@@ -25,3 +25,4 @@ function renderToday(){const d=new Date();$('#todayDate').textContent=d.toLocale
 $('#todayList').addEventListener('click',event=>{const button=event.target.closest('[data-taken]');if(!button)return;taken[button.dataset.taken]=Date.now();const entries=Object.entries(taken).filter(([key])=>key>=new Date().toISOString().slice(0,10));taken=Object.fromEntries(entries.slice(-200));localStorage.setItem(takenKey,JSON.stringify(taken));renderToday()});renderToday();
 const priorSaveSettings=$('#saveSettings').onclick;$('#saveSettings').onclick=async()=>{await priorSaveSettings();await syncPushSubscription()};
 const priorSaveSchedule=$('#saveSchedule').onclick;$('#saveSchedule').onclick=async event=>{await priorSaveSchedule(event);await syncPushSubscription()};
+if('serviceWorker'in navigator){navigator.serviceWorker.ready.then(registration=>{registration.update();setInterval(()=>registration.update(),15*60*1000)})}
