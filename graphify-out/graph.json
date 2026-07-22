@@ -4693,6 +4693,15 @@
       "norm_label": "seedschedule"
     },
     {
+      "label": "readStoredJson()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L2",
+      "id": "web_app_readstoredjson",
+      "community": 22,
+      "norm_label": "readstoredjson()"
+    },
+    {
       "label": "esc()",
       "file_type": "code",
       "source_file": "web/app.js",
@@ -4720,10 +4729,19 @@
       "norm_label": "timenow()"
     },
     {
-      "label": "active()",
+      "label": "taken",
       "file_type": "code",
       "source_file": "web/app.js",
       "source_location": "L4",
+      "id": "web_app_taken",
+      "community": 22,
+      "norm_label": "taken"
+    },
+    {
+      "label": "active()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L5",
       "id": "web_app_active",
       "community": 22,
       "norm_label": "active()"
@@ -4732,7 +4750,7 @@
       "label": "renderToday()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L5",
+      "source_location": "L6",
       "id": "web_app_rendertoday",
       "community": 22,
       "norm_label": "rendertoday()"
@@ -4741,7 +4759,7 @@
       "label": "renderSchedules()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L6",
+      "source_location": "L7",
       "id": "web_app_renderschedules",
       "community": 22,
       "norm_label": "renderschedules()"
@@ -4750,7 +4768,7 @@
       "label": "openEditor()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L7",
+      "source_location": "L8",
       "id": "web_app_openeditor",
       "community": 22,
       "norm_label": "openeditor()"
@@ -4759,7 +4777,7 @@
       "label": "renderMedicineInputs()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L8",
+      "source_location": "L9",
       "id": "web_app_rendermedicineinputs",
       "community": 22,
       "norm_label": "rendermedicineinputs()"
@@ -4768,7 +4786,7 @@
       "label": "addMedicineInput()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L8",
+      "source_location": "L9",
       "id": "web_app_addmedicineinput",
       "community": 22,
       "norm_label": "addmedicineinput()"
@@ -4777,7 +4795,7 @@
       "label": "saveEditor()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L9",
+      "source_location": "L10",
       "id": "web_app_saveeditor",
       "community": 22,
       "norm_label": "saveeditor()"
@@ -4786,7 +4804,7 @@
       "label": "playSound()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L10",
+      "source_location": "L11",
       "id": "web_app_playsound",
       "community": 22,
       "norm_label": "playsound()"
@@ -4795,7 +4813,7 @@
       "label": "renderAll()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L11",
+      "source_location": "L12",
       "id": "web_app_renderall",
       "community": 22,
       "norm_label": "renderall()"
@@ -4804,7 +4822,7 @@
       "label": "updateNotificationStatus()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L13",
+      "source_location": "L14",
       "id": "web_app_updatenotificationstatus",
       "community": 22,
       "norm_label": "updatenotificationstatus()"
@@ -4813,7 +4831,7 @@
       "label": "enableNotifications()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L14",
+      "source_location": "L15",
       "id": "web_app_enablenotifications",
       "community": 22,
       "norm_label": "enablenotifications()"
@@ -4822,7 +4840,7 @@
       "label": "notifiedKeys",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "web_app_notifiedkeys",
       "community": 22,
       "norm_label": "notifiedkeys"
@@ -4831,7 +4849,7 @@
       "label": "checkForegroundNotifications()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L16",
+      "source_location": "L17",
       "id": "web_app_checkforegroundnotifications",
       "community": 22,
       "norm_label": "checkforegroundnotifications()"
@@ -4840,7 +4858,7 @@
       "label": "nextPushReminders()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "web_app_nextpushreminders",
       "community": 22,
       "norm_label": "nextpushreminders()"
@@ -4849,19 +4867,10 @@
       "label": "syncPushSubscription()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "web_app_syncpushsubscription",
       "community": 22,
       "norm_label": "syncpushsubscription()"
-    },
-    {
-      "label": "taken",
-      "file_type": "code",
-      "source_file": "web/app.js",
-      "source_location": "L22",
-      "id": "web_app_taken",
-      "community": 22,
-      "norm_label": "taken"
     },
     {
       "label": "reminderState()",
@@ -4876,7 +4885,7 @@
       "label": "qrDialog",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L28",
+      "source_location": "L27",
       "id": "web_app_qrdialog",
       "community": 22,
       "norm_label": "qrdialog"
@@ -4885,7 +4894,7 @@
       "label": "pairingPayload()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L29",
+      "source_location": "L28",
       "id": "web_app_pairingpayload",
       "community": 22,
       "norm_label": "pairingpayload()"
@@ -4894,7 +4903,7 @@
       "label": "decodePairingPayload()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L30",
+      "source_location": "L29",
       "id": "web_app_decodepairingpayload",
       "community": 22,
       "norm_label": "decodepairingpayload()"
@@ -4903,7 +4912,7 @@
       "label": "renderPairingQr()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L31",
+      "source_location": "L30",
       "id": "web_app_renderpairingqr",
       "community": 22,
       "norm_label": "renderpairingqr()"
@@ -4912,7 +4921,7 @@
       "label": "pairFromUrl",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L34",
+      "source_location": "L33",
       "id": "web_app_pairfromurl",
       "community": 22,
       "norm_label": "pairfromurl"
@@ -9067,9 +9076,9 @@
       "source_file": "medication_reminder.py",
       "source_location": "L294",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
-      "target": "medication_reminder_medicationreminderapp_add_schedule_main",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp_add_schedule_main"
     },
     {
       "relation": "method",
@@ -9297,9 +9306,9 @@
       "source_file": "medication_reminder.py",
       "source_location": "L303",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
-      "target": "medication_reminder_medicationreminderapp_remove_selected_main",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp_remove_selected_main"
     },
     {
       "relation": "method",
@@ -9337,9 +9346,9 @@
       "source_file": "medication_reminder.py",
       "source_location": "L283",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
-      "target": "medication_reminder_medicationreminderapp_selected_main_event_index",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp_selected_main_event_index"
     },
     {
       "relation": "method",
@@ -9826,9 +9835,9 @@
       "source_file": "medication_reminder.py",
       "source_location": "L298",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_edit_selected_main",
-      "target": "medication_reminder_medicationreminderapp_selected_main_event_index",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp_selected_main_event_index"
     },
     {
       "relation": "calls",
@@ -9837,9 +9846,9 @@
       "source_file": "medication_reminder.py",
       "source_location": "L304",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_remove_selected_main",
-      "target": "medication_reminder_medicationreminderapp_selected_main_event_index",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp_selected_main_event_index"
     },
     {
       "relation": "calls",
@@ -9848,9 +9857,9 @@
       "source_file": "medication_reminder.py",
       "source_location": "L295",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_add_schedule_main",
-      "target": "medication_reminder_medicationreminderapp_edit_event_dialog",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp_edit_event_dialog"
     },
     {
       "relation": "calls",
@@ -9870,9 +9879,9 @@
       "source_file": "medication_reminder.py",
       "source_location": "L312",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_remove_selected_main",
-      "target": "medication_reminder_medicationreminderapp_save_config",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp_save_config"
     },
     {
       "relation": "calls",
@@ -16277,6 +16286,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "web/app.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "web_app",
+      "target": "web_app_readstoredjson",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
       "source_location": "L23",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16835,5 +16854,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "162dfb37ec7e9b78da074d1f7ee43c851c071acc"
+  "built_at_commit": "469ca753b27cc1d442d3630787e6e53143a810ad"
 }

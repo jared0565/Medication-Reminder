@@ -1,4 +1,4 @@
-const CACHE='medication-reminder-web-v6';
+const CACHE='medication-reminder-web-v7';
 const ASSETS=['./','./index.html','./styles.css','./app.js','./qrcode.js','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting()});

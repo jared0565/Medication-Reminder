@@ -1,16 +1,16 @@
 # Graph Report - Medication Reminder  (2026-07-22)
 
 ## Corpus Check
-- 48 files · ~26,819 words
+- 48 files · ~26,825 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 610 nodes · 1089 edges · 35 communities (27 shown, 8 thin omitted)
+- 611 nodes · 1090 edges · 35 communities (27 shown, 8 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 100 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `162dfb37`
+- Built from commit: `469ca753`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -44,7 +44,7 @@
 ## God Nodes (most connected - your core abstractions)
 1. `MedicationReminderApp` - 48 edges
 2. `QRCode` - 30 edges
-3. `$()` - 29 edges
+3. `$()` - 30 edges
 4. `ScheduleEngine` - 28 edges
 5. `StorageError` - 24 edges
 6. `AppStorage` - 21 edges
@@ -134,7 +134,7 @@ Cohesion: 0.33
 Nodes (7): This file provides zest.releaser entrypoints using when releasing new qrcode ver, Update the version in the manpage document., update_manpage(), test_change(), test_invalid_data(), test_no_change(), test_not_qrcode()
 
 ### Community 22 - "Community 22"
-Cohesion: 0.09
+Cohesion: 0.08
 Nodes (22): fetch(), $(), addMedicineInput(), bridge, enableNotifications(), esc(), nextPushReminders(), notifiedKeys (+14 more)
 
 ### Community 34 - "Community 34"
@@ -154,7 +154,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `ConfigValidationError` connect `Community 3` to `Community 1`, `Community 2`, `Community 7`?**
   _High betweenness centrality (0.140) - this node is a cross-community bridge._
 - **Why does `StyledPilImage` connect `Community 10` to `Community 11`?**
-  _High betweenness centrality (0.111) - this node is a cross-community bridge._
+  _High betweenness centrality (0.110) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `MedicationReminderApp` (e.g. with `AppStorage` and `ConfigValidationError`) actually correct?**
   _`MedicationReminderApp` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `QRCode` (e.g. with `BaseImage` and `BaseImageWithDrawer`) actually correct?**

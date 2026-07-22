@@ -51,8 +51,8 @@
     </section>
   </main>
 
-  <dialog id="scheduleDialog"><form id="scheduleForm" class="dialog-card">
-    <div class="dialog-heading"><div><p class="eyebrow">SCHEDULE</p><h2 id="dialogTitle">Add schedule</h2></div><button type="button" data-close-schedule class="close-button" aria-label="Close">×</button></div>
+  <dialog id="scheduleDialog"><form method="dialog" id="scheduleForm" class="dialog-card">
+    <div class="dialog-heading"><div><p class="eyebrow">SCHEDULE</p><h2 id="dialogTitle">Add schedule</h2></div><button value="cancel" formnovalidate class="close-button" aria-label="Close">×</button></div>
     <input id="eventId" type="hidden" />
     <label>Time<input id="eventTime" type="time" required /></label>
     <label>Reminder label<input id="eventLabel" required maxlength="200" /></label>
@@ -61,7 +61,7 @@
     <label>Days <input id="eventDays" placeholder="daily or mon,tue,wed" required /></label>
     <div class="date-grid"><label>Start date<input id="eventStart" type="date" /></label><label>End date<input id="eventEnd" type="date" /></label></div>
     <label class="switch-label"><input id="eventEnabled" type="checkbox" /> Reminder enabled</label>
-    <div class="dialog-actions"><button type="button" data-close-schedule class="secondary-button">Cancel</button><button type="submit" id="saveSchedule" class="primary-button">Save schedule</button></div>
+    <div class="dialog-actions"><button value="cancel" formnovalidate class="secondary-button">Cancel</button><button type="button" id="saveSchedule" class="primary-button">Save schedule</button></div>
   </form></dialog>
   <script src="qrcode.js"></script>
   <script src="app.js"></script>
