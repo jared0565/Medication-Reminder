@@ -235,8 +235,6 @@ class MedicationReminderApp:
         ttk.Button(button_bar, text="Edit selected", style="Teal.TButton", command=self.edit_selected_main).pack(side="left")
         ttk.Button(button_bar, text="Alert settings", style="Accent.TButton", command=self.open_alert_settings).pack(side="left", padx=8)
         ttk.Button(button_bar, text="Export taken log", style="Teal.TButton", command=self.export_taken_log).pack(side="left")
-        ttk.Button(button_bar, text="Pair device", style="Teal.TButton", command=self.pair_device).pack(side="left", padx=8)
-        ttk.Button(button_bar, text="Show QR", style="Teal.TButton", command=self.show_pairing_qr).pack(side="left")
         ttk.Button(button_bar, text="Minimize to tray", style="Teal.TButton", command=self.hide_to_tray).pack(side="right")
 
         columns = ("time", "label", "medicines")
@@ -634,6 +632,8 @@ class MedicationReminderApp:
         ttk.Button(quick_actions, text="Edit selected", style="Teal.TButton", command=edit_selected).pack(side="left", padx=6)
         ttk.Button(quick_actions, text="Remove selected", command=remove_schedule).pack(side="left", padx=6)
         ttk.Button(quick_actions, text="Alert settings", command=open_alert_settings).pack(side="left", padx=6)
+        ttk.Button(quick_actions, text="Pair device", command=self.pair_device).pack(side="left", padx=6)
+        ttk.Button(quick_actions, text="Show QR", command=self.show_pairing_qr).pack(side="left", padx=6)
 
         buttons = ttk.Frame(container)
         buttons.pack(fill="x", pady=(12, 0))
