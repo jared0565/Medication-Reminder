@@ -100,13 +100,13 @@
     "semantic_hash": ""
   },
   "web/app.js": {
-    "mtime": 1784753994.1767774,
-    "ast_hash": "cd05dea93b6ecaf4951d9495c2a646e7",
+    "mtime": 1784754605.2689614,
+    "ast_hash": "94821088d4c02bcac3924b1ac7d3fa32",
     "semantic_hash": ""
   },
   "web/sw.js": {
-    "mtime": 1784753724.1733117,
-    "ast_hash": "552d7012d7672580a544dbba67d655b6",
+    "mtime": 1784754610.1101985,
+    "ast_hash": "04bdbb1e1c29cabd7805bfddbc7c5244",
     "semantic_hash": ""
   },
   "web/index.html": {
