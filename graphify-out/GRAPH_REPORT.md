@@ -1,16 +1,16 @@
 # Graph Report - Medication Reminder  (2026-07-22)
 
 ## Corpus Check
-- 47 files · ~26,556 words
+- 48 files · ~26,746 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 596 nodes · 1057 edges · 34 communities (26 shown, 8 thin omitted)
-- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 93 edges (avg confidence: 0.55)
+- 607 nodes · 1082 edges · 35 communities (27 shown, 8 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 100 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `24d4a8a7`
+- Built from commit: `ac11d87e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -39,18 +39,19 @@
 - [[_COMMUNITY_Community 21|Community 21]]
 - [[_COMMUNITY_Community 22|Community 22]]
 - [[_COMMUNITY_Community 23|Community 23]]
+- [[_COMMUNITY_Community 34|Community 34]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `MedicationReminderApp` - 41 edges
+1. `MedicationReminderApp` - 45 edges
 2. `QRCode` - 30 edges
 3. `$()` - 29 edges
-4. `ScheduleEngine` - 27 edges
-5. `StorageError` - 23 edges
-6. `AppStorage` - 20 edges
-7. `ConfigValidationError` - 19 edges
+4. `ScheduleEngine` - 28 edges
+5. `StorageError` - 24 edges
+6. `AppStorage` - 21 edges
+7. `ConfigValidationError` - 20 edges
 8. `Any` - 19 edges
 9. `Any` - 19 edges
-10. `StyledPilImage` - 18 edges
+10. `validate_schedule()` - 18 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `DueOccurrence` --uses--> `ConfigValidationError`  [INFERRED]
@@ -70,15 +71,15 @@
 - 1-file cycle: `vendor/qrcode/image/styles/moduledrawers/svg.py -> vendor/qrcode/image/styles/moduledrawers/svg.py`
 - 1-file cycle: `vendor/qrcode/image/svg.py -> vendor/qrcode/image/svg.py`
 
-## Communities (34 total, 8 thin omitted)
+## Communities (35 total, 8 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.18
 Nodes (10): Build a single Windows EXE, Editing the schedule, Files, Important clinical note, Local-first web app, Main features, Medication Reminder Widget for Windows, Quick start (+2 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.10
-Nodes (12): DueOccurrence, DueEvent, enable_dpi_awareness(), MedicationReminderApp, Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls. (+4 more)
+Cohesion: 0.11
+Nodes (9): DueOccurrence, DueEvent, MedicationReminderApp, Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls. (+1 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
@@ -86,7 +87,7 @@ Nodes (25): BaseImage, GenericImage, GenericImageLocal, PilImage, PIL image buil
 
 ### Community 3 - "Community 3"
 Cohesion: 0.08
-Nodes (40): Any, date, Exception, AppStorage, atomic_write_bytes(), ConfigValidationError, _DataBlob, default_data_dir() (+32 more)
+Nodes (42): Any, date, Exception, AppStorage, atomic_write_bytes(), ConfigValidationError, _DataBlob, default_data_dir() (+34 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.15
@@ -97,12 +98,12 @@ Cohesion: 0.06
 Nodes (33): gexp(), glog(), Polynomial, rs_blocks(), RSBlock, BCH_digit(), BCH_type_info(), BCH_type_number() (+25 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.18
-Nodes (9): main(), Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., show_startup_error(), SingleInstance (+1 more)
+Cohesion: 0.17
+Nodes (10): main(), Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., show_startup_error() (+2 more)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.07
-Nodes (17): Styled PIL image builder, default format is PNG.      This differs from the PilI, StyledPilImage, CircleModuleDrawer, GappedSquareModuleDrawer, HorizontalBarsDrawer, A base class for StyledPilImage module drawers.      NOTE: the color that this d, Draws vertically contiguous groups of modules as long rounded rectangles,     wi, Draws horizontally contiguous groups of modules as long rounded rectangles, (+9 more)
+Nodes (16): Styled PIL image builder, default format is PNG.      This differs from the PilI, StyledPilImage, CircleModuleDrawer, GappedSquareModuleDrawer, HorizontalBarsDrawer, A base class for StyledPilImage module drawers.      NOTE: the color that this d, Draws vertically contiguous groups of modules as long rounded rectangles,     wi, Draws horizontally contiguous groups of modules as long rounded rectangles, (+8 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.08
@@ -113,8 +114,8 @@ Cohesion: 0.09
 Nodes (13): BaseImage, BaseImageWithDrawer, Find whether the referenced module is in an eye., Base QRCode image output class., Draw a single rectangle of the QR code., Draw a single rectangle of the QR code given the surrounding context, Processes QR code after completion, A helper method for pixel-based image generators that specifies the         four (+5 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.14
-Nodes (10): BaseSvgQRModuleDrawer, Coords, SvgCircleDrawer, SvgPathCircleDrawer, SvgPathQRModuleDrawer, SvgPathSquareDrawer, SvgQRModuleDrawer, SvgSquareDrawer (+2 more)
+Cohesion: 0.13
+Nodes (11): BaseSvgQRModuleDrawer, Coords, SvgCircleDrawer, SvgPathCircleDrawer, SvgPathQRModuleDrawer, SvgPathSquareDrawer, SvgQRModuleDrawer, SvgSquareDrawer (+3 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.12
@@ -125,8 +126,8 @@ Cohesion: 0.12
 Nodes (6): commas(), get_drawer_help(), get_factory(), main(), test_commas(), BaseImage
 
 ### Community 18 - "Community 18"
-Cohesion: 0.20
-Nodes (10): Return a quoted command that starts this app without a console window., Register this user's app for logon startup; never requires elevation., Return a quoted command that starts this app without a console window., Return a quoted command that starts this app without a console window., Return a quoted command that starts this app without a console window., Register this user's app for logon startup; never requires elevation., Register this user's app for logon startup; never requires elevation., Register this user's app for logon startup; never requires elevation. (+2 more)
+Cohesion: 0.17
+Nodes (12): Return a quoted command that starts this app without a console window., Register this user's app for logon startup; never requires elevation., Return a quoted command that starts this app without a console window., Return a quoted command that starts this app without a console window., Return a quoted command that starts this app without a console window., Return a quoted command that starts this app without a console window., Register this user's app for logon startup; never requires elevation., Register this user's app for logon startup; never requires elevation. (+4 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.33
@@ -135,6 +136,10 @@ Nodes (7): This file provides zest.releaser entrypoints using when releasing new
 ### Community 22 - "Community 22"
 Cohesion: 0.09
 Nodes (22): fetch(), $(), addMedicineInput(), bridge, enableNotifications(), esc(), nextPushReminders(), notifiedKeys (+14 more)
+
+### Community 34 - "Community 34"
+Cohesion: 0.40
+Nodes (5): enable_dpi_awareness(), Ask Windows to render Tk at the monitor's native DPI., Ask Windows to render Tk at the monitor's native DPI., Ask Windows to render Tk at the monitor's native DPI., Ask Windows to render Tk at the monitor's native DPI.
 
 ## Knowledge Gaps
 - **33 isolated node(s):** `PreToolUse`, `timezone`, `events`, `BaseImage`, `SvgImageWhite` (+28 more)
@@ -145,16 +150,16 @@ Nodes (22): fetch(), $(), addMedicineInput(), bridge, enableNotifications(), esc
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ActiveWithNeighbors` connect `Community 12` to `Community 10`, `Community 2`, `Community 14`?**
-  _High betweenness centrality (0.159) - this node is a cross-community bridge._
+  _High betweenness centrality (0.156) - this node is a cross-community bridge._
 - **Why does `ConfigValidationError` connect `Community 3` to `Community 1`, `Community 2`, `Community 7`?**
-  _High betweenness centrality (0.158) - this node is a cross-community bridge._
+  _High betweenness centrality (0.139) - this node is a cross-community bridge._
 - **Why does `StyledPilImage` connect `Community 10` to `Community 11`?**
-  _High betweenness centrality (0.112) - this node is a cross-community bridge._
-- **Are the 5 inferred relationships involving `MedicationReminderApp` (e.g. with `AppStorage` and `ConfigValidationError`) actually correct?**
-  _`MedicationReminderApp` has 5 INFERRED edges - model-reasoned connections that need verification._
+  _High betweenness centrality (0.111) - this node is a cross-community bridge._
+- **Are the 6 inferred relationships involving `MedicationReminderApp` (e.g. with `AppStorage` and `ConfigValidationError`) actually correct?**
+  _`MedicationReminderApp` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `QRCode` (e.g. with `BaseImage` and `BaseImageWithDrawer`) actually correct?**
   _`QRCode` has 6 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 9 inferred relationships involving `ScheduleEngine` (e.g. with `DueOccurrence` and `Exception`) actually correct?**
-  _`ScheduleEngine` has 9 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 8 inferred relationships involving `StorageError` (e.g. with `DueOccurrence` and `Exception`) actually correct?**
-  _`StorageError` has 8 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 10 inferred relationships involving `ScheduleEngine` (e.g. with `DueOccurrence` and `Exception`) actually correct?**
+  _`ScheduleEngine` has 10 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 9 inferred relationships involving `StorageError` (e.g. with `DueOccurrence` and `Exception`) actually correct?**
+  _`StorageError` has 9 INFERRED edges - model-reasoned connections that need verification._

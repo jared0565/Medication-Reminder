@@ -3,6 +3,7 @@ from __future__ import annotations
 import ctypes
 import base64
 import io
+import json
 import math
 import os
 import struct
@@ -738,8 +739,30 @@ class MedicationReminderApp:
 
         ttk.Button(form, text="Save changes", command=save).pack(anchor="e", pady=(12, 0))
 
+    def _pairing_payload(self) -> str:
+        compact = {
+            "v": 2,
+            "z": self.config_data["timezone"],
+            "e": [[event["id"], event["enabled"], event["time"], event["label"], event["medicines"], event.get("instructions", ""), event["days"], event.get("start_date"), event.get("end_date")] for event in self.config_data["events"]],
+        }
+        return base64.urlsafe_b64encode(json.dumps(compact, separators=(",", ":")).encode()).decode().rstrip("=")
+
+    @staticmethod
+    def _decode_pairing_payload(incoming: str) -> dict[str, Any]:
+        value = incoming.strip()
+        padded = value + "=" * ((4 - len(value) % 4) % 4)
+        data = json.loads(base64.urlsafe_b64decode(padded).decode())
+        if data.get("v") == 2 and isinstance(data.get("e"), list):
+            events = []
+            for item in data["e"]:
+                if not isinstance(item, list) or len(item) != 9:
+                    raise ValueError("Invalid compact schedule event")
+                events.append({"id": item[0], "enabled": bool(item[1]), "time": item[2], "label": item[3], "medicines": item[4], "instructions": item[5] or "", "days": item[6], "start_date": item[7], "end_date": item[8]})
+            return {"timezone": data.get("z", "Europe/London"), "events": events}
+        return data["schedule"]
+
     def pair_device(self) -> None:
-        payload = base64.urlsafe_b64encode(json.dumps({"version": 1, "schedule": self.config_data}, separators=(",", ":")).encode()).decode().rstrip("=")
+        payload = self._pairing_payload()
         self.root.clipboard_clear()
         self.root.clipboard_append(payload)
         self.root.update()
@@ -750,9 +773,7 @@ class MedicationReminderApp:
         if not incoming:
             return
         try:
-            padded = incoming.strip() + "=" * ((4 - len(incoming.strip()) % 4) % 4)
-            data = json.loads(base64.urlsafe_b64decode(padded).decode())
-            imported = validate_schedule(data["schedule"])
+            imported = validate_schedule(self._decode_pairing_payload(incoming))
             self.storage.save_schedule(imported)
             self.config_data = imported
             self.scheduler.replace_schedule(imported)
@@ -763,7 +784,7 @@ class MedicationReminderApp:
             messagebox.showerror(APP_NAME, f"Invalid pairing code: {exc}")
 
     def show_pairing_qr(self) -> None:
-        payload = base64.urlsafe_b64encode(json.dumps({"version": 1, "schedule": self.config_data}, separators=(",", ":")).encode()).decode().rstrip("=")
+        payload = self._pairing_payload()
         try:
             code = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=4, border=4)
             code.add_data(payload)

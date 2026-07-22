@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "medication_reminder.py": {
-    "mtime": 1784751244.2995336,
-    "ast_hash": "c36244ff3e2b84975905af5c2cebd2fe",
+    "mtime": 1784752319.0374763,
+    "ast_hash": "3fdf3632184ddbd329b2846193acfb01",
     "semantic_hash": ""
   },
   "medication_schedule.json": {
@@ -100,18 +100,18 @@
     "semantic_hash": ""
   },
   "web/app.js": {
-    "mtime": 1784751646.4735115,
-    "ast_hash": "42fbea34d0d5514109ed12b0b7f2aaeb",
+    "mtime": 1784752256.822217,
+    "ast_hash": "ca0028854245a4bcd838252e29c3ed78",
     "semantic_hash": ""
   },
   "web/sw.js": {
-    "mtime": 1784751641.6834545,
-    "ast_hash": "c2172470f5fd80e1dfac3e254f8e39aa",
+    "mtime": 1784752297.1899855,
+    "ast_hash": "41593c40047193a188fd5d9379a3200d",
     "semantic_hash": ""
   },
   "web/index.html": {
-    "mtime": 1784751069.0485575,
-    "ast_hash": "59352a8314924d1f93b137c980d2574f",
+    "mtime": 1784752223.412958,
+    "ast_hash": "ab024e178386f513e430e7ca716bbeb1",
     "semantic_hash": ""
   },
   ".wrangler/cache/pages.json": {
@@ -317,6 +317,11 @@
   "web/qrcode.js": {
     "mtime": 1784751037.755073,
     "ast_hash": "fbb6b69bce6abf116d6eb147ad5484a5",
+    "semantic_hash": ""
+  },
+  "tests/test_pairing.py": {
+    "mtime": 1784752437.7629137,
+    "ast_hash": "305282c415fb21f0ea965c977794268d",
     "semantic_hash": ""
   }
 }
