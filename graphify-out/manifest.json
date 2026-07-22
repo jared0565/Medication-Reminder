@@ -1,0 +1,117 @@
+{
+  ".codex/hooks.json": {
+    "mtime": 1784709745.9597018,
+    "ast_hash": "e8eaa8bfc16efe32b3117db52a4085ec",
+    "semantic_hash": ""
+  },
+  "medication_reminder.py": {
+    "mtime": 1784714503.5235524,
+    "ast_hash": "a373ef34bcb21eb354c4a9292378e0ed",
+    "semantic_hash": ""
+  },
+  "medication_schedule.json": {
+    "mtime": 1784709013.792509,
+    "ast_hash": "d4ee3b8460d7c193762b1ec502fa0256",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1784709735.7436392,
+    "ast_hash": "752aa83aa64361ac32860f882dcff932",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1784736709.360826,
+    "ast_hash": "d7732275dcd8859a58acd068abfc4eff",
+    "semantic_hash": ""
+  },
+  "requirements.txt": {
+    "mtime": 1784710873.1405444,
+    "ast_hash": "55b51e8e8ecdbce783c4e319904aa937",
+    "semantic_hash": ""
+  },
+  "medication_core.py": {
+    "mtime": 1784711991.758608,
+    "ast_hash": "d2e730872ee34251bf12a0f85db19b92",
+    "semantic_hash": ""
+  },
+  "tests/test_medication_core.py": {
+    "mtime": 1784710640.049054,
+    "ast_hash": "ea32c02b5cc906ab6e0ef82f94e4e0c9",
+    "semantic_hash": ""
+  },
+  "build_latest/MedicationReminder/Analysis-00.toc": {
+    "mtime": 1784713090.7907343,
+    "ast_hash": "cc4c7e54041b1b4c6a9c1461e8908ba6",
+    "semantic_hash": ""
+  },
+  "build_latest/MedicationReminder/EXE-00.toc": {
+    "mtime": 1784713102.618982,
+    "ast_hash": "9d21256c91e3f01b65a4d50ed15a9eed",
+    "semantic_hash": ""
+  },
+  "build_latest/MedicationReminder/PKG-00.toc": {
+    "mtime": 1784713098.159863,
+    "ast_hash": "6a2dd9d66eaf730464cdcd9bf23e0390",
+    "semantic_hash": ""
+  },
+  "build_latest/MedicationReminder/PYZ-00.toc": {
+    "mtime": 1784713091.3015075,
+    "ast_hash": "4abba2a8ce9e7e07d2acb5945dde479d",
+    "semantic_hash": ""
+  },
+  "build_latest/MedicationReminder/warn-MedicationReminder.txt": {
+    "mtime": 1784713090.6342194,
+    "ast_hash": "e0698e0c8ab9f727800c224791781a74",
+    "semantic_hash": ""
+  },
+  "build_latest/MedicationReminder/xref-MedicationReminder.html": {
+    "mtime": 1784713090.7102208,
+    "ast_hash": "d1b34168f2982f0eded12b30e1c544a1",
+    "semantic_hash": ""
+  },
+  "build_latest2/MedicationReminder/Analysis-00.toc": {
+    "mtime": 1784713961.1968138,
+    "ast_hash": "3876859ff8a596451fae90eb46bd6a1e",
+    "semantic_hash": ""
+  },
+  "build_latest2/MedicationReminder/EXE-00.toc": {
+    "mtime": 1784713975.8474886,
+    "ast_hash": "23d901c1b7b51f5d91c4d8fae5dc94fe",
+    "semantic_hash": ""
+  },
+  "build_latest2/MedicationReminder/PKG-00.toc": {
+    "mtime": 1784713970.7805245,
+    "ast_hash": "07c046cb7c91b45d467a06604087a065",
+    "semantic_hash": ""
+  },
+  "build_latest2/MedicationReminder/PYZ-00.toc": {
+    "mtime": 1784713961.7349374,
+    "ast_hash": "6eb808a0237c4d8da4528004cdf5a242",
+    "semantic_hash": ""
+  },
+  "build_latest2/MedicationReminder/warn-MedicationReminder.txt": {
+    "mtime": 1784713961.043328,
+    "ast_hash": "e0698e0c8ab9f727800c224791781a74",
+    "semantic_hash": ""
+  },
+  "build_latest2/MedicationReminder/xref-MedicationReminder.html": {
+    "mtime": 1784713961.1198137,
+    "ast_hash": "d1b34168f2982f0eded12b30e1c544a1",
+    "semantic_hash": ""
+  },
+  "web/app.js": {
+    "mtime": 1784736686.964578,
+    "ast_hash": "2ae8c6b06849f0f016f0e67f950afb34",
+    "semantic_hash": ""
+  },
+  "web/sw.js": {
+    "mtime": 1784736696.0268826,
+    "ast_hash": "71513697d975ae284d7eb900410611fa",
+    "semantic_hash": ""
+  },
+  "web/index.html": {
+    "mtime": 1784736677.0341444,
+    "ast_hash": "9c0dae591072d8c700399e91a04d23ba",
+    "semantic_hash": ""
+  }
+}

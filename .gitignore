@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+build/
+build_latest/
+build_latest2/
+dist/
+dist_latest/
+dist_latest2/
+*.spec
+MedicationReminder_*.exe
+graphify-out/cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/
+web/.cache/
