@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ctypes
+import base64
 import io
 import math
 import os
@@ -232,6 +233,7 @@ class MedicationReminderApp:
         ttk.Button(button_bar, text="Edit selected", style="Teal.TButton", command=self.edit_selected_main).pack(side="left")
         ttk.Button(button_bar, text="Alert settings", style="Accent.TButton", command=self.open_alert_settings).pack(side="left", padx=8)
         ttk.Button(button_bar, text="Export taken log", style="Teal.TButton", command=self.export_taken_log).pack(side="left")
+        ttk.Button(button_bar, text="Pair device", style="Teal.TButton", command=self.pair_device).pack(side="left", padx=8)
         ttk.Button(button_bar, text="Minimize to tray", style="Teal.TButton", command=self.hide_to_tray).pack(side="right")
 
         columns = ("time", "label", "medicines")
@@ -728,6 +730,30 @@ class MedicationReminderApp:
                 dialog.destroy()
 
         ttk.Button(form, text="Save changes", command=save).pack(anchor="e", pady=(12, 0))
+
+    def pair_device(self) -> None:
+        payload = base64.urlsafe_b64encode(json.dumps({"version": 1, "schedule": self.config_data}, separators=(",", ":")).encode()).decode().rstrip("=")
+        self.root.clipboard_clear()
+        self.root.clipboard_append(payload)
+        self.root.update()
+        action = messagebox.askyesno(APP_NAME, "A private pairing code was copied to the clipboard.\n\nYes: import a code from another device instead.\nNo: keep this device's code copied for pasting into the mobile app.")
+        if not action:
+            return
+        incoming = simpledialog.askstring(APP_NAME, "Paste the pairing code to import:", parent=self.root)
+        if not incoming:
+            return
+        try:
+            padded = incoming.strip() + "=" * ((4 - len(incoming.strip()) % 4) % 4)
+            data = json.loads(base64.urlsafe_b64decode(padded).decode())
+            imported = validate_schedule(data["schedule"])
+            self.storage.save_schedule(imported)
+            self.config_data = imported
+            self.scheduler.replace_schedule(imported)
+            self.refresh_schedule_table()
+            self.update_next_due_text()
+            messagebox.showinfo(APP_NAME, "Schedule imported successfully.")
+        except (ValueError, KeyError, UnicodeError, ConfigValidationError) as exc:
+            messagebox.showerror(APP_NAME, f"Invalid pairing code: {exc}")
 
     def export_taken_log(self) -> None:
         if not messagebox.askyesno(
