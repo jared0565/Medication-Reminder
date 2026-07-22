@@ -772,7 +772,7 @@
       "label": ".refresh_schedule_table()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L256",
+      "source_location": "L260",
       "id": "medication_reminder_medicationreminderapp_refresh_schedule_table",
       "community": 1,
       "norm_label": ".refresh_schedule_table()"
@@ -781,25 +781,52 @@
       "label": ".update_next_due_text()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L265",
+      "source_location": "L269",
       "id": "medication_reminder_medicationreminderapp_update_next_due_text",
       "community": 1,
       "norm_label": ".update_next_due_text()"
     },
     {
+      "label": "._selected_main_event_index()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L283",
+      "id": "medication_reminder_medicationreminderapp_selected_main_event_index",
+      "community": 1,
+      "norm_label": "._selected_main_event_index()"
+    },
+    {
+      "label": ".add_schedule_main()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L294",
+      "id": "medication_reminder_medicationreminderapp_add_schedule_main",
+      "community": 1,
+      "norm_label": ".add_schedule_main()"
+    },
+    {
       "label": ".edit_selected_main()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L279",
+      "source_location": "L297",
       "id": "medication_reminder_medicationreminderapp_edit_selected_main",
       "community": 1,
       "norm_label": ".edit_selected_main()"
     },
     {
+      "label": ".remove_selected_main()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L303",
+      "id": "medication_reminder_medicationreminderapp_remove_selected_main",
+      "community": 1,
+      "norm_label": ".remove_selected_main()"
+    },
+    {
       "label": ".open_alert_settings()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L291",
+      "source_location": "L314",
       "id": "medication_reminder_medicationreminderapp_open_alert_settings",
       "community": 1,
       "norm_label": ".open_alert_settings()"
@@ -808,7 +835,7 @@
       "label": ".check_schedule()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L322",
+      "source_location": "L345",
       "id": "medication_reminder_medicationreminderapp_check_schedule",
       "community": 1,
       "norm_label": ".check_schedule()"
@@ -817,7 +844,7 @@
       "label": ".play_alert_sound()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L341",
+      "source_location": "L364",
       "id": "medication_reminder_medicationreminderapp_play_alert_sound",
       "community": 1,
       "norm_label": ".play_alert_sound()"
@@ -826,7 +853,7 @@
       "label": ".show_due_popup()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L382",
+      "source_location": "L405",
       "id": "medication_reminder_medicationreminderapp_show_due_popup",
       "community": 1,
       "norm_label": ".show_due_popup()"
@@ -835,7 +862,7 @@
       "label": "DueOccurrence",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L382",
+      "source_location": "L405",
       "id": "dueoccurrence",
       "community": 1,
       "norm_label": "dueoccurrence"
@@ -844,7 +871,7 @@
       "label": ".mark_taken()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L457",
+      "source_location": "L480",
       "id": "medication_reminder_medicationreminderapp_mark_taken",
       "community": 1,
       "norm_label": ".mark_taken()"
@@ -853,7 +880,7 @@
       "label": "Toplevel",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L457",
+      "source_location": "L480",
       "id": "toplevel",
       "community": 1,
       "norm_label": "toplevel"
@@ -862,7 +889,7 @@
       "label": ".snooze_event()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L475",
+      "source_location": "L498",
       "id": "medication_reminder_medicationreminderapp_snooze_event",
       "community": 1,
       "norm_label": ".snooze_event()"
@@ -871,7 +898,7 @@
       "label": "._close_popup()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L488",
+      "source_location": "L511",
       "id": "medication_reminder_medicationreminderapp_close_popup",
       "community": 1,
       "norm_label": "._close_popup()"
@@ -880,7 +907,7 @@
       "label": ".test_reminder()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L494",
+      "source_location": "L517",
       "id": "medication_reminder_medicationreminderapp_test_reminder",
       "community": 1,
       "norm_label": ".test_reminder()"
@@ -889,7 +916,7 @@
       "label": ".save_config()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L507",
+      "source_location": "L530",
       "id": "medication_reminder_medicationreminderapp_save_config",
       "community": 1,
       "norm_label": ".save_config()"
@@ -898,7 +925,7 @@
       "label": ".open_schedule_editor()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L521",
+      "source_location": "L544",
       "id": "medication_reminder_medicationreminderapp_open_schedule_editor",
       "community": 1,
       "norm_label": ".open_schedule_editor()"
@@ -907,7 +934,7 @@
       "label": ".edit_event_dialog()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L653",
+      "source_location": "L676",
       "id": "medication_reminder_medicationreminderapp_edit_event_dialog",
       "community": 1,
       "norm_label": ".edit_event_dialog()"
@@ -916,7 +943,7 @@
       "label": "._pairing_payload()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L742",
+      "source_location": "L765",
       "id": "medication_reminder_medicationreminderapp_pairing_payload",
       "community": 1,
       "norm_label": "._pairing_payload()"
@@ -925,7 +952,7 @@
       "label": "._decode_pairing_payload()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L751",
+      "source_location": "L774",
       "id": "medication_reminder_medicationreminderapp_decode_pairing_payload",
       "community": 1,
       "norm_label": "._decode_pairing_payload()"
@@ -934,7 +961,7 @@
       "label": "Any",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L751",
+      "source_location": "L774",
       "id": "medication_reminder_py_any",
       "community": 3,
       "norm_label": "any"
@@ -943,7 +970,7 @@
       "label": ".pair_device()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L764",
+      "source_location": "L787",
       "id": "medication_reminder_medicationreminderapp_pair_device",
       "community": 1,
       "norm_label": ".pair_device()"
@@ -952,7 +979,7 @@
       "label": ".show_pairing_qr()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L786",
+      "source_location": "L809",
       "id": "medication_reminder_medicationreminderapp_show_pairing_qr",
       "community": 1,
       "norm_label": ".show_pairing_qr()"
@@ -961,7 +988,7 @@
       "label": ".export_taken_log()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L810",
+      "source_location": "L833",
       "id": "medication_reminder_medicationreminderapp_export_taken_log",
       "community": 1,
       "norm_label": ".export_taken_log()"
@@ -970,7 +997,7 @@
       "label": "._safe_audit()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L831",
+      "source_location": "L854",
       "id": "medication_reminder_medicationreminderapp_safe_audit",
       "community": 1,
       "norm_label": "._safe_audit()"
@@ -979,7 +1006,7 @@
       "label": "._warn_persistence()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L837",
+      "source_location": "L860",
       "id": "medication_reminder_medicationreminderapp_warn_persistence",
       "community": 1,
       "norm_label": "._warn_persistence()"
@@ -988,7 +1015,7 @@
       "label": "Exception",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L837",
+      "source_location": "L860",
       "id": "medication_reminder_py_exception",
       "community": 3,
       "norm_label": "exception"
@@ -997,7 +1024,7 @@
       "label": ".hide_to_tray()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L847",
+      "source_location": "L870",
       "id": "medication_reminder_medicationreminderapp_hide_to_tray",
       "community": 1,
       "norm_label": ".hide_to_tray()"
@@ -1006,7 +1033,7 @@
       "label": ".show_window()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L850",
+      "source_location": "L873",
       "id": "medication_reminder_medicationreminderapp_show_window",
       "community": 1,
       "norm_label": ".show_window()"
@@ -1015,7 +1042,7 @@
       "label": "._show_window_main_thread()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L853",
+      "source_location": "L876",
       "id": "medication_reminder_medicationreminderapp_show_window_main_thread",
       "community": 1,
       "norm_label": "._show_window_main_thread()"
@@ -1024,7 +1051,7 @@
       "label": ".start_tray_icon()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L858",
+      "source_location": "L881",
       "id": "medication_reminder_medicationreminderapp_start_tray_icon",
       "community": 1,
       "norm_label": ".start_tray_icon()"
@@ -1033,7 +1060,7 @@
       "label": ".quit_app()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L870",
+      "source_location": "L893",
       "id": "medication_reminder_medicationreminderapp_quit_app",
       "community": 1,
       "norm_label": ".quit_app()"
@@ -1042,7 +1069,7 @@
       "label": ".run()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L881",
+      "source_location": "L904",
       "id": "medication_reminder_medicationreminderapp_run",
       "community": 7,
       "norm_label": ".run()"
@@ -1051,7 +1078,7 @@
       "label": "show_startup_error()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L885",
+      "source_location": "L908",
       "id": "medication_reminder_show_startup_error",
       "community": 7,
       "norm_label": "show_startup_error()"
@@ -1060,7 +1087,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L892",
+      "source_location": "L915",
       "id": "medication_reminder_main",
       "community": 7,
       "norm_label": "main()"
@@ -1503,7 +1530,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L1",
       "id": "image_base",
-      "community": 12,
+      "community": 2,
       "norm_label": "base.py"
     },
     {
@@ -3222,7 +3249,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L55",
       "id": "qrcode_main_activewithneighbors",
-      "community": 12,
+      "community": 10,
       "norm_label": "activewithneighbors"
     },
     {
@@ -3231,7 +3258,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L66",
       "id": "qrcode_main_activewithneighbors_bool",
-      "community": 12,
+      "community": 10,
       "norm_label": ".__bool__()"
     },
     {
@@ -5728,9 +5755,9 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pairing",
-      "target": "medication_core",
-      "confidence_score": 1.0
+      "target": "medication_core"
     },
     {
       "relation": "uses",
@@ -6867,9 +6894,9 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pairing",
-      "target": "medication_core_validate_schedule",
-      "confidence_score": 1.0
+      "target": "medication_core_validate_schedule"
     },
     {
       "relation": "calls",
@@ -8711,9 +8738,9 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pairing",
-      "target": "medication_reminder",
-      "confidence_score": 1.0
+      "target": "medication_reminder"
     },
     {
       "relation": "calls",
@@ -9038,6 +9065,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L294",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_add_schedule_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L80",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -9258,6 +9295,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L303",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_remove_selected_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L511",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -9283,6 +9330,16 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
       "target": "medication_reminder_medicationreminderapp_save_config"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L283",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_selected_main_event_index",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -9401,9 +9458,9 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pairing",
-      "target": "medication_reminder_medicationreminderapp",
-      "confidence_score": 1.0
+      "target": "medication_reminder_medicationreminderapp"
     },
     {
       "relation": "uses",
@@ -9411,9 +9468,9 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L6",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "tests_test_pairing_pairingtests",
-      "target": "medication_reminder_medicationreminderapp",
-      "confidence_score": 0.5
+      "target": "medication_reminder_medicationreminderapp"
     },
     {
       "relation": "calls",
@@ -9767,11 +9824,55 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp_edit_selected_main",
+      "target": "medication_reminder_medicationreminderapp_selected_main_event_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp_remove_selected_main",
+      "target": "medication_reminder_medicationreminderapp_selected_main_event_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L295",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp_add_schedule_main",
+      "target": "medication_reminder_medicationreminderapp_edit_event_dialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L280",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_edit_selected_main",
       "target": "medication_reminder_medicationreminderapp_edit_event_dialog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L312",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp_remove_selected_main",
+      "target": "medication_reminder_medicationreminderapp_save_config",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10386,9 +10487,9 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pairing",
-      "target": "tests_test_pairing_pairingtests",
-      "confidence_score": 1.0
+      "target": "tests_test_pairing_pairingtests"
     },
     {
       "relation": "method",
@@ -10396,9 +10497,9 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pairing_pairingtests",
-      "target": "tests_test_pairing_pairingtests_test_compact_pairing_payload_round_trips_schedule",
-      "confidence_score": 1.0
+      "target": "tests_test_pairing_pairingtests_test_compact_pairing_payload_round_trips_schedule"
     },
     {
       "relation": "imports_from",
@@ -16734,5 +16835,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ac11d87e4a1988a5b4a75d08c3fac7cde6c9fd0a"
+  "built_at_commit": "162dfb37ec7e9b78da074d1f7ee43c851c071acc"
 }

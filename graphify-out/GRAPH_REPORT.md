@@ -1,16 +1,16 @@
 # Graph Report - Medication Reminder  (2026-07-22)
 
 ## Corpus Check
-- 48 files · ~26,746 words
+- 48 files · ~26,819 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 607 nodes · 1082 edges · 35 communities (27 shown, 8 thin omitted)
+- 610 nodes · 1089 edges · 35 communities (27 shown, 8 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 100 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ac11d87e`
+- Built from commit: `162dfb37`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -42,7 +42,7 @@
 - [[_COMMUNITY_Community 34|Community 34]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `MedicationReminderApp` - 45 edges
+1. `MedicationReminderApp` - 48 edges
 2. `QRCode` - 30 edges
 3. `$()` - 29 edges
 4. `ScheduleEngine` - 28 edges
@@ -78,7 +78,7 @@ Cohesion: 0.18
 Nodes (10): Build a single Windows EXE, Editing the schedule, Files, Important clinical note, Local-first web app, Main features, Medication Reminder Widget for Windows, Quick start (+2 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.11
+Cohesion: 0.10
 Nodes (9): DueOccurrence, DueEvent, MedicationReminderApp, Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls., Apply a bright, friendly palette while preserving native Tk controls. (+1 more)
 
 ### Community 2 - "Community 2"
@@ -102,16 +102,16 @@ Cohesion: 0.17
 Nodes (10): main(), Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., Prevent duplicate reminder processes using a per-user Windows mutex., show_startup_error() (+2 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.07
-Nodes (16): Styled PIL image builder, default format is PNG.      This differs from the PilI, StyledPilImage, CircleModuleDrawer, GappedSquareModuleDrawer, HorizontalBarsDrawer, A base class for StyledPilImage module drawers.      NOTE: the color that this d, Draws vertically contiguous groups of modules as long rounded rectangles,     wi, Draws horizontally contiguous groups of modules as long rounded rectangles, (+8 more)
+Cohesion: 0.08
+Nodes (17): Styled PIL image builder, default format is PNG.      This differs from the PilI, StyledPilImage, CircleModuleDrawer, GappedSquareModuleDrawer, HorizontalBarsDrawer, A base class for StyledPilImage module drawers.      NOTE: the color that this d, Draws vertically contiguous groups of modules as long rounded rectangles,     wi, Draws horizontally contiguous groups of modules as long rounded rectangles, (+9 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.08
 Nodes (14): HorizontalGradiantColorMask, ImageColorMask, QRColorMask, RadialGradiantColorMask, Fills in the foreground with a radial gradient from the center to the edge, Fills in the foreground with a square gradient from the center to the edge, Fills in the foreground with a gradient sweeping from the left to the right, Fills in the forefround with a gradient sweeping from the top to the bottom (+6 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.09
-Nodes (13): BaseImage, BaseImageWithDrawer, Find whether the referenced module is in an eye., Base QRCode image output class., Draw a single rectangle of the QR code., Draw a single rectangle of the QR code given the surrounding context, Processes QR code after completion, A helper method for pixel-based image generators that specifies the         four (+5 more)
+Cohesion: 0.10
+Nodes (12): BaseImage, BaseImageWithDrawer, Find whether the referenced module is in an eye., Base QRCode image output class., Draw a single rectangle of the QR code., Draw a single rectangle of the QR code given the surrounding context, Processes QR code after completion, A helper method for pixel-based image generators that specifies the         four (+4 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.13
@@ -149,10 +149,10 @@ Nodes (5): enable_dpi_awareness(), Ask Windows to render Tk at the monitor's nat
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ActiveWithNeighbors` connect `Community 12` to `Community 10`, `Community 2`, `Community 14`?**
-  _High betweenness centrality (0.156) - this node is a cross-community bridge._
+- **Why does `ActiveWithNeighbors` connect `Community 10` to `Community 2`, `Community 12`, `Community 14`?**
+  _High betweenness centrality (0.155) - this node is a cross-community bridge._
 - **Why does `ConfigValidationError` connect `Community 3` to `Community 1`, `Community 2`, `Community 7`?**
-  _High betweenness centrality (0.139) - this node is a cross-community bridge._
+  _High betweenness centrality (0.140) - this node is a cross-community bridge._
 - **Why does `StyledPilImage` connect `Community 10` to `Community 11`?**
   _High betweenness centrality (0.111) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `MedicationReminderApp` (e.g. with `AppStorage` and `ConfigValidationError`) actually correct?**

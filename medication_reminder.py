@@ -231,13 +231,17 @@ class MedicationReminderApp:
         button_bar = ttk.Frame(outer)
         button_bar.pack(fill="x", pady=(2, 12))
         ttk.Button(button_bar, text="Test reminder", style="Accent.TButton", command=self.test_reminder).pack(side="left")
-        ttk.Button(button_bar, text="Manage schedules", style="Teal.TButton", command=self.open_schedule_editor).pack(
-            side="left", padx=8
-        )
-        ttk.Button(button_bar, text="Edit selected", style="Teal.TButton", command=self.edit_selected_main).pack(side="left")
         ttk.Button(button_bar, text="Alert settings", style="Accent.TButton", command=self.open_alert_settings).pack(side="left", padx=8)
         ttk.Button(button_bar, text="Export taken log", style="Teal.TButton", command=self.export_taken_log).pack(side="left")
         ttk.Button(button_bar, text="Minimize to tray", style="Teal.TButton", command=self.hide_to_tray).pack(side="right")
+
+        schedule_bar = ttk.Frame(outer)
+        schedule_bar.pack(fill="x", pady=(0, 8))
+        ttk.Label(schedule_bar, text="Schedules:", style="Meta.TLabel").pack(side="left", padx=(0, 8))
+        ttk.Button(schedule_bar, text="+ Add", style="Accent.TButton", command=self.add_schedule_main).pack(side="left", padx=(0, 6))
+        ttk.Button(schedule_bar, text="Edit", style="Teal.TButton", command=self.edit_selected_main).pack(side="left", padx=6)
+        ttk.Button(schedule_bar, text="Remove", command=self.remove_selected_main).pack(side="left", padx=6)
+        ttk.Button(schedule_bar, text="Manage schedules", command=self.open_schedule_editor).pack(side="right")
 
         columns = ("time", "label", "medicines")
         self.tree = ttk.Treeview(outer, columns=columns, show="headings", height=9)
@@ -276,17 +280,36 @@ class MedicationReminderApp:
         if self.running:
             self.root.after(30_000, self.update_next_due_text)
 
-    def edit_selected_main(self) -> None:
+    def _selected_main_event_index(self) -> int | None:
         selected = self.tree.selection()
         if not selected:
             messagebox.showinfo(APP_NAME, "Select a schedule row first.")
-            return
+            return None
         values = self.tree.item(selected[0], "values")
         event_index = next((index for index, event in enumerate(self.config_data["events"]) if event["time"] == values[0] and event["label"] == values[1]), None)
         if event_index is None:
             messagebox.showerror(APP_NAME, "The selected schedule is no longer available.")
+        return event_index
+
+    def add_schedule_main(self) -> None:
+        self.edit_event_dialog(self.root, None, self.refresh_schedule_table)
+
+    def edit_selected_main(self) -> None:
+        event_index = self._selected_main_event_index()
+        if event_index is None:
             return
         self.edit_event_dialog(self.root, event_index, self.refresh_schedule_table)
+
+    def remove_selected_main(self) -> None:
+        event_index = self._selected_main_event_index()
+        if event_index is None:
+            return
+        event = self.config_data["events"][event_index]
+        if not messagebox.askyesno(APP_NAME, f"Remove '{event['label']}' from the schedule?", parent=self.root):
+            return
+        candidate = deepcopy(self.config_data)
+        candidate["events"].pop(event_index)
+        self.save_config(candidate, "reminder_removed", event["id"])
 
     def open_alert_settings(self) -> None:
         settings = tk.Toplevel(self.root)
