@@ -10,6 +10,8 @@ import sys
 import threading
 import time
 import wave
+import webbrowser
+from urllib.parse import quote
 import winsound
 from copy import deepcopy
 from datetime import datetime
@@ -234,6 +236,7 @@ class MedicationReminderApp:
         ttk.Button(button_bar, text="Alert settings", style="Accent.TButton", command=self.open_alert_settings).pack(side="left", padx=8)
         ttk.Button(button_bar, text="Export taken log", style="Teal.TButton", command=self.export_taken_log).pack(side="left")
         ttk.Button(button_bar, text="Pair device", style="Teal.TButton", command=self.pair_device).pack(side="left", padx=8)
+        ttk.Button(button_bar, text="Show QR", style="Teal.TButton", command=self.show_pairing_qr).pack(side="left")
         ttk.Button(button_bar, text="Minimize to tray", style="Teal.TButton", command=self.hide_to_tray).pack(side="right")
 
         columns = ("time", "label", "medicines")
@@ -754,6 +757,10 @@ class MedicationReminderApp:
             messagebox.showinfo(APP_NAME, "Schedule imported successfully.")
         except (ValueError, KeyError, UnicodeError, ConfigValidationError) as exc:
             messagebox.showerror(APP_NAME, f"Invalid pairing code: {exc}")
+
+    def show_pairing_qr(self) -> None:
+        payload = base64.urlsafe_b64encode(json.dumps({"version": 1, "schedule": self.config_data}, separators=(",", ":")).encode()).decode().rstrip("=")
+        webbrowser.open("https://medication.bytesfx.com/?pair=" + quote(payload, safe=""))
 
     def export_taken_log(self) -> None:
         if not messagebox.askyesno(
