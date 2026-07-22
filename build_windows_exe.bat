@@ -2,7 +2,7 @@
 title Build Medication Reminder EXE
 cd /d "%~dp0"
 py -m pip install -r requirements.txt
-pyinstaller --noconfirm --clean --onefile --windowed ^
+pyinstaller --noconfirm --clean --onefile --windowed --paths vendor ^
   --distpath dist ^
   --name MedicationReminder ^
   --icon medication_icon.ico ^

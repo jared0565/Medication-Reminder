@@ -10,8 +10,6 @@ import sys
 import threading
 import time
 import wave
-import webbrowser
-from urllib.parse import quote
 import winsound
 from copy import deepcopy
 from datetime import datetime
@@ -19,8 +17,11 @@ from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog, ttk
 
-from PIL import Image
+from PIL import Image, ImageTk
 import pystray
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "vendor"))
+import qrcode
 
 from medication_core import (
     AppStorage,
@@ -763,7 +764,27 @@ class MedicationReminderApp:
 
     def show_pairing_qr(self) -> None:
         payload = base64.urlsafe_b64encode(json.dumps({"version": 1, "schedule": self.config_data}, separators=(",", ":")).encode()).decode().rstrip("=")
-        webbrowser.open("https://medication.bytesfx.com/?pair=" + quote(payload, safe=""))
+        try:
+            code = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=4, border=4)
+            code.add_data(payload)
+            code.make(fit=True)
+            image = code.make_image(fill_color="#243044", back_color="white").convert("RGB")
+            photo = ImageTk.PhotoImage(image)
+            dialog = tk.Toplevel(self.root)
+            dialog.title("Pair schedule with mobile")
+            dialog.configure(bg="white")
+            dialog.resizable(False, False)
+            dialog.transient(self.root)
+            ttk.Label(dialog, text="Scan this QR code from the mobile app", style="Heading.TLabel").pack(padx=24, pady=(20, 10))
+            image_label = tk.Label(dialog, image=photo, bg="white")
+            image_label.image = photo
+            image_label.pack(padx=24, pady=8)
+            ttk.Label(dialog, text="Schedules are transferred directly in the QR code.", style="Meta.TLabel").pack(pady=(4, 12))
+            ttk.Button(dialog, text="Close", command=dialog.destroy).pack(pady=(0, 20))
+            dialog.lift()
+            dialog.focus_force()
+        except (ValueError, OSError) as exc:
+            messagebox.showerror(APP_NAME, f"Could not create the pairing QR code: {exc}", parent=self.root)
 
     def export_taken_log(self) -> None:
         if not messagebox.askyesno(
