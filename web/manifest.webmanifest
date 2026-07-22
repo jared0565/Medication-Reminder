@@ -1,1 +1,1 @@
-{"name":"Medication Reminder","short_name":"Meds Reminder","start_url":"./","display":"standalone","background_color":"#fff8f2","theme_color":"#138a8a","description":"A private, local-first medication reminder.","icons":[]}
+{"name":"Medication Reminder","short_name":"Meds Reminder","start_url":"./","display":"standalone","background_color":"#fff8f2","theme_color":"#138a8a","description":"A private, local-first medication reminder.","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
