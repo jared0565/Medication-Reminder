@@ -315,14 +315,22 @@ class AppStorage:
 
     def load_settings(self) -> dict[str, Any]:
         if not self.settings_file.exists():
-            return {"volume": 70, "sound": "SystemExclamation"}
+            return {"volume": 70, "sound": "chime"}
         value = self.settings_file.load()
         if not isinstance(value, dict):
             raise StorageError("The protected alert settings have an invalid structure")
-        return {"volume": max(0, min(100, int(value.get("volume", 70)))), "sound": str(value.get("sound", "SystemExclamation"))}
+        legacy = {"SystemExclamation": "chime", "SystemAsterisk": "bright", "SystemHand": "urgent", "SystemQuestion": "warm", "SystemInformation": "quiet"}
+        sound = legacy.get(str(value.get("sound", "chime")), str(value.get("sound", "chime")))
+        if sound not in {"chime", "bright", "warm", "urgent", "quiet"}:
+            sound = "chime"
+        return {"volume": max(0, min(100, int(value.get("volume", 70)))), "sound": sound}
 
     def save_settings(self, settings: dict[str, Any]) -> None:
-        normalized = {"volume": max(0, min(100, int(settings.get("volume", 70)))), "sound": str(settings.get("sound", "SystemExclamation"))}
+        sound = str(settings.get("sound", "chime"))
+        sound = {"SystemExclamation": "chime", "SystemAsterisk": "bright", "SystemHand": "urgent", "SystemQuestion": "warm", "SystemInformation": "quiet"}.get(sound, sound)
+        if sound not in {"chime", "bright", "warm", "urgent", "quiet"}:
+            sound = "chime"
+        normalized = {"volume": max(0, min(100, int(settings.get("volume", 70)))), "sound": sound}
         self.settings_file.save(normalized)
 
     def load_schedule(self, seed_path: Path) -> dict[str, Any]:

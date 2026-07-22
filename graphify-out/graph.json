@@ -31,84 +31,12 @@
       "norm_label": "pretooluse"
     },
     {
-      "label": "Analysis-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest2/MedicationReminder/Analysis-00.toc",
-      "source_location": "L1",
-      "id": "build_latest2_medicationreminder_analysis_00_toc_medicationreminder_analysis_00",
-      "community": 14,
-      "norm_label": "analysis-00.toc"
-    },
-    {
-      "label": "EXE-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest2/MedicationReminder/EXE-00.toc",
-      "source_location": "L1",
-      "id": "build_latest2_medicationreminder_exe_00_toc_medicationreminder_exe_00",
-      "community": 15,
-      "norm_label": "exe-00.toc"
-    },
-    {
-      "label": "PKG-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest2/MedicationReminder/PKG-00.toc",
-      "source_location": "L1",
-      "id": "build_latest2_medicationreminder_pkg_00_toc_medicationreminder_pkg_00",
-      "community": 16,
-      "norm_label": "pkg-00.toc"
-    },
-    {
-      "label": "PYZ-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest2/MedicationReminder/PYZ-00.toc",
-      "source_location": "L1",
-      "id": "build_latest2_medicationreminder_pyz_00_toc_medicationreminder_pyz_00",
-      "community": 17,
-      "norm_label": "pyz-00.toc"
-    },
-    {
-      "label": "Analysis-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/Analysis-00.toc",
-      "source_location": "L1",
-      "id": "build_latest_medicationreminder_analysis_00_toc_medicationreminder_analysis_00",
-      "community": 18,
-      "norm_label": "analysis-00.toc"
-    },
-    {
-      "label": "EXE-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/EXE-00.toc",
-      "source_location": "L1",
-      "id": "build_latest_medicationreminder_exe_00_toc_medicationreminder_exe_00",
-      "community": 19,
-      "norm_label": "exe-00.toc"
-    },
-    {
-      "label": "PKG-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/PKG-00.toc",
-      "source_location": "L1",
-      "id": "build_latest_medicationreminder_pkg_00_toc_medicationreminder_pkg_00",
-      "community": 20,
-      "norm_label": "pkg-00.toc"
-    },
-    {
-      "label": "PYZ-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/PYZ-00.toc",
-      "source_location": "L1",
-      "id": "build_latest_medicationreminder_pyz_00_toc_medicationreminder_pyz_00",
-      "community": 21,
-      "norm_label": "pyz-00.toc"
-    },
-    {
       "label": "medication_core.py",
       "file_type": "code",
       "source_file": "medication_core.py",
       "source_location": "L1",
       "id": "medication_core",
-      "community": 4,
+      "community": 3,
       "norm_label": "medication_core.py"
     },
     {
@@ -117,7 +45,7 @@
       "source_file": "medication_core.py",
       "source_location": "L28",
       "id": "medication_core_configvalidationerror",
-      "community": 4,
+      "community": 3,
       "norm_label": "configvalidationerror"
     },
     {
@@ -189,7 +117,7 @@
       "source_file": "medication_core.py",
       "source_location": "L42",
       "id": "medication_core_parse_iso_date",
-      "community": 4,
+      "community": 3,
       "norm_label": "parse_iso_date()"
     },
     {
@@ -207,7 +135,7 @@
       "source_file": "medication_core.py",
       "source_location": "L49",
       "id": "medication_core_parse_time",
-      "community": 4,
+      "community": 3,
       "norm_label": "parse_time()"
     },
     {
@@ -216,7 +144,7 @@
       "source_file": "medication_core.py",
       "source_location": "L49",
       "id": "time",
-      "community": 4,
+      "community": 7,
       "norm_label": "time"
     },
     {
@@ -225,7 +153,7 @@
       "source_file": "medication_core.py",
       "source_location": "L55",
       "id": "medication_core_require_text",
-      "community": 4,
+      "community": 3,
       "norm_label": "_require_text()"
     },
     {
@@ -243,7 +171,7 @@
       "source_file": "medication_core.py",
       "source_location": "L66",
       "id": "medication_core_validate_schedule",
-      "community": 4,
+      "community": 3,
       "norm_label": "validate_schedule()"
     },
     {
@@ -439,7 +367,7 @@
       "label": ".save_settings()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L324",
+      "source_location": "L328",
       "id": "medication_core_appstorage_save_settings",
       "community": 2,
       "norm_label": ".save_settings()"
@@ -448,7 +376,7 @@
       "label": ".load_schedule()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L328",
+      "source_location": "L336",
       "id": "medication_core_appstorage_load_schedule",
       "community": 2,
       "norm_label": ".load_schedule()"
@@ -457,7 +385,7 @@
       "label": ".save_schedule()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L343",
+      "source_location": "L351",
       "id": "medication_core_appstorage_save_schedule",
       "community": 2,
       "norm_label": ".save_schedule()"
@@ -466,7 +394,7 @@
       "label": ".load_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L348",
+      "source_location": "L356",
       "id": "medication_core_appstorage_load_state",
       "community": 2,
       "norm_label": ".load_state()"
@@ -475,7 +403,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L348",
+      "source_location": "L356",
       "id": "medication_core_py_datetime",
       "community": 3,
       "norm_label": "datetime"
@@ -484,7 +412,7 @@
       "label": ".save_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L355",
+      "source_location": "L363",
       "id": "medication_core_appstorage_save_state",
       "community": 2,
       "norm_label": ".save_state()"
@@ -493,7 +421,7 @@
       "label": ".append_audit()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L358",
+      "source_location": "L366",
       "id": "medication_core_appstorage_append_audit",
       "community": 2,
       "norm_label": ".append_audit()"
@@ -502,7 +430,7 @@
       "label": ".export_taken_csv()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L370",
+      "source_location": "L378",
       "id": "medication_core_appstorage_export_taken_csv",
       "community": 2,
       "norm_label": ".export_taken_csv()"
@@ -511,7 +439,7 @@
       "label": "_safe_datetime()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L404",
+      "source_location": "L412",
       "id": "medication_core_safe_datetime",
       "community": 3,
       "norm_label": "_safe_datetime()"
@@ -520,7 +448,7 @@
       "label": "default_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L414",
+      "source_location": "L422",
       "id": "medication_core_default_state",
       "community": 2,
       "norm_label": "default_state()"
@@ -529,7 +457,7 @@
       "label": "normalize_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L426",
+      "source_location": "L434",
       "id": "medication_core_normalize_state",
       "community": 2,
       "norm_label": "normalize_state()"
@@ -538,25 +466,25 @@
       "label": "DueOccurrence",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L447",
+      "source_location": "L455",
       "id": "medication_core_dueoccurrence",
-      "community": 4,
+      "community": 7,
       "norm_label": "dueoccurrence"
     },
     {
       "label": ".overdue()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L457",
+      "source_location": "L465",
       "id": "medication_core_dueoccurrence_overdue",
-      "community": 4,
+      "community": 7,
       "norm_label": ".overdue()"
     },
     {
       "label": "ScheduleEngine",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L461",
+      "source_location": "L469",
       "id": "medication_core_scheduleengine",
       "community": 3,
       "norm_label": "scheduleengine"
@@ -565,7 +493,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L462",
+      "source_location": "L470",
       "id": "medication_core_scheduleengine_init",
       "community": 3,
       "norm_label": ".__init__()"
@@ -574,7 +502,7 @@
       "label": ".replace_schedule()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L467",
+      "source_location": "L475",
       "id": "medication_core_scheduleengine_replace_schedule",
       "community": 3,
       "norm_label": ".replace_schedule()"
@@ -583,7 +511,7 @@
       "label": ".collect_due()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L472",
+      "source_location": "L480",
       "id": "medication_core_scheduleengine_collect_due",
       "community": 3,
       "norm_label": ".collect_due()"
@@ -592,7 +520,7 @@
       "label": ".next_ready()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L501",
+      "source_location": "L509",
       "id": "medication_core_scheduleengine_next_ready",
       "community": 3,
       "norm_label": ".next_ready()"
@@ -601,7 +529,7 @@
       "label": ".resolve()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L513",
+      "source_location": "L521",
       "id": "medication_core_scheduleengine_resolve",
       "community": 2,
       "norm_label": ".resolve()"
@@ -610,7 +538,7 @@
       "label": ".mark_taken()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L536",
+      "source_location": "L544",
       "id": "medication_core_scheduleengine_mark_taken",
       "community": 3,
       "norm_label": ".mark_taken()"
@@ -619,7 +547,7 @@
       "label": ".snooze()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L543",
+      "source_location": "L551",
       "id": "medication_core_scheduleengine_snooze",
       "community": 3,
       "norm_label": ".snooze()"
@@ -628,7 +556,7 @@
       "label": ".next_scheduled()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L550",
+      "source_location": "L558",
       "id": "medication_core_scheduleengine_next_scheduled",
       "community": 3,
       "norm_label": ".next_scheduled()"
@@ -637,7 +565,7 @@
       "label": "._drop_invalid_pending()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L563",
+      "source_location": "L571",
       "id": "medication_core_scheduleengine_drop_invalid_pending",
       "community": 3,
       "norm_label": "._drop_invalid_pending()"
@@ -646,7 +574,7 @@
       "label": "._cleanup()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L570",
+      "source_location": "L578",
       "id": "medication_core_scheduleengine_cleanup",
       "community": 3,
       "norm_label": "._cleanup()"
@@ -655,7 +583,7 @@
       "label": "._localize()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L581",
+      "source_location": "L589",
       "id": "medication_core_scheduleengine_localize",
       "community": 3,
       "norm_label": "._localize()"
@@ -666,7 +594,7 @@
       "source_file": "medication_core.py",
       "source_location": "L29",
       "id": "medication_core_rationale_29",
-      "community": 4,
+      "community": 3,
       "norm_label": "raised when the medication schedule does not satisfy its contract."
     },
     {
@@ -684,7 +612,7 @@
       "source_file": "medication_core.py",
       "source_location": "L67",
       "id": "medication_core_rationale_67",
-      "community": 4,
+      "community": 3,
       "norm_label": "validate and normalize untrusted schedule data at the file/ui boundary."
     },
     {
@@ -702,7 +630,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1",
       "id": "medication_reminder",
-      "community": 4,
+      "community": 7,
       "norm_label": "medication_reminder.py"
     },
     {
@@ -711,7 +639,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L37",
       "id": "medication_reminder_enable_dpi_awareness",
-      "community": 4,
+      "community": 7,
       "norm_label": "enable_dpi_awareness()"
     },
     {
@@ -720,7 +648,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L58",
       "id": "medication_reminder_resource_dir",
-      "community": 4,
+      "community": 7,
       "norm_label": "resource_dir()"
     },
     {
@@ -729,7 +657,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L58",
       "id": "medication_reminder_py_path",
-      "community": 4,
+      "community": 7,
       "norm_label": "path"
     },
     {
@@ -738,7 +666,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L70",
       "id": "medication_reminder_startup_command",
-      "community": 4,
+      "community": 7,
       "norm_label": "startup_command()"
     },
     {
@@ -747,7 +675,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L80",
       "id": "medication_reminder_register_startup",
-      "community": 4,
+      "community": 7,
       "norm_label": "register_startup()"
     },
     {
@@ -828,7 +756,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L190",
       "id": "medication_reminder_py_datetime",
-      "community": 4,
+      "community": 7,
       "norm_label": "datetime"
     },
     {
@@ -898,7 +826,7 @@
       "label": ".show_due_popup()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L359",
+      "source_location": "L362",
       "id": "medication_reminder_medicationreminderapp_show_due_popup",
       "community": 1,
       "norm_label": ".show_due_popup()"
@@ -907,7 +835,7 @@
       "label": "DueOccurrence",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L359",
+      "source_location": "L362",
       "id": "dueoccurrence",
       "community": 1,
       "norm_label": "dueoccurrence"
@@ -916,7 +844,7 @@
       "label": ".mark_taken()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L434",
+      "source_location": "L437",
       "id": "medication_reminder_medicationreminderapp_mark_taken",
       "community": 1,
       "norm_label": ".mark_taken()"
@@ -925,7 +853,7 @@
       "label": "Toplevel",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L434",
+      "source_location": "L437",
       "id": "toplevel",
       "community": 1,
       "norm_label": "toplevel"
@@ -934,7 +862,7 @@
       "label": ".snooze_event()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L452",
+      "source_location": "L455",
       "id": "medication_reminder_medicationreminderapp_snooze_event",
       "community": 1,
       "norm_label": ".snooze_event()"
@@ -943,7 +871,7 @@
       "label": "._close_popup()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L465",
+      "source_location": "L468",
       "id": "medication_reminder_medicationreminderapp_close_popup",
       "community": 1,
       "norm_label": "._close_popup()"
@@ -952,7 +880,7 @@
       "label": ".test_reminder()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L471",
+      "source_location": "L474",
       "id": "medication_reminder_medicationreminderapp_test_reminder",
       "community": 1,
       "norm_label": ".test_reminder()"
@@ -961,7 +889,7 @@
       "label": ".save_config()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L484",
+      "source_location": "L487",
       "id": "medication_reminder_medicationreminderapp_save_config",
       "community": 1,
       "norm_label": ".save_config()"
@@ -970,7 +898,7 @@
       "label": ".open_schedule_editor()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L498",
+      "source_location": "L501",
       "id": "medication_reminder_medicationreminderapp_open_schedule_editor",
       "community": 1,
       "norm_label": ".open_schedule_editor()"
@@ -979,7 +907,7 @@
       "label": ".edit_event_dialog()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L625",
+      "source_location": "L628",
       "id": "medication_reminder_medicationreminderapp_edit_event_dialog",
       "community": 1,
       "norm_label": ".edit_event_dialog()"
@@ -988,7 +916,7 @@
       "label": ".export_taken_log()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L714",
+      "source_location": "L717",
       "id": "medication_reminder_medicationreminderapp_export_taken_log",
       "community": 1,
       "norm_label": ".export_taken_log()"
@@ -997,7 +925,7 @@
       "label": "._safe_audit()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L735",
+      "source_location": "L738",
       "id": "medication_reminder_medicationreminderapp_safe_audit",
       "community": 1,
       "norm_label": "._safe_audit()"
@@ -1006,7 +934,7 @@
       "label": "._warn_persistence()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L741",
+      "source_location": "L744",
       "id": "medication_reminder_medicationreminderapp_warn_persistence",
       "community": 1,
       "norm_label": "._warn_persistence()"
@@ -1015,16 +943,16 @@
       "label": "Exception",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L741",
+      "source_location": "L744",
       "id": "exception",
-      "community": 4,
+      "community": 2,
       "norm_label": "exception"
     },
     {
       "label": ".hide_to_tray()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L751",
+      "source_location": "L754",
       "id": "medication_reminder_medicationreminderapp_hide_to_tray",
       "community": 1,
       "norm_label": ".hide_to_tray()"
@@ -1033,7 +961,7 @@
       "label": ".show_window()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L754",
+      "source_location": "L757",
       "id": "medication_reminder_medicationreminderapp_show_window",
       "community": 1,
       "norm_label": ".show_window()"
@@ -1042,7 +970,7 @@
       "label": "._show_window_main_thread()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L757",
+      "source_location": "L760",
       "id": "medication_reminder_medicationreminderapp_show_window_main_thread",
       "community": 1,
       "norm_label": "._show_window_main_thread()"
@@ -1051,7 +979,7 @@
       "label": ".start_tray_icon()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L762",
+      "source_location": "L765",
       "id": "medication_reminder_medicationreminderapp_start_tray_icon",
       "community": 1,
       "norm_label": ".start_tray_icon()"
@@ -1060,7 +988,7 @@
       "label": ".quit_app()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L774",
+      "source_location": "L777",
       "id": "medication_reminder_medicationreminderapp_quit_app",
       "community": 1,
       "norm_label": ".quit_app()"
@@ -1069,7 +997,7 @@
       "label": ".run()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L785",
+      "source_location": "L788",
       "id": "medication_reminder_medicationreminderapp_run",
       "community": 7,
       "norm_label": ".run()"
@@ -1078,7 +1006,7 @@
       "label": "show_startup_error()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L789",
+      "source_location": "L792",
       "id": "medication_reminder_show_startup_error",
       "community": 7,
       "norm_label": "show_startup_error()"
@@ -1087,7 +1015,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L796",
+      "source_location": "L799",
       "id": "medication_reminder_main",
       "community": 7,
       "norm_label": "main()"
@@ -1098,7 +1026,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L38",
       "id": "medication_reminder_rationale_38",
-      "community": 4,
+      "community": 7,
       "norm_label": "ask windows to render tk at the monitor's native dpi."
     },
     {
@@ -1107,7 +1035,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L71",
       "id": "medication_reminder_rationale_71",
-      "community": 4,
+      "community": 7,
       "norm_label": "return a quoted command that starts this app without a console window."
     },
     {
@@ -1116,7 +1044,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L81",
       "id": "medication_reminder_rationale_81",
-      "community": 4,
+      "community": 7,
       "norm_label": "register this user's app for logon startup; never requires elevation."
     },
     {
@@ -1354,6 +1282,42 @@
       "norm_label": "renderall()"
     },
     {
+      "label": "updateNotificationStatus()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L13",
+      "id": "web_app_updatenotificationstatus",
+      "community": 22,
+      "norm_label": "updatenotificationstatus()"
+    },
+    {
+      "label": "enableNotifications()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L14",
+      "id": "web_app_enablenotifications",
+      "community": 22,
+      "norm_label": "enablenotifications()"
+    },
+    {
+      "label": "notifiedKeys",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L15",
+      "id": "web_app_notifiedkeys",
+      "community": 22,
+      "norm_label": "notifiedkeys"
+    },
+    {
+      "label": "checkForegroundNotifications()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L16",
+      "id": "web_app_checkforegroundnotifications",
+      "community": 22,
+      "norm_label": "checkforegroundnotifications()"
+    },
+    {
       "label": "sw.js",
       "file_type": "code",
       "source_file": "web/sw.js",
@@ -1366,10 +1330,145 @@
       "label": "ASSETS",
       "file_type": "code",
       "source_file": "web/sw.js",
-      "source_location": "L1",
+      "source_location": "L2",
       "id": "web_sw_assets",
       "community": 23,
       "norm_label": "assets"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L1",
+      "id": "worker_package",
+      "community": 4,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L2",
+      "id": "worker_package_name",
+      "community": 4,
+      "norm_label": "name"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L3",
+      "id": "worker_package_version",
+      "community": 4,
+      "norm_label": "version"
+    },
+    {
+      "label": "description",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L4",
+      "id": "worker_package_description",
+      "community": 4,
+      "norm_label": "description"
+    },
+    {
+      "label": "main",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L5",
+      "id": "worker_package_main",
+      "community": 4,
+      "norm_label": "main"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L6",
+      "id": "worker_package_scripts",
+      "community": 4,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "test",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L7",
+      "id": "worker_package_scripts_test",
+      "community": 4,
+      "norm_label": "test"
+    },
+    {
+      "label": "keywords",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L9",
+      "id": "worker_package_keywords",
+      "community": 4,
+      "norm_label": "keywords"
+    },
+    {
+      "label": "author",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L10",
+      "id": "worker_package_author",
+      "community": 4,
+      "norm_label": "author"
+    },
+    {
+      "label": "license",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L11",
+      "id": "worker_package_license",
+      "community": 4,
+      "norm_label": "license"
+    },
+    {
+      "label": "type",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L12",
+      "id": "worker_package_type",
+      "community": 4,
+      "norm_label": "type"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L13",
+      "id": "worker_package_dependencies",
+      "community": 4,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "web-push",
+      "file_type": "code",
+      "source_file": "worker/package.json",
+      "source_location": "L14",
+      "id": "worker_package_dependencies_web_push",
+      "community": 4,
+      "norm_label": "web-push"
+    },
+    {
+      "label": "index.js",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L1",
+      "id": "src_index",
+      "community": 10,
+      "norm_label": "index.js"
+    },
+    {
+      "label": "fetch()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L4",
+      "id": "src_index_fetch",
+      "community": 10,
+      "norm_label": "fetch()"
     },
     {
       "label": "AGENTS.md",
@@ -1402,7 +1501,7 @@
       "label": "Medication Reminder Widget for Windows",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L2",
+      "source_location": "L1",
       "id": "readme_medication_reminder_widget_for_windows",
       "community": 0,
       "norm_label": "medication reminder widget for windows"
@@ -1411,7 +1510,7 @@
       "label": "Main features",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L8",
+      "source_location": "L7",
       "id": "readme_main_features",
       "community": 0,
       "norm_label": "main features"
@@ -1420,7 +1519,7 @@
       "label": "Important clinical note",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L20",
+      "source_location": "L19",
       "id": "readme_important_clinical_note",
       "community": 0,
       "norm_label": "important clinical note"
@@ -1429,7 +1528,7 @@
       "label": "Quick start",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L26",
+      "source_location": "L25",
       "id": "readme_quick_start",
       "community": 0,
       "norm_label": "quick start"
@@ -1438,7 +1537,7 @@
       "label": "Build a single Windows EXE",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L39",
+      "source_location": "L38",
       "id": "readme_build_a_single_windows_exe",
       "community": 0,
       "norm_label": "build a single windows exe"
@@ -1447,7 +1546,7 @@
       "label": "Start automatically with Windows",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L52",
+      "source_location": "L51",
       "id": "readme_start_automatically_with_windows",
       "community": 0,
       "norm_label": "start automatically with windows"
@@ -1456,7 +1555,7 @@
       "label": "Editing the schedule",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L62",
+      "source_location": "L61",
       "id": "readme_editing_the_schedule",
       "community": 0,
       "norm_label": "editing the schedule"
@@ -1465,7 +1564,7 @@
       "label": "Files",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L70",
+      "source_location": "L69",
       "id": "readme_files",
       "community": 0,
       "norm_label": "files"
@@ -1474,7 +1573,7 @@
       "label": "Testing",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L77",
+      "source_location": "L76",
       "id": "readme_testing",
       "community": 0,
       "norm_label": "testing"
@@ -1483,46 +1582,10 @@
       "label": "Local-first web app",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L89",
+      "source_location": "L88",
       "id": "readme_local_first_web_app",
       "community": 0,
       "norm_label": "local-first web app"
-    },
-    {
-      "label": "Analysis-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/Analysis-00.toc",
-      "source_location": "L1",
-      "community": 10,
-      "norm_label": "analysis-00.toc",
-      "id": "medicationreminder_analysis_00"
-    },
-    {
-      "label": "EXE-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/EXE-00.toc",
-      "source_location": "L1",
-      "community": 11,
-      "norm_label": "exe-00.toc",
-      "id": "medicationreminder_exe_00"
-    },
-    {
-      "label": "PKG-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/PKG-00.toc",
-      "source_location": "L1",
-      "community": 12,
-      "norm_label": "pkg-00.toc",
-      "id": "medicationreminder_pkg_00"
-    },
-    {
-      "label": "PYZ-00.toc",
-      "file_type": "code",
-      "source_file": "build_latest/MedicationReminder/PYZ-00.toc",
-      "source_location": "L1",
-      "community": 13,
-      "norm_label": "pyz-00.toc",
-      "id": "medicationreminder_pyz_00"
     },
     {
       "label": "Apply a bright, friendly palette while preserving native Tk controls.",
@@ -1538,7 +1601,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L50",
-      "community": 4,
+      "community": 7,
       "norm_label": "return a quoted command that starts this app without a console window.",
       "id": "medication_reminder_rationale_50"
     },
@@ -1547,7 +1610,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L60",
-      "community": 4,
+      "community": 7,
       "norm_label": "register this user's app for logon startup; never requires elevation.",
       "id": "medication_reminder_rationale_60"
     },
@@ -1574,7 +1637,7 @@
       "file_type": "code",
       "source_file": "medication_reminder.py",
       "source_location": "L25",
-      "community": 4,
+      "community": 7,
       "norm_label": "app_dir()",
       "id": "medication_reminder_app_dir"
     },
@@ -1583,7 +1646,7 @@
       "file_type": "code",
       "source_file": "medication_reminder.py",
       "source_location": "L25",
-      "community": 4,
+      "community": 7,
       "norm_label": "path",
       "id": "path"
     },
@@ -5757,9 +5820,9 @@
       "source_file": "web/app.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_active",
-      "confidence_score": 1.0
+      "target": "web_app_active"
     },
     {
       "relation": "calls",
@@ -5768,9 +5831,29 @@
       "source_location": "L8",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "web_app_addmedicineinput",
-      "target": "web_app",
-      "confidence_score": 1.0
+      "target": "web_app"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_app",
+      "target": "web_app_checkforegroundnotifications"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_app",
+      "target": "web_app_enablenotifications"
     },
     {
       "relation": "contains",
@@ -5778,9 +5861,19 @@
       "source_file": "web/app.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_esc",
-      "confidence_score": 1.0
+      "target": "web_app_esc"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_app",
+      "target": "web_app_notifiedkeys"
     },
     {
       "relation": "calls",
@@ -5789,9 +5882,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "web_app_openeditor",
-      "target": "web_app",
-      "confidence_score": 1.0
+      "target": "web_app"
     },
     {
       "relation": "contains",
@@ -5799,9 +5892,9 @@
       "source_file": "web/app.js",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_playsound",
-      "confidence_score": 1.0
+      "target": "web_app_playsound"
     },
     {
       "relation": "calls",
@@ -5810,9 +5903,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "web_app_renderall",
-      "target": "web_app",
-      "confidence_score": 1.0
+      "target": "web_app"
     },
     {
       "relation": "calls",
@@ -5821,9 +5914,9 @@
       "source_location": "L8",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "web_app_rendermedicineinputs",
-      "target": "web_app",
-      "confidence_score": 1.0
+      "target": "web_app"
     },
     {
       "relation": "calls",
@@ -5832,9 +5925,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "web_app_renderschedules",
-      "target": "web_app",
-      "confidence_score": 1.0
+      "target": "web_app"
     },
     {
       "relation": "calls",
@@ -5843,9 +5936,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "web_app_rendertoday",
-      "target": "web_app",
-      "confidence_score": 1.0
+      "target": "web_app"
     },
     {
       "relation": "contains",
@@ -5853,9 +5946,9 @@
       "source_file": "web/app.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_save",
-      "confidence_score": 1.0
+      "target": "web_app_save"
     },
     {
       "relation": "calls",
@@ -5864,9 +5957,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "web_app_saveeditor",
-      "target": "web_app",
-      "confidence_score": 1.0
+      "target": "web_app"
     },
     {
       "relation": "contains",
@@ -5874,9 +5967,9 @@
       "source_file": "web/app.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_seedschedule",
-      "confidence_score": 1.0
+      "target": "web_app_seedschedule"
     },
     {
       "relation": "contains",
@@ -5884,9 +5977,20 @@
       "source_file": "web/app.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_timenow",
-      "confidence_score": 1.0
+      "target": "web_app_timenow"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "call",
+      "confidence_score": 1.0,
+      "source": "web_app_updatenotificationstatus",
+      "target": "web_app"
     },
     {
       "relation": "calls",
@@ -5895,9 +5999,9 @@
       "source_file": "web/app.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_addmedicineinput",
-      "target": "web_app_esc",
-      "confidence_score": 1.0
+      "target": "web_app_esc"
     },
     {
       "relation": "calls",
@@ -5906,9 +6010,9 @@
       "source_file": "web/app.js",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_saveeditor",
-      "target": "web_app_save",
-      "confidence_score": 1.0
+      "target": "web_app_save"
     },
     {
       "relation": "calls",
@@ -5917,9 +6021,9 @@
       "source_file": "web/app.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_rendertoday",
-      "target": "web_app_timenow",
-      "confidence_score": 1.0
+      "target": "web_app_timenow"
     },
     {
       "relation": "calls",
@@ -5928,9 +6032,9 @@
       "source_file": "web/app.js",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_renderall",
-      "target": "web_app_rendertoday",
-      "confidence_score": 1.0
+      "target": "web_app_rendertoday"
     },
     {
       "relation": "calls",
@@ -5939,9 +6043,9 @@
       "source_file": "web/app.js",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_renderall",
-      "target": "web_app_renderschedules",
-      "confidence_score": 1.0
+      "target": "web_app_renderschedules"
     },
     {
       "relation": "calls",
@@ -5950,9 +6054,9 @@
       "source_file": "web/app.js",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_openeditor",
-      "target": "web_app_rendermedicineinputs",
-      "confidence_score": 1.0
+      "target": "web_app_rendermedicineinputs"
     },
     {
       "relation": "calls",
@@ -5961,9 +6065,20 @@
       "source_file": "web/app.js",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_saveeditor",
-      "target": "web_app_renderall",
-      "confidence_score": 1.0
+      "target": "web_app_renderall"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_app_enablenotifications",
+      "target": "web_app_updatenotificationstatus"
     },
     {
       "relation": "contains",
@@ -5971,9 +6086,139 @@
       "source_file": "web/sw.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_sw",
-      "target": "web_sw_assets",
-      "confidence_score": 1.0
+      "target": "web_sw_assets"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_author"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_description"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_keywords"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_license"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_scripts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_type"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package",
+      "target": "worker_package_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package_scripts",
+      "target": "worker_package_scripts_test"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "worker_package_dependencies",
+      "target": "worker_package_dependencies_web_push"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_fetch"
     },
     {
       "relation": "contains",
@@ -6041,9 +6286,9 @@
       "source_file": "README.md",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_medication_reminder_widget_for_windows",
-      "target": "readme_local_first_web_app",
-      "confidence_score": 1.0
+      "target": "readme_local_first_web_app"
     },
     {
       "relation": "contains",
@@ -6119,5 +6364,6 @@
       "target": "medication_reminder_dueevent"
     }
   ],
-  "hyperedges": []
+  "hyperedges": [],
+  "built_at_commit": "c26e62cc5d4165263ae06af1b1c0042110757324"
 }

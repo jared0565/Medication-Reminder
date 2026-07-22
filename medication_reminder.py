@@ -290,8 +290,8 @@ class MedicationReminderApp:
         ttk.Label(form, text="Alert volume").pack(anchor="w")
         tk.Scale(form, from_=0, to=100, orient="horizontal", variable=volume_var, resolution=5, showvalue=True, length=340, highlightthickness=0).pack(fill="x", pady=(2, 12))
         ttk.Label(form, text="Reminder sound").pack(anchor="w")
-        sound_var = tk.StringVar(value=self.alert_settings.get("sound", "SystemExclamation"))
-        ttk.Combobox(form, textvariable=sound_var, state="readonly", values=("SystemExclamation", "SystemAsterisk", "SystemHand", "SystemQuestion", "SystemInformation")).pack(fill="x", pady=(2, 14))
+        sound_var = tk.StringVar(value=self.alert_settings.get("sound", "chime"))
+        ttk.Combobox(form, textvariable=sound_var, state="readonly", values=("chime", "bright", "warm", "urgent", "quiet")).pack(fill="x", pady=(2, 14))
         def save_alert_settings() -> None:
             self.alert_settings = {"volume": volume_var.get(), "sound": sound_var.get()}
             try:
@@ -335,22 +335,25 @@ class MedicationReminderApp:
             try:
                 import winsound as sound_api
                 sound_profiles = {
-                    "SystemExclamation": (880, 260),
-                    "SystemAsterisk": (660, 220),
-                    "SystemHand": (220, 420),
-                    "SystemQuestion": (520, 180),
-                    "SystemInformation": (740, 140),
+                    "chime": ((523, 180), (659, 180), (784, 320)),
+                    "bright": ((784, 130), (988, 130), (1175, 260)),
+                    "warm": ((330, 180), (392, 180), (494, 300)),
+                    "urgent": ((880, 130), (440, 130), (880, 180)),
+                    "quiet": ((660, 220),),
                 }
-                frequency, duration = sound_profiles.get(settings.get("sound"), sound_profiles["SystemExclamation"])
+                pattern = sound_profiles.get(settings.get("sound"), sound_profiles["chime"])
                 volume = max(0, min(100, int(settings.get("volume", 70))))
                 packed_volume = int(volume * 0xFFFF / 100)
                 try:
                     ctypes.WinDLL("winmm").waveOutSetVolume(0, packed_volume | (packed_volume << 16))
                 except OSError:
                     pass
+                scale = 0.35 + (volume / 100) * 0.65
                 for _ in range(3):
-                    sound_api.Beep(frequency, duration)
-                    time.sleep(0.7)
+                    for frequency, duration in pattern:
+                        sound_api.Beep(frequency, max(50, int(duration * scale)))
+                        time.sleep(0.06)
+                    time.sleep(0.35)
             except OSError:
                 pass
 
@@ -584,8 +587,8 @@ class MedicationReminderApp:
             ttk.Label(form, text="Alert volume").pack(anchor="w")
             tk.Scale(form, from_=0, to=100, orient="horizontal", variable=volume_var, resolution=5, showvalue=True, length=340, highlightthickness=0).pack(fill="x", pady=(2, 12))
             ttk.Label(form, text="Reminder sound").pack(anchor="w")
-            sound_var = tk.StringVar(value=self.alert_settings.get("sound", "SystemExclamation"))
-            ttk.Combobox(form, textvariable=sound_var, state="readonly", values=("SystemExclamation", "SystemAsterisk", "SystemHand", "SystemQuestion", "SystemInformation")).pack(fill="x", pady=(2, 14))
+            sound_var = tk.StringVar(value=self.alert_settings.get("sound", "chime"))
+            ttk.Combobox(form, textvariable=sound_var, state="readonly", values=("chime", "bright", "warm", "urgent", "quiet")).pack(fill="x", pady=(2, 14))
             def save_alert_settings() -> None:
                 self.alert_settings = {"volume": volume_var.get(), "sound": sound_var.get()}
                 try:
