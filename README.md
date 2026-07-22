@@ -92,4 +92,6 @@ static and dependency-free: open it through a local HTTPS/static server for full
 installation behavior. It stores schedules and alert settings in browser local storage,
 supports schedule and medication CRUD, and includes a sound preview. Browser reminders
 are not as reliable as native Android alarms, so this version is intended for workflow
-validation before adding server sync or Play Store packaging.
+validation before adding server sync or Play Store packaging. The PWA does not upload
+schedules, medications, or notification subscriptions; each browser/device owns its
+local data.
