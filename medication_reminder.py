@@ -537,6 +537,11 @@ class MedicationReminderApp:
                 messagebox.showinfo(APP_NAME, "Timezone updated. Reopen this window to refresh the display.")
 
         ttk.Button(timezone_bar, text="Apply timezone", command=apply_timezone).pack(side="left")
+        pairing_bar = ttk.Frame(container)
+        pairing_bar.pack(fill="x", pady=(0, 8))
+        ttk.Label(pairing_bar, text="Device pairing:", style="Meta.TLabel").pack(side="left", padx=(0, 10))
+        ttk.Button(pairing_bar, text="Pair device", command=self.pair_device).pack(side="left", padx=6)
+        ttk.Button(pairing_bar, text="Show QR", command=self.show_pairing_qr).pack(side="left", padx=6)
 
         columns = ("enabled", "time", "label", "medicines")
         tree = ttk.Treeview(container, columns=columns, show="headings", height=15)
@@ -632,8 +637,6 @@ class MedicationReminderApp:
         ttk.Button(quick_actions, text="Edit selected", style="Teal.TButton", command=edit_selected).pack(side="left", padx=6)
         ttk.Button(quick_actions, text="Remove selected", command=remove_schedule).pack(side="left", padx=6)
         ttk.Button(quick_actions, text="Alert settings", command=open_alert_settings).pack(side="left", padx=6)
-        ttk.Button(quick_actions, text="Pair device", command=self.pair_device).pack(side="left", padx=6)
-        ttk.Button(quick_actions, text="Show QR", command=self.show_pairing_qr).pack(side="left", padx=6)
 
         buttons = ttk.Frame(container)
         buttons.pack(fill="x", pady=(12, 0))
