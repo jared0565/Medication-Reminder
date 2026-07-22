@@ -1,4 +1,3 @@
-
 # Medication Reminder Widget for Windows
 
 A lightweight Windows tray application that accompanies the printed medication plan.
