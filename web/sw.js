@@ -1,6 +1,7 @@
-const CACHE='medication-reminder-web-v4';
+const CACHE='medication-reminder-web-v5';
 const ASSETS=['./','./index.html','./styles.css','./app.js','./qrcode.js','./manifest.webmanifest','./icon.svg'];
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
+self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting()});
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const requestUrl=new URL(event.request.url);const isAppFile=requestUrl.origin===self.location.origin&&['/','/index.html','/app.js','/styles.css','/manifest.webmanifest'].includes(requestUrl.pathname);if(isAppFile){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response}).catch(()=>caches.match(event.request)))}else event.respondWith(caches.match(event.request).then(response=>response||fetch(event.request)))});
 self.addEventListener('push',event=>{let data={title:'Medication Reminder',body:'A scheduled reminder is due.'};try{data={...data,...event.data.json()}}catch{}event.waitUntil(self.registration.showNotification(data.title,{body:data.body,tag:data.tag||'medication-reminder'}))});
