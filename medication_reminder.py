@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import ctypes
+import io
+import math
 import os
+import struct
 import sys
 import threading
 import time
+import wave
 import winsound
 from copy import deepcopy
 from datetime import datetime
@@ -343,15 +347,26 @@ class MedicationReminderApp:
                 }
                 pattern = sound_profiles.get(settings.get("sound"), sound_profiles["chime"])
                 volume = max(0, min(100, int(settings.get("volume", 70))))
-                packed_volume = int(volume * 0xFFFF / 100)
-                try:
-                    ctypes.WinDLL("winmm").waveOutSetVolume(0, packed_volume | (packed_volume << 16))
-                except OSError:
-                    pass
-                scale = 0.35 + (volume / 100) * 0.65
+                # Beep ignores per-process volume on many Windows drivers. Generate
+                # normalized PCM instead, so the setting reliably controls amplitude
+                # without changing the user's global system volume.
+                amplitude = int(30000 * (0.12 + 0.88 * volume / 100))
+                def tone(frequency: int, duration: int) -> bytes:
+                    sample_rate = 44100
+                    frames = int(sample_rate * duration / 1000)
+                    raw = bytearray()
+                    for index in range(frames):
+                        position = index / max(1, frames - 1)
+                        envelope = min(1.0, position * 18.0, (1.0 - position) * 14.0)
+                        sample = int(amplitude * envelope * math.sin(2 * math.pi * frequency * index / sample_rate))
+                        raw.extend(struct.pack("<h", sample))
+                    output = io.BytesIO()
+                    with wave.open(output, "wb") as wav:
+                        wav.setnchannels(1); wav.setsampwidth(2); wav.setframerate(sample_rate); wav.writeframes(raw)
+                    return output.getvalue()
                 for _ in range(3):
                     for frequency, duration in pattern:
-                        sound_api.Beep(frequency, max(50, int(duration * scale)))
+                        sound_api.PlaySound(tone(frequency, duration), sound_api.SND_MEMORY)
                         time.sleep(0.06)
                     time.sleep(0.35)
             except OSError:
