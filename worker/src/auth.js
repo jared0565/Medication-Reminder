@@ -86,6 +86,12 @@ export function readSessionToken(request) {
   return parseSessionCredential(request)?.token || '';
 }
 
+function hasLegacySessionBearer(request) {
+  const authorization = request.headers.get('Authorization') || '';
+  return authorization.startsWith('Bearer ')
+    && SESSION_TOKEN_PATTERN.test(authorization.slice('Bearer '.length));
+}
+
 export function validCsrfRequest(request) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(request.method)) return true;
   return request.headers.get('Origin') === APP_ORIGIN
@@ -269,6 +275,12 @@ export async function handleAuthRequest(request, env, url, helpers) {
     });
   }
   if (!['/auth/me', '/auth/session'].includes(url.pathname)) return null;
+  // The reusable bearer session is a temporary v1 widget compatibility
+  // credential. V2 account routes are cookie-only, including when the request
+  // also presents an otherwise valid session cookie.
+  if (apiVersion !== 1 && hasLegacySessionBearer(request)) {
+    return json(request, { error: 'Sign-in required.' }, { status: 401 });
+  }
   if (request.method === 'DELETE' && url.pathname === '/auth/session') {
     let account;
     try {

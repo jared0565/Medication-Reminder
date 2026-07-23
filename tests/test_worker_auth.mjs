@@ -663,6 +663,56 @@ test('protected browser auth mutations are rejected before route dispatch withou
   }
 });
 
+test('v2 account routes reject valid legacy bearer sessions even with valid browser CSRF proof', async () => {
+  const sessionToken = `mrs_${'b'.repeat(43)}`;
+  for (const [method, path, body] of [
+    ['GET', '/api/auth/me', undefined],
+    ['PATCH', '/api/auth/me', JSON.stringify({
+      intendedStartDate: '2026-08-01',
+      intendedEndDate: '2026-08-31',
+    })],
+    ['DELETE', '/api/auth/session', undefined],
+  ]) {
+    const database = authDatabase({ sessionToken });
+    const headers = {
+      Authorization: `Bearer ${sessionToken}`,
+    };
+    if (method !== 'GET') {
+      headers.Origin = 'https://medication.bytesfx.com';
+      headers['X-Medication-CSRF'] = '1';
+      if (body) headers['Content-Type'] = 'application/json';
+    }
+    const request = new Request(`https://medication.bytesfx.com${path}`, {
+      method,
+      headers,
+      body,
+    });
+    const response = await worker.fetch(
+      request,
+      { DB: database, LEGACY_V1_HOST },
+      { waitUntil() {} },
+    );
+    assert.equal(response.status, 401, `${method} ${path}`);
+    assert.deepEqual(await response.json(), { error: 'Sign-in required.' });
+    assert.equal(database.calls.length, 0, `${method} ${path} must reject before session lookup`);
+  }
+});
+
+test('api-prefixed auth remains cookie-only on the exact legacy host', async () => {
+  const sessionToken = `mrs_${'b'.repeat(43)}`;
+  const database = authDatabase({ sessionToken });
+  const request = new Request(`https://${LEGACY_V1_HOST}/api/auth/me`, {
+    headers: { Authorization: `Bearer ${sessionToken}` },
+  });
+  const response = await worker.fetch(
+    request,
+    { DB: database, LEGACY_V1_HOST },
+    { waitUntil() {} },
+  );
+  assert.equal(response.status, 401);
+  assert.equal(database.calls.length, 0);
+});
+
 test('exact legacy host /api auth requests cannot downgrade into the legacy v1 contract', async () => {
   const request = new Request(`https://${LEGACY_V1_HOST}/api/auth/google`, {
     method: 'POST',
