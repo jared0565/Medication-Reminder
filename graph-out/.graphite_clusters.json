@@ -1,366 +1,366 @@
 {
   "node_to_community": {
-    "aesgcm": 0,
+    "aesgcm": 15,
     "agents": 1,
-    "any": 0,
-    "appstorage": 0,
-    "base64": 0,
+    "any": 15,
+    "appstorage": 15,
+    "base64": 15,
     "build_windows_exe": 2,
-    "configvalidationerror": 0,
-    "copy": 0,
-    "cryptography_hazmat_primitives_ciphers_aead": 0,
-    "csv": 0,
-    "ctypes": 0,
-    "dataclass": 0,
-    "dataclasses": 0,
-    "date": 0,
-    "datetime": 0,
-    "deepcopy": 0,
+    "configvalidationerror": 15,
+    "copy": 15,
+    "cryptography_hazmat_primitives_ciphers_aead": 15,
+    "csv": 15,
+    "ctypes": 15,
+    "dataclass": 15,
+    "dataclasses": 15,
+    "date": 15,
+    "datetime": 15,
+    "deepcopy": 15,
     "docs_graphite_query_interface_recommendation": 3,
     "docs_superpowers_plans_2026_07_23_browser_account_boundary": 4,
     "docs_superpowers_specs_2026_07_23_browser_account_boundary_design": 5,
-    "dueoccurrence": 0,
-    "encryptedsyncclient": 0,
-    "filedialog": 0,
-    "image": 0,
-    "imagetk": 0,
+    "dueoccurrence": 15,
+    "encryptedsyncclient": 15,
+    "filedialog": 15,
+    "image": 15,
+    "imagetk": 15,
     "install_dependencies": 6,
-    "io": 0,
-    "json": 0,
+    "io": 15,
+    "json": 15,
     "license": 7,
-    "math": 0,
-    "medication_core": 0,
-    "medication_core_append_audit": 10,
-    "medication_core_appstorage": 10,
-    "medication_core_astimezone": 10,
-    "medication_core_atomic_write_bytes": 10,
-    "medication_core_candidates": 10,
-    "medication_core_cleanup": 10,
-    "medication_core_collect_due": 10,
-    "medication_core_configure_functions": 10,
-    "medication_core_configvalidationerror": 10,
-    "medication_core_cryptprotectdata": 10,
-    "medication_core_cryptunprotectdata": 10,
-    "medication_core_csv": 10,
-    "medication_core_ctypes": 10,
-    "medication_core_data": 10,
-    "medication_core_datablob": 10,
-    "medication_core_dataclass": 0,
-    "medication_core_date": 10,
-    "medication_core_datetime": 10,
-    "medication_core_deepcopy": 10,
-    "medication_core_default_data_dir": 10,
-    "medication_core_default_state": 10,
-    "medication_core_delete_sync_credentials": 10,
-    "medication_core_destination": 10,
-    "medication_core_dpapiprotector": 10,
-    "medication_core_drop_invalid_pending": 10,
-    "medication_core_dueoccurrence": 0,
-    "medication_core_encode": 10,
-    "medication_core_event_active": 10,
-    "medication_core_event_id_pattern": 10,
-    "medication_core_exists": 10,
-    "medication_core_expanduser": 10,
-    "medication_core_export_taken_csv": 10,
-    "medication_core_f": 10,
-    "medication_core_from_buffer_copy": 10,
-    "medication_core_get": 10,
-    "medication_core_init": 10,
-    "medication_core_input_blob": 10,
-    "medication_core_is_file": 10,
-    "medication_core_isoformat": 10,
-    "medication_core_items": 10,
-    "medication_core_join": 10,
-    "medication_core_json": 10,
-    "medication_core_key": 10,
-    "medication_core_known": 10,
-    "medication_core_last_check": 10,
-    "medication_core_legacy": 10,
-    "medication_core_load": 10,
-    "medication_core_load_schedule": 10,
-    "medication_core_load_settings": 10,
-    "medication_core_load_state": 10,
-    "medication_core_load_sync_credentials": 10,
-    "medication_core_localfree": 10,
-    "medication_core_localize": 10,
-    "medication_core_lower": 10,
-    "medication_core_mark_taken": 10,
-    "medication_core_mkdir": 10,
-    "medication_core_next_ready": 10,
-    "medication_core_next_scheduled": 10,
-    "medication_core_normalize_state": 10,
-    "medication_core_normalized_days": 10,
-    "medication_core_normalized_events": 10,
-    "medication_core_now": 10,
-    "medication_core_occurrence_key": 10,
-    "medication_core_os": 10,
-    "medication_core_overdue": 0,
-    "medication_core_parse_iso_date": 10,
-    "medication_core_parse_time": 10,
-    "medication_core_parsed": 10,
-    "medication_core_parsed_end": 10,
-    "medication_core_parsed_start": 10,
-    "medication_core_path": 10,
-    "medication_core_plain": 10,
-    "medication_core_pop": 10,
-    "medication_core_protect": 10,
-    "medication_core_protectedjsonfile": 10,
-    "medication_core_protector": 10,
-    "medication_core_raw": 10,
-    "medication_core_raw_event": 10,
-    "medication_core_re": 10,
-    "medication_core_read_bytes": 10,
-    "medication_core_record": 10,
-    "medication_core_replace_schedule": 10,
-    "medication_core_require_text": 10,
-    "medication_core_required": 10,
-    "medication_core_resolve": 10,
-    "medication_core_retained": 10,
-    "medication_core_safe_datetime": 10,
-    "medication_core_save": 10,
-    "medication_core_save_schedule": 10,
-    "medication_core_save_settings": 10,
-    "medication_core_save_state": 10,
-    "medication_core_save_sync_credentials": 10,
-    "medication_core_scheduleengine": 10,
-    "medication_core_seed_path": 10,
-    "medication_core_seen_ids": 10,
-    "medication_core_self": 10,
-    "medication_core_settings": 10,
-    "medication_core_snooze": 10,
-    "medication_core_stat": 10,
-    "medication_core_storageerror": 10,
-    "medication_core_target_date": 10,
-    "medication_core_temp_path": 10,
-    "medication_core_tempfile": 10,
-    "medication_core_time": 10,
-    "medication_core_timedelta": 10,
-    "medication_core_transform": 10,
-    "medication_core_unlink": 10,
-    "medication_core_unprotect": 10,
-    "medication_core_until": 10,
-    "medication_core_validate_schedule": 10,
-    "medication_core_value": 10,
-    "medication_core_valueerror": 10,
-    "medication_core_writer": 10,
-    "medication_core_zoneinfo": 10,
-    "medication_reminder": 0,
-    "medication_reminder_actions": 12,
-    "medication_reminder_add_medicine": 12,
-    "medication_reminder_add_schedule": 12,
-    "medication_reminder_add_schedule_main": 12,
-    "medication_reminder_after": 12,
-    "medication_reminder_alert_buttons": 12,
-    "medication_reminder_append_audit": 12,
-    "medication_reminder_apply_remote_schedule": 12,
-    "medication_reminder_apply_timezone": 12,
-    "medication_reminder_appstorage": 15,
-    "medication_reminder_astimezone": 15,
-    "medication_reminder_bind": 12,
-    "medication_reminder_build_main_window": 12,
-    "medication_reminder_button_bar": 12,
-    "medication_reminder_buttons": 12,
+    "math": 15,
+    "medication_core": 15,
+    "medication_core_append_audit": 9,
+    "medication_core_appstorage": 9,
+    "medication_core_astimezone": 9,
+    "medication_core_atomic_write_bytes": 9,
+    "medication_core_candidates": 9,
+    "medication_core_cleanup": 9,
+    "medication_core_collect_due": 9,
+    "medication_core_configure_functions": 9,
+    "medication_core_configvalidationerror": 9,
+    "medication_core_cryptprotectdata": 9,
+    "medication_core_cryptunprotectdata": 9,
+    "medication_core_csv": 9,
+    "medication_core_ctypes": 9,
+    "medication_core_data": 9,
+    "medication_core_datablob": 9,
+    "medication_core_dataclass": 15,
+    "medication_core_date": 9,
+    "medication_core_datetime": 9,
+    "medication_core_deepcopy": 9,
+    "medication_core_default_data_dir": 9,
+    "medication_core_default_state": 9,
+    "medication_core_delete_sync_credentials": 9,
+    "medication_core_destination": 9,
+    "medication_core_dpapiprotector": 9,
+    "medication_core_drop_invalid_pending": 9,
+    "medication_core_dueoccurrence": 9,
+    "medication_core_encode": 9,
+    "medication_core_event_active": 9,
+    "medication_core_event_id_pattern": 9,
+    "medication_core_exists": 9,
+    "medication_core_expanduser": 9,
+    "medication_core_export_taken_csv": 9,
+    "medication_core_f": 9,
+    "medication_core_from_buffer_copy": 9,
+    "medication_core_get": 9,
+    "medication_core_init": 9,
+    "medication_core_input_blob": 9,
+    "medication_core_is_file": 9,
+    "medication_core_isoformat": 9,
+    "medication_core_items": 9,
+    "medication_core_join": 9,
+    "medication_core_json": 9,
+    "medication_core_key": 9,
+    "medication_core_known": 9,
+    "medication_core_last_check": 9,
+    "medication_core_legacy": 9,
+    "medication_core_load": 9,
+    "medication_core_load_schedule": 9,
+    "medication_core_load_settings": 9,
+    "medication_core_load_state": 9,
+    "medication_core_load_sync_credentials": 9,
+    "medication_core_localfree": 9,
+    "medication_core_localize": 9,
+    "medication_core_lower": 9,
+    "medication_core_mark_taken": 9,
+    "medication_core_mkdir": 9,
+    "medication_core_next_ready": 9,
+    "medication_core_next_scheduled": 9,
+    "medication_core_normalize_state": 9,
+    "medication_core_normalized_days": 9,
+    "medication_core_normalized_events": 9,
+    "medication_core_now": 9,
+    "medication_core_occurrence_key": 9,
+    "medication_core_os": 9,
+    "medication_core_overdue": 9,
+    "medication_core_parse_iso_date": 9,
+    "medication_core_parse_time": 9,
+    "medication_core_parsed": 9,
+    "medication_core_parsed_end": 9,
+    "medication_core_parsed_start": 9,
+    "medication_core_path": 9,
+    "medication_core_plain": 9,
+    "medication_core_pop": 9,
+    "medication_core_protect": 9,
+    "medication_core_protectedjsonfile": 9,
+    "medication_core_protector": 9,
+    "medication_core_raw": 9,
+    "medication_core_raw_event": 9,
+    "medication_core_re": 15,
+    "medication_core_read_bytes": 9,
+    "medication_core_record": 9,
+    "medication_core_replace_schedule": 9,
+    "medication_core_require_text": 9,
+    "medication_core_required": 9,
+    "medication_core_resolve": 9,
+    "medication_core_retained": 9,
+    "medication_core_safe_datetime": 9,
+    "medication_core_save": 9,
+    "medication_core_save_schedule": 9,
+    "medication_core_save_settings": 9,
+    "medication_core_save_state": 9,
+    "medication_core_save_sync_credentials": 9,
+    "medication_core_scheduleengine": 9,
+    "medication_core_seed_path": 9,
+    "medication_core_seen_ids": 9,
+    "medication_core_self": 9,
+    "medication_core_settings": 9,
+    "medication_core_snooze": 9,
+    "medication_core_stat": 9,
+    "medication_core_storageerror": 9,
+    "medication_core_target_date": 9,
+    "medication_core_temp_path": 9,
+    "medication_core_tempfile": 9,
+    "medication_core_time": 9,
+    "medication_core_timedelta": 9,
+    "medication_core_transform": 9,
+    "medication_core_unlink": 9,
+    "medication_core_unprotect": 9,
+    "medication_core_until": 9,
+    "medication_core_validate_schedule": 9,
+    "medication_core_value": 9,
+    "medication_core_valueerror": 9,
+    "medication_core_writer": 9,
+    "medication_core_zoneinfo": 9,
+    "medication_reminder": 15,
+    "medication_reminder_actions": 11,
+    "medication_reminder_add_medicine": 11,
+    "medication_reminder_add_schedule": 11,
+    "medication_reminder_add_schedule_main": 11,
+    "medication_reminder_after": 11,
+    "medication_reminder_alert_buttons": 11,
+    "medication_reminder_append_audit": 11,
+    "medication_reminder_apply_remote_schedule": 11,
+    "medication_reminder_apply_timezone": 11,
+    "medication_reminder_appstorage": 13,
+    "medication_reminder_astimezone": 13,
+    "medication_reminder_bind": 11,
+    "medication_reminder_build_main_window": 11,
+    "medication_reminder_button_bar": 11,
+    "medication_reminder_buttons": 11,
     "medication_reminder_bytearray": 14,
-    "medication_reminder_check_schedule": 12,
-    "medication_reminder_clipboard_append": 12,
-    "medication_reminder_clipboard_clear": 12,
-    "medication_reminder_close": 0,
-    "medication_reminder_close_popup": 12,
-    "medication_reminder_closehandle": 0,
-    "medication_reminder_code": 12,
-    "medication_reminder_collect_due": 12,
-    "medication_reminder_column": 12,
-    "medication_reminder_configure": 12,
-    "medication_reminder_configure_theme": 12,
-    "medication_reminder_configured_timezone": 12,
-    "medication_reminder_container": 12,
-    "medication_reminder_convert": 12,
-    "medication_reminder_copy_link": 12,
-    "medication_reminder_create_pair": 12,
-    "medication_reminder_credentials": 12,
-    "medication_reminder_ctypes": 15,
-    "medication_reminder_date_row": 12,
-    "medication_reminder_datetime": 12,
-    "medication_reminder_days_var": 12,
-    "medication_reminder_deepcopy": 12,
-    "medication_reminder_deiconify": 12,
-    "medication_reminder_delete_sync_credentials": 12,
-    "medication_reminder_destroy": 12,
-    "medication_reminder_dialog": 12,
-    "medication_reminder_dirname": 0,
-    "medication_reminder_dueoccurrence": 12,
-    "medication_reminder_edit_event_dialog": 12,
-    "medication_reminder_edit_medicine": 12,
-    "medication_reminder_edit_selected": 12,
-    "medication_reminder_edit_selected_main": 12,
-    "medication_reminder_editor": 12,
-    "medication_reminder_enable_dpi_awareness": 15,
-    "medication_reminder_enabled_var": 12,
-    "medication_reminder_encryptedsyncclient": 15,
-    "medication_reminder_end_frame": 12,
-    "medication_reminder_end_var": 12,
-    "medication_reminder_executable": 0,
-    "medication_reminder_export_taken_csv": 12,
-    "medication_reminder_export_taken_log": 12,
-    "medication_reminder_fetch": 12,
-    "medication_reminder_filedialog": 12,
-    "medication_reminder_finish_sync": 12,
-    "medication_reminder_focus_force": 12,
-    "medication_reminder_form": 12,
-    "medication_reminder_frame": 12,
-    "medication_reminder_geometry": 15,
-    "medication_reminder_get": 12,
-    "medication_reminder_get_children": 12,
-    "medication_reminder_heading": 12,
-    "medication_reminder_hide_to_tray": 12,
-    "medication_reminder_icon_path": 12,
-    "medication_reminder_image": 12,
-    "medication_reminder_image_label": 12,
-    "medication_reminder_imagetk": 12,
-    "medication_reminder_init": 15,
-    "medication_reminder_insert": 12,
-    "medication_reminder_instance": 0,
+    "medication_reminder_check_schedule": 11,
+    "medication_reminder_clipboard_append": 11,
+    "medication_reminder_clipboard_clear": 11,
+    "medication_reminder_close": 15,
+    "medication_reminder_close_popup": 11,
+    "medication_reminder_closehandle": 15,
+    "medication_reminder_code": 11,
+    "medication_reminder_collect_due": 11,
+    "medication_reminder_column": 11,
+    "medication_reminder_configure": 11,
+    "medication_reminder_configure_theme": 11,
+    "medication_reminder_configured_timezone": 11,
+    "medication_reminder_container": 11,
+    "medication_reminder_convert": 11,
+    "medication_reminder_copy_link": 11,
+    "medication_reminder_create_pair": 11,
+    "medication_reminder_credentials": 11,
+    "medication_reminder_ctypes": 13,
+    "medication_reminder_date_row": 11,
+    "medication_reminder_datetime": 11,
+    "medication_reminder_days_var": 11,
+    "medication_reminder_deepcopy": 11,
+    "medication_reminder_deiconify": 11,
+    "medication_reminder_delete_sync_credentials": 11,
+    "medication_reminder_destroy": 11,
+    "medication_reminder_dialog": 11,
+    "medication_reminder_dirname": 15,
+    "medication_reminder_dueoccurrence": 11,
+    "medication_reminder_edit_event_dialog": 11,
+    "medication_reminder_edit_medicine": 11,
+    "medication_reminder_edit_selected": 11,
+    "medication_reminder_edit_selected_main": 11,
+    "medication_reminder_editor": 11,
+    "medication_reminder_enable_dpi_awareness": 13,
+    "medication_reminder_enabled_var": 11,
+    "medication_reminder_encryptedsyncclient": 13,
+    "medication_reminder_end_frame": 11,
+    "medication_reminder_end_var": 11,
+    "medication_reminder_executable": 15,
+    "medication_reminder_export_taken_csv": 11,
+    "medication_reminder_export_taken_log": 11,
+    "medication_reminder_fetch": 11,
+    "medication_reminder_filedialog": 11,
+    "medication_reminder_finish_sync": 11,
+    "medication_reminder_focus_force": 11,
+    "medication_reminder_form": 11,
+    "medication_reminder_frame": 11,
+    "medication_reminder_geometry": 13,
+    "medication_reminder_get": 11,
+    "medication_reminder_get_children": 11,
+    "medication_reminder_heading": 11,
+    "medication_reminder_hide_to_tray": 11,
+    "medication_reminder_icon_path": 11,
+    "medication_reminder_image": 11,
+    "medication_reminder_image_label": 11,
+    "medication_reminder_imagetk": 11,
+    "medication_reminder_init": 13,
+    "medication_reminder_insert": 11,
+    "medication_reminder_instance": 15,
     "medication_reminder_io": 14,
-    "medication_reminder_isoformat": 12,
-    "medication_reminder_item": 12,
-    "medication_reminder_join": 12,
-    "medication_reminder_kernel32": 15,
-    "medication_reminder_label_var": 12,
-    "medication_reminder_lift": 12,
-    "medication_reminder_load_schedule": 15,
-    "medication_reminder_load_settings": 15,
-    "medication_reminder_load_state": 15,
-    "medication_reminder_load_sync_credentials": 15,
-    "medication_reminder_lower": 12,
-    "medication_reminder_main": 0,
-    "medication_reminder_mainloop": 0,
-    "medication_reminder_mark_taken": 12,
+    "medication_reminder_isoformat": 11,
+    "medication_reminder_item": 11,
+    "medication_reminder_join": 11,
+    "medication_reminder_kernel32": 13,
+    "medication_reminder_label_var": 11,
+    "medication_reminder_lift": 11,
+    "medication_reminder_load_schedule": 13,
+    "medication_reminder_load_settings": 13,
+    "medication_reminder_load_state": 13,
+    "medication_reminder_load_sync_credentials": 13,
+    "medication_reminder_lower": 11,
+    "medication_reminder_main": 15,
+    "medication_reminder_mainloop": 15,
+    "medication_reminder_mark_taken": 11,
     "medication_reminder_math": 14,
-    "medication_reminder_medicationreminderapp": 12,
-    "medication_reminder_medicine_buttons": 12,
-    "medication_reminder_medicines_box": 12,
-    "medication_reminder_meds_box": 12,
-    "medication_reminder_messagebox": 12,
-    "medication_reminder_minsize": 15,
-    "medication_reminder_next_ready": 12,
-    "medication_reminder_next_scheduled": 12,
-    "medication_reminder_now": 12,
-    "medication_reminder_open_alert_settings": 12,
-    "medication_reminder_open_schedule_editor": 12,
-    "medication_reminder_oserror": 15,
-    "medication_reminder_outer": 12,
+    "medication_reminder_medicationreminderapp": 11,
+    "medication_reminder_medicine_buttons": 11,
+    "medication_reminder_medicines_box": 11,
+    "medication_reminder_meds_box": 11,
+    "medication_reminder_messagebox": 11,
+    "medication_reminder_minsize": 13,
+    "medication_reminder_next_ready": 11,
+    "medication_reminder_next_scheduled": 11,
+    "medication_reminder_now": 11,
+    "medication_reminder_open_alert_settings": 11,
+    "medication_reminder_open_schedule_editor": 11,
+    "medication_reminder_oserror": 13,
+    "medication_reminder_outer": 11,
     "medication_reminder_output": 14,
-    "medication_reminder_pack": 12,
-    "medication_reminder_pair_created": 12,
-    "medication_reminder_pair_device": 12,
-    "medication_reminder_pairing_bar": 12,
-    "medication_reminder_pairing_link": 12,
-    "medication_reminder_parse_time": 12,
-    "medication_reminder_path": 0,
-    "medication_reminder_periodic_sync": 12,
-    "medication_reminder_play_alert_sound": 12,
-    "medication_reminder_pop": 12,
-    "medication_reminder_populate": 12,
-    "medication_reminder_popup": 12,
-    "medication_reminder_protocol": 15,
-    "medication_reminder_pystray": 12,
-    "medication_reminder_python_executable": 0,
-    "medication_reminder_qrcode": 12,
-    "medication_reminder_quick_actions": 12,
-    "medication_reminder_quit_app": 12,
+    "medication_reminder_pack": 11,
+    "medication_reminder_pair_created": 11,
+    "medication_reminder_pair_device": 11,
+    "medication_reminder_pairing_bar": 11,
+    "medication_reminder_pairing_link": 11,
+    "medication_reminder_parse_time": 11,
+    "medication_reminder_path": 15,
+    "medication_reminder_periodic_sync": 11,
+    "medication_reminder_play_alert_sound": 11,
+    "medication_reminder_pop": 11,
+    "medication_reminder_populate": 11,
+    "medication_reminder_popup": 11,
+    "medication_reminder_protocol": 13,
+    "medication_reminder_pystray": 11,
+    "medication_reminder_python_executable": 15,
+    "medication_reminder_qrcode": 11,
+    "medication_reminder_quick_actions": 11,
+    "medication_reminder_quit_app": 11,
     "medication_reminder_raw": 14,
-    "medication_reminder_refresh_callback": 12,
-    "medication_reminder_refresh_schedule_table": 12,
-    "medication_reminder_register_startup": 0,
-    "medication_reminder_remove_medicine": 12,
-    "medication_reminder_remove_schedule": 12,
-    "medication_reminder_remove_selected_main": 12,
-    "medication_reminder_replace": 12,
-    "medication_reminder_replace_schedule": 12,
-    "medication_reminder_resolve": 0,
-    "medication_reminder_resource_dir": 0,
-    "medication_reminder_revoke": 12,
-    "medication_reminder_root": 12,
-    "medication_reminder_run": 0,
-    "medication_reminder_runtimeerror": 15,
-    "medication_reminder_safe_audit": 12,
-    "medication_reminder_save": 12,
-    "medication_reminder_save_alert_settings": 12,
-    "medication_reminder_save_config": 12,
-    "medication_reminder_save_schedule": 12,
-    "medication_reminder_save_settings": 12,
-    "medication_reminder_save_state": 12,
-    "medication_reminder_save_sync_credentials": 12,
-    "medication_reminder_schedule_bar": 12,
-    "medication_reminder_scheduleengine": 15,
-    "medication_reminder_secrets": 12,
-    "medication_reminder_selected_main_event_index": 12,
-    "medication_reminder_selection": 12,
-    "medication_reminder_self": 12,
-    "medication_reminder_set_context": 15,
-    "medication_reminder_set_sync_status": 12,
-    "medication_reminder_settings": 12,
-    "medication_reminder_shcore": 15,
-    "medication_reminder_show_due_popup": 12,
-    "medication_reminder_show_pairing_qr": 12,
-    "medication_reminder_show_startup_error": 12,
-    "medication_reminder_show_window": 12,
-    "medication_reminder_show_window_main_thread": 12,
-    "medication_reminder_simpledialog": 12,
-    "medication_reminder_singleinstance": 0,
-    "medication_reminder_snooze": 12,
-    "medication_reminder_snooze_event": 12,
-    "medication_reminder_sound_api": 12,
-    "medication_reminder_sound_profiles": 12,
-    "medication_reminder_sound_var": 12,
-    "medication_reminder_split": 12,
-    "medication_reminder_start": 12,
-    "medication_reminder_start_frame": 12,
-    "medication_reminder_start_sync": 12,
-    "medication_reminder_start_tray_icon": 12,
-    "medication_reminder_start_var": 12,
-    "medication_reminder_startup_command": 0,
-    "medication_reminder_stop": 12,
-    "medication_reminder_storageerror": 12,
-    "medication_reminder_strftime": 12,
-    "medication_reminder_strip": 12,
+    "medication_reminder_refresh_callback": 11,
+    "medication_reminder_refresh_schedule_table": 11,
+    "medication_reminder_register_startup": 15,
+    "medication_reminder_remove_medicine": 11,
+    "medication_reminder_remove_schedule": 11,
+    "medication_reminder_remove_selected_main": 11,
+    "medication_reminder_replace": 11,
+    "medication_reminder_replace_schedule": 11,
+    "medication_reminder_resolve": 15,
+    "medication_reminder_resource_dir": 15,
+    "medication_reminder_revoke": 11,
+    "medication_reminder_root": 11,
+    "medication_reminder_run": 15,
+    "medication_reminder_runtimeerror": 13,
+    "medication_reminder_safe_audit": 11,
+    "medication_reminder_save": 11,
+    "medication_reminder_save_alert_settings": 11,
+    "medication_reminder_save_config": 11,
+    "medication_reminder_save_schedule": 11,
+    "medication_reminder_save_settings": 11,
+    "medication_reminder_save_state": 11,
+    "medication_reminder_save_sync_credentials": 11,
+    "medication_reminder_schedule_bar": 11,
+    "medication_reminder_scheduleengine": 13,
+    "medication_reminder_secrets": 11,
+    "medication_reminder_selected_main_event_index": 11,
+    "medication_reminder_selection": 11,
+    "medication_reminder_self": 11,
+    "medication_reminder_set_context": 13,
+    "medication_reminder_set_sync_status": 11,
+    "medication_reminder_settings": 11,
+    "medication_reminder_shcore": 13,
+    "medication_reminder_show_due_popup": 11,
+    "medication_reminder_show_pairing_qr": 11,
+    "medication_reminder_show_startup_error": 11,
+    "medication_reminder_show_window": 11,
+    "medication_reminder_show_window_main_thread": 11,
+    "medication_reminder_simpledialog": 11,
+    "medication_reminder_singleinstance": 15,
+    "medication_reminder_snooze": 11,
+    "medication_reminder_snooze_event": 11,
+    "medication_reminder_sound_api": 11,
+    "medication_reminder_sound_profiles": 11,
+    "medication_reminder_sound_var": 11,
+    "medication_reminder_split": 11,
+    "medication_reminder_start": 11,
+    "medication_reminder_start_frame": 11,
+    "medication_reminder_start_sync": 11,
+    "medication_reminder_start_tray_icon": 11,
+    "medication_reminder_start_var": 11,
+    "medication_reminder_startup_command": 15,
+    "medication_reminder_stop": 11,
+    "medication_reminder_storageerror": 11,
+    "medication_reminder_strftime": 11,
+    "medication_reminder_strip": 11,
     "medication_reminder_struct": 14,
-    "medication_reminder_style": 12,
-    "medication_reminder_sync_failed": 12,
-    "medication_reminder_systemexit": 0,
-    "medication_reminder_test_alert_settings": 12,
-    "medication_reminder_test_reminder": 12,
-    "medication_reminder_threading": 12,
-    "medication_reminder_time": 12,
-    "medication_reminder_time_var": 12,
-    "medication_reminder_timezone_bar": 12,
-    "medication_reminder_timezone_var": 12,
-    "medication_reminder_title": 15,
-    "medication_reminder_tk": 12,
-    "medication_reminder_toggle": 12,
+    "medication_reminder_style": 11,
+    "medication_reminder_sync_failed": 11,
+    "medication_reminder_systemexit": 15,
+    "medication_reminder_test_alert_settings": 11,
+    "medication_reminder_test_reminder": 11,
+    "medication_reminder_threading": 11,
+    "medication_reminder_time": 11,
+    "medication_reminder_time_var": 11,
+    "medication_reminder_timezone_bar": 11,
+    "medication_reminder_timezone_var": 11,
+    "medication_reminder_title": 13,
+    "medication_reminder_tk": 11,
+    "medication_reminder_toggle": 11,
     "medication_reminder_tone": 14,
-    "medication_reminder_tree": 12,
-    "medication_reminder_ttk": 12,
-    "medication_reminder_unpair_device": 12,
-    "medication_reminder_until": 12,
-    "medication_reminder_update": 12,
-    "medication_reminder_update_next_due_text": 12,
-    "medication_reminder_updated": 12,
-    "medication_reminder_validate_schedule": 12,
-    "medication_reminder_value": 12,
-    "medication_reminder_volume_var": 12,
-    "medication_reminder_warn_persistence": 12,
+    "medication_reminder_tree": 11,
+    "medication_reminder_ttk": 11,
+    "medication_reminder_unpair_device": 11,
+    "medication_reminder_until": 11,
+    "medication_reminder_update": 11,
+    "medication_reminder_update_next_due_text": 11,
+    "medication_reminder_updated": 11,
+    "medication_reminder_validate_schedule": 11,
+    "medication_reminder_value": 11,
+    "medication_reminder_volume_var": 11,
+    "medication_reminder_warn_persistence": 11,
     "medication_reminder_wav": 14,
     "medication_reminder_wave": 14,
-    "medication_reminder_when": 12,
-    "medication_reminder_winfo_exists": 12,
-    "medication_reminder_winreg": 0,
-    "medication_reminder_with_name": 0,
-    "medication_reminder_withdraw": 12,
-    "medication_reminder_worker": 12,
-    "medication_reminder_zoneinfo": 12,
+    "medication_reminder_when": 11,
+    "medication_reminder_winfo_exists": 11,
+    "medication_reminder_winreg": 15,
+    "medication_reminder_with_name": 15,
+    "medication_reminder_withdraw": 11,
+    "medication_reminder_worker": 11,
+    "medication_reminder_zoneinfo": 11,
     "medication_schedule": 16,
-    "messagebox": 0,
+    "messagebox": 15,
     "node_assert_strict": 17,
     "node_crypto": 17,
     "node_fs": 17,
@@ -368,32 +368,32 @@
     "node_sqlite": 18,
     "node_test": 17,
     "node_vm": 17,
-    "os": 0,
-    "parse_time": 0,
-    "path": 0,
-    "pathlib": 0,
-    "pil": 0,
-    "protocol": 10,
-    "pystray": 0,
-    "qrcode": 0,
-    "re": 0,
+    "os": 15,
+    "parse_time": 15,
+    "path": 15,
+    "pathlib": 15,
+    "pil": 15,
+    "protocol": 9,
+    "pystray": 15,
+    "qrcode": 15,
+    "re": 15,
     "readme": 19,
-    "remoteschedule": 0,
+    "remoteschedule": 15,
     "requirements": 20,
     "run_medication_reminder": 21,
     "runtimeerror": 22,
-    "scheduleengine": 0,
-    "secrets": 0,
-    "simpledialog": 0,
-    "storageerror": 0,
-    "struct": 0,
-    "sync_client": 0,
+    "scheduleengine": 15,
+    "secrets": 15,
+    "simpledialog": 15,
+    "storageerror": 15,
+    "struct": 15,
+    "sync_client": 15,
     "sync_client_aesgcm": 22,
     "sync_client_api_url": 22,
     "sync_client_b64": 22,
     "sync_client_base64": 22,
     "sync_client_create_pair": 22,
-    "sync_client_dataclass": 0,
+    "sync_client_dataclass": 15,
     "sync_client_decode": 22,
     "sync_client_decrypt": 22,
     "sync_client_encode": 22,
@@ -420,632 +420,720 @@
     "sync_client_update": 22,
     "sync_client_urlopen": 22,
     "sync_client_validate_schedule": 22,
-    "syncerror": 0,
-    "sys": 0,
-    "tempfile": 0,
-    "tests_e2e_sync": 0,
-    "tests_e2e_sync_assertionerror": 0,
-    "tests_e2e_sync_client": 0,
-    "tests_e2e_sync_decode": 0,
-    "tests_e2e_sync_encryptedsyncclient": 0,
-    "tests_e2e_sync_endswith": 0,
-    "tests_e2e_sync_exc": 0,
-    "tests_e2e_sync_get": 0,
-    "tests_e2e_sync_insert": 0,
-    "tests_e2e_sync_json": 0,
-    "tests_e2e_sync_main": 0,
-    "tests_e2e_sync_path": 0,
-    "tests_e2e_sync_read_text": 0,
-    "tests_e2e_sync_resolve": 0,
-    "tests_e2e_sync_secrets": 0,
-    "tests_e2e_sync_urlopen": 0,
-    "tests_e2e_sync_validate_schedule": 0,
+    "syncerror": 15,
+    "sys": 15,
+    "tempfile": 15,
+    "tests_e2e_sync": 15,
+    "tests_e2e_sync_assertionerror": 15,
+    "tests_e2e_sync_client": 15,
+    "tests_e2e_sync_decode": 15,
+    "tests_e2e_sync_encryptedsyncclient": 15,
+    "tests_e2e_sync_endswith": 15,
+    "tests_e2e_sync_exc": 15,
+    "tests_e2e_sync_get": 15,
+    "tests_e2e_sync_insert": 15,
+    "tests_e2e_sync_json": 15,
+    "tests_e2e_sync_main": 15,
+    "tests_e2e_sync_path": 15,
+    "tests_e2e_sync_read_text": 15,
+    "tests_e2e_sync_resolve": 15,
+    "tests_e2e_sync_secrets": 15,
+    "tests_e2e_sync_urlopen": 15,
+    "tests_e2e_sync_validate_schedule": 15,
     "tests_test_due_modal": 17,
     "tests_test_due_modal_close": 17,
-    "tests_test_due_modal_readfilesync": 24,
-    "tests_test_due_modal_replacechildren": 24,
-    "tests_test_due_modal_showmodal": 24,
+    "tests_test_due_modal_readfilesync": 34,
+    "tests_test_due_modal_replacechildren": 34,
+    "tests_test_due_modal_showmodal": 17,
     "tests_test_due_modal_test": 17,
-    "tests_test_due_modal_test_notification_taps_route_the_private_due_timestamp_back_to_local_modal_data_l43_c84": 24,
-    "tests_test_due_modal_test_pwa_due_reminder_opens_a_modal_with_one_safe_list_row_per_medication_l6_c78": 24,
-    "tests_test_due_modal_test_windows_reminder_is_modal_and_creates_one_visible_label_for_every_medicine_l52_c84": 24,
-    "tests_test_medication_core": 0,
-    "tests_test_medication_core_datetime": 25,
-    "tests_test_medication_core_engine": 25,
-    "tests_test_medication_core_isoformat": 25,
-    "tests_test_medication_core_schedule": 25,
-    "tests_test_medication_core_scheduleengine": 25,
-    "tests_test_medication_core_scheduleenginetests": 25,
-    "tests_test_medication_core_self": 25,
-    "tests_test_medication_core_test_catches_up_after_sleep_or_restart": 25,
-    "tests_test_medication_core_test_invalid_schedule_is_rejected": 25,
-    "tests_test_medication_core_test_mark_taken_removes_pending_and_records_completion": 25,
-    "tests_test_medication_core_test_snooze_suppresses_until_expiry": 25,
-    "tests_test_medication_core_unittest": 0,
-    "tests_test_medication_core_validate_schedule": 25,
-    "tests_test_medication_core_zoneinfo": 0,
-    "tests_test_pairing": 0,
-    "tests_test_pairing_encryptedsyncclient": 26,
-    "tests_test_pairing_json": 26,
-    "tests_test_pairing_pairingtests": 26,
-    "tests_test_pairing_path": 26,
-    "tests_test_pairing_read_text": 26,
-    "tests_test_pairing_self": 26,
-    "tests_test_pairing_test_encrypted_pairing_payload_round_trips_schedule": 26,
-    "tests_test_pairing_test_pairing_link_uses_fragment_and_contains_no_schedule": 26,
-    "tests_test_pairing_unittest": 0,
-    "tests_test_pairing_validate_schedule": 26,
+    "tests_test_due_modal_test_notification_taps_route_the_private_due_timestamp_back_to_local_modal_data_l43_c84": 34,
+    "tests_test_due_modal_test_pwa_due_reminder_opens_a_modal_with_one_safe_list_row_per_medication_l6_c78": 34,
+    "tests_test_due_modal_test_windows_reminder_is_modal_and_creates_one_visible_label_for_every_medicine_l52_c84": 34,
+    "tests_test_medication_core": 15,
+    "tests_test_medication_core_datetime": 24,
+    "tests_test_medication_core_engine": 24,
+    "tests_test_medication_core_isoformat": 24,
+    "tests_test_medication_core_schedule": 24,
+    "tests_test_medication_core_scheduleengine": 24,
+    "tests_test_medication_core_scheduleenginetests": 24,
+    "tests_test_medication_core_self": 24,
+    "tests_test_medication_core_test_catches_up_after_sleep_or_restart": 24,
+    "tests_test_medication_core_test_invalid_schedule_is_rejected": 24,
+    "tests_test_medication_core_test_mark_taken_removes_pending_and_records_completion": 24,
+    "tests_test_medication_core_test_snooze_suppresses_until_expiry": 24,
+    "tests_test_medication_core_unittest": 15,
+    "tests_test_medication_core_validate_schedule": 24,
+    "tests_test_medication_core_zoneinfo": 15,
+    "tests_test_pairing": 15,
+    "tests_test_pairing_encryptedsyncclient": 25,
+    "tests_test_pairing_json": 25,
+    "tests_test_pairing_pairingtests": 25,
+    "tests_test_pairing_path": 25,
+    "tests_test_pairing_read_text": 25,
+    "tests_test_pairing_self": 25,
+    "tests_test_pairing_test_encrypted_pairing_payload_round_trips_schedule": 25,
+    "tests_test_pairing_test_pairing_link_uses_fragment_and_contains_no_schedule": 25,
+    "tests_test_pairing_unittest": 15,
+    "tests_test_pairing_validate_schedule": 25,
     "tests_test_web_access": 17,
-    "tests_test_web_access_add": 17,
-    "tests_test_web_access_addeventlistener": 83,
-    "tests_test_web_access_assert_throws_l270_c5": 29,
-    "tests_test_web_access_assert_throws_l317_c5": 30,
-    "tests_test_web_access_callback": 83,
-    "tests_test_web_access_classlist": 17,
-    "tests_test_web_access_close": 83,
-    "tests_test_web_access_constructor": 83,
-    "tests_test_web_access_contains": 17,
-    "tests_test_web_access_dispatch": 83,
-    "tests_test_web_access_dispatchevent": 83,
-    "tests_test_web_access_focus": 38,
-    "tests_test_web_access_getitem": 32,
-    "tests_test_web_access_harness": 83,
-    "tests_test_web_access_names_foreach_l12_c35": 17,
-    "tests_test_web_access_preventdefault": 24,
-    "tests_test_web_access_queryselector": 32,
-    "tests_test_web_access_queuemicrotask": 83,
-    "tests_test_web_access_readfilesync": 83,
-    "tests_test_web_access_remove": 17,
-    "tests_test_web_access_removeitem": 24,
+    "tests_test_web_access_add": 36,
+    "tests_test_web_access_addeventlistener": 28,
+    "tests_test_web_access_assert_throws_l270_c5": 28,
+    "tests_test_web_access_assert_throws_l317_c5": 28,
+    "tests_test_web_access_callback": 28,
+    "tests_test_web_access_classlist": 36,
+    "tests_test_web_access_close": 28,
+    "tests_test_web_access_constructor": 28,
+    "tests_test_web_access_contains": 36,
+    "tests_test_web_access_dispatch": 28,
+    "tests_test_web_access_dispatchevent": 28,
+    "tests_test_web_access_focus": 40,
+    "tests_test_web_access_getitem": 30,
+    "tests_test_web_access_harness": 28,
+    "tests_test_web_access_names_foreach_l12_c35": 36,
+    "tests_test_web_access_preventdefault": 30,
+    "tests_test_web_access_queryselector": 28,
+    "tests_test_web_access_queuemicrotask": 28,
+    "tests_test_web_access_readfilesync": 28,
+    "tests_test_web_access_remove": 36,
+    "tests_test_web_access_removeitem": 31,
     "tests_test_web_access_replace": 18,
-    "tests_test_web_access_replacestate": 32,
-    "tests_test_web_access_setitem": 24,
-    "tests_test_web_access_showmodal": 24,
-    "tests_test_web_access_stop": 83,
+    "tests_test_web_access_replacestate": 31,
+    "tests_test_web_access_setitem": 30,
+    "tests_test_web_access_showmodal": 28,
+    "tests_test_web_access_stop": 28,
     "tests_test_web_access_test": 17,
-    "tests_test_web_access_test_access_api_remains_stable_for_account_and_sync_integrations_l326_c69": 83,
-    "tests_test_web_access_test_account_resolution_emits_a_safe_access_event_and_enables_entitled_cloud_use_l297_c85": 83,
-    "tests_test_web_access_test_an_installed_mobile_invitation_alone_remains_privacy_locked_l220_c69": 83,
-    "tests_test_web_access_test_cloud_operations_reject_local_mode_with_a_safe_status_message_l314_c71": 83,
-    "tests_test_web_access_test_complete_url_scrub_failure_stops_loading_and_cannot_be_unlocked_l259_c73": 83,
-    "tests_test_web_access_test_continue_locally_unlocks_without_cloud_capability_l157_c59": 17,
-    "tests_test_web_access_test_desktop_pairing_fragment_is_scrubbed_and_held_only_in_module_memory_l226_c77": 83,
-    "tests_test_web_access_test_history_scrub_failure_uses_clean_location_replacement_and_remains_fail_clos_l245_c87": 83,
-    "tests_test_web_access_test_installed_paired_mobile_bypasses_google_gate_l174_c54": 83,
-    "tests_test_web_access_test_new_browser_stays_privacy_locked_until_a_choice_is_made_l148_c65": 17,
-    "tests_test_web_access_test_only_exact_valid_legacy_v1_and_scoped_v2_mobile_credentials_unlock_l181_c76": 83,
-    "tests_test_web_access_test_pending_invitation_consumption_is_one_use_and_never_enters_events_l237_c75": 83,
-    "tests_test_web_access_test_privacy_dialog_cannot_be_dismissed_with_escape_or_its_backdrop_l285_c72": 83,
-    "tests_test_web_access_test_privacy_lock_markup_is_present_before_medication_content_l346_c66": 83,
-    "tests_test_web_access_test_remembered_local_choice_is_restored_without_becoming_account_mode_l167_c75": 83,
-    "tests_test_web_access_test_throwing_local_storage_remains_locked_and_reports_a_generic_local_mode_erro_l277_c86": 83,
+    "tests_test_web_access_test_access_api_remains_stable_for_account_and_sync_integrations_l326_c69": 28,
+    "tests_test_web_access_test_account_resolution_emits_a_safe_access_event_and_enables_entitled_cloud_use_l297_c85": 28,
+    "tests_test_web_access_test_an_installed_mobile_invitation_alone_remains_privacy_locked_l220_c69": 28,
+    "tests_test_web_access_test_cloud_operations_reject_local_mode_with_a_safe_status_message_l314_c71": 28,
+    "tests_test_web_access_test_complete_url_scrub_failure_stops_loading_and_cannot_be_unlocked_l259_c73": 28,
+    "tests_test_web_access_test_continue_locally_unlocks_without_cloud_capability_l157_c59": 36,
+    "tests_test_web_access_test_desktop_pairing_fragment_is_scrubbed_and_held_only_in_module_memory_l226_c77": 28,
+    "tests_test_web_access_test_history_scrub_failure_uses_clean_location_replacement_and_remains_fail_clos_l245_c87": 28,
+    "tests_test_web_access_test_installed_paired_mobile_bypasses_google_gate_l174_c54": 28,
+    "tests_test_web_access_test_new_browser_stays_privacy_locked_until_a_choice_is_made_l148_c65": 36,
+    "tests_test_web_access_test_only_exact_valid_legacy_v1_and_scoped_v2_mobile_credentials_unlock_l181_c76": 28,
+    "tests_test_web_access_test_pending_invitation_consumption_is_one_use_and_never_enters_events_l237_c75": 28,
+    "tests_test_web_access_test_privacy_dialog_cannot_be_dismissed_with_escape_or_its_backdrop_l285_c72": 28,
+    "tests_test_web_access_test_privacy_lock_markup_is_present_before_medication_content_l346_c66": 28,
+    "tests_test_web_access_test_remembered_local_choice_is_restored_without_becoming_account_mode_l167_c75": 28,
+    "tests_test_web_access_test_throwing_local_storage_remains_locked_and_reports_a_generic_local_mode_erro_l277_c86": 28,
     "tests_test_web_account": 17,
-    "tests_test_web_account_readfilesync": 33,
+    "tests_test_web_account_accountharness": 28,
+    "tests_test_web_account_accountview": 17,
+    "tests_test_web_account_addeventlistener": 28,
+    "tests_test_web_account_alert": 28,
+    "tests_test_web_account_anon_l339_c23": 28,
+    "tests_test_web_account_anon_l353_c23": 28,
+    "tests_test_web_account_anon_l368_c23": 28,
+    "tests_test_web_account_anon_l429_c21": 28,
+    "tests_test_web_account_append": 28,
+    "tests_test_web_account_chooselocal": 28,
+    "tests_test_web_account_clearmedicationschedule": 28,
+    "tests_test_web_account_clearschedulecalls": 28,
+    "tests_test_web_account_close": 28,
+    "tests_test_web_account_completegooglerequest": 28,
+    "tests_test_web_account_completegooglerequest_l205_c33": 17,
+    "tests_test_web_account_completemerequest": 28,
+    "tests_test_web_account_completemerequest_l194_c29": 17,
+    "tests_test_web_account_constructor": 28,
+    "tests_test_web_account_createelement": 28,
+    "tests_test_web_account_dispatchevent": 28,
+    "tests_test_web_account_element": 28,
+    "tests_test_web_account_emit": 28,
+    "tests_test_web_account_emitwindowevent": 28,
+    "tests_test_web_account_emitwindowevent_l103_c27": 28,
+    "tests_test_web_account_fetch": 17,
+    "tests_test_web_account_getitem": 30,
+    "tests_test_web_account_googlecallback": 28,
+    "tests_test_web_account_initialize": 28,
+    "tests_test_web_account_invokegooglecallback": 28,
+    "tests_test_web_account_json": 17,
+    "tests_test_web_account_listener": 28,
+    "tests_test_web_account_queryselector": 28,
+    "tests_test_web_account_queuemicrotask": 28,
+    "tests_test_web_account_queuemicrotask_l227_c48": 33,
+    "tests_test_web_account_queuemicrotask_l80_c22": 28,
+    "tests_test_web_account_readfilesync": 17,
+    "tests_test_web_account_removeitem": 31,
+    "tests_test_web_account_renderbutton": 34,
+    "tests_test_web_account_replacechildren": 28,
+    "tests_test_web_account_requirecloud": 28,
+    "tests_test_web_account_resolve": 17,
+    "tests_test_web_account_resolveaccount": 28,
+    "tests_test_web_account_resolvesignedout": 28,
+    "tests_test_web_account_response": 17,
+    "tests_test_web_account_setitem": 30,
+    "tests_test_web_account_showchoice": 28,
+    "tests_test_web_account_showmodal": 28,
+    "tests_test_web_account_signout": 28,
     "tests_test_web_account_test": 17,
-    "tests_test_web_account_test_account_client_uses_the_public_client_id_indirectly_and_never_embeds_an_oau_l5_c94": 33,
-    "tests_test_web_account_test_pair_creation_requires_server_derived_advanced_access_and_sends_the_account_l13_c93": 33,
-    "tests_test_web_account_test_security_policy_permits_google_identity_services_while_blocking_plugins_and_l19_c93": 33,
+    "tests_test_web_account_test_account_client_contains_no_reusable_session_storage_or_token_logging_l547_c78": 35,
+    "tests_test_web_account_test_account_requests_are_same_origin_and_cookie_credentialed_l300_c66": 28,
+    "tests_test_web_account_test_account_service_failure_exposes_a_choice_and_never_auto_selects_local_mode_l434_c84": 28,
+    "tests_test_web_account_test_cookie_mutations_include_the_application_csrf_header_l310_c62": 28,
+    "tests_test_web_account_test_delete_failure_retains_account_mode_and_never_clears_local_data_l498_c73": 28,
+    "tests_test_web_account_test_explicit_google_sign_in_from_local_mode_succeeds_without_a_newer_decision_l392_c83": 28,
+    "tests_test_web_account_test_failed_google_sign_in_can_be_retried_l414_c46": 28,
+    "tests_test_web_account_test_failed_local_erase_does_not_claim_to_have_entered_local_mode_l465_c70": 28,
+    "tests_test_web_account_test_google_identity_renders_in_the_access_gate_and_account_settings_l326_c73": 28,
+    "tests_test_web_account_test_google_library_load_failure_keeps_the_explicit_local_choice_available_l426_c79": 28,
+    "tests_test_web_account_test_google_sign_in_can_run_again_after_sign_out_keep_local_l400_c64": 28,
+    "tests_test_web_account_test_google_sign_in_does_not_persist_a_javascript_session_token_l318_c68": 28,
+    "tests_test_web_account_test_late_google_response_cannot_override_a_newer_explicit_local_choice_l363_c76": 28,
+    "tests_test_web_account_test_late_session_restoration_cannot_override_a_newer_explicit_local_choice_l350_c80": 28,
+    "tests_test_web_account_test_paired_mobile_mode_is_not_overridden_by_session_restoration_l385_c69": 28,
+    "tests_test_web_account_test_repeated_google_callbacks_share_one_in_flight_account_mutation_l333_c72": 28,
+    "tests_test_web_account_test_security_policy_permits_google_identity_services_while_blocking_plugins_and_l572_c93": 17,
+    "tests_test_web_account_test_sign_out_cancel_preserves_the_account_and_makes_no_request_l540_c68": 28,
+    "tests_test_web_account_test_sign_out_dialog_exposes_keep_erase_and_cancel_without_remote_unpairing_l563_c82": 17,
+    "tests_test_web_account_test_sign_out_erase_clears_local_schedule_state_before_entering_local_mode_l458_c79": 28,
+    "tests_test_web_account_test_sign_out_keep_local_returns_to_explicit_local_mode_l448_c60": 28,
+    "tests_test_web_account_test_signed_out_account_events_always_observe_the_matching_access_state_l512_c76": 28,
+    "tests_test_web_account_test_stored_local_mode_is_not_overridden_by_session_restoration_l378_c68": 28,
+    "tests_test_web_account_test_task_6_compatibility_shim_remains_credential_free_and_non_deployable_alone_l556_c84": 28,
+    "tests_test_web_account_test_thrown_local_erase_remains_privacy_locked_after_server_logout_l481_c71": 28,
+    "tests_test_web_account_test_unavailable_browser_storage_does_not_prevent_account_initialization_l441_c77": 28,
     "tests_test_web_sync": 17,
-    "tests_test_web_sync_add": 17,
-    "tests_test_web_sync_addeventlistener": 17,
-    "tests_test_web_sync_alert": 17,
-    "tests_test_web_sync_append": 17,
-    "tests_test_web_sync_cancelanimationframe": 17,
-    "tests_test_web_sync_close": 17,
-    "tests_test_web_sync_contains": 17,
-    "tests_test_web_sync_control": 17,
-    "tests_test_web_sync_createelement": 17,
-    "tests_test_web_sync_detect": 32,
-    "tests_test_web_sync_dialog": 17,
-    "tests_test_web_sync_encode": 17,
-    "tests_test_web_sync_encode_l268_c18": 34,
-    "tests_test_web_sync_fillrect": 17,
-    "tests_test_web_sync_getusermedia": 24,
-    "tests_test_web_sync_installedmobileharness": 17,
-    "tests_test_web_sync_json": 35,
-    "tests_test_web_sync_play": 17,
-    "tests_test_web_sync_queryselector": 32,
-    "tests_test_web_sync_readfilesync": 17,
-    "tests_test_web_sync_remove": 17,
-    "tests_test_web_sync_replacestate": 32,
-    "tests_test_web_sync_revokefromsource_l135_c23": 36,
-    "tests_test_web_sync_serviceworkermessagehandler": 36,
-    "tests_test_web_sync_showmodal": 24,
-    "tests_test_web_sync_stop": 83,
+    "tests_test_web_sync_add": 36,
+    "tests_test_web_sync_addeventlistener": 36,
+    "tests_test_web_sync_alert": 36,
+    "tests_test_web_sync_append": 36,
+    "tests_test_web_sync_cancelanimationframe": 36,
+    "tests_test_web_sync_close": 36,
+    "tests_test_web_sync_contains": 36,
+    "tests_test_web_sync_control": 36,
+    "tests_test_web_sync_createelement": 36,
+    "tests_test_web_sync_detect": 31,
+    "tests_test_web_sync_dialog": 36,
+    "tests_test_web_sync_encode": 36,
+    "tests_test_web_sync_encode_l268_c18": 37,
+    "tests_test_web_sync_fillrect": 31,
+    "tests_test_web_sync_getusermedia": 30,
+    "tests_test_web_sync_installedmobileharness": 36,
+    "tests_test_web_sync_json": 36,
+    "tests_test_web_sync_play": 36,
+    "tests_test_web_sync_queryselector": 36,
+    "tests_test_web_sync_readfilesync": 36,
+    "tests_test_web_sync_remove": 36,
+    "tests_test_web_sync_replacestate": 31,
+    "tests_test_web_sync_revokefromsource_l135_c23": 38,
+    "tests_test_web_sync_serviceworkermessagehandler": 38,
+    "tests_test_web_sync_showmodal": 36,
+    "tests_test_web_sync_stop": 28,
     "tests_test_web_sync_test": 17,
-    "tests_test_web_sync_test_a_new_visitor_starts_with_an_empty_private_schedule_l212_c61": 17,
-    "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l188_c68": 17,
-    "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l180_c77": 17,
-    "tests_test_web_sync_test_desktop_encrypted_schedule_import_works_end_to_end_without_storing_pairing_l243_c96": 17,
-    "tests_test_web_sync_test_desktop_pairing_links_are_routed_to_a_non_claiming_snapshot_import_l229_c76": 17,
-    "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l142_c80": 17,
-    "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l170_c72": 17,
-    "tests_test_web_sync_toggle": 17,
+    "tests_test_web_sync_test_a_new_visitor_starts_with_an_empty_private_schedule_l212_c61": 36,
+    "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l188_c68": 36,
+    "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l180_c77": 36,
+    "tests_test_web_sync_test_desktop_encrypted_schedule_import_works_end_to_end_without_storing_pairing_l243_c96": 36,
+    "tests_test_web_sync_test_desktop_pairing_links_are_routed_to_a_non_claiming_snapshot_import_l229_c76": 36,
+    "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l142_c80": 36,
+    "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l170_c72": 36,
+    "tests_test_web_sync_toggle": 36,
     "tests_test_web_update": 17,
-    "tests_test_web_update_addeventlistener": 38,
-    "tests_test_web_update_alert": 38,
-    "tests_test_web_update_anon_l6_c33": 37,
-    "tests_test_web_update_flush": 38,
-    "tests_test_web_update_json": 35,
-    "tests_test_web_update_postmessage": 38,
-    "tests_test_web_update_queryselector": 32,
-    "tests_test_web_update_readfilesync": 38,
-    "tests_test_web_update_register": 38,
-    "tests_test_web_update_reload": 38,
-    "tests_test_web_update_setimmediate": 37,
+    "tests_test_web_update_addeventlistener": 40,
+    "tests_test_web_update_alert": 40,
+    "tests_test_web_update_anon_l6_c33": 39,
+    "tests_test_web_update_flush": 40,
+    "tests_test_web_update_json": 40,
+    "tests_test_web_update_postmessage": 40,
+    "tests_test_web_update_queryselector": 40,
+    "tests_test_web_update_readfilesync": 40,
+    "tests_test_web_update_register": 40,
+    "tests_test_web_update_reload": 40,
+    "tests_test_web_update_setimmediate": 39,
     "tests_test_web_update_test": 17,
-    "tests_test_web_update_test_cloudflare_release_discovery_asks_before_activating_an_update_l75_c71": 38,
-    "tests_test_web_update_test_declined_updates_are_not_activated_or_repeatedly_prompted_in_the_same_sessi_l85_c87": 38,
-    "tests_test_web_update_test_startup_reports_no_update_when_cloudflare_version_matches_the_installed_app_l98_c85": 38,
-    "tests_test_web_update_update": 38,
-    "tests_test_web_update_updateharness": 38,
+    "tests_test_web_update_test_cloudflare_release_discovery_asks_before_activating_an_update_l75_c71": 40,
+    "tests_test_web_update_test_declined_updates_are_not_activated_or_repeatedly_prompted_in_the_same_sessi_l85_c87": 40,
+    "tests_test_web_update_test_startup_reports_no_update_when_cloudflare_version_matches_the_installed_app_l98_c85": 40,
+    "tests_test_web_update_update": 40,
+    "tests_test_web_update_updateharness": 40,
     "tests_test_worker_auth": 17,
     "tests_test_worker_auth_all": 18,
-    "tests_test_worker_auth_assert_rejects_l719_c24": 35,
-    "tests_test_worker_auth_assert_rejects_l725_c24": 35,
-    "tests_test_worker_auth_assert_rejects_l728_c24": 35,
-    "tests_test_worker_auth_authdatabase": 18,
-    "tests_test_worker_auth_b64url": 35,
-    "tests_test_worker_auth_b64url_l18_c16": 39,
+    "tests_test_worker_auth_assert_rejects_l719_c24": 17,
+    "tests_test_worker_auth_assert_rejects_l725_c24": 17,
+    "tests_test_worker_auth_assert_rejects_l728_c24": 17,
+    "tests_test_worker_auth_authdatabase": 17,
+    "tests_test_worker_auth_b64url": 17,
+    "tests_test_worker_auth_b64url_l18_c16": 42,
     "tests_test_worker_auth_batch": 18,
     "tests_test_worker_auth_bind": 18,
-    "tests_test_worker_auth_dev_hosts_cannot_enter_the_legacy_v1_google_contract_l428_c97": 35,
+    "tests_test_worker_auth_dev_hosts_cannot_enter_the_legacy_v1_google_contract_l428_c97": 17,
     "tests_test_worker_auth_first": 18,
-    "tests_test_worker_auth_fixture": 35,
-    "tests_test_worker_auth_handleauthrequest": 35,
-    "tests_test_worker_auth_json": 35,
-    "tests_test_worker_auth_map_l21_c42": 40,
+    "tests_test_worker_auth_fixture": 17,
+    "tests_test_worker_auth_handleauthrequest": 17,
+    "tests_test_worker_auth_json": 17,
+    "tests_test_worker_auth_map_l21_c42": 43,
     "tests_test_worker_auth_prepare": 18,
-    "tests_test_worker_auth_readjson_l321_c19": 35,
-    "tests_test_worker_auth_readjson_l353_c17": 35,
-    "tests_test_worker_auth_resetgooglekeysfortests": 35,
+    "tests_test_worker_auth_readjson_l321_c19": 44,
+    "tests_test_worker_auth_readjson_l353_c17": 45,
+    "tests_test_worker_auth_resetgooglekeysfortests": 17,
     "tests_test_worker_auth_run": 18,
-    "tests_test_worker_auth_sha256hex": 18,
-    "tests_test_worker_auth_sha256hex_l19_c19": 41,
+    "tests_test_worker_auth_sha256hex": 17,
+    "tests_test_worker_auth_sha256hex_l19_c19": 46,
     "tests_test_worker_auth_test": 17,
-    "tests_test_worker_auth_test_a_malformed_session_cookie_does_not_suppress_a_valid_migration_bearer_l227_c79": 42,
-    "tests_test_worker_auth_test_a_token_issued_for_another_oauth_client_is_rejected_l716_c61": 35,
-    "tests_test_worker_auth_test_api_prefixed_paths_normalize_while_legacy_and_similarly_prefixed_paths_are_l688_c94": 35,
-    "tests_test_worker_auth_test_audit_failure_does_not_prevent_valid_v2_logout_from_clearing_the_cookie_l554_c81": 18,
+    "tests_test_worker_auth_test_a_malformed_session_cookie_does_not_suppress_a_valid_migration_bearer_l227_c79": 47,
+    "tests_test_worker_auth_test_a_token_issued_for_another_oauth_client_is_rejected_l716_c61": 17,
+    "tests_test_worker_auth_test_api_prefixed_paths_normalize_while_legacy_and_similarly_prefixed_paths_are_l688_c94": 18,
+    "tests_test_worker_auth_test_audit_failure_does_not_prevent_valid_v2_logout_from_clearing_the_cookie_l554_c81": 17,
     "tests_test_worker_auth_test_auth_preflight_allows_the_csrf_marker_for_the_workers_dev_migration_path_l674_c82": 18,
-    "tests_test_worker_auth_test_clearing_the_session_cookie_retains_its_security_and_path_attributes_l166_c78": 43,
-    "tests_test_worker_auth_test_conflicting_valid_cookie_and_bearer_credentials_fail_closed_l239_c69": 44,
-    "tests_test_worker_auth_test_csrf_validation_allows_safe_methods_without_headers_l278_c61": 45,
-    "tests_test_worker_auth_test_csrf_validation_requires_the_exact_app_origin_and_marker_for_mutations_l285_c80": 46,
+    "tests_test_worker_auth_test_clearing_the_session_cookie_retains_its_security_and_path_attributes_l166_c78": 48,
+    "tests_test_worker_auth_test_conflicting_valid_cookie_and_bearer_credentials_fail_closed_l239_c69": 49,
+    "tests_test_worker_auth_test_csrf_validation_allows_safe_methods_without_headers_l278_c61": 50,
+    "tests_test_worker_auth_test_csrf_validation_requires_the_exact_app_origin_and_marker_for_mutations_l285_c80": 51,
     "tests_test_worker_auth_test_exact_legacy_host_api_auth_requests_cannot_downgrade_into_the_legacy_v1_co_l666_c91": 18,
-    "tests_test_worker_auth_test_expired_and_unverified_google_identities_are_rejected_l722_c63": 35,
-    "tests_test_worker_auth_test_expired_or_revoked_v2_session_logout_is_idempotent_and_clears_the_cookie_l517_c82": 18,
-    "tests_test_worker_auth_test_google_identity_tokens_are_signature_issuer_audience_expiry_and_email_v_l704_c92": 35,
-    "tests_test_worker_auth_test_google_sign_in_sets_a_secure_session_cookie_without_exposing_session_secret_l303_c86": 35,
-    "tests_test_worker_auth_test_identical_valid_cookie_and_bearer_credentials_resolve_to_the_cookie_kind_l252_c82": 47,
-    "tests_test_worker_auth_test_legacy_v1_bearer_logout_deletes_the_session_without_csrf_and_stays_200_comp_l637_c91": 18,
-    "tests_test_worker_auth_test_legacy_v1_bearer_patch_remains_compatible_without_csrf_l459_c64": 35,
-    "tests_test_worker_auth_test_legacy_v1_cookie_patch_requires_csrf_based_on_parsed_credential_kind_l479_c78": 18,
-    "tests_test_worker_auth_test_legacy_v1_cookie_patch_succeeds_with_the_exact_csrf_proof_l497_c67": 18,
-    "tests_test_worker_auth_test_legacy_v1_google_sign_in_keeps_the_deployed_bearer_client_response_contract_l398_c98": 35,
-    "tests_test_worker_auth_test_logout_revocation_does_not_depend_on_last_seen_or_entitlement_work_l616_c76": 18,
-    "tests_test_worker_auth_test_malformed_or_unrelated_cookies_do_not_block_a_valid_bearer_migration_token_l193_c84": 48,
+    "tests_test_worker_auth_test_expired_and_unverified_google_identities_are_rejected_l722_c63": 17,
+    "tests_test_worker_auth_test_expired_or_revoked_v2_session_logout_is_idempotent_and_clears_the_cookie_l517_c82": 17,
+    "tests_test_worker_auth_test_google_identity_tokens_are_signature_issuer_audience_expiry_and_email_v_l704_c92": 17,
+    "tests_test_worker_auth_test_google_sign_in_sets_a_secure_session_cookie_without_exposing_session_secret_l303_c86": 17,
+    "tests_test_worker_auth_test_identical_valid_cookie_and_bearer_credentials_resolve_to_the_cookie_kind_l252_c82": 52,
+    "tests_test_worker_auth_test_legacy_v1_bearer_logout_deletes_the_session_without_csrf_and_stays_200_comp_l637_c91": 17,
+    "tests_test_worker_auth_test_legacy_v1_bearer_patch_remains_compatible_without_csrf_l459_c64": 17,
+    "tests_test_worker_auth_test_legacy_v1_cookie_patch_requires_csrf_based_on_parsed_credential_kind_l479_c78": 17,
+    "tests_test_worker_auth_test_legacy_v1_cookie_patch_succeeds_with_the_exact_csrf_proof_l497_c67": 17,
+    "tests_test_worker_auth_test_legacy_v1_google_sign_in_keeps_the_deployed_bearer_client_response_contract_l398_c98": 17,
+    "tests_test_worker_auth_test_logout_revocation_does_not_depend_on_last_seen_or_entitlement_work_l616_c76": 17,
+    "tests_test_worker_auth_test_malformed_or_unrelated_cookies_do_not_block_a_valid_bearer_migration_token_l193_c84": 53,
     "tests_test_worker_auth_test_protected_browser_auth_mutations_are_rejected_before_route_dispatch_without_l654_c104": 18,
-    "tests_test_worker_auth_test_session_cookies_are_scoped_and_hardened_without_a_domain_attribute_l135_c76": 49,
-    "tests_test_worker_auth_test_session_cookies_clamp_a_negative_max_age_to_zero_l153_c58": 50,
-    "tests_test_worker_auth_test_session_cookies_clamp_an_oversized_max_age_to_the_session_ttl_l161_c71": 51,
-    "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_infinity_l145_c62": 52,
-    "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_nan_l149_c57": 53,
-    "tests_test_worker_auth_test_session_cookies_truncate_a_finite_decimal_max_age_l157_c59": 54,
-    "tests_test_worker_auth_test_session_credential_parser_rejects_duplicate_session_cookie_names_l205_c74": 55,
-    "tests_test_worker_auth_test_session_credential_parser_strictly_rejects_malformed_cookie_values_l217_c76": 56,
-    "tests_test_worker_auth_test_session_deletion_failure_returns_503_clears_the_cookie_and_skips_audit_l575_c82": 35,
-    "tests_test_worker_auth_test_session_lookup_failure_returns_503_while_still_clearing_the_cookie_l532_c76": 35,
-    "tests_test_worker_auth_test_session_lookup_only_authenticates_the_token_hash_configured_by_the_db_fixtu_l264_c87": 18,
-    "tests_test_worker_auth_test_session_tokens_prefer_the_cookie_and_retain_the_bearer_migration_fallback_l175_c83": 57,
-    "tests_test_worker_auth_test_sign_out_clears_the_hardened_session_cookie_l340_c53": 35,
-    "tests_test_worker_auth_test_v2_google_sign_in_requires_csrf_and_returns_only_the_cookie_based_account_c_l368_c92": 35,
-    "tests_test_worker_auth_test_valid_v2_cookie_logout_deletes_the_server_session_and_clears_the_cookie_l598_c81": 18,
-    "tests_test_worker_auth_verifygooglecredential": 35,
-    "tests_test_worker_auth_waituntil": 35,
+    "tests_test_worker_auth_test_session_cookies_are_scoped_and_hardened_without_a_domain_attribute_l135_c76": 54,
+    "tests_test_worker_auth_test_session_cookies_clamp_a_negative_max_age_to_zero_l153_c58": 55,
+    "tests_test_worker_auth_test_session_cookies_clamp_an_oversized_max_age_to_the_session_ttl_l161_c71": 56,
+    "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_infinity_l145_c62": 57,
+    "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_nan_l149_c57": 58,
+    "tests_test_worker_auth_test_session_cookies_truncate_a_finite_decimal_max_age_l157_c59": 59,
+    "tests_test_worker_auth_test_session_credential_parser_rejects_duplicate_session_cookie_names_l205_c74": 60,
+    "tests_test_worker_auth_test_session_credential_parser_strictly_rejects_malformed_cookie_values_l217_c76": 61,
+    "tests_test_worker_auth_test_session_deletion_failure_returns_503_clears_the_cookie_and_skips_audit_l575_c82": 17,
+    "tests_test_worker_auth_test_session_lookup_failure_returns_503_while_still_clearing_the_cookie_l532_c76": 17,
+    "tests_test_worker_auth_test_session_lookup_only_authenticates_the_token_hash_configured_by_the_db_fixtu_l264_c87": 17,
+    "tests_test_worker_auth_test_session_tokens_prefer_the_cookie_and_retain_the_bearer_migration_fallback_l175_c83": 62,
+    "tests_test_worker_auth_test_sign_out_clears_the_hardened_session_cookie_l340_c53": 17,
+    "tests_test_worker_auth_test_v2_google_sign_in_requires_csrf_and_returns_only_the_cookie_based_account_c_l368_c92": 17,
+    "tests_test_worker_auth_test_valid_v2_cookie_logout_deletes_the_server_session_and_clears_the_cookie_l598_c81": 17,
+    "tests_test_worker_auth_verifygooglecredential": 17,
+    "tests_test_worker_auth_waituntil": 17,
     "tests_test_worker_sync": 18,
     "tests_test_worker_sync_all": 18,
-    "tests_test_worker_sync_assertindexdefinitions": 58,
+    "tests_test_worker_sync_assertindexdefinitions": 64,
     "tests_test_worker_sync_batch": 18,
     "tests_test_worker_sync_bind": 18,
-    "tests_test_worker_sync_btoa": 35,
+    "tests_test_worker_sync_btoa": 18,
     "tests_test_worker_sync_claim": 18,
-    "tests_test_worker_sync_claim_l1078_c17": 35,
-    "tests_test_worker_sync_close": 35,
-    "tests_test_worker_sync_createpair": 35,
-    "tests_test_worker_sync_definitions_filter_l168_c26": 59,
-    "tests_test_worker_sync_definitions_map_l164_c39": 60,
+    "tests_test_worker_sync_claim_l1081_c17": 18,
+    "tests_test_worker_sync_close": 18,
+    "tests_test_worker_sync_createpair": 18,
+    "tests_test_worker_sync_definitions_filter_l168_c26": 65,
+    "tests_test_worker_sync_definitions_map_l164_c39": 66,
     "tests_test_worker_sync_fakedb": 18,
     "tests_test_worker_sync_filter_l98_c13": 18,
     "tests_test_worker_sync_first": 18,
     "tests_test_worker_sync_inspectsyncpairs": 18,
     "tests_test_worker_sync_map_l115_c32": 18,
-    "tests_test_worker_sync_map_l372_c42": 61,
-    "tests_test_worker_sync_mobileclaim": 35,
+    "tests_test_worker_sync_map_l372_c42": 67,
+    "tests_test_worker_sync_mobileclaim": 18,
     "tests_test_worker_sync_normalizesql": 18,
     "tests_test_worker_sync_prepare": 18,
-    "tests_test_worker_sync_randomclaimnonce": 35,
-    "tests_test_worker_sync_readfile": 58,
-    "tests_test_worker_sync_request": 35,
-    "tests_test_worker_sync_request_l1016_c19": 35,
+    "tests_test_worker_sync_randomclaimnonce": 18,
+    "tests_test_worker_sync_readfile": 64,
+    "tests_test_worker_sync_request": 18,
+    "tests_test_worker_sync_request_l1019_c19": 18,
     "tests_test_worker_sync_resolve": 18,
     "tests_test_worker_sync_run": 18,
     "tests_test_worker_sync_sha256hex": 18,
     "tests_test_worker_sync_sqlited1": 18,
-    "tests_test_worker_sync_sqlstatements": 58,
-    "tests_test_worker_sync_statements_filter_l142_c39": 62,
-    "tests_test_worker_sync_syncpaircolumndefinitions": 58,
-    "tests_test_worker_sync_t_after_l1014_c11": 63,
-    "tests_test_worker_sync_t_after_l1030_c11": 64,
-    "tests_test_worker_sync_t_after_l1066_c11": 65,
-    "tests_test_worker_sync_t_after_l1097_c11": 66,
-    "tests_test_worker_sync_t_after_l1115_c11": 67,
-    "tests_test_worker_sync_t_after_l1153_c11": 68,
-    "tests_test_worker_sync_t_after_l1216_c11": 69,
-    "tests_test_worker_sync_t_after_l1244_c11": 70,
-    "tests_test_worker_sync_t_after_l486_c11": 71,
-    "tests_test_worker_sync_t_after_l529_c11": 72,
-    "tests_test_worker_sync_t_after_l561_c11": 73,
-    "tests_test_worker_sync_t_after_l597_c11": 74,
-    "tests_test_worker_sync_t_after_l648_c11": 75,
-    "tests_test_worker_sync_t_after_l675_c11": 76,
-    "tests_test_worker_sync_t_after_l730_c11": 77,
-    "tests_test_worker_sync_t_after_l871_c11": 78,
-    "tests_test_worker_sync_t_after_l920_c11": 79,
-    "tests_test_worker_sync_t_after_l973_c11": 80,
-    "tests_test_worker_sync_t_after_l991_c11": 81,
-    "tests_test_worker_sync_t_test_l807_c26": 35,
+    "tests_test_worker_sync_sqlstatements": 64,
+    "tests_test_worker_sync_statements_filter_l142_c39": 68,
+    "tests_test_worker_sync_syncpaircolumndefinitions": 64,
+    "tests_test_worker_sync_t_after_l1017_c11": 69,
+    "tests_test_worker_sync_t_after_l1033_c11": 70,
+    "tests_test_worker_sync_t_after_l1069_c11": 71,
+    "tests_test_worker_sync_t_after_l1100_c11": 72,
+    "tests_test_worker_sync_t_after_l1118_c11": 73,
+    "tests_test_worker_sync_t_after_l1156_c11": 74,
+    "tests_test_worker_sync_t_after_l1219_c11": 75,
+    "tests_test_worker_sync_t_after_l1247_c11": 76,
+    "tests_test_worker_sync_t_after_l486_c11": 77,
+    "tests_test_worker_sync_t_after_l529_c11": 78,
+    "tests_test_worker_sync_t_after_l561_c11": 79,
+    "tests_test_worker_sync_t_after_l597_c11": 80,
+    "tests_test_worker_sync_t_after_l651_c11": 81,
+    "tests_test_worker_sync_t_after_l678_c11": 82,
+    "tests_test_worker_sync_t_after_l733_c11": 83,
+    "tests_test_worker_sync_t_after_l874_c11": 84,
+    "tests_test_worker_sync_t_after_l923_c11": 85,
+    "tests_test_worker_sync_t_after_l976_c11": 86,
+    "tests_test_worker_sync_t_after_l994_c11": 87,
+    "tests_test_worker_sync_t_test_l810_c26": 18,
     "tests_test_worker_sync_test": 18,
-    "tests_test_worker_sync_test_account_and_mobile_updates_retain_separate_scoped_authorization_predicates_l1151_c84": 35,
-    "tests_test_worker_sync_test_account_and_scoped_mobile_updates_derive_updated_by_from_authenticated_devi_l1028_c96": 35,
-    "tests_test_worker_sync_test_account_cookie_cannot_accompany_invitation_claim_and_does_not_consume_it_l646_c82": 35,
-    "tests_test_worker_sync_test_account_pair_routes_are_tenant_bound_and_legacy_bearer_cannot_authorize_own_l527_c92": 35,
+    "tests_test_worker_sync_test_account_and_mobile_updates_retain_separate_scoped_authorization_predicates_l1154_c84": 18,
+    "tests_test_worker_sync_test_account_and_scoped_mobile_updates_derive_updated_by_from_authenticated_devi_l1031_c96": 18,
+    "tests_test_worker_sync_test_account_cookie_cannot_accompany_invitation_claim_and_does_not_consume_it_l649_c82": 18,
+    "tests_test_worker_sync_test_account_pair_routes_are_tenant_bound_and_legacy_bearer_cannot_authorize_own_l527_c92": 18,
     "tests_test_worker_sync_test_account_pairing_lookup_binds_both_pair_and_tenant_l295_c59": 18,
     "tests_test_worker_sync_test_advanced_entitlement_is_required_for_cloud_synchronization_l258_c68": 18,
-    "tests_test_worker_sync_test_canonical_schema_has_one_copy_of_every_scoped_credential_column_and_index_l161_c83": 58,
-    "tests_test_worker_sync_test_disabled_and_deletion_pending_owners_pause_claim_and_scoped_mobile_sync_unt_l805_c99": 82,
-    "tests_test_worker_sync_test_entitlement_revocation_pauses_account_and_mobile_sync_without_blocking_owne_l728_c95": 35,
-    "tests_test_worker_sync_test_exact_legacy_host_bearer_account_sessions_cannot_authorize_account_owned_sy_l559_c87": 35,
-    "tests_test_worker_sync_test_expired_and_incorrect_invitations_use_the_same_safe_not_found_response_l1095_c80": 35,
+    "tests_test_worker_sync_test_canonical_schema_has_one_copy_of_every_scoped_credential_column_and_index_l161_c83": 64,
+    "tests_test_worker_sync_test_disabled_and_deletion_pending_owners_pause_claim_and_scoped_mobile_sync_unt_l808_c99": 88,
+    "tests_test_worker_sync_test_entitlement_revocation_pauses_account_and_mobile_sync_without_blocking_owne_l731_c95": 18,
+    "tests_test_worker_sync_test_exact_legacy_host_bearer_account_sessions_cannot_authorize_account_owned_sy_l559_c87": 18,
+    "tests_test_worker_sync_test_expired_and_incorrect_invitations_use_the_same_safe_not_found_response_l1098_c80": 18,
     "tests_test_worker_sync_test_invitation_consumption_is_atomic_and_single_use_l312_c57": 18,
-    "tests_test_worker_sync_test_invitation_refresh_compare_and_set_allows_only_one_concurrent_winner_l1012_c78": 35,
-    "tests_test_worker_sync_test_invitation_refresh_is_tenant_scoped_and_invalidates_the_previous_invitation_l1113_c85": 35,
+    "tests_test_worker_sync_test_invitation_refresh_compare_and_set_allows_only_one_concurrent_winner_l1015_c78": 18,
+    "tests_test_worker_sync_test_invitation_refresh_is_tenant_scoped_and_invalidates_the_previous_invitation_l1116_c85": 18,
     "tests_test_worker_sync_test_legacy_claim_is_a_conditional_atomic_update_with_retry_safe_device_binding_l337_c84": 18,
-    "tests_test_worker_sync_test_legacy_claim_is_atomic_for_competing_devices_and_idempotent_for_the_winner_l1064_c84": 18,
+    "tests_test_worker_sync_test_legacy_claim_is_atomic_for_competing_devices_and_idempotent_for_the_winner_l1067_c84": 18,
     "tests_test_worker_sync_test_legacy_lookup_requires_a_null_account_owner_and_legacy_token_hash_l329_c75": 18,
-    "tests_test_worker_sync_test_legacy_records_remain_bearer_compatible_only_while_account_owner_is_null_l1214_c82": 18,
-    "tests_test_worker_sync_test_malformed_claim_nonce_is_uniformly_rejected_before_invitation_state_lookup_l918_c84": 35,
+    "tests_test_worker_sync_test_legacy_records_remain_bearer_compatible_only_while_account_owner_is_null_l1217_c82": 18,
+    "tests_test_worker_sync_test_malformed_claim_nonce_is_uniformly_rejected_before_invitation_state_lookup_l921_c84": 18,
     "tests_test_worker_sync_test_migration_result_and_fresh_schema_are_executable_and_expose_equivalent_scop_l182_c98": 18,
-    "tests_test_worker_sync_test_missing_mobile_credential_secret_fails_without_consuming_invitation_l971_c77": 35,
+    "tests_test_worker_sync_test_missing_mobile_credential_secret_fails_without_consuming_invitation_l974_c77": 18,
     "tests_test_worker_sync_test_mobile_credential_derivation_is_deterministic_secret_backed_and_domain_se_l264_c92": 18,
-    "tests_test_worker_sync_test_mobile_credentials_reject_account_cookies_and_remain_scoped_to_one_pair_l673_c81": 35,
-    "tests_test_worker_sync_test_mobile_invitation_is_one_use_and_returns_a_pair_and_device_scoped_credentia_l595_c86": 35,
+    "tests_test_worker_sync_test_mobile_credentials_reject_account_cookies_and_remain_scoped_to_one_pair_l676_c81": 18,
+    "tests_test_worker_sync_test_mobile_invitation_is_one_use_and_returns_a_pair_and_device_scoped_credentia_l595_c86": 18,
     "tests_test_worker_sync_test_mobile_lookup_binds_pair_device_and_hashed_mobile_credential_l304_c72": 18,
-    "tests_test_worker_sync_test_new_mobile_claim_is_idempotent_for_the_same_invitation_device_and_claim_non_l869_c87": 35,
-    "tests_test_worker_sync_test_pair_creation_derives_ownership_requires_advanced_entitlement_and_keeps_c_l484_c95": 35,
-    "tests_test_worker_sync_test_pairing_audit_metadata_never_records_application_or_credential_secrets_l1242_c80": 35,
-    "tests_test_worker_sync_test_scoped_pairing_credentials_migration_has_complete_index_definitions_l152_c77": 58,
-    "tests_test_worker_sync_test_scoped_pairing_credentials_migration_has_exactly_five_additive_columns_l139_c80": 58,
-    "tests_test_worker_sync_test_successful_claim_returns_from_the_atomic_update_without_a_credential_bound_l989_c94": 35,
-    "tests_test_worker_sync_test_worker_test_script_runs_authentication_and_schema_contracts_l218_c69": 58,
-    "tests_test_worker_sync_waituntil": 35,
+    "tests_test_worker_sync_test_new_mobile_claim_is_idempotent_for_the_same_invitation_device_and_claim_non_l872_c87": 18,
+    "tests_test_worker_sync_test_pair_creation_derives_ownership_requires_advanced_entitlement_and_keeps_c_l484_c95": 18,
+    "tests_test_worker_sync_test_pairing_audit_metadata_never_records_application_or_credential_secrets_l1245_c80": 18,
+    "tests_test_worker_sync_test_scoped_pairing_credentials_migration_has_complete_index_definitions_l152_c77": 64,
+    "tests_test_worker_sync_test_scoped_pairing_credentials_migration_has_exactly_five_additive_columns_l139_c80": 64,
+    "tests_test_worker_sync_test_successful_claim_returns_from_the_atomic_update_without_a_credential_bound_l992_c94": 18,
+    "tests_test_worker_sync_test_worker_test_script_runs_authentication_and_schema_contracts_l218_c69": 64,
+    "tests_test_worker_sync_waituntil": 17,
     "tests_test_worker_sync_withoutscopedcredentials": 18,
-    "tests_test_worker_sync_workerfixture": 35,
+    "tests_test_worker_sync_workerfixture": 18,
     "tests_test_worker_sync_wrapstatement": 18,
-    "threading": 0,
-    "time": 0,
-    "timedelta": 0,
-    "tkinter": 0,
-    "ttk": 0,
-    "typing": 0,
-    "unittest": 0,
-    "urllib_error": 0,
-    "urllib_request": 0,
-    "validate_schedule": 0,
-    "valueerror": 10,
-    "wave": 0,
-    "web_access": 83,
-    "web_access_anon_l1_c2": 83,
-    "web_access_chooselocal": 83,
-    "web_access_cloudsync": 83,
-    "web_access_consumependinginvitation": 83,
-    "web_access_dialog_addeventlistener_cancel_l192_c38": 24,
-    "web_access_dialog_addeventlistener_click_l197_c37": 83,
-    "web_access_emit": 83,
-    "web_access_focuschoice": 83,
-    "web_access_matchmedia": 83,
-    "web_access_mode": 83,
-    "web_access_pendinginvitation": 83,
-    "web_access_queuemicrotask": 83,
-    "web_access_queuemicrotask_l122_c20": 38,
-    "web_access_readstorage": 83,
-    "web_access_ready": 83,
-    "web_access_removestorage": 83,
-    "web_access_requirecloud": 83,
-    "web_access_resolveaccount": 83,
-    "web_access_resolvepairedmobile": 83,
-    "web_access_resolvesignedout": 83,
-    "web_access_setstatus": 83,
-    "web_access_showchoice": 83,
-    "web_access_signedin": 83,
-    "web_access_storedmobilepair": 83,
-    "web_access_unlock": 83,
-    "web_access_writestorage": 83,
-    "web_account": 24,
-    "web_account_advanced": 24,
-    "web_account_alert": 24,
-    "web_account_anon_l1_c2": 24,
-    "web_account_authorizationheaders": 24,
-    "web_account_confirm": 24,
-    "web_account_current": 24,
-    "web_account_elements_save_onclick_l115_c25": 24,
-    "web_account_elements_signout_onclick_l125_c28": 24,
-    "web_account_fetch": 35,
-    "web_account_handlegooglecredential": 24,
-    "web_account_initialize": 24,
-    "web_account_loadgooglelibrary": 24,
-    "web_account_matchmedia": 24,
-    "web_account_render": 24,
-    "web_account_rendergooglebutton": 24,
-    "web_account_request": 35,
-    "web_account_requireadvanced": 24,
-    "web_account_restoresession": 24,
-    "web_account_signedin": 24,
-    "web_account_storesession": 24,
-    "web_app": 24,
-    "web_app_active": 24,
-    "web_app_addeventlistener_click_l37_c42": 24,
-    "web_app_addeventlistener_close_l34_c42": 24,
-    "web_app_addmedicine_onclick_l13_c361": 32,
-    "web_app_addmedicineinput": 32,
-    "web_app_addschedule_onclick_l13_c318": 24,
-    "web_app_alert": 24,
-    "web_app_atob": 24,
-    "web_app_await": 24,
-    "web_app_b_onclick_l13_c56": 17,
-    "web_app_btoa": 24,
-    "web_app_checkduemodals": 24,
-    "web_app_checkforegroundnotifications": 24,
-    "web_app_clearprematuretaken": 24,
-    "web_app_closeduemodal": 24,
-    "web_app_confirm": 24,
-    "web_app_decodepairingpayload": 24,
-    "web_app_e_medicines_map_l36_c933": 24,
-    "web_app_e_medicines_map_l7_c642": 24,
-    "web_app_emptyschedule": 24,
-    "web_app_emptyschedule_l2_c398": 84,
-    "web_app_enablenotifications": 24,
-    "web_app_enablenotifications_onclick_l23_c100": 24,
-    "web_app_enqueuedue": 24,
-    "web_app_esc": 24,
+    "threading": 15,
+    "time": 15,
+    "timedelta": 15,
+    "tkinter": 15,
+    "ttk": 15,
+    "typing": 15,
+    "unittest": 15,
+    "urllib_error": 15,
+    "urllib_request": 15,
+    "validate_schedule": 15,
+    "valueerror": 9,
+    "wave": 15,
+    "web_access": 27,
+    "web_access_anon_l1_c2": 27,
+    "web_access_chooselocal": 27,
+    "web_access_cloudsync": 27,
+    "web_access_consumependinginvitation": 28,
+    "web_access_dialog_addeventlistener_cancel_l192_c38": 30,
+    "web_access_dialog_addeventlistener_click_l197_c37": 27,
+    "web_access_emit": 27,
+    "web_access_focuschoice": 27,
+    "web_access_matchmedia": 27,
+    "web_access_mode": 27,
+    "web_access_pendinginvitation": 28,
+    "web_access_queuemicrotask": 27,
+    "web_access_queuemicrotask_l122_c20": 40,
+    "web_access_readstorage": 27,
+    "web_access_ready": 27,
+    "web_access_removestorage": 27,
+    "web_access_requirecloud": 27,
+    "web_access_resolveaccount": 27,
+    "web_access_resolvepairedmobile": 27,
+    "web_access_resolvesignedout": 27,
+    "web_access_setstatus": 27,
+    "web_access_showchoice": 27,
+    "web_access_signedin": 27,
+    "web_access_storedmobilepair": 27,
+    "web_access_unlock": 27,
+    "web_access_writestorage": 30,
+    "web_account": 34,
+    "web_account_accessdecisioniscurrent": 34,
+    "web_account_accessdecisionsnapshot": 34,
+    "web_account_advanced": 34,
+    "web_account_alert": 34,
+    "web_account_anon_l185_c37": 90,
+    "web_account_anon_l1_c2": 30,
+    "web_account_anon_l219_c22": 34,
+    "web_account_anon_l315_c24": 34,
+    "web_account_anon_l330_c23": 34,
+    "web_account_authorizationheaders": 28,
+    "web_account_choosesignoutaction": 34,
+    "web_account_cleartimeout": 34,
+    "web_account_current": 34,
+    "web_account_dialog_addeventlistener_close_l317_c40": 34,
+    "web_account_elements_save_onclick_l388_c29": 34,
+    "web_account_emitaccountchanged": 34,
+    "web_account_fetch": 34,
+    "web_account_finish": 91,
+    "web_account_finish_l189_c22": 34,
+    "web_account_handlegooglecredential": 34,
+    "web_account_identityloadfailed": 34,
+    "web_account_initialize": 34,
+    "web_account_loadgooglelibrary": 34,
+    "web_account_matchmedia": 34,
+    "web_account_remainsignedout": 34,
+    "web_account_render": 34,
+    "web_account_rendergooglebuttons": 34,
+    "web_account_request": 34,
+    "web_account_requireadvanced": 34,
+    "web_account_resolve": 34,
+    "web_account_script_onerror_l206_c24": 91,
+    "web_account_script_onload_l205_c23": 91,
+    "web_account_setaccountstatus": 34,
+    "web_account_settimeout": 90,
+    "web_account_settimeout_l200_c34": 91,
+    "web_account_signedin": 34,
+    "web_account_signout": 34,
+    "web_account_validaccountview": 34,
+    "web_app": 30,
+    "web_app_active": 30,
+    "web_app_addeventlistener_click_l37_c42": 30,
+    "web_app_addeventlistener_close_l34_c42": 30,
+    "web_app_addmedicine_onclick_l13_c361": 30,
+    "web_app_addmedicineinput": 30,
+    "web_app_addschedule_onclick_l13_c318": 30,
+    "web_app_alert": 30,
+    "web_app_atob": 30,
+    "web_app_await": 30,
+    "web_app_b_onclick_l13_c56": 36,
+    "web_app_btoa": 30,
+    "web_app_checkduemodals": 30,
+    "web_app_checkforegroundnotifications": 30,
+    "web_app_clearprematuretaken": 30,
+    "web_app_closeduemodal": 30,
+    "web_app_confirm": 30,
+    "web_app_decodepairingpayload": 30,
+    "web_app_e_medicines_map_l36_c933": 30,
+    "web_app_e_medicines_map_l7_c642": 30,
+    "web_app_emptyschedule": 30,
+    "web_app_emptyschedule_l2_c398": 92,
+    "web_app_enablenotifications": 30,
+    "web_app_enablenotifications_onclick_l23_c100": 30,
+    "web_app_enqueuedue": 30,
+    "web_app_esc": 30,
     "web_app_esc_l3_c48": 18,
-    "web_app_escape": 24,
-    "web_app_exportschedule_onclick_l47_c30": 24,
-    "web_app_fetch": 24,
-    "web_app_foreach_l21_c202": 85,
-    "web_app_foreach_l45_c502": 83,
-    "web_app_importschedule_onclick_l48_c30": 24,
-    "web_app_installbutton_onclick_l13_c1299": 86,
-    "web_app_items_map_l36_c312": 24,
-    "web_app_list_map_l7_c152": 24,
-    "web_app_localdatekey": 24,
-    "web_app_localdatekey_l5_c20": 87,
-    "web_app_map_l10_c480": 88,
-    "web_app_markduetaken_onclick_l35_c71": 24,
-    "web_app_markoccurrencetaken": 24,
-    "web_app_nextpushreminders": 24,
-    "web_app_notes_foreach_l11_c523": 83,
-    "web_app_openeditor": 24,
-    "web_app_pairingpayload": 24,
-    "web_app_persisttaken": 24,
-    "web_app_playsound": 24,
-    "web_app_priornotificationhandler": 24,
-    "web_app_priorsavesettings": 24,
-    "web_app_prompt": 24,
-    "web_app_qrcode": 24,
-    "web_app_readstoredjson": 24,
-    "web_app_readstoredjson_l2_c165": 32,
-    "web_app_reminderstate": 24,
-    "web_app_renderall": 24,
-    "web_app_rendermedicineinputs": 24,
-    "web_app_renderpairingqr": 24,
-    "web_app_renderschedules": 24,
-    "web_app_rendertoday": 24,
-    "web_app_requestanimationframe": 24,
-    "web_app_save": 24,
-    "web_app_save_l3_c162": 24,
-    "web_app_saveeditor": 24,
-    "web_app_saveschedule_onclick_l13_c411": 24,
-    "web_app_savesettings_onclick_l13_c721": 24,
-    "web_app_savesettings_onclick_l39_c79": 24,
-    "web_app_scan": 24,
-    "web_app_scan_l45_c401": 24,
-    "web_app_scanqr_onclick_l45_c22": 24,
-    "web_app_schedule_events_filter_l18_c254": 24,
-    "web_app_schedule_events_filter_l21_c178": 24,
-    "web_app_schedule_events_filter_l33_c156": 24,
-    "web_app_schedule_events_filter_l36_c205": 24,
-    "web_app_schedulelist_onclick_l13_c1007": 24,
-    "web_app_setinterval": 24,
-    "web_app_settimeout": 24,
-    "web_app_settimeout_l11_c939": 89,
-    "web_app_showbrowsernotification": 24,
-    "web_app_shownextduemodal": 24,
-    "web_app_showqr_onclick_l44_c22": 24,
-    "web_app_sort_l36_c226": 90,
-    "web_app_sort_l7_c65": 91,
-    "web_app_structuredclone": 24,
-    "web_app_syncpushsubscription": 24,
-    "web_app_testsound_onclick_l13_c585": 24,
-    "web_app_timenow_l3_c540": 92,
-    "web_app_uint8array_from_l22_c620": 93,
-    "web_app_unescape": 24,
-    "web_app_updatenotificationstatus": 24,
-    "web_app_volumeinput_oninput_l13_c512": 24,
-    "web_app_window_addeventlistener_beforeinstallprompt_l13_c1420": 24,
-    "web_app_window_applysyncedschedule_l50_c28": 24,
-    "web_app_window_clearmedicationschedule_l51_c32": 24,
-    "web_app_window_getmedicationpushendpoint_l52_c34": 94,
-    "web_app_window_getmedicationschedule_l49_c30": 24,
-    "web_due_modal": 24,
-    "web_due_modal_close": 24,
-    "web_due_modal_show": 24,
-    "web_headers": 95,
-    "web_index": 96,
-    "web_manifest": 97,
+    "web_app_escape": 30,
+    "web_app_exportschedule_onclick_l47_c30": 30,
+    "web_app_fetch": 30,
+    "web_app_foreach_l21_c202": 93,
+    "web_app_foreach_l45_c502": 28,
+    "web_app_importschedule_onclick_l48_c30": 30,
+    "web_app_installbutton_onclick_l13_c1299": 94,
+    "web_app_items_map_l36_c312": 30,
+    "web_app_list_map_l7_c152": 30,
+    "web_app_localdatekey": 30,
+    "web_app_localdatekey_l5_c20": 95,
+    "web_app_map_l10_c480": 96,
+    "web_app_markduetaken_onclick_l35_c71": 30,
+    "web_app_markoccurrencetaken": 30,
+    "web_app_nextpushreminders": 30,
+    "web_app_notes_foreach_l11_c523": 28,
+    "web_app_openeditor": 30,
+    "web_app_pairingpayload": 30,
+    "web_app_persisttaken": 30,
+    "web_app_playsound": 30,
+    "web_app_priornotificationhandler": 30,
+    "web_app_priorsavesettings": 30,
+    "web_app_prompt": 30,
+    "web_app_qrcode": 30,
+    "web_app_readstoredjson": 30,
+    "web_app_readstoredjson_l2_c165": 30,
+    "web_app_reminderstate": 30,
+    "web_app_renderall": 30,
+    "web_app_rendermedicineinputs": 30,
+    "web_app_renderpairingqr": 30,
+    "web_app_renderschedules": 30,
+    "web_app_rendertoday": 30,
+    "web_app_requestanimationframe": 30,
+    "web_app_save": 30,
+    "web_app_save_l3_c162": 30,
+    "web_app_saveeditor": 30,
+    "web_app_saveschedule_onclick_l13_c411": 30,
+    "web_app_savesettings_onclick_l13_c721": 30,
+    "web_app_savesettings_onclick_l39_c79": 30,
+    "web_app_scan": 30,
+    "web_app_scan_l45_c401": 30,
+    "web_app_scanqr_onclick_l45_c22": 30,
+    "web_app_schedule_events_filter_l18_c254": 30,
+    "web_app_schedule_events_filter_l21_c178": 30,
+    "web_app_schedule_events_filter_l33_c156": 30,
+    "web_app_schedule_events_filter_l36_c205": 30,
+    "web_app_schedulelist_onclick_l13_c1007": 30,
+    "web_app_setinterval": 30,
+    "web_app_settimeout": 30,
+    "web_app_settimeout_l11_c939": 97,
+    "web_app_showbrowsernotification": 30,
+    "web_app_shownextduemodal": 30,
+    "web_app_showqr_onclick_l44_c22": 30,
+    "web_app_sort_l36_c226": 98,
+    "web_app_sort_l7_c65": 99,
+    "web_app_structuredclone": 30,
+    "web_app_syncpushsubscription": 30,
+    "web_app_testsound_onclick_l13_c585": 30,
+    "web_app_timenow_l3_c540": 100,
+    "web_app_uint8array_from_l22_c620": 101,
+    "web_app_unescape": 30,
+    "web_app_updatenotificationstatus": 30,
+    "web_app_volumeinput_oninput_l13_c512": 30,
+    "web_app_window_addeventlistener_beforeinstallprompt_l13_c1420": 30,
+    "web_app_window_applysyncedschedule_l50_c28": 30,
+    "web_app_window_clearmedicationschedule_l51_c32": 30,
+    "web_app_window_getmedicationpushendpoint_l52_c34": 102,
+    "web_app_window_getmedicationschedule_l49_c30": 30,
+    "web_due_modal": 34,
+    "web_due_modal_close": 34,
+    "web_due_modal_show": 34,
+    "web_headers": 103,
+    "web_index": 104,
+    "web_manifest": 105,
     "web_push": 18,
-    "web_qrcode": 17,
-    "web_qrcode_base64decodeinputstream": 17,
-    "web_qrcode_base64encodeoutputstream": 17,
-    "web_qrcode_bitoutputstream": 17,
-    "web_qrcode_bytearrayoutputstream": 17,
-    "web_qrcode_chattonum": 17,
-    "web_qrcode_createbytes": 17,
-    "web_qrcode_createdata": 17,
-    "web_qrcode_createdataurl": 17,
-    "web_qrcode_createhalfascii": 17,
-    "web_qrcode_decode": 17,
-    "web_qrcode_define": 17,
-    "web_qrcode_encode": 17,
-    "web_qrcode_escapexml": 17,
-    "web_qrcode_factory": 17,
-    "web_qrcode_getbchdigit": 17,
-    "web_qrcode_getbestmaskpattern": 17,
-    "web_qrcode_getcode": 17,
-    "web_qrcode_getlzwraster": 17,
-    "web_qrcode_getpixel": 17,
-    "web_qrcode_getrsblocktable": 17,
-    "web_qrcode_gifimage": 17,
-    "web_qrcode_lzwtable": 17,
-    "web_qrcode_makeimpl": 17,
-    "web_qrcode_mapdata": 17,
-    "web_qrcode_maskfunc": 17,
-    "web_qrcode_qr8bitbyte": 17,
-    "web_qrcode_qralphanum": 17,
-    "web_qrcode_qrbitbuffer": 17,
-    "web_qrcode_qrkanji": 17,
-    "web_qrcode_qrnumber": 17,
-    "web_qrcode_qrpolynomial": 17,
-    "web_qrcode_qrrsblock": 17,
-    "web_qrcode_read": 17,
-    "web_qrcode_setuppositionadjustpattern": 17,
-    "web_qrcode_setuppositionprobepattern": 17,
-    "web_qrcode_setuptimingpattern": 17,
-    "web_qrcode_setuptypeinfo": 17,
-    "web_qrcode_setuptypenumber": 17,
-    "web_qrcode_stringtobytes": 17,
-    "web_qrcode_strtonum": 17,
-    "web_qrcode_toutf8array": 17,
-    "web_qrcode_writeencoded": 17,
-    "web_styles": 98,
-    "web_sw": 99,
-    "web_sw_fetch": 100,
-    "web_sw_list_foreach_l7_c569": 38,
-    "web_sw_self_addeventlistener_activate_l5_c34": 35,
-    "web_sw_self_addeventlistener_fetch_l6_c31": 100,
-    "web_sw_self_addeventlistener_install_l3_c33": 35,
-    "web_sw_self_addeventlistener_message_l4_c33": 101,
-    "web_sw_self_addeventlistener_notificationclick_l8_c43": 35,
-    "web_sw_self_addeventlistener_push_l7_c30": 35,
-    "web_sw_then_l3_c80": 102,
-    "web_sw_then_l5_c160": 103,
-    "web_sw_then_l6_c336": 104,
-    "web_sw_then_l6_c399": 105,
-    "web_sw_then_l6_c551": 100,
-    "web_sw_then_l8_c202": 38,
-    "web_sync": 32,
-    "web_sync_acceptpairing": 32,
-    "web_sync_alert": 32,
-    "web_sync_anon_l1_c2": 32,
-    "web_sync_anon_l59_c1038": 32,
-    "web_sync_anon_l59_c921": 32,
-    "web_sync_api": 32,
-    "web_sync_atob": 32,
-    "web_sync_auth": 32,
-    "web_sync_b64": 32,
-    "web_sync_btoa": 32,
-    "web_sync_cancelanimationframe": 32,
-    "web_sync_catch_l65_c139": 32,
-    "web_sync_cleartimeout": 32,
-    "web_sync_confirm": 32,
-    "web_sync_copypairlink": 32,
-    "web_sync_copytext": 32,
-    "web_sync_createpair": 32,
-    "web_sync_credentials": 32,
-    "web_sync_decryptschedule": 32,
-    "web_sync_dialog_queryselector_copysecurepairlink_onclick_l63_c184": 32,
-    "web_sync_document_addeventlistener_visibilitychange_l64_c190": 32,
-    "web_sync_drawqr": 32,
-    "web_sync_encryptschedule": 32,
-    "web_sync_fetch": 32,
-    "web_sync_filter_l23_c721": 106,
-    "web_sync_foreach_l36_c162": 83,
-    "web_sync_forgetmobileschedule": 32,
-    "web_sync_importkey": 32,
-    "web_sync_importkey_l26_c19": 32,
-    "web_sync_importschedulecopy": 32,
-    "web_sync_item_days_map_l23_c682": 107,
-    "web_sync_matchmedia": 32,
-    "web_sync_navigator_serviceworker_addeventlistener_message_l64_c382": 32,
-    "web_sync_openscanner": 32,
-    "web_sync_pairinglink": 32,
-    "web_sync_parseinvitation": 32,
-    "web_sync_prompt": 32,
-    "web_sync_qrcode": 32,
-    "web_sync_randomid": 32,
-    "web_sync_randomid_l12_c18": 32,
-    "web_sync_refreshcontrols": 32,
-    "web_sync_refreshstatus": 32,
-    "web_sync_requestanimationframe": 32,
-    "web_sync_resolve": 108,
-    "web_sync_savecredentials": 32,
-    "web_sync_scan_l38_c830": 32,
-    "web_sync_scannerdialog_queryselector_pastesecurepairlink_onclick_l40_c63": 32,
-    "web_sync_setinterval": 32,
-    "web_sync_setinterval_l64_c563": 32,
-    "web_sync_settimeout": 32,
-    "web_sync_settimeout_l59_c1058": 108,
-    "web_sync_settimeout_l60_c2179": 32,
-    "web_sync_settimeout_l62_c210": 32,
-    "web_sync_showerror": 32,
-    "web_sync_showpairing": 32,
-    "web_sync_stableid": 32,
-    "web_sync_stopscanner": 32,
-    "web_sync_storedjson": 32,
-    "web_sync_syncbutton_onclick_l63_c85": 32,
-    "web_sync_syncnow": 32,
-    "web_sync_uint8array_from_l11_c176": 109,
-    "web_sync_unb64": 32,
-    "web_sync_unpair": 32,
-    "web_sync_usescannedpairing": 32,
-    "web_sync_validateschedule": 32,
-    "web_sync_value_events_map_l23_c35": 110,
-    "web_sync_window_addeventlistener_focus_l64_c297": 32,
-    "web_sync_window_addeventlistener_medication_schedule_changed_l62_c57": 32,
-    "web_update": 38,
-    "web_update_alert": 38,
-    "web_update_anon_l1_c2": 38,
-    "web_update_checkbutton_onclick_l87_c29": 38,
-    "web_update_checkforupdate": 38,
-    "web_update_confirm": 38,
-    "web_update_document_addeventlistener_visibilitychange_l102_c51": 38,
-    "web_update_fetch": 35,
-    "web_update_fetchrelease": 35,
-    "web_update_navigator_serviceworker_addeventlistener_controllerchange_l67_c64": 38,
-    "web_update_offerupdate": 38,
-    "web_update_setinterval": 38,
-    "web_update_setinterval_l105_c17": 38,
-    "web_update_then_l73_c50": 38,
-    "web_update_window_addeventlistener_focus_l101_c38": 38,
-    "web_update_worker_addeventlistener_statechange_l79_c46": 38,
-    "web_version": 111,
-    "winreg": 0,
-    "winsound": 0,
-    "worker_migrations_0002_google_accounts": 112,
-    "worker_migrations_0003_scoped_pairing_credentials": 113,
-    "worker_package": 8,
-    "worker_package_lock": 9,
-    "worker_schema": 11,
+    "web_qrcode": 36,
+    "web_qrcode_base64decodeinputstream": 36,
+    "web_qrcode_base64encodeoutputstream": 36,
+    "web_qrcode_bitoutputstream": 36,
+    "web_qrcode_bytearrayoutputstream": 36,
+    "web_qrcode_chattonum": 36,
+    "web_qrcode_createbytes": 36,
+    "web_qrcode_createdata": 36,
+    "web_qrcode_createdataurl": 36,
+    "web_qrcode_createhalfascii": 36,
+    "web_qrcode_decode": 36,
+    "web_qrcode_define": 36,
+    "web_qrcode_encode": 36,
+    "web_qrcode_escapexml": 36,
+    "web_qrcode_factory": 36,
+    "web_qrcode_getbchdigit": 36,
+    "web_qrcode_getbestmaskpattern": 36,
+    "web_qrcode_getcode": 36,
+    "web_qrcode_getlzwraster": 36,
+    "web_qrcode_getpixel": 36,
+    "web_qrcode_getrsblocktable": 36,
+    "web_qrcode_gifimage": 36,
+    "web_qrcode_lzwtable": 36,
+    "web_qrcode_makeimpl": 36,
+    "web_qrcode_mapdata": 36,
+    "web_qrcode_maskfunc": 36,
+    "web_qrcode_qr8bitbyte": 36,
+    "web_qrcode_qralphanum": 36,
+    "web_qrcode_qrbitbuffer": 36,
+    "web_qrcode_qrkanji": 36,
+    "web_qrcode_qrnumber": 36,
+    "web_qrcode_qrpolynomial": 36,
+    "web_qrcode_qrrsblock": 36,
+    "web_qrcode_read": 36,
+    "web_qrcode_setuppositionadjustpattern": 36,
+    "web_qrcode_setuppositionprobepattern": 36,
+    "web_qrcode_setuptimingpattern": 36,
+    "web_qrcode_setuptypeinfo": 36,
+    "web_qrcode_setuptypenumber": 36,
+    "web_qrcode_stringtobytes": 36,
+    "web_qrcode_strtonum": 36,
+    "web_qrcode_toutf8array": 36,
+    "web_qrcode_writeencoded": 36,
+    "web_styles": 106,
+    "web_sw": 107,
+    "web_sw_fetch": 108,
+    "web_sw_list_foreach_l7_c569": 40,
+    "web_sw_self_addeventlistener_activate_l5_c34": 17,
+    "web_sw_self_addeventlistener_fetch_l6_c31": 108,
+    "web_sw_self_addeventlistener_install_l3_c33": 17,
+    "web_sw_self_addeventlistener_message_l4_c33": 109,
+    "web_sw_self_addeventlistener_notificationclick_l8_c43": 17,
+    "web_sw_self_addeventlistener_push_l7_c30": 17,
+    "web_sw_then_l3_c80": 110,
+    "web_sw_then_l5_c160": 111,
+    "web_sw_then_l6_c336": 112,
+    "web_sw_then_l6_c399": 113,
+    "web_sw_then_l6_c551": 108,
+    "web_sw_then_l8_c202": 40,
+    "web_sync": 31,
+    "web_sync_acceptpairing": 31,
+    "web_sync_alert": 31,
+    "web_sync_anon_l1_c2": 31,
+    "web_sync_anon_l59_c1038": 31,
+    "web_sync_anon_l59_c921": 31,
+    "web_sync_api": 31,
+    "web_sync_atob": 31,
+    "web_sync_auth": 31,
+    "web_sync_b64": 31,
+    "web_sync_btoa": 31,
+    "web_sync_cancelanimationframe": 31,
+    "web_sync_catch_l65_c139": 31,
+    "web_sync_cleartimeout": 31,
+    "web_sync_confirm": 31,
+    "web_sync_copypairlink": 31,
+    "web_sync_copytext": 31,
+    "web_sync_createpair": 31,
+    "web_sync_credentials": 31,
+    "web_sync_decryptschedule": 31,
+    "web_sync_dialog_queryselector_copysecurepairlink_onclick_l63_c184": 31,
+    "web_sync_document_addeventlistener_visibilitychange_l64_c190": 31,
+    "web_sync_drawqr": 31,
+    "web_sync_encryptschedule": 31,
+    "web_sync_fetch": 31,
+    "web_sync_filter_l23_c721": 114,
+    "web_sync_foreach_l36_c162": 28,
+    "web_sync_forgetmobileschedule": 31,
+    "web_sync_importkey": 31,
+    "web_sync_importkey_l26_c19": 31,
+    "web_sync_importschedulecopy": 31,
+    "web_sync_item_days_map_l23_c682": 115,
+    "web_sync_matchmedia": 31,
+    "web_sync_navigator_serviceworker_addeventlistener_message_l64_c382": 31,
+    "web_sync_openscanner": 31,
+    "web_sync_pairinglink": 31,
+    "web_sync_parseinvitation": 31,
+    "web_sync_prompt": 31,
+    "web_sync_qrcode": 31,
+    "web_sync_randomid": 30,
+    "web_sync_randomid_l12_c18": 31,
+    "web_sync_refreshcontrols": 31,
+    "web_sync_refreshstatus": 31,
+    "web_sync_requestanimationframe": 31,
+    "web_sync_resolve": 116,
+    "web_sync_savecredentials": 31,
+    "web_sync_scan_l38_c830": 31,
+    "web_sync_scannerdialog_queryselector_pastesecurepairlink_onclick_l40_c63": 31,
+    "web_sync_setinterval": 31,
+    "web_sync_setinterval_l64_c563": 31,
+    "web_sync_settimeout": 31,
+    "web_sync_settimeout_l59_c1058": 116,
+    "web_sync_settimeout_l60_c2179": 31,
+    "web_sync_settimeout_l62_c210": 31,
+    "web_sync_showerror": 31,
+    "web_sync_showpairing": 31,
+    "web_sync_stableid": 30,
+    "web_sync_stopscanner": 31,
+    "web_sync_storedjson": 30,
+    "web_sync_syncbutton_onclick_l63_c85": 31,
+    "web_sync_syncnow": 31,
+    "web_sync_uint8array_from_l11_c176": 117,
+    "web_sync_unb64": 31,
+    "web_sync_unpair": 31,
+    "web_sync_usescannedpairing": 31,
+    "web_sync_validateschedule": 31,
+    "web_sync_value_events_map_l23_c35": 118,
+    "web_sync_window_addeventlistener_focus_l64_c297": 31,
+    "web_sync_window_addeventlistener_medication_schedule_changed_l62_c57": 31,
+    "web_update": 40,
+    "web_update_alert": 40,
+    "web_update_anon_l1_c2": 40,
+    "web_update_checkbutton_onclick_l87_c29": 40,
+    "web_update_checkforupdate": 40,
+    "web_update_confirm": 40,
+    "web_update_document_addeventlistener_visibilitychange_l102_c51": 40,
+    "web_update_fetch": 40,
+    "web_update_fetchrelease": 40,
+    "web_update_navigator_serviceworker_addeventlistener_controllerchange_l67_c64": 40,
+    "web_update_offerupdate": 40,
+    "web_update_setinterval": 40,
+    "web_update_setinterval_l105_c17": 40,
+    "web_update_then_l73_c50": 40,
+    "web_update_window_addeventlistener_focus_l101_c38": 40,
+    "web_update_worker_addeventlistener_statechange_l79_c46": 40,
+    "web_version": 8,
+    "winreg": 15,
+    "winsound": 15,
+    "worker_migrations_0002_google_accounts": 41,
+    "worker_migrations_0003_scoped_pairing_credentials": 10,
+    "worker_package": 12,
+    "worker_package_lock": 23,
+    "worker_schema": 89,
     "worker_src_auth": 18,
     "worker_src_auth_accountview": 18,
     "worker_src_auth_activeentitlements": 18,
@@ -1057,12 +1145,12 @@
     "worker_src_auth_decodebase64url": 18,
     "worker_src_auth_encodebase64url": 18,
     "worker_src_auth_enforceratelimit": 18,
-    "worker_src_auth_fetcher": 35,
-    "worker_src_auth_googlekeys": 35,
+    "worker_src_auth_fetcher": 18,
+    "worker_src_auth_googlekeys": 18,
     "worker_src_auth_handleauthrequest": 18,
     "worker_src_auth_hascloudsync": 18,
     "worker_src_auth_json": 18,
-    "worker_src_auth_map_l36_c42": 13,
+    "worker_src_auth_map_l36_c42": 26,
     "worker_src_auth_parsejsonpart": 18,
     "worker_src_auth_parsesessioncredential": 18,
     "worker_src_auth_randomtoken": 18,
@@ -1072,7 +1160,7 @@
     "worker_src_auth_resetgooglekeysfortests": 18,
     "worker_src_auth_sessioncookie": 18,
     "worker_src_auth_sha256": 18,
-    "worker_src_auth_uint8array_from_l16_c97": 23,
+    "worker_src_auth_uint8array_from_l16_c97": 29,
     "worker_src_auth_validcsrfrequest": 18,
     "worker_src_auth_validoptionaldate": 18,
     "worker_src_auth_verifygooglecredential": 18,
@@ -1100,7 +1188,7 @@
     "worker_src_index_loadinvitationstate": 18,
     "worker_src_index_loadlegacypair": 18,
     "worker_src_index_loadmobilepair": 18,
-    "worker_src_index_map_l49_c42": 27,
+    "worker_src_index_map_l49_c42": 63,
     "worker_src_index_mobilepair": 18,
     "worker_src_index_normalizepathname": 18,
     "worker_src_index_notifypairedmobile": 18,
@@ -1110,17 +1198,17 @@
     "worker_src_index_saferecordpairaudit": 18,
     "worker_src_index_scheduled": 18,
     "worker_src_index_tokenhash": 18,
-    "worker_src_index_uint8array_from_l67_c5": 28,
+    "worker_src_index_uint8array_from_l67_c5": 0,
     "worker_src_index_validencryptedpayload": 18,
     "worker_src_index_validlegacyencryptedbody": 18,
     "worker_src_index_validpushendpoint": 18,
-    "worker_wrangler": 31,
-    "zoneinfo": 0,
-    "zoneinfonotfounderror": 0
+    "worker_wrangler": 32,
+    "zoneinfo": 15,
+    "zoneinfonotfounderror": 15
   },
   "clusters": [
     {
-      "id": 12,
+      "id": 11,
       "members": [
         "medication_reminder_actions",
         "medication_reminder_add_medicine",
@@ -1303,52 +1391,70 @@
         "node_sqlite",
         "tests_test_web_access_replace",
         "tests_test_worker_auth_all",
-        "tests_test_worker_auth_authdatabase",
         "tests_test_worker_auth_batch",
         "tests_test_worker_auth_bind",
         "tests_test_worker_auth_first",
         "tests_test_worker_auth_prepare",
         "tests_test_worker_auth_run",
-        "tests_test_worker_auth_sha256hex",
-        "tests_test_worker_auth_test_audit_failure_does_not_prevent_valid_v2_logout_from_clearing_the_cookie_l554_c81",
+        "tests_test_worker_auth_test_api_prefixed_paths_normalize_while_legacy_and_similarly_prefixed_paths_are_l688_c94",
         "tests_test_worker_auth_test_auth_preflight_allows_the_csrf_marker_for_the_workers_dev_migration_path_l674_c82",
         "tests_test_worker_auth_test_exact_legacy_host_api_auth_requests_cannot_downgrade_into_the_legacy_v1_co_l666_c91",
-        "tests_test_worker_auth_test_expired_or_revoked_v2_session_logout_is_idempotent_and_clears_the_cookie_l517_c82",
-        "tests_test_worker_auth_test_legacy_v1_bearer_logout_deletes_the_session_without_csrf_and_stays_200_comp_l637_c91",
-        "tests_test_worker_auth_test_legacy_v1_cookie_patch_requires_csrf_based_on_parsed_credential_kind_l479_c78",
-        "tests_test_worker_auth_test_legacy_v1_cookie_patch_succeeds_with_the_exact_csrf_proof_l497_c67",
-        "tests_test_worker_auth_test_logout_revocation_does_not_depend_on_last_seen_or_entitlement_work_l616_c76",
         "tests_test_worker_auth_test_protected_browser_auth_mutations_are_rejected_before_route_dispatch_without_l654_c104",
-        "tests_test_worker_auth_test_session_lookup_only_authenticates_the_token_hash_configured_by_the_db_fixtu_l264_c87",
-        "tests_test_worker_auth_test_valid_v2_cookie_logout_deletes_the_server_session_and_clears_the_cookie_l598_c81",
         "tests_test_worker_sync",
         "tests_test_worker_sync_all",
         "tests_test_worker_sync_batch",
         "tests_test_worker_sync_bind",
+        "tests_test_worker_sync_btoa",
         "tests_test_worker_sync_claim",
+        "tests_test_worker_sync_claim_l1081_c17",
+        "tests_test_worker_sync_close",
+        "tests_test_worker_sync_createpair",
         "tests_test_worker_sync_fakedb",
         "tests_test_worker_sync_filter_l98_c13",
         "tests_test_worker_sync_first",
         "tests_test_worker_sync_inspectsyncpairs",
         "tests_test_worker_sync_map_l115_c32",
+        "tests_test_worker_sync_mobileclaim",
         "tests_test_worker_sync_normalizesql",
         "tests_test_worker_sync_prepare",
+        "tests_test_worker_sync_randomclaimnonce",
+        "tests_test_worker_sync_request",
+        "tests_test_worker_sync_request_l1019_c19",
         "tests_test_worker_sync_resolve",
         "tests_test_worker_sync_run",
         "tests_test_worker_sync_sha256hex",
         "tests_test_worker_sync_sqlited1",
+        "tests_test_worker_sync_t_test_l810_c26",
         "tests_test_worker_sync_test",
+        "tests_test_worker_sync_test_account_and_mobile_updates_retain_separate_scoped_authorization_predicates_l1154_c84",
+        "tests_test_worker_sync_test_account_and_scoped_mobile_updates_derive_updated_by_from_authenticated_devi_l1031_c96",
+        "tests_test_worker_sync_test_account_cookie_cannot_accompany_invitation_claim_and_does_not_consume_it_l649_c82",
+        "tests_test_worker_sync_test_account_pair_routes_are_tenant_bound_and_legacy_bearer_cannot_authorize_own_l527_c92",
         "tests_test_worker_sync_test_account_pairing_lookup_binds_both_pair_and_tenant_l295_c59",
         "tests_test_worker_sync_test_advanced_entitlement_is_required_for_cloud_synchronization_l258_c68",
+        "tests_test_worker_sync_test_entitlement_revocation_pauses_account_and_mobile_sync_without_blocking_owne_l731_c95",
+        "tests_test_worker_sync_test_exact_legacy_host_bearer_account_sessions_cannot_authorize_account_owned_sy_l559_c87",
+        "tests_test_worker_sync_test_expired_and_incorrect_invitations_use_the_same_safe_not_found_response_l1098_c80",
         "tests_test_worker_sync_test_invitation_consumption_is_atomic_and_single_use_l312_c57",
+        "tests_test_worker_sync_test_invitation_refresh_compare_and_set_allows_only_one_concurrent_winner_l1015_c78",
+        "tests_test_worker_sync_test_invitation_refresh_is_tenant_scoped_and_invalidates_the_previous_invitation_l1116_c85",
         "tests_test_worker_sync_test_legacy_claim_is_a_conditional_atomic_update_with_retry_safe_device_binding_l337_c84",
-        "tests_test_worker_sync_test_legacy_claim_is_atomic_for_competing_devices_and_idempotent_for_the_winner_l1064_c84",
+        "tests_test_worker_sync_test_legacy_claim_is_atomic_for_competing_devices_and_idempotent_for_the_winner_l1067_c84",
         "tests_test_worker_sync_test_legacy_lookup_requires_a_null_account_owner_and_legacy_token_hash_l329_c75",
-        "tests_test_worker_sync_test_legacy_records_remain_bearer_compatible_only_while_account_owner_is_null_l1214_c82",
+        "tests_test_worker_sync_test_legacy_records_remain_bearer_compatible_only_while_account_owner_is_null_l1217_c82",
+        "tests_test_worker_sync_test_malformed_claim_nonce_is_uniformly_rejected_before_invitation_state_lookup_l921_c84",
         "tests_test_worker_sync_test_migration_result_and_fresh_schema_are_executable_and_expose_equivalent_scop_l182_c98",
+        "tests_test_worker_sync_test_missing_mobile_credential_secret_fails_without_consuming_invitation_l974_c77",
         "tests_test_worker_sync_test_mobile_credential_derivation_is_deterministic_secret_backed_and_domain_se_l264_c92",
+        "tests_test_worker_sync_test_mobile_credentials_reject_account_cookies_and_remain_scoped_to_one_pair_l676_c81",
+        "tests_test_worker_sync_test_mobile_invitation_is_one_use_and_returns_a_pair_and_device_scoped_credentia_l595_c86",
         "tests_test_worker_sync_test_mobile_lookup_binds_pair_device_and_hashed_mobile_credential_l304_c72",
+        "tests_test_worker_sync_test_new_mobile_claim_is_idempotent_for_the_same_invitation_device_and_claim_non_l872_c87",
+        "tests_test_worker_sync_test_pair_creation_derives_ownership_requires_advanced_entitlement_and_keeps_c_l484_c95",
+        "tests_test_worker_sync_test_pairing_audit_metadata_never_records_application_or_credential_secrets_l1245_c80",
+        "tests_test_worker_sync_test_successful_claim_returns_from_the_atomic_update_without_a_credential_bound_l992_c94",
         "tests_test_worker_sync_withoutscopedcredentials",
+        "tests_test_worker_sync_workerfixture",
         "tests_test_worker_sync_wrapstatement",
         "web_app_esc_l3_c48",
         "web_push",
@@ -1363,6 +1469,8 @@
         "worker_src_auth_decodebase64url",
         "worker_src_auth_encodebase64url",
         "worker_src_auth_enforceratelimit",
+        "worker_src_auth_fetcher",
+        "worker_src_auth_googlekeys",
         "worker_src_auth_handleauthrequest",
         "worker_src_auth_hascloudsync",
         "worker_src_auth_json",
@@ -1415,16 +1523,16 @@
         "worker_src_index_validlegacyencryptedbody",
         "worker_src_index_validpushendpoint"
       ],
-      "size": 115,
+      "size": 135,
       "file_count": 3,
-      "function_count": 98,
+      "function_count": 117,
       "class_count": 0,
       "labels": [
         "functions"
       ]
     },
     {
-      "id": 10,
+      "id": 9,
       "members": [
         "medication_core_append_audit",
         "medication_core_appstorage",
@@ -1450,6 +1558,7 @@
         "medication_core_destination",
         "medication_core_dpapiprotector",
         "medication_core_drop_invalid_pending",
+        "medication_core_dueoccurrence",
         "medication_core_encode",
         "medication_core_event_active",
         "medication_core_event_id_pattern",
@@ -1488,6 +1597,7 @@
         "medication_core_now",
         "medication_core_occurrence_key",
         "medication_core_os",
+        "medication_core_overdue",
         "medication_core_parse_iso_date",
         "medication_core_parse_time",
         "medication_core_parsed",
@@ -1501,7 +1611,6 @@
         "medication_core_protector",
         "medication_core_raw",
         "medication_core_raw_event",
-        "medication_core_re",
         "medication_core_read_bytes",
         "medication_core_record",
         "medication_core_replace_schedule",
@@ -1540,138 +1649,14 @@
         "protocol",
         "valueerror"
       ],
-      "size": 113,
+      "size": 114,
       "file_count": 0,
-      "function_count": 41,
-      "class_count": 8,
+      "function_count": 42,
+      "class_count": 9,
       "labels": []
     },
     {
-      "id": 24,
-      "members": [
-        "tests_test_due_modal_readfilesync",
-        "tests_test_due_modal_replacechildren",
-        "tests_test_due_modal_showmodal",
-        "tests_test_due_modal_test_notification_taps_route_the_private_due_timestamp_back_to_local_modal_data_l43_c84",
-        "tests_test_due_modal_test_pwa_due_reminder_opens_a_modal_with_one_safe_list_row_per_medication_l6_c78",
-        "tests_test_due_modal_test_windows_reminder_is_modal_and_creates_one_visible_label_for_every_medicine_l52_c84",
-        "tests_test_web_access_preventdefault",
-        "tests_test_web_access_removeitem",
-        "tests_test_web_access_setitem",
-        "tests_test_web_access_showmodal",
-        "tests_test_web_sync_getusermedia",
-        "tests_test_web_sync_showmodal",
-        "web_access_dialog_addeventlistener_cancel_l192_c38",
-        "web_account",
-        "web_account_advanced",
-        "web_account_alert",
-        "web_account_anon_l1_c2",
-        "web_account_authorizationheaders",
-        "web_account_confirm",
-        "web_account_current",
-        "web_account_elements_save_onclick_l115_c25",
-        "web_account_elements_signout_onclick_l125_c28",
-        "web_account_handlegooglecredential",
-        "web_account_initialize",
-        "web_account_loadgooglelibrary",
-        "web_account_matchmedia",
-        "web_account_render",
-        "web_account_rendergooglebutton",
-        "web_account_requireadvanced",
-        "web_account_restoresession",
-        "web_account_signedin",
-        "web_account_storesession",
-        "web_app",
-        "web_app_active",
-        "web_app_addeventlistener_click_l37_c42",
-        "web_app_addeventlistener_close_l34_c42",
-        "web_app_addschedule_onclick_l13_c318",
-        "web_app_alert",
-        "web_app_atob",
-        "web_app_await",
-        "web_app_btoa",
-        "web_app_checkduemodals",
-        "web_app_checkforegroundnotifications",
-        "web_app_clearprematuretaken",
-        "web_app_closeduemodal",
-        "web_app_confirm",
-        "web_app_decodepairingpayload",
-        "web_app_e_medicines_map_l36_c933",
-        "web_app_e_medicines_map_l7_c642",
-        "web_app_emptyschedule",
-        "web_app_enablenotifications",
-        "web_app_enablenotifications_onclick_l23_c100",
-        "web_app_enqueuedue",
-        "web_app_esc",
-        "web_app_escape",
-        "web_app_exportschedule_onclick_l47_c30",
-        "web_app_fetch",
-        "web_app_importschedule_onclick_l48_c30",
-        "web_app_items_map_l36_c312",
-        "web_app_list_map_l7_c152",
-        "web_app_localdatekey",
-        "web_app_markduetaken_onclick_l35_c71",
-        "web_app_markoccurrencetaken",
-        "web_app_nextpushreminders",
-        "web_app_openeditor",
-        "web_app_pairingpayload",
-        "web_app_persisttaken",
-        "web_app_playsound",
-        "web_app_priornotificationhandler",
-        "web_app_priorsavesettings",
-        "web_app_prompt",
-        "web_app_qrcode",
-        "web_app_readstoredjson",
-        "web_app_reminderstate",
-        "web_app_renderall",
-        "web_app_rendermedicineinputs",
-        "web_app_renderpairingqr",
-        "web_app_renderschedules",
-        "web_app_rendertoday",
-        "web_app_requestanimationframe",
-        "web_app_save",
-        "web_app_save_l3_c162",
-        "web_app_saveeditor",
-        "web_app_saveschedule_onclick_l13_c411",
-        "web_app_savesettings_onclick_l13_c721",
-        "web_app_savesettings_onclick_l39_c79",
-        "web_app_scan",
-        "web_app_scan_l45_c401",
-        "web_app_scanqr_onclick_l45_c22",
-        "web_app_schedule_events_filter_l18_c254",
-        "web_app_schedule_events_filter_l21_c178",
-        "web_app_schedule_events_filter_l33_c156",
-        "web_app_schedule_events_filter_l36_c205",
-        "web_app_schedulelist_onclick_l13_c1007",
-        "web_app_setinterval",
-        "web_app_settimeout",
-        "web_app_showbrowsernotification",
-        "web_app_shownextduemodal",
-        "web_app_showqr_onclick_l44_c22",
-        "web_app_structuredclone",
-        "web_app_syncpushsubscription",
-        "web_app_testsound_onclick_l13_c585",
-        "web_app_unescape",
-        "web_app_updatenotificationstatus",
-        "web_app_volumeinput_oninput_l13_c512",
-        "web_app_window_addeventlistener_beforeinstallprompt_l13_c1420",
-        "web_app_window_applysyncedschedule_l50_c28",
-        "web_app_window_clearmedicationschedule_l51_c32",
-        "web_app_window_getmedicationschedule_l49_c30",
-        "web_due_modal",
-        "web_due_modal_close",
-        "web_due_modal_show"
-      ],
-      "size": 112,
-      "file_count": 3,
-      "function_count": 83,
-      "class_count": 0,
-      "labels": [
-        "functions"
-      ]
-    },
-    {
-      "id": 0,
+      "id": 15,
       "members": [
         "aesgcm",
         "any",
@@ -1697,8 +1682,7 @@
         "math",
         "medication_core",
         "medication_core_dataclass",
-        "medication_core_dueoccurrence",
-        "medication_core_overdue",
+        "medication_core_re",
         "medication_reminder",
         "medication_reminder_close",
         "medication_reminder_closehandle",
@@ -1776,35 +1760,231 @@
         "zoneinfo",
         "zoneinfonotfounderror"
       ],
-      "size": 102,
+      "size": 101,
       "file_count": 6,
-      "function_count": 8,
-      "class_count": 2,
+      "function_count": 7,
+      "class_count": 1,
       "labels": []
     },
     {
-      "id": 17,
+      "id": 28,
       "members": [
-        "node_assert_strict",
-        "node_crypto",
-        "node_fs",
-        "node_test",
-        "node_vm",
-        "tests_test_due_modal",
-        "tests_test_due_modal_close",
-        "tests_test_due_modal_test",
-        "tests_test_web_access",
+        "tests_test_web_access_addeventlistener",
+        "tests_test_web_access_assert_throws_l270_c5",
+        "tests_test_web_access_assert_throws_l317_c5",
+        "tests_test_web_access_callback",
+        "tests_test_web_access_close",
+        "tests_test_web_access_constructor",
+        "tests_test_web_access_dispatch",
+        "tests_test_web_access_dispatchevent",
+        "tests_test_web_access_harness",
+        "tests_test_web_access_queryselector",
+        "tests_test_web_access_queuemicrotask",
+        "tests_test_web_access_readfilesync",
+        "tests_test_web_access_showmodal",
+        "tests_test_web_access_stop",
+        "tests_test_web_access_test_access_api_remains_stable_for_account_and_sync_integrations_l326_c69",
+        "tests_test_web_access_test_account_resolution_emits_a_safe_access_event_and_enables_entitled_cloud_use_l297_c85",
+        "tests_test_web_access_test_an_installed_mobile_invitation_alone_remains_privacy_locked_l220_c69",
+        "tests_test_web_access_test_cloud_operations_reject_local_mode_with_a_safe_status_message_l314_c71",
+        "tests_test_web_access_test_complete_url_scrub_failure_stops_loading_and_cannot_be_unlocked_l259_c73",
+        "tests_test_web_access_test_desktop_pairing_fragment_is_scrubbed_and_held_only_in_module_memory_l226_c77",
+        "tests_test_web_access_test_history_scrub_failure_uses_clean_location_replacement_and_remains_fail_clos_l245_c87",
+        "tests_test_web_access_test_installed_paired_mobile_bypasses_google_gate_l174_c54",
+        "tests_test_web_access_test_only_exact_valid_legacy_v1_and_scoped_v2_mobile_credentials_unlock_l181_c76",
+        "tests_test_web_access_test_pending_invitation_consumption_is_one_use_and_never_enters_events_l237_c75",
+        "tests_test_web_access_test_privacy_dialog_cannot_be_dismissed_with_escape_or_its_backdrop_l285_c72",
+        "tests_test_web_access_test_privacy_lock_markup_is_present_before_medication_content_l346_c66",
+        "tests_test_web_access_test_remembered_local_choice_is_restored_without_becoming_account_mode_l167_c75",
+        "tests_test_web_access_test_throwing_local_storage_remains_locked_and_reports_a_generic_local_mode_erro_l277_c86",
+        "tests_test_web_account_accountharness",
+        "tests_test_web_account_addeventlistener",
+        "tests_test_web_account_alert",
+        "tests_test_web_account_anon_l339_c23",
+        "tests_test_web_account_anon_l353_c23",
+        "tests_test_web_account_anon_l368_c23",
+        "tests_test_web_account_anon_l429_c21",
+        "tests_test_web_account_append",
+        "tests_test_web_account_chooselocal",
+        "tests_test_web_account_clearmedicationschedule",
+        "tests_test_web_account_clearschedulecalls",
+        "tests_test_web_account_close",
+        "tests_test_web_account_completegooglerequest",
+        "tests_test_web_account_completemerequest",
+        "tests_test_web_account_constructor",
+        "tests_test_web_account_createelement",
+        "tests_test_web_account_dispatchevent",
+        "tests_test_web_account_element",
+        "tests_test_web_account_emit",
+        "tests_test_web_account_emitwindowevent",
+        "tests_test_web_account_emitwindowevent_l103_c27",
+        "tests_test_web_account_googlecallback",
+        "tests_test_web_account_initialize",
+        "tests_test_web_account_invokegooglecallback",
+        "tests_test_web_account_listener",
+        "tests_test_web_account_queryselector",
+        "tests_test_web_account_queuemicrotask",
+        "tests_test_web_account_queuemicrotask_l80_c22",
+        "tests_test_web_account_replacechildren",
+        "tests_test_web_account_requirecloud",
+        "tests_test_web_account_resolveaccount",
+        "tests_test_web_account_resolvesignedout",
+        "tests_test_web_account_showchoice",
+        "tests_test_web_account_showmodal",
+        "tests_test_web_account_signout",
+        "tests_test_web_account_test_account_requests_are_same_origin_and_cookie_credentialed_l300_c66",
+        "tests_test_web_account_test_account_service_failure_exposes_a_choice_and_never_auto_selects_local_mode_l434_c84",
+        "tests_test_web_account_test_cookie_mutations_include_the_application_csrf_header_l310_c62",
+        "tests_test_web_account_test_delete_failure_retains_account_mode_and_never_clears_local_data_l498_c73",
+        "tests_test_web_account_test_explicit_google_sign_in_from_local_mode_succeeds_without_a_newer_decision_l392_c83",
+        "tests_test_web_account_test_failed_google_sign_in_can_be_retried_l414_c46",
+        "tests_test_web_account_test_failed_local_erase_does_not_claim_to_have_entered_local_mode_l465_c70",
+        "tests_test_web_account_test_google_identity_renders_in_the_access_gate_and_account_settings_l326_c73",
+        "tests_test_web_account_test_google_library_load_failure_keeps_the_explicit_local_choice_available_l426_c79",
+        "tests_test_web_account_test_google_sign_in_can_run_again_after_sign_out_keep_local_l400_c64",
+        "tests_test_web_account_test_google_sign_in_does_not_persist_a_javascript_session_token_l318_c68",
+        "tests_test_web_account_test_late_google_response_cannot_override_a_newer_explicit_local_choice_l363_c76",
+        "tests_test_web_account_test_late_session_restoration_cannot_override_a_newer_explicit_local_choice_l350_c80",
+        "tests_test_web_account_test_paired_mobile_mode_is_not_overridden_by_session_restoration_l385_c69",
+        "tests_test_web_account_test_repeated_google_callbacks_share_one_in_flight_account_mutation_l333_c72",
+        "tests_test_web_account_test_sign_out_cancel_preserves_the_account_and_makes_no_request_l540_c68",
+        "tests_test_web_account_test_sign_out_erase_clears_local_schedule_state_before_entering_local_mode_l458_c79",
+        "tests_test_web_account_test_sign_out_keep_local_returns_to_explicit_local_mode_l448_c60",
+        "tests_test_web_account_test_signed_out_account_events_always_observe_the_matching_access_state_l512_c76",
+        "tests_test_web_account_test_stored_local_mode_is_not_overridden_by_session_restoration_l378_c68",
+        "tests_test_web_account_test_task_6_compatibility_shim_remains_credential_free_and_non_deployable_alone_l556_c84",
+        "tests_test_web_account_test_thrown_local_erase_remains_privacy_locked_after_server_logout_l481_c71",
+        "tests_test_web_account_test_unavailable_browser_storage_does_not_prevent_account_initialization_l441_c77",
+        "tests_test_web_sync_stop",
+        "web_access_consumependinginvitation",
+        "web_access_pendinginvitation",
+        "web_account_authorizationheaders",
+        "web_app_foreach_l45_c502",
+        "web_app_notes_foreach_l11_c523",
+        "web_sync_foreach_l36_c162"
+      ],
+      "size": 93,
+      "file_count": 0,
+      "function_count": 88,
+      "class_count": 0,
+      "labels": [
+        "functions"
+      ]
+    },
+    {
+      "id": 30,
+      "members": [
+        "tests_test_web_access_getitem",
+        "tests_test_web_access_preventdefault",
+        "tests_test_web_access_setitem",
+        "tests_test_web_account_getitem",
+        "tests_test_web_account_setitem",
+        "tests_test_web_sync_getusermedia",
+        "web_access_dialog_addeventlistener_cancel_l192_c38",
+        "web_access_writestorage",
+        "web_account_anon_l1_c2",
+        "web_app",
+        "web_app_active",
+        "web_app_addeventlistener_click_l37_c42",
+        "web_app_addeventlistener_close_l34_c42",
+        "web_app_addmedicine_onclick_l13_c361",
+        "web_app_addmedicineinput",
+        "web_app_addschedule_onclick_l13_c318",
+        "web_app_alert",
+        "web_app_atob",
+        "web_app_await",
+        "web_app_btoa",
+        "web_app_checkduemodals",
+        "web_app_checkforegroundnotifications",
+        "web_app_clearprematuretaken",
+        "web_app_closeduemodal",
+        "web_app_confirm",
+        "web_app_decodepairingpayload",
+        "web_app_e_medicines_map_l36_c933",
+        "web_app_e_medicines_map_l7_c642",
+        "web_app_emptyschedule",
+        "web_app_enablenotifications",
+        "web_app_enablenotifications_onclick_l23_c100",
+        "web_app_enqueuedue",
+        "web_app_esc",
+        "web_app_escape",
+        "web_app_exportschedule_onclick_l47_c30",
+        "web_app_fetch",
+        "web_app_importschedule_onclick_l48_c30",
+        "web_app_items_map_l36_c312",
+        "web_app_list_map_l7_c152",
+        "web_app_localdatekey",
+        "web_app_markduetaken_onclick_l35_c71",
+        "web_app_markoccurrencetaken",
+        "web_app_nextpushreminders",
+        "web_app_openeditor",
+        "web_app_pairingpayload",
+        "web_app_persisttaken",
+        "web_app_playsound",
+        "web_app_priornotificationhandler",
+        "web_app_priorsavesettings",
+        "web_app_prompt",
+        "web_app_qrcode",
+        "web_app_readstoredjson",
+        "web_app_readstoredjson_l2_c165",
+        "web_app_reminderstate",
+        "web_app_renderall",
+        "web_app_rendermedicineinputs",
+        "web_app_renderpairingqr",
+        "web_app_renderschedules",
+        "web_app_rendertoday",
+        "web_app_requestanimationframe",
+        "web_app_save",
+        "web_app_save_l3_c162",
+        "web_app_saveeditor",
+        "web_app_saveschedule_onclick_l13_c411",
+        "web_app_savesettings_onclick_l13_c721",
+        "web_app_savesettings_onclick_l39_c79",
+        "web_app_scan",
+        "web_app_scan_l45_c401",
+        "web_app_scanqr_onclick_l45_c22",
+        "web_app_schedule_events_filter_l18_c254",
+        "web_app_schedule_events_filter_l21_c178",
+        "web_app_schedule_events_filter_l33_c156",
+        "web_app_schedule_events_filter_l36_c205",
+        "web_app_schedulelist_onclick_l13_c1007",
+        "web_app_setinterval",
+        "web_app_settimeout",
+        "web_app_showbrowsernotification",
+        "web_app_shownextduemodal",
+        "web_app_showqr_onclick_l44_c22",
+        "web_app_structuredclone",
+        "web_app_syncpushsubscription",
+        "web_app_testsound_onclick_l13_c585",
+        "web_app_unescape",
+        "web_app_updatenotificationstatus",
+        "web_app_volumeinput_oninput_l13_c512",
+        "web_app_window_addeventlistener_beforeinstallprompt_l13_c1420",
+        "web_app_window_applysyncedschedule_l50_c28",
+        "web_app_window_clearmedicationschedule_l51_c32",
+        "web_app_window_getmedicationschedule_l49_c30",
+        "web_sync_randomid",
+        "web_sync_stableid",
+        "web_sync_storedjson"
+      ],
+      "size": 92,
+      "file_count": 1,
+      "function_count": 68,
+      "class_count": 0,
+      "labels": [
+        "functions"
+      ]
+    },
+    {
+      "id": 36,
+      "members": [
         "tests_test_web_access_add",
         "tests_test_web_access_classlist",
         "tests_test_web_access_contains",
         "tests_test_web_access_names_foreach_l12_c35",
         "tests_test_web_access_remove",
-        "tests_test_web_access_test",
         "tests_test_web_access_test_continue_locally_unlocks_without_cloud_capability_l157_c59",
         "tests_test_web_access_test_new_browser_stays_privacy_locked_until_a_choice_is_made_l148_c65",
-        "tests_test_web_account",
-        "tests_test_web_account_test",
-        "tests_test_web_sync",
         "tests_test_web_sync_add",
         "tests_test_web_sync_addeventlistener",
         "tests_test_web_sync_alert",
@@ -1816,12 +1996,13 @@
         "tests_test_web_sync_createelement",
         "tests_test_web_sync_dialog",
         "tests_test_web_sync_encode",
-        "tests_test_web_sync_fillrect",
         "tests_test_web_sync_installedmobileharness",
+        "tests_test_web_sync_json",
         "tests_test_web_sync_play",
+        "tests_test_web_sync_queryselector",
         "tests_test_web_sync_readfilesync",
         "tests_test_web_sync_remove",
-        "tests_test_web_sync_test",
+        "tests_test_web_sync_showmodal",
         "tests_test_web_sync_test_a_new_visitor_starts_with_an_empty_private_schedule_l212_c61",
         "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l188_c68",
         "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l180_c77",
@@ -1830,10 +2011,6 @@
         "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l142_c80",
         "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l170_c72",
         "tests_test_web_sync_toggle",
-        "tests_test_web_update",
-        "tests_test_web_update_test",
-        "tests_test_worker_auth",
-        "tests_test_worker_auth_test",
         "web_app_b_onclick_l13_c56",
         "web_qrcode",
         "web_qrcode_base64decodeinputstream",
@@ -1879,25 +2056,98 @@
         "web_qrcode_toutf8array",
         "web_qrcode_writeencoded"
       ],
-      "size": 93,
-      "file_count": 7,
-      "function_count": 33,
+      "size": 77,
+      "file_count": 1,
+      "function_count": 34,
       "class_count": 0,
       "labels": []
     },
     {
-      "id": 32,
+      "id": 17,
       "members": [
-        "tests_test_web_access_getitem",
-        "tests_test_web_access_queryselector",
+        "node_assert_strict",
+        "node_crypto",
+        "node_fs",
+        "node_test",
+        "node_vm",
+        "tests_test_due_modal",
+        "tests_test_due_modal_close",
+        "tests_test_due_modal_showmodal",
+        "tests_test_due_modal_test",
+        "tests_test_web_access",
+        "tests_test_web_access_test",
+        "tests_test_web_account",
+        "tests_test_web_account_accountview",
+        "tests_test_web_account_completegooglerequest_l205_c33",
+        "tests_test_web_account_completemerequest_l194_c29",
+        "tests_test_web_account_fetch",
+        "tests_test_web_account_json",
+        "tests_test_web_account_readfilesync",
+        "tests_test_web_account_resolve",
+        "tests_test_web_account_response",
+        "tests_test_web_account_test",
+        "tests_test_web_account_test_security_policy_permits_google_identity_services_while_blocking_plugins_and_l572_c93",
+        "tests_test_web_account_test_sign_out_dialog_exposes_keep_erase_and_cancel_without_remote_unpairing_l563_c82",
+        "tests_test_web_sync",
+        "tests_test_web_sync_test",
+        "tests_test_web_update",
+        "tests_test_web_update_test",
+        "tests_test_worker_auth",
+        "tests_test_worker_auth_assert_rejects_l719_c24",
+        "tests_test_worker_auth_assert_rejects_l725_c24",
+        "tests_test_worker_auth_assert_rejects_l728_c24",
+        "tests_test_worker_auth_authdatabase",
+        "tests_test_worker_auth_b64url",
+        "tests_test_worker_auth_dev_hosts_cannot_enter_the_legacy_v1_google_contract_l428_c97",
+        "tests_test_worker_auth_fixture",
+        "tests_test_worker_auth_handleauthrequest",
+        "tests_test_worker_auth_json",
+        "tests_test_worker_auth_resetgooglekeysfortests",
+        "tests_test_worker_auth_sha256hex",
+        "tests_test_worker_auth_test",
+        "tests_test_worker_auth_test_a_token_issued_for_another_oauth_client_is_rejected_l716_c61",
+        "tests_test_worker_auth_test_audit_failure_does_not_prevent_valid_v2_logout_from_clearing_the_cookie_l554_c81",
+        "tests_test_worker_auth_test_expired_and_unverified_google_identities_are_rejected_l722_c63",
+        "tests_test_worker_auth_test_expired_or_revoked_v2_session_logout_is_idempotent_and_clears_the_cookie_l517_c82",
+        "tests_test_worker_auth_test_google_identity_tokens_are_signature_issuer_audience_expiry_and_email_v_l704_c92",
+        "tests_test_worker_auth_test_google_sign_in_sets_a_secure_session_cookie_without_exposing_session_secret_l303_c86",
+        "tests_test_worker_auth_test_legacy_v1_bearer_logout_deletes_the_session_without_csrf_and_stays_200_comp_l637_c91",
+        "tests_test_worker_auth_test_legacy_v1_bearer_patch_remains_compatible_without_csrf_l459_c64",
+        "tests_test_worker_auth_test_legacy_v1_cookie_patch_requires_csrf_based_on_parsed_credential_kind_l479_c78",
+        "tests_test_worker_auth_test_legacy_v1_cookie_patch_succeeds_with_the_exact_csrf_proof_l497_c67",
+        "tests_test_worker_auth_test_legacy_v1_google_sign_in_keeps_the_deployed_bearer_client_response_contract_l398_c98",
+        "tests_test_worker_auth_test_logout_revocation_does_not_depend_on_last_seen_or_entitlement_work_l616_c76",
+        "tests_test_worker_auth_test_session_deletion_failure_returns_503_clears_the_cookie_and_skips_audit_l575_c82",
+        "tests_test_worker_auth_test_session_lookup_failure_returns_503_while_still_clearing_the_cookie_l532_c76",
+        "tests_test_worker_auth_test_session_lookup_only_authenticates_the_token_hash_configured_by_the_db_fixtu_l264_c87",
+        "tests_test_worker_auth_test_sign_out_clears_the_hardened_session_cookie_l340_c53",
+        "tests_test_worker_auth_test_v2_google_sign_in_requires_csrf_and_returns_only_the_cookie_based_account_c_l368_c92",
+        "tests_test_worker_auth_test_valid_v2_cookie_logout_deletes_the_server_session_and_clears_the_cookie_l598_c81",
+        "tests_test_worker_auth_verifygooglecredential",
+        "tests_test_worker_auth_waituntil",
+        "tests_test_worker_sync_waituntil",
+        "web_sw_self_addeventlistener_activate_l5_c34",
+        "web_sw_self_addeventlistener_install_l3_c33",
+        "web_sw_self_addeventlistener_notificationclick_l8_c43",
+        "web_sw_self_addeventlistener_push_l7_c30"
+      ],
+      "size": 65,
+      "file_count": 6,
+      "function_count": 41,
+      "class_count": 0,
+      "labels": [
+        "functions"
+      ]
+    },
+    {
+      "id": 31,
+      "members": [
+        "tests_test_web_access_removeitem",
         "tests_test_web_access_replacestate",
+        "tests_test_web_account_removeitem",
         "tests_test_web_sync_detect",
-        "tests_test_web_sync_queryselector",
+        "tests_test_web_sync_fillrect",
         "tests_test_web_sync_replacestate",
-        "tests_test_web_update_queryselector",
-        "web_app_addmedicine_onclick_l13_c361",
-        "web_app_addmedicineinput",
-        "web_app_readstoredjson_l2_c165",
         "web_sync",
         "web_sync_acceptpairing",
         "web_sync_alert",
@@ -1934,7 +2184,6 @@
         "web_sync_parseinvitation",
         "web_sync_prompt",
         "web_sync_qrcode",
-        "web_sync_randomid",
         "web_sync_randomid_l12_c18",
         "web_sync_refreshcontrols",
         "web_sync_refreshstatus",
@@ -1949,9 +2198,7 @@
         "web_sync_settimeout_l62_c210",
         "web_sync_showerror",
         "web_sync_showpairing",
-        "web_sync_stableid",
         "web_sync_stopscanner",
-        "web_sync_storedjson",
         "web_sync_syncbutton_onclick_l63_c85",
         "web_sync_syncnow",
         "web_sync_unb64",
@@ -1961,150 +2208,107 @@
         "web_sync_window_addeventlistener_focus_l64_c297",
         "web_sync_window_addeventlistener_medication_schedule_changed_l62_c57"
       ],
-      "size": 72,
+      "size": 65,
       "file_count": 1,
-      "function_count": 55,
+      "function_count": 49,
       "class_count": 0,
       "labels": [
         "functions"
       ]
     },
     {
-      "id": 35,
+      "id": 34,
       "members": [
-        "tests_test_web_sync_json",
-        "tests_test_web_update_json",
-        "tests_test_worker_auth_assert_rejects_l719_c24",
-        "tests_test_worker_auth_assert_rejects_l725_c24",
-        "tests_test_worker_auth_assert_rejects_l728_c24",
-        "tests_test_worker_auth_b64url",
-        "tests_test_worker_auth_dev_hosts_cannot_enter_the_legacy_v1_google_contract_l428_c97",
-        "tests_test_worker_auth_fixture",
-        "tests_test_worker_auth_handleauthrequest",
-        "tests_test_worker_auth_json",
-        "tests_test_worker_auth_readjson_l321_c19",
-        "tests_test_worker_auth_readjson_l353_c17",
-        "tests_test_worker_auth_resetgooglekeysfortests",
-        "tests_test_worker_auth_test_a_token_issued_for_another_oauth_client_is_rejected_l716_c61",
-        "tests_test_worker_auth_test_api_prefixed_paths_normalize_while_legacy_and_similarly_prefixed_paths_are_l688_c94",
-        "tests_test_worker_auth_test_expired_and_unverified_google_identities_are_rejected_l722_c63",
-        "tests_test_worker_auth_test_google_identity_tokens_are_signature_issuer_audience_expiry_and_email_v_l704_c92",
-        "tests_test_worker_auth_test_google_sign_in_sets_a_secure_session_cookie_without_exposing_session_secret_l303_c86",
-        "tests_test_worker_auth_test_legacy_v1_bearer_patch_remains_compatible_without_csrf_l459_c64",
-        "tests_test_worker_auth_test_legacy_v1_google_sign_in_keeps_the_deployed_bearer_client_response_contract_l398_c98",
-        "tests_test_worker_auth_test_session_deletion_failure_returns_503_clears_the_cookie_and_skips_audit_l575_c82",
-        "tests_test_worker_auth_test_session_lookup_failure_returns_503_while_still_clearing_the_cookie_l532_c76",
-        "tests_test_worker_auth_test_sign_out_clears_the_hardened_session_cookie_l340_c53",
-        "tests_test_worker_auth_test_v2_google_sign_in_requires_csrf_and_returns_only_the_cookie_based_account_c_l368_c92",
-        "tests_test_worker_auth_verifygooglecredential",
-        "tests_test_worker_auth_waituntil",
-        "tests_test_worker_sync_btoa",
-        "tests_test_worker_sync_claim_l1078_c17",
-        "tests_test_worker_sync_close",
-        "tests_test_worker_sync_createpair",
-        "tests_test_worker_sync_mobileclaim",
-        "tests_test_worker_sync_randomclaimnonce",
-        "tests_test_worker_sync_request",
-        "tests_test_worker_sync_request_l1016_c19",
-        "tests_test_worker_sync_t_test_l807_c26",
-        "tests_test_worker_sync_test_account_and_mobile_updates_retain_separate_scoped_authorization_predicates_l1151_c84",
-        "tests_test_worker_sync_test_account_and_scoped_mobile_updates_derive_updated_by_from_authenticated_devi_l1028_c96",
-        "tests_test_worker_sync_test_account_cookie_cannot_accompany_invitation_claim_and_does_not_consume_it_l646_c82",
-        "tests_test_worker_sync_test_account_pair_routes_are_tenant_bound_and_legacy_bearer_cannot_authorize_own_l527_c92",
-        "tests_test_worker_sync_test_entitlement_revocation_pauses_account_and_mobile_sync_without_blocking_owne_l728_c95",
-        "tests_test_worker_sync_test_exact_legacy_host_bearer_account_sessions_cannot_authorize_account_owned_sy_l559_c87",
-        "tests_test_worker_sync_test_expired_and_incorrect_invitations_use_the_same_safe_not_found_response_l1095_c80",
-        "tests_test_worker_sync_test_invitation_refresh_compare_and_set_allows_only_one_concurrent_winner_l1012_c78",
-        "tests_test_worker_sync_test_invitation_refresh_is_tenant_scoped_and_invalidates_the_previous_invitation_l1113_c85",
-        "tests_test_worker_sync_test_malformed_claim_nonce_is_uniformly_rejected_before_invitation_state_lookup_l918_c84",
-        "tests_test_worker_sync_test_missing_mobile_credential_secret_fails_without_consuming_invitation_l971_c77",
-        "tests_test_worker_sync_test_mobile_credentials_reject_account_cookies_and_remain_scoped_to_one_pair_l673_c81",
-        "tests_test_worker_sync_test_mobile_invitation_is_one_use_and_returns_a_pair_and_device_scoped_credentia_l595_c86",
-        "tests_test_worker_sync_test_new_mobile_claim_is_idempotent_for_the_same_invitation_device_and_claim_non_l869_c87",
-        "tests_test_worker_sync_test_pair_creation_derives_ownership_requires_advanced_entitlement_and_keeps_c_l484_c95",
-        "tests_test_worker_sync_test_pairing_audit_metadata_never_records_application_or_credential_secrets_l1242_c80",
-        "tests_test_worker_sync_test_successful_claim_returns_from_the_atomic_update_without_a_credential_bound_l989_c94",
-        "tests_test_worker_sync_waituntil",
-        "tests_test_worker_sync_workerfixture",
+        "tests_test_due_modal_readfilesync",
+        "tests_test_due_modal_replacechildren",
+        "tests_test_due_modal_test_notification_taps_route_the_private_due_timestamp_back_to_local_modal_data_l43_c84",
+        "tests_test_due_modal_test_pwa_due_reminder_opens_a_modal_with_one_safe_list_row_per_medication_l6_c78",
+        "tests_test_due_modal_test_windows_reminder_is_modal_and_creates_one_visible_label_for_every_medicine_l52_c84",
+        "tests_test_web_account_renderbutton",
+        "web_account",
+        "web_account_accessdecisioniscurrent",
+        "web_account_accessdecisionsnapshot",
+        "web_account_advanced",
+        "web_account_alert",
+        "web_account_anon_l219_c22",
+        "web_account_anon_l315_c24",
+        "web_account_anon_l330_c23",
+        "web_account_choosesignoutaction",
+        "web_account_cleartimeout",
+        "web_account_current",
+        "web_account_dialog_addeventlistener_close_l317_c40",
+        "web_account_elements_save_onclick_l388_c29",
+        "web_account_emitaccountchanged",
         "web_account_fetch",
+        "web_account_finish_l189_c22",
+        "web_account_handlegooglecredential",
+        "web_account_identityloadfailed",
+        "web_account_initialize",
+        "web_account_loadgooglelibrary",
+        "web_account_matchmedia",
+        "web_account_remainsignedout",
+        "web_account_render",
+        "web_account_rendergooglebuttons",
         "web_account_request",
-        "web_sw_self_addeventlistener_activate_l5_c34",
-        "web_sw_self_addeventlistener_install_l3_c33",
-        "web_sw_self_addeventlistener_notificationclick_l8_c43",
-        "web_sw_self_addeventlistener_push_l7_c30",
+        "web_account_requireadvanced",
+        "web_account_resolve",
+        "web_account_setaccountstatus",
+        "web_account_signedin",
+        "web_account_signout",
+        "web_account_validaccountview",
+        "web_due_modal",
+        "web_due_modal_close",
+        "web_due_modal_show"
+      ],
+      "size": 40,
+      "file_count": 2,
+      "function_count": 32,
+      "class_count": 0,
+      "labels": [
+        "functions"
+      ]
+    },
+    {
+      "id": 40,
+      "members": [
+        "tests_test_web_access_focus",
+        "tests_test_web_update_addeventlistener",
+        "tests_test_web_update_alert",
+        "tests_test_web_update_flush",
+        "tests_test_web_update_json",
+        "tests_test_web_update_postmessage",
+        "tests_test_web_update_queryselector",
+        "tests_test_web_update_readfilesync",
+        "tests_test_web_update_register",
+        "tests_test_web_update_reload",
+        "tests_test_web_update_test_cloudflare_release_discovery_asks_before_activating_an_update_l75_c71",
+        "tests_test_web_update_test_declined_updates_are_not_activated_or_repeatedly_prompted_in_the_same_sessi_l85_c87",
+        "tests_test_web_update_test_startup_reports_no_update_when_cloudflare_version_matches_the_installed_app_l98_c85",
+        "tests_test_web_update_update",
+        "tests_test_web_update_updateharness",
+        "web_access_queuemicrotask_l122_c20",
+        "web_sw_list_foreach_l7_c569",
+        "web_sw_then_l8_c202",
+        "web_update",
+        "web_update_alert",
+        "web_update_anon_l1_c2",
+        "web_update_checkbutton_onclick_l87_c29",
+        "web_update_checkforupdate",
+        "web_update_confirm",
+        "web_update_document_addeventlistener_visibilitychange_l102_c51",
         "web_update_fetch",
         "web_update_fetchrelease",
-        "worker_src_auth_fetcher",
-        "worker_src_auth_googlekeys"
+        "web_update_navigator_serviceworker_addeventlistener_controllerchange_l67_c64",
+        "web_update_offerupdate",
+        "web_update_setinterval",
+        "web_update_setinterval_l105_c17",
+        "web_update_then_l73_c50",
+        "web_update_window_addeventlistener_focus_l101_c38",
+        "web_update_worker_addeventlistener_statechange_l79_c46"
       ],
-      "size": 64,
-      "file_count": 0,
-      "function_count": 56,
-      "class_count": 0,
-      "labels": [
-        "functions"
-      ]
-    },
-    {
-      "id": 83,
-      "members": [
-        "tests_test_web_access_addeventlistener",
-        "tests_test_web_access_callback",
-        "tests_test_web_access_close",
-        "tests_test_web_access_constructor",
-        "tests_test_web_access_dispatch",
-        "tests_test_web_access_dispatchevent",
-        "tests_test_web_access_harness",
-        "tests_test_web_access_queuemicrotask",
-        "tests_test_web_access_readfilesync",
-        "tests_test_web_access_stop",
-        "tests_test_web_access_test_access_api_remains_stable_for_account_and_sync_integrations_l326_c69",
-        "tests_test_web_access_test_account_resolution_emits_a_safe_access_event_and_enables_entitled_cloud_use_l297_c85",
-        "tests_test_web_access_test_an_installed_mobile_invitation_alone_remains_privacy_locked_l220_c69",
-        "tests_test_web_access_test_cloud_operations_reject_local_mode_with_a_safe_status_message_l314_c71",
-        "tests_test_web_access_test_complete_url_scrub_failure_stops_loading_and_cannot_be_unlocked_l259_c73",
-        "tests_test_web_access_test_desktop_pairing_fragment_is_scrubbed_and_held_only_in_module_memory_l226_c77",
-        "tests_test_web_access_test_history_scrub_failure_uses_clean_location_replacement_and_remains_fail_clos_l245_c87",
-        "tests_test_web_access_test_installed_paired_mobile_bypasses_google_gate_l174_c54",
-        "tests_test_web_access_test_only_exact_valid_legacy_v1_and_scoped_v2_mobile_credentials_unlock_l181_c76",
-        "tests_test_web_access_test_pending_invitation_consumption_is_one_use_and_never_enters_events_l237_c75",
-        "tests_test_web_access_test_privacy_dialog_cannot_be_dismissed_with_escape_or_its_backdrop_l285_c72",
-        "tests_test_web_access_test_privacy_lock_markup_is_present_before_medication_content_l346_c66",
-        "tests_test_web_access_test_remembered_local_choice_is_restored_without_becoming_account_mode_l167_c75",
-        "tests_test_web_access_test_throwing_local_storage_remains_locked_and_reports_a_generic_local_mode_erro_l277_c86",
-        "tests_test_web_sync_stop",
-        "web_access",
-        "web_access_anon_l1_c2",
-        "web_access_chooselocal",
-        "web_access_cloudsync",
-        "web_access_consumependinginvitation",
-        "web_access_dialog_addeventlistener_click_l197_c37",
-        "web_access_emit",
-        "web_access_focuschoice",
-        "web_access_matchmedia",
-        "web_access_mode",
-        "web_access_pendinginvitation",
-        "web_access_queuemicrotask",
-        "web_access_readstorage",
-        "web_access_ready",
-        "web_access_removestorage",
-        "web_access_requirecloud",
-        "web_access_resolveaccount",
-        "web_access_resolvepairedmobile",
-        "web_access_resolvesignedout",
-        "web_access_setstatus",
-        "web_access_showchoice",
-        "web_access_signedin",
-        "web_access_storedmobilepair",
-        "web_access_unlock",
-        "web_access_writestorage",
-        "web_app_foreach_l45_c502",
-        "web_app_notes_foreach_l11_c523",
-        "web_sync_foreach_l36_c162"
-      ],
-      "size": 53,
+      "size": 34,
       "file_count": 1,
-      "function_count": 48,
+      "function_count": 27,
       "class_count": 0,
       "labels": [
         "functions"
@@ -2153,49 +2357,42 @@
       "labels": []
     },
     {
-      "id": 38,
+      "id": 27,
       "members": [
-        "tests_test_web_access_focus",
-        "tests_test_web_update_addeventlistener",
-        "tests_test_web_update_alert",
-        "tests_test_web_update_flush",
-        "tests_test_web_update_postmessage",
-        "tests_test_web_update_readfilesync",
-        "tests_test_web_update_register",
-        "tests_test_web_update_reload",
-        "tests_test_web_update_test_cloudflare_release_discovery_asks_before_activating_an_update_l75_c71",
-        "tests_test_web_update_test_declined_updates_are_not_activated_or_repeatedly_prompted_in_the_same_sessi_l85_c87",
-        "tests_test_web_update_test_startup_reports_no_update_when_cloudflare_version_matches_the_installed_app_l98_c85",
-        "tests_test_web_update_update",
-        "tests_test_web_update_updateharness",
-        "web_access_queuemicrotask_l122_c20",
-        "web_sw_list_foreach_l7_c569",
-        "web_sw_then_l8_c202",
-        "web_update",
-        "web_update_alert",
-        "web_update_anon_l1_c2",
-        "web_update_checkbutton_onclick_l87_c29",
-        "web_update_checkforupdate",
-        "web_update_confirm",
-        "web_update_document_addeventlistener_visibilitychange_l102_c51",
-        "web_update_navigator_serviceworker_addeventlistener_controllerchange_l67_c64",
-        "web_update_offerupdate",
-        "web_update_setinterval",
-        "web_update_setinterval_l105_c17",
-        "web_update_then_l73_c50",
-        "web_update_window_addeventlistener_focus_l101_c38",
-        "web_update_worker_addeventlistener_statechange_l79_c46"
+        "web_access",
+        "web_access_anon_l1_c2",
+        "web_access_chooselocal",
+        "web_access_cloudsync",
+        "web_access_dialog_addeventlistener_click_l197_c37",
+        "web_access_emit",
+        "web_access_focuschoice",
+        "web_access_matchmedia",
+        "web_access_mode",
+        "web_access_queuemicrotask",
+        "web_access_readstorage",
+        "web_access_ready",
+        "web_access_removestorage",
+        "web_access_requirecloud",
+        "web_access_resolveaccount",
+        "web_access_resolvepairedmobile",
+        "web_access_resolvesignedout",
+        "web_access_setstatus",
+        "web_access_showchoice",
+        "web_access_signedin",
+        "web_access_storedmobilepair",
+        "web_access_unlock"
       ],
-      "size": 30,
+      "size": 22,
       "file_count": 1,
-      "function_count": 24,
+      "function_count": 19,
       "class_count": 0,
       "labels": [
+        "web",
         "functions"
       ]
     },
     {
-      "id": 15,
+      "id": 13,
       "members": [
         "medication_reminder_appstorage",
         "medication_reminder_astimezone",
@@ -2225,7 +2422,7 @@
       "labels": []
     },
     {
-      "id": 25,
+      "id": 24,
       "members": [
         "tests_test_medication_core_datetime",
         "tests_test_medication_core_engine",
@@ -2268,7 +2465,7 @@
       "labels": []
     },
     {
-      "id": 26,
+      "id": 25,
       "members": [
         "tests_test_pairing_encryptedsyncclient",
         "tests_test_pairing_json",
@@ -2289,7 +2486,7 @@
       ]
     },
     {
-      "id": 58,
+      "id": 64,
       "members": [
         "tests_test_worker_sync_assertindexdefinitions",
         "tests_test_worker_sync_readfile",
@@ -2310,24 +2507,24 @@
       ]
     },
     {
-      "id": 33,
+      "id": 91,
       "members": [
-        "tests_test_web_account_readfilesync",
-        "tests_test_web_account_test_account_client_uses_the_public_client_id_indirectly_and_never_embeds_an_oau_l5_c94",
-        "tests_test_web_account_test_pair_creation_requires_server_derived_advanced_access_and_sends_the_account_l13_c93",
-        "tests_test_web_account_test_security_policy_permits_google_identity_services_while_blocking_plugins_and_l19_c93"
+        "web_account_finish",
+        "web_account_script_onerror_l206_c24",
+        "web_account_script_onload_l205_c23",
+        "web_account_settimeout_l200_c34"
       ],
       "size": 4,
       "file_count": 0,
       "function_count": 3,
       "class_count": 0,
       "labels": [
-        "tests",
+        "web",
         "functions"
       ]
     },
     {
-      "id": 100,
+      "id": 108,
       "members": [
         "web_sw_fetch",
         "web_sw_self_addeventlistener_fetch_l6_c31",
@@ -2343,7 +2540,7 @@
       ]
     },
     {
-      "id": 36,
+      "id": 38,
       "members": [
         "tests_test_web_sync_revokefromsource_l135_c23",
         "tests_test_web_sync_serviceworkermessagehandler"
@@ -2357,7 +2554,7 @@
       ]
     },
     {
-      "id": 37,
+      "id": 39,
       "members": [
         "tests_test_web_update_anon_l6_c33",
         "tests_test_web_update_setimmediate"
@@ -2372,7 +2569,21 @@
       ]
     },
     {
-      "id": 108,
+      "id": 90,
+      "members": [
+        "web_account_anon_l185_c37",
+        "web_account_settimeout"
+      ],
+      "size": 2,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web"
+      ]
+    },
+    {
+      "id": 116,
       "members": [
         "web_sync_resolve",
         "web_sync_settimeout_l59_c1058"
@@ -2382,7 +2593,20 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "web",
+        "web"
+      ]
+    },
+    {
+      "id": 0,
+      "members": [
+        "worker_src_index_uint8array_from_l67_c5"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "worker/src",
         "functions"
       ]
     },
@@ -2483,6 +2707,34 @@
     {
       "id": 8,
       "members": [
+        "web_version"
+      ],
+      "size": 1,
+      "file_count": 1,
+      "function_count": 0,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "files"
+      ]
+    },
+    {
+      "id": 10,
+      "members": [
+        "worker_migrations_0003_scoped_pairing_credentials"
+      ],
+      "size": 1,
+      "file_count": 1,
+      "function_count": 0,
+      "class_count": 0,
+      "labels": [
+        "worker/migrations",
+        "files"
+      ]
+    },
+    {
+      "id": 12,
+      "members": [
         "worker_package"
       ],
       "size": 1,
@@ -2492,48 +2744,6 @@
       "labels": [
         "worker",
         "files"
-      ]
-    },
-    {
-      "id": 9,
-      "members": [
-        "worker_package_lock"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "worker",
-        "files"
-      ]
-    },
-    {
-      "id": 11,
-      "members": [
-        "worker_schema"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "worker",
-        "files"
-      ]
-    },
-    {
-      "id": 13,
-      "members": [
-        "worker_src_auth_map_l36_c42"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "worker/src",
-        "functions"
       ]
     },
     {
@@ -2591,35 +2801,21 @@
     {
       "id": 23,
       "members": [
-        "worker_src_auth_uint8array_from_l16_c97"
+        "worker_package_lock"
       ],
       "size": 1,
-      "file_count": 0,
-      "function_count": 1,
+      "file_count": 1,
+      "function_count": 0,
       "class_count": 0,
       "labels": [
-        "worker/src",
-        "functions"
+        "worker",
+        "files"
       ]
     },
     {
-      "id": 27,
+      "id": 26,
       "members": [
-        "worker_src_index_map_l49_c42"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "worker/src",
-        "functions"
-      ]
-    },
-    {
-      "id": 28,
-      "members": [
-        "worker_src_index_uint8array_from_l67_c5"
+        "worker_src_auth_map_l36_c42"
       ],
       "size": 1,
       "file_count": 0,
@@ -2633,33 +2829,19 @@
     {
       "id": 29,
       "members": [
-        "tests_test_web_access_assert_throws_l270_c5"
+        "worker_src_auth_uint8array_from_l16_c97"
       ],
       "size": 1,
       "file_count": 0,
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
+        "worker/src",
         "functions"
       ]
     },
     {
-      "id": 30,
-      "members": [
-        "tests_test_web_access_assert_throws_l317_c5"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 31,
+      "id": 32,
       "members": [
         "worker_wrangler"
       ],
@@ -2673,7 +2855,35 @@
       ]
     },
     {
-      "id": 34,
+      "id": 33,
+      "members": [
+        "tests_test_web_account_queuemicrotask_l227_c48"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 35,
+      "members": [
+        "tests_test_web_account_test_account_client_contains_no_reusable_session_storage_or_token_logging_l547_c78"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 37,
       "members": [
         "tests_test_web_sync_encode_l268_c18"
       ],
@@ -2687,973 +2897,7 @@
       ]
     },
     {
-      "id": 39,
-      "members": [
-        "tests_test_worker_auth_b64url_l18_c16"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 40,
-      "members": [
-        "tests_test_worker_auth_map_l21_c42"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
       "id": 41,
-      "members": [
-        "tests_test_worker_auth_sha256hex_l19_c19"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 42,
-      "members": [
-        "tests_test_worker_auth_test_a_malformed_session_cookie_does_not_suppress_a_valid_migration_bearer_l227_c79"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 43,
-      "members": [
-        "tests_test_worker_auth_test_clearing_the_session_cookie_retains_its_security_and_path_attributes_l166_c78"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 44,
-      "members": [
-        "tests_test_worker_auth_test_conflicting_valid_cookie_and_bearer_credentials_fail_closed_l239_c69"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 45,
-      "members": [
-        "tests_test_worker_auth_test_csrf_validation_allows_safe_methods_without_headers_l278_c61"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 46,
-      "members": [
-        "tests_test_worker_auth_test_csrf_validation_requires_the_exact_app_origin_and_marker_for_mutations_l285_c80"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 47,
-      "members": [
-        "tests_test_worker_auth_test_identical_valid_cookie_and_bearer_credentials_resolve_to_the_cookie_kind_l252_c82"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 48,
-      "members": [
-        "tests_test_worker_auth_test_malformed_or_unrelated_cookies_do_not_block_a_valid_bearer_migration_token_l193_c84"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 49,
-      "members": [
-        "tests_test_worker_auth_test_session_cookies_are_scoped_and_hardened_without_a_domain_attribute_l135_c76"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 50,
-      "members": [
-        "tests_test_worker_auth_test_session_cookies_clamp_a_negative_max_age_to_zero_l153_c58"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 51,
-      "members": [
-        "tests_test_worker_auth_test_session_cookies_clamp_an_oversized_max_age_to_the_session_ttl_l161_c71"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 52,
-      "members": [
-        "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_infinity_l145_c62"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 53,
-      "members": [
-        "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_nan_l149_c57"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 54,
-      "members": [
-        "tests_test_worker_auth_test_session_cookies_truncate_a_finite_decimal_max_age_l157_c59"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 55,
-      "members": [
-        "tests_test_worker_auth_test_session_credential_parser_rejects_duplicate_session_cookie_names_l205_c74"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 56,
-      "members": [
-        "tests_test_worker_auth_test_session_credential_parser_strictly_rejects_malformed_cookie_values_l217_c76"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 57,
-      "members": [
-        "tests_test_worker_auth_test_session_tokens_prefer_the_cookie_and_retain_the_bearer_migration_fallback_l175_c83"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 59,
-      "members": [
-        "tests_test_worker_sync_definitions_filter_l168_c26"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 60,
-      "members": [
-        "tests_test_worker_sync_definitions_map_l164_c39"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 61,
-      "members": [
-        "tests_test_worker_sync_map_l372_c42"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 62,
-      "members": [
-        "tests_test_worker_sync_statements_filter_l142_c39"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 63,
-      "members": [
-        "tests_test_worker_sync_t_after_l1014_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 64,
-      "members": [
-        "tests_test_worker_sync_t_after_l1030_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 65,
-      "members": [
-        "tests_test_worker_sync_t_after_l1066_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 66,
-      "members": [
-        "tests_test_worker_sync_t_after_l1097_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 67,
-      "members": [
-        "tests_test_worker_sync_t_after_l1115_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 68,
-      "members": [
-        "tests_test_worker_sync_t_after_l1153_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 69,
-      "members": [
-        "tests_test_worker_sync_t_after_l1216_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 70,
-      "members": [
-        "tests_test_worker_sync_t_after_l1244_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 71,
-      "members": [
-        "tests_test_worker_sync_t_after_l486_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 72,
-      "members": [
-        "tests_test_worker_sync_t_after_l529_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 73,
-      "members": [
-        "tests_test_worker_sync_t_after_l561_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 74,
-      "members": [
-        "tests_test_worker_sync_t_after_l597_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 75,
-      "members": [
-        "tests_test_worker_sync_t_after_l648_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 76,
-      "members": [
-        "tests_test_worker_sync_t_after_l675_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 77,
-      "members": [
-        "tests_test_worker_sync_t_after_l730_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 78,
-      "members": [
-        "tests_test_worker_sync_t_after_l871_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 79,
-      "members": [
-        "tests_test_worker_sync_t_after_l920_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 80,
-      "members": [
-        "tests_test_worker_sync_t_after_l973_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 81,
-      "members": [
-        "tests_test_worker_sync_t_after_l991_c11"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 82,
-      "members": [
-        "tests_test_worker_sync_test_disabled_and_deletion_pending_owners_pause_claim_and_scoped_mobile_sync_unt_l805_c99"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "tests",
-        "functions"
-      ]
-    },
-    {
-      "id": 84,
-      "members": [
-        "web_app_emptyschedule_l2_c398"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 85,
-      "members": [
-        "web_app_foreach_l21_c202"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 86,
-      "members": [
-        "web_app_installbutton_onclick_l13_c1299"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 87,
-      "members": [
-        "web_app_localdatekey_l5_c20"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 88,
-      "members": [
-        "web_app_map_l10_c480"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 89,
-      "members": [
-        "web_app_settimeout_l11_c939"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 90,
-      "members": [
-        "web_app_sort_l36_c226"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 91,
-      "members": [
-        "web_app_sort_l7_c65"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 92,
-      "members": [
-        "web_app_timenow_l3_c540"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 93,
-      "members": [
-        "web_app_uint8array_from_l22_c620"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 94,
-      "members": [
-        "web_app_window_getmedicationpushendpoint_l52_c34"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 95,
-      "members": [
-        "web_headers"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "files"
-      ]
-    },
-    {
-      "id": 96,
-      "members": [
-        "web_index"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "files"
-      ]
-    },
-    {
-      "id": 97,
-      "members": [
-        "web_manifest"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "files"
-      ]
-    },
-    {
-      "id": 98,
-      "members": [
-        "web_styles"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "files"
-      ]
-    },
-    {
-      "id": 99,
-      "members": [
-        "web_sw"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "files"
-      ]
-    },
-    {
-      "id": 101,
-      "members": [
-        "web_sw_self_addeventlistener_message_l4_c33"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 102,
-      "members": [
-        "web_sw_then_l3_c80"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 103,
-      "members": [
-        "web_sw_then_l5_c160"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 104,
-      "members": [
-        "web_sw_then_l6_c336"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 105,
-      "members": [
-        "web_sw_then_l6_c399"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 106,
-      "members": [
-        "web_sync_filter_l23_c721"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 107,
-      "members": [
-        "web_sync_item_days_map_l23_c682"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 109,
-      "members": [
-        "web_sync_uint8array_from_l11_c176"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 110,
-      "members": [
-        "web_sync_value_events_map_l23_c35"
-      ],
-      "size": 1,
-      "file_count": 0,
-      "function_count": 1,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "functions"
-      ]
-    },
-    {
-      "id": 111,
-      "members": [
-        "web_version"
-      ],
-      "size": 1,
-      "file_count": 1,
-      "function_count": 0,
-      "class_count": 0,
-      "labels": [
-        "web",
-        "files"
-      ]
-    },
-    {
-      "id": 112,
       "members": [
         "worker_migrations_0002_google_accounts"
       ],
@@ -3667,19 +2911,1013 @@
       ]
     },
     {
-      "id": 113,
+      "id": 42,
       "members": [
-        "worker_migrations_0003_scoped_pairing_credentials"
+        "tests_test_worker_auth_b64url_l18_c16"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 43,
+      "members": [
+        "tests_test_worker_auth_map_l21_c42"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 44,
+      "members": [
+        "tests_test_worker_auth_readjson_l321_c19"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 45,
+      "members": [
+        "tests_test_worker_auth_readjson_l353_c17"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 46,
+      "members": [
+        "tests_test_worker_auth_sha256hex_l19_c19"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 47,
+      "members": [
+        "tests_test_worker_auth_test_a_malformed_session_cookie_does_not_suppress_a_valid_migration_bearer_l227_c79"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 48,
+      "members": [
+        "tests_test_worker_auth_test_clearing_the_session_cookie_retains_its_security_and_path_attributes_l166_c78"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 49,
+      "members": [
+        "tests_test_worker_auth_test_conflicting_valid_cookie_and_bearer_credentials_fail_closed_l239_c69"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 50,
+      "members": [
+        "tests_test_worker_auth_test_csrf_validation_allows_safe_methods_without_headers_l278_c61"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 51,
+      "members": [
+        "tests_test_worker_auth_test_csrf_validation_requires_the_exact_app_origin_and_marker_for_mutations_l285_c80"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 52,
+      "members": [
+        "tests_test_worker_auth_test_identical_valid_cookie_and_bearer_credentials_resolve_to_the_cookie_kind_l252_c82"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 53,
+      "members": [
+        "tests_test_worker_auth_test_malformed_or_unrelated_cookies_do_not_block_a_valid_bearer_migration_token_l193_c84"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 54,
+      "members": [
+        "tests_test_worker_auth_test_session_cookies_are_scoped_and_hardened_without_a_domain_attribute_l135_c76"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 55,
+      "members": [
+        "tests_test_worker_auth_test_session_cookies_clamp_a_negative_max_age_to_zero_l153_c58"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 56,
+      "members": [
+        "tests_test_worker_auth_test_session_cookies_clamp_an_oversized_max_age_to_the_session_ttl_l161_c71"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 57,
+      "members": [
+        "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_infinity_l145_c62"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 58,
+      "members": [
+        "tests_test_worker_auth_test_session_cookies_fail_closed_when_max_age_is_nan_l149_c57"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 59,
+      "members": [
+        "tests_test_worker_auth_test_session_cookies_truncate_a_finite_decimal_max_age_l157_c59"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 60,
+      "members": [
+        "tests_test_worker_auth_test_session_credential_parser_rejects_duplicate_session_cookie_names_l205_c74"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 61,
+      "members": [
+        "tests_test_worker_auth_test_session_credential_parser_strictly_rejects_malformed_cookie_values_l217_c76"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 62,
+      "members": [
+        "tests_test_worker_auth_test_session_tokens_prefer_the_cookie_and_retain_the_bearer_migration_fallback_l175_c83"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 63,
+      "members": [
+        "worker_src_index_map_l49_c42"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "worker/src",
+        "functions"
+      ]
+    },
+    {
+      "id": 65,
+      "members": [
+        "tests_test_worker_sync_definitions_filter_l168_c26"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 66,
+      "members": [
+        "tests_test_worker_sync_definitions_map_l164_c39"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 67,
+      "members": [
+        "tests_test_worker_sync_map_l372_c42"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 68,
+      "members": [
+        "tests_test_worker_sync_statements_filter_l142_c39"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 69,
+      "members": [
+        "tests_test_worker_sync_t_after_l1017_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 70,
+      "members": [
+        "tests_test_worker_sync_t_after_l1033_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 71,
+      "members": [
+        "tests_test_worker_sync_t_after_l1069_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 72,
+      "members": [
+        "tests_test_worker_sync_t_after_l1100_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 73,
+      "members": [
+        "tests_test_worker_sync_t_after_l1118_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 74,
+      "members": [
+        "tests_test_worker_sync_t_after_l1156_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 75,
+      "members": [
+        "tests_test_worker_sync_t_after_l1219_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 76,
+      "members": [
+        "tests_test_worker_sync_t_after_l1247_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 77,
+      "members": [
+        "tests_test_worker_sync_t_after_l486_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 78,
+      "members": [
+        "tests_test_worker_sync_t_after_l529_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 79,
+      "members": [
+        "tests_test_worker_sync_t_after_l561_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 80,
+      "members": [
+        "tests_test_worker_sync_t_after_l597_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 81,
+      "members": [
+        "tests_test_worker_sync_t_after_l651_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 82,
+      "members": [
+        "tests_test_worker_sync_t_after_l678_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 83,
+      "members": [
+        "tests_test_worker_sync_t_after_l733_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 84,
+      "members": [
+        "tests_test_worker_sync_t_after_l874_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 85,
+      "members": [
+        "tests_test_worker_sync_t_after_l923_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 86,
+      "members": [
+        "tests_test_worker_sync_t_after_l976_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 87,
+      "members": [
+        "tests_test_worker_sync_t_after_l994_c11"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 88,
+      "members": [
+        "tests_test_worker_sync_test_disabled_and_deletion_pending_owners_pause_claim_and_scoped_mobile_sync_unt_l808_c99"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "tests",
+        "functions"
+      ]
+    },
+    {
+      "id": 89,
+      "members": [
+        "worker_schema"
       ],
       "size": 1,
       "file_count": 1,
       "function_count": 0,
       "class_count": 0,
       "labels": [
-        "worker/migrations",
+        "worker",
         "files"
+      ]
+    },
+    {
+      "id": 92,
+      "members": [
+        "web_app_emptyschedule_l2_c398"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 93,
+      "members": [
+        "web_app_foreach_l21_c202"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 94,
+      "members": [
+        "web_app_installbutton_onclick_l13_c1299"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 95,
+      "members": [
+        "web_app_localdatekey_l5_c20"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 96,
+      "members": [
+        "web_app_map_l10_c480"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 97,
+      "members": [
+        "web_app_settimeout_l11_c939"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 98,
+      "members": [
+        "web_app_sort_l36_c226"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 99,
+      "members": [
+        "web_app_sort_l7_c65"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 100,
+      "members": [
+        "web_app_timenow_l3_c540"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 101,
+      "members": [
+        "web_app_uint8array_from_l22_c620"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 102,
+      "members": [
+        "web_app_window_getmedicationpushendpoint_l52_c34"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 103,
+      "members": [
+        "web_headers"
+      ],
+      "size": 1,
+      "file_count": 1,
+      "function_count": 0,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "files"
+      ]
+    },
+    {
+      "id": 104,
+      "members": [
+        "web_index"
+      ],
+      "size": 1,
+      "file_count": 1,
+      "function_count": 0,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "files"
+      ]
+    },
+    {
+      "id": 105,
+      "members": [
+        "web_manifest"
+      ],
+      "size": 1,
+      "file_count": 1,
+      "function_count": 0,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "files"
+      ]
+    },
+    {
+      "id": 106,
+      "members": [
+        "web_styles"
+      ],
+      "size": 1,
+      "file_count": 1,
+      "function_count": 0,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "files"
+      ]
+    },
+    {
+      "id": 107,
+      "members": [
+        "web_sw"
+      ],
+      "size": 1,
+      "file_count": 1,
+      "function_count": 0,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "files"
+      ]
+    },
+    {
+      "id": 109,
+      "members": [
+        "web_sw_self_addeventlistener_message_l4_c33"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 110,
+      "members": [
+        "web_sw_then_l3_c80"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 111,
+      "members": [
+        "web_sw_then_l5_c160"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 112,
+      "members": [
+        "web_sw_then_l6_c336"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 113,
+      "members": [
+        "web_sw_then_l6_c399"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 114,
+      "members": [
+        "web_sync_filter_l23_c721"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 115,
+      "members": [
+        "web_sync_item_days_map_l23_c682"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 117,
+      "members": [
+        "web_sync_uint8array_from_l11_c176"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
+      ]
+    },
+    {
+      "id": 118,
+      "members": [
+        "web_sync_value_events_map_l23_c35"
+      ],
+      "size": 1,
+      "file_count": 0,
+      "function_count": 1,
+      "class_count": 0,
+      "labels": [
+        "web",
+        "functions"
       ]
     }
   ],
-  "count": 114
+  "count": 119
 }

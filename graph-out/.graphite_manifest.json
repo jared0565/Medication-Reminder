@@ -125,8 +125,8 @@
     {
       "rel_path": "tests/test_web_account.mjs",
       "language": "javascript",
-      "size": 1133,
-      "hash": "7ce9bee016e8445de8bb6557f111f8f5b30e173b678b654c8c7cac6eec816860"
+      "size": 19696,
+      "hash": "887391f2112f8b2ac2c8e8e28e4f3eea7266a0ae38853869b2249adaae534218"
     },
     {
       "rel_path": "tests/test_web_sync.mjs",
@@ -149,8 +149,8 @@
     {
       "rel_path": "tests/test_worker_sync.mjs",
       "language": "javascript",
-      "size": 48654,
-      "hash": "b00de9383c6ffd7e4e8908aede3e6131bb1f03332dbb051093d39a10855c05c9"
+      "size": 48718,
+      "hash": "3fa199b487c9653a6a49b6473fe42048bc5c02c4b70b3d59ade7b96378dcc3ba"
     },
     {
       "rel_path": "web/_headers",
@@ -167,8 +167,8 @@
     {
       "rel_path": "web/account.js",
       "language": "javascript",
-      "size": 6687,
-      "hash": "8380ced0da9d75cc6ae6f87dfb66ff05c8fac6e90581b548c304930a4b5d1417"
+      "size": 14195,
+      "hash": "a4c1fd28e6aea63c44e4f7cc47e6e06a4cbd4ed1dedd33a53388d5194b39bf75"
     },
     {
       "rel_path": "web/app.js",
@@ -185,8 +185,8 @@
     {
       "rel_path": "web/index.html",
       "language": "html",
-      "size": 8480,
-      "hash": "de9e4ecef00dfadf98645ab881149aa3f9322b49aecf425acb4c87a8d04efce5"
+      "size": 9345,
+      "hash": "c613ab19a41407773415bea9dfb1afa1eaea2eca21d0a52c2b9711796ca4daa7"
     },
     {
       "rel_path": "web/manifest.webmanifest",

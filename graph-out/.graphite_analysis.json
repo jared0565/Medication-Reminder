@@ -1,12 +1,20 @@
 {
   "god_nodes": [
     {
+      "id": "tests_test_web_account_accountharness",
+      "name": "accountHarness",
+      "kind": "function",
+      "degree": 53,
+      "in_degree": 24,
+      "out_degree": 29
+    },
+    {
       "id": "web_app",
       "name": "app.js",
       "kind": "file",
-      "degree": 57,
+      "degree": 53,
       "in_degree": 16,
-      "out_degree": 41
+      "out_degree": 37
     },
     {
       "id": "medication_reminder",
@@ -65,14 +73,6 @@
       "out_degree": 40
     },
     {
-      "id": "tests_test_web_sync_json",
-      "name": "json",
-      "kind": "function",
-      "degree": 36,
-      "in_degree": 35,
-      "out_degree": 1
-    },
-    {
       "id": "worker_src_index",
       "name": "index.js",
       "kind": "file",
@@ -81,28 +81,12 @@
       "out_degree": 35
     },
     {
-      "id": "tests_test_worker_auth_json",
-      "name": "json",
-      "kind": "function",
-      "degree": 35,
-      "in_degree": 35,
-      "out_degree": 0
-    },
-    {
       "id": "worker_src_index_fetch",
       "name": "fetch",
       "kind": "function",
       "degree": 35,
       "in_degree": 19,
       "out_degree": 16
-    },
-    {
-      "id": "tests_test_web_update_json",
-      "name": "json",
-      "kind": "function",
-      "degree": 34,
-      "in_degree": 34,
-      "out_degree": 0
     },
     {
       "id": "tests_test_web_access_harness",
@@ -159,6 +143,22 @@
       "degree": 23,
       "in_degree": 3,
       "out_degree": 20
+    },
+    {
+      "id": "web_sync_syncnow",
+      "name": "syncNow",
+      "kind": "function",
+      "degree": 23,
+      "in_degree": 8,
+      "out_degree": 15
+    },
+    {
+      "id": "worker_src_auth",
+      "name": "auth.js",
+      "kind": "file",
+      "degree": 23,
+      "in_degree": 2,
+      "out_degree": 21
     }
   ],
   "orphans": [
@@ -218,13 +218,13 @@
       "kind": "file"
     },
     {
-      "id": "tests_test_web_access_assert_throws_l270_c5",
-      "name": "assert.throws",
+      "id": "tests_test_web_account_queuemicrotask_l227_c48",
+      "name": "queueMicrotask",
       "kind": "function"
     },
     {
-      "id": "tests_test_web_access_assert_throws_l317_c5",
-      "name": "assert.throws",
+      "id": "tests_test_web_account_test_account_client_contains_no_reusable_session_storage_or_token_logging_l547_c78",
+      "name": "test account client contains no reusable session storage or token logging",
       "kind": "function"
     },
     {
@@ -243,6 +243,16 @@
       "kind": "function"
     },
     {
+      "id": "tests_test_worker_auth_readjson_l321_c19",
+      "name": "readJson",
+      "kind": "function"
+    },
+    {
+      "id": "tests_test_worker_auth_readjson_l353_c17",
+      "name": "readJson",
+      "kind": "function"
+    },
+    {
       "id": "tests_test_worker_auth_sha256hex_l19_c19",
       "name": "sha256Hex",
       "kind": "function"
@@ -250,16 +260,6 @@
     {
       "id": "tests_test_worker_auth_test_a_malformed_session_cookie_does_not_suppress_a_valid_migration_bearer_l227_c79",
       "name": "test a malformed session cookie does not suppress a valid migration bearer",
-      "kind": "function"
-    },
-    {
-      "id": "tests_test_worker_auth_test_clearing_the_session_cookie_retains_its_security_and_path_attributes_l166_c78",
-      "name": "test clearing the session cookie retains its security and path attributes",
-      "kind": "function"
-    },
-    {
-      "id": "tests_test_worker_auth_test_conflicting_valid_cookie_and_bearer_credentials_fail_closed_l239_c69",
-      "name": "test conflicting valid cookie and bearer credentials fail closed",
       "kind": "function"
     }
   ],
@@ -307,6 +307,13 @@
       "ratio": 20.0
     },
     {
+      "id": "web_account",
+      "name": "account.js",
+      "out_degree": 20,
+      "in_degree": 0,
+      "ratio": 20.0
+    },
+    {
       "id": "tests_e2e_sync",
       "name": "e2e_sync.py",
       "out_degree": 16,
@@ -314,15 +321,15 @@
       "ratio": 16.0
     },
     {
-      "id": "web_account",
-      "name": "account.js",
-      "out_degree": 13,
-      "in_degree": 0,
-      "ratio": 13.0
-    },
-    {
       "id": "tests_test_medication_core",
       "name": "test_medication_core.py",
+      "out_degree": 11,
+      "in_degree": 0,
+      "ratio": 11.0
+    },
+    {
+      "id": "tests_test_web_account",
+      "name": "test_web_account.mjs",
       "out_degree": 11,
       "in_degree": 0,
       "ratio": 11.0
@@ -389,13 +396,6 @@
       "out_degree": 6,
       "in_degree": 0,
       "ratio": 6.0
-    },
-    {
-      "id": "tests_test_web_account",
-      "name": "test_web_account.mjs",
-      "out_degree": 4,
-      "in_degree": 0,
-      "ratio": 4.0
     },
     {
       "id": "web_update",
@@ -549,6 +549,30 @@
   ],
   "cycles": [
     [
+      "web_app_renderpairingqr",
+      "web_app"
+    ],
+    [
+      "web_app_checkduemodals",
+      "web_app_enqueuedue",
+      "web_app_shownextduemodal",
+      "web_app"
+    ],
+    [
+      "web_app_enqueuedue",
+      "web_app_shownextduemodal",
+      "web_app"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
       "web_app_updatenotificationstatus",
       "web_app",
       "web_app_enablenotifications"
@@ -558,8 +582,35 @@
       "web_app"
     ],
     [
-      "web_app_addmedicineinput",
+      "web_app_renderall",
       "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_saveeditor"
     ],
     [
       "web_app_rendertoday",
@@ -568,85 +619,34 @@
     ],
     [
       "web_app_rendertoday",
-      "web_app",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_rendertoday",
       "web_app"
     ],
     [
-      "web_app_rendertoday",
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_renderschedules",
-      "web_app",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_renderschedules",
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app",
-      "web_app_checkduemodals",
-      "web_app_enqueuedue",
-      "web_app_shownextduemodal"
-    ],
-    [
-      "web_app",
-      "web_app_enqueuedue",
-      "web_app_shownextduemodal"
-    ],
-    [
-      "web_app",
-      "web_app_openeditor"
-    ],
-    [
-      "web_app",
       "web_app_openeditor",
-      "web_app_rendermedicineinputs"
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_renderall"
+      "web_app_addmedicineinput",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_rendermedicineinputs"
-    ],
-    [
-      "web_app",
-      "web_app_renderpairingqr"
-    ],
-    [
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app",
       "web_app_saveeditor",
-      "web_app_renderall"
+      "web_app"
+    ],
+    [
+      "web_app_shownextduemodal",
+      "web_app"
     ],
     [
       "web_app",
-      "web_app_shownextduemodal"
+      "web_app_renderschedules"
     ]
   ],
   "top_files_by_links": [
     {
       "id": "web_app",
       "name": "app.js",
-      "degree": 57,
+      "degree": 53,
       "source_file": "web/app.js"
     },
     {
@@ -704,22 +704,28 @@
       "source_file": "web/access.js"
     },
     {
+      "id": "web_account",
+      "name": "account.js",
+      "degree": 20,
+      "source_file": "web/account.js"
+    },
+    {
       "id": "tests_e2e_sync",
       "name": "e2e_sync.py",
       "degree": 16,
       "source_file": "tests/e2e_sync.py"
     },
     {
-      "id": "web_account",
-      "name": "account.js",
-      "degree": 13,
-      "source_file": "web/account.js"
-    },
-    {
       "id": "tests_test_medication_core",
       "name": "test_medication_core.py",
       "degree": 11,
       "source_file": "tests/test_medication_core.py"
+    },
+    {
+      "id": "tests_test_web_account",
+      "name": "test_web_account.mjs",
+      "degree": 11,
+      "source_file": "tests/test_web_account.mjs"
     },
     {
       "id": "tests_test_pairing",
@@ -756,12 +762,6 @@
       "name": "test_web_update.mjs",
       "degree": 6,
       "source_file": "tests/test_web_update.mjs"
-    },
-    {
-      "id": "tests_test_web_account",
-      "name": "test_web_account.mjs",
-      "degree": 4,
-      "source_file": "tests/test_web_account.mjs"
     }
   ]
 }
