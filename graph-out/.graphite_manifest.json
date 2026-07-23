@@ -137,8 +137,8 @@
     {
       "rel_path": "tests/test_worker_auth.mjs",
       "language": "javascript",
-      "size": 3035,
-      "hash": "4ce1f5f7eabb1e6b7ae69465cc3e06af22b482c66821cb4d742c5e6222a2ac71"
+      "size": 28600,
+      "hash": "e70a3e3952e6d123a8aad8a18aa244c9d86d482009cca75824707039b91da05c"
     },
     {
       "rel_path": "tests/test_worker_sync.mjs",
@@ -251,20 +251,20 @@
     {
       "rel_path": "worker/src/auth.js",
       "language": "javascript",
-      "size": 12287,
-      "hash": "710b7c806d37039a2e08c1d6eb571b46b26531bc7eaa6f5b6a18ec4f5d095c88"
+      "size": 15643,
+      "hash": "8efed15b6feb641995de15b2ad76793c6db4dca882ca92d44a7a8545a954fc40"
     },
     {
       "rel_path": "worker/src/index.js",
       "language": "javascript",
-      "size": 15745,
-      "hash": "abb660001f3199585f97da0791980e05cd4818922c87e1f53dcaae00a9e0b16e"
+      "size": 17114,
+      "hash": "29d234b4ff0c0b9c188eb7cb54aacafb6583d25171ba5436d99d95eaa616d11e"
     },
     {
       "rel_path": "worker/wrangler.jsonc",
       "language": null,
-      "size": 515,
-      "hash": "0cc229ed4a4d28bdcdf8f46ef011796c40010c6accc4b0dc9ff0a1ce619ab49c"
+      "size": 720,
+      "hash": "b9656a11cf292557bbeb20998083f26f0230c146b76710a2cfaaa1a0142fda5a"
     }
   ],
   "typescript_resolver": "auto"
