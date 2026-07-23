@@ -1,16 +1,16 @@
 # Graph Report - Medication Reminder  (2026-07-23)
 
 ## Corpus Check
-- 51 files · ~30,095 words
+- 51 files · ~30,119 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 686 nodes · 1337 edges · 38 communities (30 shown, 8 thin omitted)
+- 687 nodes · 1340 edges · 36 communities (28 shown, 8 thin omitted)
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 138 edges (avg confidence: 0.54)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1dde3b64`
+- Built from commit: `084671a3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -39,14 +39,12 @@
 - [[_COMMUNITY_Community 21|Community 21]]
 - [[_COMMUNITY_Community 22|Community 22]]
 - [[_COMMUNITY_Community 23|Community 23]]
-- [[_COMMUNITY_Community 34|Community 34]]
 - [[_COMMUNITY_Community 35|Community 35]]
 - [[_COMMUNITY_Community 36|Community 36]]
-- [[_COMMUNITY_Community 37|Community 37]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `MedicationReminderApp` - 59 edges
-2. `$()` - 32 edges
+2. `$()` - 33 edges
 3. `ScheduleEngine` - 30 edges
 4. `QRCode` - 30 edges
 5. `StorageError` - 28 edges
@@ -59,13 +57,13 @@
 ## Surprising Connections (you probably didn't know these)
 - `DueOccurrence` --uses--> `ConfigValidationError`  [INFERRED]
   medication_reminder.py → medication_core.py
+- `Exception` --uses--> `ConfigValidationError`  [INFERRED]
+  medication_reminder.py → medication_core.py
 - `MedicationReminderApp` --uses--> `ConfigValidationError`  [INFERRED]
   medication_reminder.py → medication_core.py
+- `ScheduleEngineTests` --uses--> `ConfigValidationError`  [INFERRED]
+  tests/test_medication_core.py → medication_core.py
 - `Toplevel` --uses--> `ConfigValidationError`  [INFERRED]
-  medication_reminder.py → medication_core.py
-- `DueOccurrence` --uses--> `StorageError`  [INFERRED]
-  medication_reminder.py → medication_core.py
-- `MedicationReminderApp` --uses--> `StorageError`  [INFERRED]
   medication_reminder.py → medication_core.py
 
 ## Import Cycles
@@ -74,7 +72,7 @@
 - 1-file cycle: `vendor/qrcode/image/styles/moduledrawers/svg.py -> vendor/qrcode/image/styles/moduledrawers/svg.py`
 - 1-file cycle: `vendor/qrcode/image/svg.py -> vendor/qrcode/image/svg.py`
 
-## Communities (38 total, 8 thin omitted)
+## Communities (36 total, 8 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.17
@@ -89,8 +87,8 @@ Cohesion: 0.05
 Nodes (25): BaseImage, GenericImage, GenericImageLocal, PilImage, PIL image builder, default format is PNG., PyPNGImage, Build an example QR Code and display it.      There's an even easier way than th, run_example() (+17 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.07
-Nodes (52): Any, date, Exception, AppStorage, atomic_write_bytes(), ConfigValidationError, default_data_dir(), default_state() (+44 more)
+Cohesion: 0.09
+Nodes (25): Any, date, Exception, AppStorage, atomic_write_bytes(), _DataBlob, default_data_dir(), default_state() (+17 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.15
@@ -101,8 +99,8 @@ Cohesion: 0.06
 Nodes (33): gexp(), glog(), Polynomial, rs_blocks(), RSBlock, BCH_digit(), BCH_type_info(), BCH_type_number() (+25 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.19
-Nodes (7): _b64(), EncryptedSyncClient, Any, _random_id(), _unb64(), main(), PairingTests
+Cohesion: 0.07
+Nodes (43): ConfigValidationError, DueOccurrence, parse_iso_date(), parse_time(), Raised when the medication schedule does not satisfy its contract., Validate and normalize untrusted schedule data at the file/UI boundary., _require_text(), validate_schedule() (+35 more)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.08
@@ -138,11 +136,7 @@ Nodes (7): This file provides zest.releaser entrypoints using when releasing new
 
 ### Community 22 - "Community 22"
 Cohesion: 0.09
-Nodes (24): $(), addMedicineInput(), bridge, clearPrematureTaken(), enableNotifications(), esc(), localDateKey(), nextPushReminders() (+16 more)
-
-### Community 34 - "Community 34"
-Cohesion: 0.33
-Nodes (6): enable_dpi_awareness(), Ask Windows to render Tk at the monitor's native DPI., Ask Windows to render Tk at the monitor's native DPI., Ask Windows to render Tk at the monitor's native DPI., Ask Windows to render Tk at the monitor's native DPI., Ask Windows to render Tk at the monitor's native DPI.
+Nodes (26): $(), addMedicineInput(), bridge, checkForegroundNotifications(), clearPrematureTaken(), enableNotifications(), esc(), localDateKey() (+18 more)
 
 ### Community 35 - "Community 35"
 Cohesion: 0.25
@@ -152,10 +146,6 @@ Nodes (22): acceptPairing(), api(), b64(), copyPairLink(), copyText(), createPai
 Cohesion: 0.33
 Nodes (12): ALLOWED_ORIGINS, authenticatedPair(), corsHeaders(), enforceRateLimit(), fetch(), handleSync(), json(), notifyPairedMobile() (+4 more)
 
-### Community 37 - "Community 37"
-Cohesion: 0.36
-Nodes (3): _DataBlob, DpapiProtector, Encrypt application data for the current Windows user via DPAPI.
-
 ## Knowledge Gaps
 - **35 isolated node(s):** `PreToolUse`, `timezone`, `events`, `BaseImage`, `SvgImageWhite` (+30 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -164,7 +154,7 @@ Nodes (3): _DataBlob, DpapiProtector, Encrypt application data for the current W
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ConfigValidationError` connect `Community 3` to `Community 1`, `Community 2`?**
+- **Why does `ConfigValidationError` connect `Community 7` to `Community 1`, `Community 2`, `Community 3`?**
   _High betweenness centrality (0.133) - this node is a cross-community bridge._
 - **Why does `ActiveWithNeighbors` connect `Community 10` to `Community 2`, `Community 12`, `Community 14`?**
   _High betweenness centrality (0.132) - this node is a cross-community bridge._

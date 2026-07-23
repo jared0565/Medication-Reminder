@@ -36,7 +36,7 @@
       "source_file": "medication_core.py",
       "source_location": "L1",
       "id": "medication_core",
-      "community": 3,
+      "community": 7,
       "norm_label": "medication_core.py"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "medication_core.py",
       "source_location": "L28",
       "id": "medication_core_configvalidationerror",
-      "community": 3,
+      "community": 7,
       "norm_label": "configvalidationerror"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "",
       "source_location": "",
       "id": "runtimeerror",
-      "community": 3,
+      "community": 7,
       "norm_label": "runtimeerror"
     },
     {
@@ -117,7 +117,7 @@
       "source_file": "medication_core.py",
       "source_location": "L42",
       "id": "medication_core_parse_iso_date",
-      "community": 3,
+      "community": 7,
       "norm_label": "parse_iso_date()"
     },
     {
@@ -135,7 +135,7 @@
       "source_file": "medication_core.py",
       "source_location": "L49",
       "id": "medication_core_parse_time",
-      "community": 3,
+      "community": 7,
       "norm_label": "parse_time()"
     },
     {
@@ -144,7 +144,7 @@
       "source_file": "medication_core.py",
       "source_location": "L49",
       "id": "time",
-      "community": 3,
+      "community": 7,
       "norm_label": "time"
     },
     {
@@ -153,7 +153,7 @@
       "source_file": "medication_core.py",
       "source_location": "L55",
       "id": "medication_core_require_text",
-      "community": 3,
+      "community": 7,
       "norm_label": "_require_text()"
     },
     {
@@ -171,7 +171,7 @@
       "source_file": "medication_core.py",
       "source_location": "L66",
       "id": "medication_core_validate_schedule",
-      "community": 3,
+      "community": 7,
       "norm_label": "validate_schedule()"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "medication_core.py",
       "source_location": "L195",
       "id": "medication_core_datablob",
-      "community": 37,
+      "community": 3,
       "norm_label": "_datablob"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "medication_core.py",
       "source_location": "L199",
       "id": "medication_core_dpapiprotector",
-      "community": 37,
+      "community": 3,
       "norm_label": "dpapiprotector"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "medication_core.py",
       "source_location": "L205",
       "id": "medication_core_dpapiprotector_init",
-      "community": 37,
+      "community": 3,
       "norm_label": ".__init__()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "medication_core.py",
       "source_location": "L212",
       "id": "medication_core_dpapiprotector_configure_functions",
-      "community": 37,
+      "community": 3,
       "norm_label": "._configure_functions()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "medication_core.py",
       "source_location": "L227",
       "id": "medication_core_dpapiprotector_input_blob",
-      "community": 37,
+      "community": 3,
       "norm_label": "._input_blob()"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "medication_core.py",
       "source_location": "L231",
       "id": "medication_core_dpapiprotector_transform",
-      "community": 37,
+      "community": 3,
       "norm_label": "._transform()"
     },
     {
@@ -270,7 +270,7 @@
       "source_file": "medication_core.py",
       "source_location": "L258",
       "id": "medication_core_dpapiprotector_protect",
-      "community": 37,
+      "community": 3,
       "norm_label": ".protect()"
     },
     {
@@ -279,7 +279,7 @@
       "source_file": "medication_core.py",
       "source_location": "L261",
       "id": "medication_core_dpapiprotector_unprotect",
-      "community": 37,
+      "community": 3,
       "norm_label": ".unprotect()"
     },
     {
@@ -495,7 +495,7 @@
       "source_file": "medication_core.py",
       "source_location": "L474",
       "id": "medication_core_dueoccurrence",
-      "community": 3,
+      "community": 7,
       "norm_label": "dueoccurrence"
     },
     {
@@ -504,7 +504,7 @@
       "source_file": "medication_core.py",
       "source_location": "L484",
       "id": "medication_core_dueoccurrence_overdue",
-      "community": 3,
+      "community": 7,
       "norm_label": ".overdue()"
     },
     {
@@ -621,7 +621,7 @@
       "source_file": "medication_core.py",
       "source_location": "L29",
       "id": "medication_core_rationale_29",
-      "community": 3,
+      "community": 7,
       "norm_label": "raised when the medication schedule does not satisfy its contract."
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "medication_core.py",
       "source_location": "L67",
       "id": "medication_core_rationale_67",
-      "community": 3,
+      "community": 7,
       "norm_label": "validate and normalize untrusted schedule data at the file/ui boundary."
     },
     {
@@ -648,7 +648,7 @@
       "source_file": "medication_core.py",
       "source_location": "L200",
       "id": "medication_core_rationale_200",
-      "community": 37,
+      "community": 3,
       "norm_label": "encrypt application data for the current windows user via dpapi."
     },
     {
@@ -657,7 +657,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1",
       "id": "medication_reminder",
-      "community": 3,
+      "community": 7,
       "norm_label": "medication_reminder.py"
     },
     {
@@ -666,7 +666,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L47",
       "id": "medication_reminder_enable_dpi_awareness",
-      "community": 34,
+      "community": 7,
       "norm_label": "enable_dpi_awareness()"
     },
     {
@@ -675,7 +675,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L68",
       "id": "medication_reminder_resource_dir",
-      "community": 3,
+      "community": 7,
       "norm_label": "resource_dir()"
     },
     {
@@ -684,7 +684,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L68",
       "id": "medication_reminder_py_path",
-      "community": 3,
+      "community": 7,
       "norm_label": "path"
     },
     {
@@ -711,7 +711,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L100",
       "id": "medication_reminder_singleinstance",
-      "community": 3,
+      "community": 7,
       "norm_label": "singleinstance"
     },
     {
@@ -720,7 +720,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L103",
       "id": "medication_reminder_singleinstance_init",
-      "community": 3,
+      "community": 7,
       "norm_label": ".__init__()"
     },
     {
@@ -729,7 +729,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L118",
       "id": "medication_reminder_singleinstance_close",
-      "community": 3,
+      "community": 7,
       "norm_label": ".close()"
     },
     {
@@ -783,7 +783,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L209",
       "id": "medication_reminder_py_datetime",
-      "community": 3,
+      "community": 7,
       "norm_label": "datetime"
     },
     {
@@ -1044,7 +1044,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L922",
       "id": "remoteschedule",
-      "community": 3,
+      "community": 7,
       "norm_label": "remoteschedule"
     },
     {
@@ -1062,7 +1062,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L937",
       "id": "syncerror",
-      "community": 3,
+      "community": 7,
       "norm_label": "syncerror"
     },
     {
@@ -1107,7 +1107,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L991",
       "id": "medication_reminder_py_exception",
-      "community": 3,
+      "community": 7,
       "norm_label": "exception"
     },
     {
@@ -1161,7 +1161,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1035",
       "id": "medication_reminder_medicationreminderapp_run",
-      "community": 3,
+      "community": 7,
       "norm_label": ".run()"
     },
     {
@@ -1170,7 +1170,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1039",
       "id": "medication_reminder_show_startup_error",
-      "community": 3,
+      "community": 7,
       "norm_label": "show_startup_error()"
     },
     {
@@ -1179,7 +1179,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1046",
       "id": "medication_reminder_main",
-      "community": 3,
+      "community": 7,
       "norm_label": "main()"
     },
     {
@@ -1188,7 +1188,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L48",
       "id": "medication_reminder_rationale_48",
-      "community": 34,
+      "community": 7,
       "norm_label": "ask windows to render tk at the monitor's native dpi."
     },
     {
@@ -1215,7 +1215,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L101",
       "id": "medication_reminder_rationale_101",
-      "community": 3,
+      "community": 7,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex."
     },
     {
@@ -1260,7 +1260,7 @@
       "source_file": "sync_client.py",
       "source_location": "L1",
       "id": "sync_client",
-      "community": 3,
+      "community": 7,
       "norm_label": "sync_client.py"
     },
     {
@@ -1269,7 +1269,7 @@
       "source_file": "sync_client.py",
       "source_location": "L21",
       "id": "sync_client_syncerror",
-      "community": 3,
+      "community": 7,
       "norm_label": "syncerror"
     },
     {
@@ -1314,7 +1314,7 @@
       "source_file": "sync_client.py",
       "source_location": "L40",
       "id": "sync_client_remoteschedule",
-      "community": 3,
+      "community": 7,
       "norm_label": "remoteschedule"
     },
     {
@@ -1422,7 +1422,7 @@
       "source_file": "tests/e2e_sync.py",
       "source_location": "L1",
       "id": "tests_e2e_sync",
-      "community": 3,
+      "community": 7,
       "norm_label": "e2e_sync.py"
     },
     {
@@ -1440,7 +1440,7 @@
       "source_file": "tests/e2e_sync.py",
       "source_location": "L1",
       "id": "tests_e2e_sync_rationale_1",
-      "community": 3,
+      "community": 7,
       "norm_label": "disposable production smoke test for the encrypted sync relay."
     },
     {
@@ -1449,7 +1449,7 @@
       "source_file": "tests/test_medication_core.py",
       "source_location": "L1",
       "id": "tests_test_medication_core",
-      "community": 3,
+      "community": 7,
       "norm_label": "test_medication_core.py"
     },
     {
@@ -1512,7 +1512,7 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L1",
       "id": "tests_test_pairing",
-      "community": 3,
+      "community": 7,
       "norm_label": "test_pairing.py"
     },
     {
@@ -5125,10 +5125,19 @@
       "norm_label": "updatenotificationstatus()"
     },
     {
-      "label": "enableNotifications()",
+      "label": "showBrowserNotification()",
       "file_type": "code",
       "source_file": "web/app.js",
       "source_location": "L16",
+      "id": "web_app_showbrowsernotification",
+      "community": 22,
+      "norm_label": "showbrowsernotification()"
+    },
+    {
+      "label": "enableNotifications()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L17",
       "id": "web_app_enablenotifications",
       "community": 22,
       "norm_label": "enablenotifications()"
@@ -5137,7 +5146,7 @@
       "label": "notifiedKeys",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "web_app_notifiedkeys",
       "community": 22,
       "norm_label": "notifiedkeys"
@@ -5146,7 +5155,7 @@
       "label": "checkForegroundNotifications()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L18",
+      "source_location": "L19",
       "id": "web_app_checkforegroundnotifications",
       "community": 22,
       "norm_label": "checkforegroundnotifications()"
@@ -5155,7 +5164,7 @@
       "label": "nextPushReminders()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L21",
+      "source_location": "L22",
       "id": "web_app_nextpushreminders",
       "community": 22,
       "norm_label": "nextpushreminders()"
@@ -5164,7 +5173,7 @@
       "label": "syncPushSubscription()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L22",
+      "source_location": "L23",
       "id": "web_app_syncpushsubscription",
       "community": 22,
       "norm_label": "syncpushsubscription()"
@@ -5173,7 +5182,7 @@
       "label": "clearPrematureTaken()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L24",
+      "source_location": "L25",
       "id": "web_app_clearprematuretaken",
       "community": 22,
       "norm_label": "clearprematuretaken()"
@@ -5182,7 +5191,7 @@
       "label": "reminderState()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L25",
+      "source_location": "L26",
       "id": "web_app_reminderstate",
       "community": 22,
       "norm_label": "reminderstate()"
@@ -5191,7 +5200,7 @@
       "label": "qrDialog",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L29",
+      "source_location": "L30",
       "id": "web_app_qrdialog",
       "community": 22,
       "norm_label": "qrdialog"
@@ -5200,7 +5209,7 @@
       "label": "pairingPayload()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L30",
+      "source_location": "L31",
       "id": "web_app_pairingpayload",
       "community": 22,
       "norm_label": "pairingpayload()"
@@ -5209,7 +5218,7 @@
       "label": "decodePairingPayload()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L31",
+      "source_location": "L32",
       "id": "web_app_decodepairingpayload",
       "community": 22,
       "norm_label": "decodepairingpayload()"
@@ -5218,7 +5227,7 @@
       "label": "renderPairingQr()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L32",
+      "source_location": "L33",
       "id": "web_app_renderpairingqr",
       "community": 22,
       "norm_label": "renderpairingqr()"
@@ -5227,7 +5236,7 @@
       "label": "pairFromUrl",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L35",
+      "source_location": "L36",
       "id": "web_app_pairfromurl",
       "community": 22,
       "norm_label": "pairfromurl"
@@ -5876,7 +5885,7 @@
       "file_type": "code",
       "source_file": "medication_reminder.py",
       "source_location": "L774",
-      "community": 3,
+      "community": 7,
       "norm_label": "any",
       "id": "medication_reminder_py_any"
     },
@@ -5885,7 +5894,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L47",
-      "community": 34,
+      "community": 7,
       "norm_label": "ask windows to render tk at the monitor's native dpi.",
       "id": "medication_reminder_rationale_47"
     },
@@ -5912,7 +5921,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L100",
-      "community": 3,
+      "community": 7,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
       "id": "medication_reminder_rationale_100"
     },
@@ -5939,7 +5948,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L46",
-      "community": 34,
+      "community": 7,
       "norm_label": "ask windows to render tk at the monitor's native dpi.",
       "id": "medication_reminder_rationale_46"
     },
@@ -5966,7 +5975,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L99",
-      "community": 3,
+      "community": 7,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
       "id": "medication_reminder_rationale_99"
     },
@@ -6011,7 +6020,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L42",
-      "community": 34,
+      "community": 7,
       "norm_label": "ask windows to render tk at the monitor's native dpi.",
       "id": "medication_reminder_rationale_42"
     },
@@ -6038,7 +6047,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L95",
-      "community": 3,
+      "community": 7,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
       "id": "medication_reminder_rationale_95"
     },
@@ -6056,7 +6065,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L38",
-      "community": 34,
+      "community": 7,
       "norm_label": "ask windows to render tk at the monitor's native dpi.",
       "id": "medication_reminder_rationale_38"
     },
@@ -6110,7 +6119,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L70",
-      "community": 3,
+      "community": 7,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
       "id": "medication_reminder_rationale_70"
     },
@@ -6119,7 +6128,7 @@
       "file_type": "code",
       "source_file": "medication_reminder.py",
       "source_location": "L25",
-      "community": 3,
+      "community": 7,
       "norm_label": "app_dir()",
       "id": "medication_reminder_app_dir"
     },
@@ -6128,7 +6137,7 @@
       "file_type": "code",
       "source_file": "medication_reminder.py",
       "source_location": "L25",
-      "community": 3,
+      "community": 7,
       "norm_label": "path",
       "id": "path"
     },
@@ -18662,6 +18671,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "web/app.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "web_app",
+      "target": "web_app_showbrowsernotification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
       "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -18819,6 +18838,28 @@
       "confidence_score": 1.0,
       "source": "web_app_enablenotifications",
       "target": "web_app_updatenotificationstatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "web_app_checkforegroundnotifications",
+      "target": "web_app_showbrowsernotification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "web_app_enablenotifications",
+      "target": "web_app_showbrowsernotification",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -19778,9 +19819,9 @@
       "source_file": "worker/src/index.js",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_index",
-      "target": "src_index_validpushendpoint",
-      "confidence_score": 1.0
+      "target": "src_index_validpushendpoint"
     },
     {
       "relation": "calls",
@@ -19844,9 +19885,9 @@
       "source_file": "worker/src/index.js",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_index_fetch",
-      "target": "src_index_readjson",
-      "confidence_score": 1.0
+      "target": "src_index_readjson"
     },
     {
       "relation": "calls",
@@ -19910,9 +19951,9 @@
       "source_file": "worker/src/index.js",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_index_fetch",
-      "target": "src_index_validpushendpoint",
-      "confidence_score": 1.0
+      "target": "src_index_validpushendpoint"
     },
     {
       "relation": "calls",
@@ -19932,9 +19973,9 @@
       "source_file": "worker/src/index.js",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_index_fetch",
-      "target": "src_index_enforceratelimit",
-      "confidence_score": 1.0
+      "target": "src_index_enforceratelimit"
     },
     {
       "relation": "calls",
@@ -20135,5 +20176,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "1dde3b648c59feb34f5f2beaf8ee061772615c9a"
+  "built_at_commit": "084671a372b3a1ae46cab4463304bdf8da3e0ca5"
 }
