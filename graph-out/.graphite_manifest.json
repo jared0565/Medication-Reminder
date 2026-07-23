@@ -149,8 +149,8 @@
     {
       "rel_path": "tests/test_worker_auth.mjs",
       "language": "javascript",
-      "size": 28600,
-      "hash": "e70a3e3952e6d123a8aad8a18aa244c9d86d482009cca75824707039b91da05c"
+      "size": 30373,
+      "hash": "b73dad66e6a1b68ec3904f2752b41c2befbef54bd05b7f01be9e32f9c1a08713"
     },
     {
       "rel_path": "tests/test_worker_sync.mjs",
@@ -269,8 +269,8 @@
     {
       "rel_path": "worker/src/auth.js",
       "language": "javascript",
-      "size": 15766,
-      "hash": "032f72c520645c63ddeac2b76ef07b607cbe255a992822f4bb4701702a4b560a"
+      "size": 16344,
+      "hash": "bf1511a94363b365a516d0325ced03f8ca88976410a746775a18d413b0f1300d"
     },
     {
       "rel_path": "worker/src/index.js",

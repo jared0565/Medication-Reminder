@@ -97,6 +97,14 @@
       "out_degree": 38
     },
     {
+      "id": "worker_src_index_fetch",
+      "name": "fetch",
+      "kind": "function",
+      "degree": 37,
+      "in_degree": 21,
+      "out_degree": 16
+    },
+    {
       "id": "tests_test_worker_sync_workerfixture",
       "name": "workerFixture",
       "kind": "function",
@@ -111,14 +119,6 @@
       "degree": 35,
       "in_degree": 10,
       "out_degree": 25
-    },
-    {
-      "id": "worker_src_index_fetch",
-      "name": "fetch",
-      "kind": "function",
-      "degree": 35,
-      "in_degree": 19,
-      "out_degree": 16
     },
     {
       "id": "tests_test_web_access_harness",
@@ -156,9 +156,9 @@
       "id": "worker_src_auth_handleauthrequest",
       "name": "handleAuthRequest",
       "kind": "function",
-      "degree": 25,
+      "degree": 26,
       "in_degree": 2,
-      "out_degree": 23
+      "out_degree": 24
     }
   ],
   "orphans": [
@@ -344,9 +344,9 @@
     {
       "id": "worker_src_auth",
       "name": "auth.js",
-      "out_degree": 21,
+      "out_degree": 22,
       "in_degree": 2,
-      "ratio": 10.5
+      "ratio": 11.0
     },
     {
       "id": "tests_test_pairing",
@@ -549,97 +549,97 @@
   ],
   "cycles": [
     [
-      "web_app",
-      "web_app_addmedicineinput"
+      "web_app_addmedicineinput",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_checkduemodals",
-      "web_app_enqueuedue",
-      "web_app_shownextduemodal"
-    ],
-    [
-      "web_app",
-      "web_app_enablenotifications",
-      "web_app_updatenotificationstatus"
-    ],
-    [
-      "web_app",
-      "web_app_enqueuedue",
-      "web_app_shownextduemodal"
-    ],
-    [
-      "web_app",
       "web_app_markoccurrencetaken",
-      "web_app_rendertoday"
+      "web_app_rendertoday",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_openeditor"
-    ],
-    [
-      "web_app",
-      "web_app_openeditor",
-      "web_app_rendermedicineinputs"
-    ],
-    [
+      "web_app_rendertoday",
       "web_app",
       "web_app_renderall"
     ],
     [
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_rendertoday",
       "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
+    ],
+    [
+      "web_app_enqueuedue",
+      "web_app_shownextduemodal",
+      "web_app",
+      "web_app_checkduemodals"
+    ],
+    [
+      "web_app_enqueuedue",
+      "web_app_shownextduemodal",
+      "web_app"
+    ],
+    [
       "web_app_renderall",
-      "web_app_renderschedules"
+      "web_app"
     ],
     [
-      "web_app",
       "web_app_renderall",
-      "web_app_rendertoday"
-    ],
-    [
-      "web_app",
-      "web_app_rendermedicineinputs"
-    ],
-    [
-      "web_app",
-      "web_app_renderpairingqr"
-    ],
-    [
-      "web_app",
-      "web_app_renderschedules"
-    ],
-    [
-      "web_app",
-      "web_app_rendertoday"
-    ],
-    [
       "web_app",
       "web_app_saveeditor"
     ],
     [
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app",
-      "web_app_saveeditor",
       "web_app_renderall",
-      "web_app_renderschedules"
+      "web_app_renderschedules",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_saveeditor",
       "web_app_renderall",
-      "web_app_rendertoday"
+      "web_app_renderschedules",
+      "web_app",
+      "web_app_saveeditor"
     ],
     [
-      "web_app",
-      "web_app_shownextduemodal"
+      "web_app_renderschedules",
+      "web_app"
     ],
     [
+      "web_app_updatenotificationstatus",
       "web_app",
-      "web_app_updatenotificationstatus"
+      "web_app_enablenotifications"
+    ],
+    [
+      "web_app_updatenotificationstatus",
+      "web_app"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app"
+    ],
+    [
+      "web_app_renderpairingqr",
+      "web_app"
+    ],
+    [
+      "web_app_shownextduemodal",
+      "web_app"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app"
     ]
   ],
   "top_files_by_links": [
@@ -680,16 +680,16 @@
       "source_file": "worker/src/index.js"
     },
     {
+      "id": "worker_src_auth",
+      "name": "auth.js",
+      "degree": 24,
+      "source_file": "worker/src/auth.js"
+    },
+    {
       "id": "sync_client",
       "name": "sync_client.py",
       "degree": 23,
       "source_file": "sync_client.py"
-    },
-    {
-      "id": "worker_src_auth",
-      "name": "auth.js",
-      "degree": 23,
-      "source_file": "worker/src/auth.js"
     },
     {
       "id": "tests_test_worker_sync",
