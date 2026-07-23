@@ -1,20 +1,20 @@
 {
   "god_nodes": [
     {
+      "id": "web_app",
+      "name": "app.js",
+      "kind": "file",
+      "degree": 57,
+      "in_degree": 16,
+      "out_degree": 41
+    },
+    {
       "id": "medication_reminder",
       "name": "medication_reminder.py",
       "kind": "file",
       "degree": 52,
       "in_degree": 0,
       "out_degree": 52
-    },
-    {
-      "id": "web_app",
-      "name": "app.js",
-      "kind": "file",
-      "degree": 52,
-      "in_degree": 16,
-      "out_degree": 36
     },
     {
       "id": "medication_core",
@@ -28,9 +28,9 @@
       "id": "web_qrcode",
       "name": "qrcode.js",
       "kind": "file",
-      "degree": 45,
+      "degree": 47,
       "in_degree": 0,
-      "out_degree": 45
+      "out_degree": 47
     },
     {
       "id": "medication_reminder_medicationreminderapp",
@@ -105,6 +105,14 @@
       "out_degree": 0
     },
     {
+      "id": "tests_test_web_access_harness",
+      "name": "harness",
+      "kind": "function",
+      "degree": 33,
+      "in_degree": 16,
+      "out_degree": 17
+    },
+    {
       "id": "tests_test_worker_sync_workerfixture",
       "name": "workerFixture",
       "kind": "function",
@@ -151,14 +159,6 @@
       "degree": 23,
       "in_degree": 3,
       "out_degree": 20
-    },
-    {
-      "id": "tests_test_worker_sync_createpair",
-      "name": "createPair",
-      "kind": "function",
-      "degree": 23,
-      "in_degree": 19,
-      "out_degree": 4
     }
   ],
   "orphans": [
@@ -218,6 +218,16 @@
       "kind": "file"
     },
     {
+      "id": "tests_test_web_access_assert_throws_l270_c5",
+      "name": "assert.throws",
+      "kind": "function"
+    },
+    {
+      "id": "tests_test_web_access_assert_throws_l317_c5",
+      "name": "assert.throws",
+      "kind": "function"
+    },
+    {
       "id": "tests_test_web_sync_encode_l268_c18",
       "name": "encode",
       "kind": "function"
@@ -251,16 +261,6 @@
       "id": "tests_test_worker_auth_test_conflicting_valid_cookie_and_bearer_credentials_fail_closed_l239_c69",
       "name": "test conflicting valid cookie and bearer credentials fail closed",
       "kind": "function"
-    },
-    {
-      "id": "tests_test_worker_auth_test_csrf_validation_allows_safe_methods_without_headers_l278_c61",
-      "name": "test CSRF validation allows safe methods without headers",
-      "kind": "function"
-    },
-    {
-      "id": "tests_test_worker_auth_test_csrf_validation_requires_the_exact_app_origin_and_marker_for_mutations_l285_c80",
-      "name": "test CSRF validation requires the exact app origin and marker for mutations",
-      "kind": "function"
     }
   ],
   "entry_points": [
@@ -274,9 +274,9 @@
     {
       "id": "web_qrcode",
       "name": "qrcode.js",
-      "out_degree": 45,
+      "out_degree": 47,
       "in_degree": 0,
-      "ratio": 45.0
+      "ratio": 47.0
     },
     {
       "id": "worker_src_index",
@@ -295,6 +295,13 @@
     {
       "id": "tests_test_worker_sync",
       "name": "test_worker_sync.mjs",
+      "out_degree": 20,
+      "in_degree": 0,
+      "ratio": 20.0
+    },
+    {
+      "id": "web_access",
+      "name": "access.js",
       "out_degree": 20,
       "in_degree": 0,
       "ratio": 20.0
@@ -356,6 +363,13 @@
       "ratio": 8.0
     },
     {
+      "id": "tests_test_web_access",
+      "name": "test_web_access.mjs",
+      "out_degree": 8,
+      "in_degree": 0,
+      "ratio": 8.0
+    },
+    {
       "id": "tests_test_worker_auth",
       "name": "test_worker_auth.mjs",
       "out_degree": 8,
@@ -389,20 +403,6 @@
       "out_degree": 3,
       "in_degree": 0,
       "ratio": 3.0
-    },
-    {
-      "id": "web_app",
-      "name": "app.js",
-      "out_degree": 36,
-      "in_degree": 16,
-      "ratio": 2.25
-    },
-    {
-      "id": "web_due_modal",
-      "name": "due-modal.js",
-      "out_degree": 2,
-      "in_degree": 0,
-      "ratio": 2.0
     }
   ],
   "surprising_connections": [
@@ -558,52 +558,43 @@
       "web_app"
     ],
     [
-      "web_app_renderall",
+      "web_app_addmedicineinput",
       "web_app"
     ],
     [
-      "web_app_renderall",
+      "web_app_rendertoday",
       "web_app",
-      "web_app_saveeditor"
+      "web_app_markoccurrencetaken"
     ],
     [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
+      "web_app_rendertoday",
       "web_app",
-      "web_app_saveeditor"
+      "web_app_renderall"
     ],
     [
-      "web_app_renderall",
       "web_app_rendertoday",
       "web_app"
     ],
     [
-      "web_app_renderall",
       "web_app_rendertoday",
       "web_app",
-      "web_app_saveeditor"
+      "web_app_saveeditor",
+      "web_app_renderall"
     ],
     [
-      "web_app_rendermedicineinputs",
+      "web_app_renderschedules",
       "web_app",
-      "web_app_openeditor"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app"
+      "web_app_renderall"
     ],
     [
       "web_app_renderschedules",
       "web_app"
     ],
     [
+      "web_app_renderschedules",
       "web_app",
-      "web_app_addmedicineinput"
+      "web_app_saveeditor",
+      "web_app_renderall"
     ],
     [
       "web_app",
@@ -618,12 +609,20 @@
     ],
     [
       "web_app",
-      "web_app_markoccurrencetaken",
-      "web_app_rendertoday"
+      "web_app_openeditor"
     ],
     [
       "web_app",
-      "web_app_openeditor"
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs"
+    ],
+    [
+      "web_app",
+      "web_app_renderall"
+    ],
+    [
+      "web_app",
+      "web_app_rendermedicineinputs"
     ],
     [
       "web_app",
@@ -631,11 +630,12 @@
     ],
     [
       "web_app",
-      "web_app_rendertoday"
+      "web_app_saveeditor"
     ],
     [
       "web_app",
-      "web_app_saveeditor"
+      "web_app_saveeditor",
+      "web_app_renderall"
     ],
     [
       "web_app",
@@ -644,16 +644,16 @@
   ],
   "top_files_by_links": [
     {
+      "id": "web_app",
+      "name": "app.js",
+      "degree": 57,
+      "source_file": "web/app.js"
+    },
+    {
       "id": "medication_reminder",
       "name": "medication_reminder.py",
       "degree": 52,
       "source_file": "medication_reminder.py"
-    },
-    {
-      "id": "web_app",
-      "name": "app.js",
-      "degree": 52,
-      "source_file": "web/app.js"
     },
     {
       "id": "medication_core",
@@ -664,7 +664,7 @@
     {
       "id": "web_qrcode",
       "name": "qrcode.js",
-      "degree": 45,
+      "degree": 47,
       "source_file": "web/qrcode.js"
     },
     {
@@ -696,6 +696,12 @@
       "name": "test_worker_sync.mjs",
       "degree": 20,
       "source_file": "tests/test_worker_sync.mjs"
+    },
+    {
+      "id": "web_access",
+      "name": "access.js",
+      "degree": 20,
+      "source_file": "web/access.js"
     },
     {
       "id": "tests_e2e_sync",
@@ -734,6 +740,12 @@
       "source_file": "tests/test_due_modal.mjs"
     },
     {
+      "id": "tests_test_web_access",
+      "name": "test_web_access.mjs",
+      "degree": 8,
+      "source_file": "tests/test_web_access.mjs"
+    },
+    {
       "id": "tests_test_worker_auth",
       "name": "test_worker_auth.mjs",
       "degree": 8,
@@ -750,18 +762,6 @@
       "name": "test_web_account.mjs",
       "degree": 4,
       "source_file": "tests/test_web_account.mjs"
-    },
-    {
-      "id": "web_update",
-      "name": "update.js",
-      "degree": 3,
-      "source_file": "web/update.js"
-    },
-    {
-      "id": "web_due_modal",
-      "name": "due-modal.js",
-      "degree": 2,
-      "source_file": "web/due-modal.js"
     }
   ]
 }

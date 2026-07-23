@@ -1,6 +1,6 @@
 {
   "root": "account-boundary",
-  "file_count": 43,
+  "file_count": 45,
   "engine": {
     "cache_version": "v6",
     "schema_version": "1",
@@ -117,6 +117,12 @@
       "hash": "0a22e3095411e9cc778122f5d485b8cc38c1d7f29395b4840f221de14a958e39"
     },
     {
+      "rel_path": "tests/test_web_access.mjs",
+      "language": "javascript",
+      "size": 13589,
+      "hash": "a9c5c5d3ca36596bd3d794af33f93e1488d4bf265133319b930f6bab7b4355d3"
+    },
+    {
       "rel_path": "tests/test_web_account.mjs",
       "language": "javascript",
       "size": 1133,
@@ -153,6 +159,12 @@
       "hash": "66dbfa8578b9e68a075c803dda673715a09a53570ab70caf835e4a50c5734796"
     },
     {
+      "rel_path": "web/access.js",
+      "language": "javascript",
+      "size": 6526,
+      "hash": "5318dbe4ec144de9dd3c10042b484a38ed56a479b6b80a74ee014cab574c0cf0"
+    },
+    {
       "rel_path": "web/account.js",
       "language": "javascript",
       "size": 6687,
@@ -173,8 +185,8 @@
     {
       "rel_path": "web/index.html",
       "language": "html",
-      "size": 7505,
-      "hash": "dfc825accee06de30a2c126223de61973051d11ab1470741ae6ff6f749dd850c"
+      "size": 8480,
+      "hash": "de9e4ecef00dfadf98645ab881149aa3f9322b49aecf425acb4c87a8d04efce5"
     },
     {
       "rel_path": "web/manifest.webmanifest",
@@ -191,8 +203,8 @@
     {
       "rel_path": "web/styles.css",
       "language": "css",
-      "size": 7155,
-      "hash": "160a184a0b80d121794b542b7d55678568a6b2c37b1d6917afc7867d6db806c2"
+      "size": 8077,
+      "hash": "61a3a9fb2ff143d7c87872459940547ac39f0a9169657462a7441b6f7b5864e5"
     },
     {
       "rel_path": "web/sw.js",
