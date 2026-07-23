@@ -228,6 +228,21 @@
       "kind": "function"
     },
     {
+      "id": "tests_test_worker_sync_definitions_filter_l159_c26",
+      "name": "definitions.filter",
+      "kind": "function"
+    },
+    {
+      "id": "tests_test_worker_sync_definitions_map_l155_c39",
+      "name": "definitions.map",
+      "kind": "function"
+    },
+    {
+      "id": "tests_test_worker_sync_statements_filter_l133_c39",
+      "name": "statements.filter",
+      "kind": "function"
+    },
+    {
       "id": "web_app_emptyschedule_l2_c398",
       "name": "emptySchedule",
       "kind": "function"
@@ -245,21 +260,6 @@
     {
       "id": "web_app_installbutton_onclick_l13_c1299",
       "name": "$('#installButton').onclick",
-      "kind": "function"
-    },
-    {
-      "id": "web_app_localdatekey_l5_c20",
-      "name": "localDateKey",
-      "kind": "function"
-    },
-    {
-      "id": "web_app_map_l10_c480",
-      "name": "map",
-      "kind": "function"
-    },
-    {
-      "id": "web_app_readstoredjson_l2_c165",
-      "name": "readStoredJson",
       "kind": "function"
     }
   ],
@@ -316,6 +316,13 @@
     {
       "id": "tests_test_medication_core",
       "name": "test_medication_core.py",
+      "out_degree": 11,
+      "in_degree": 0,
+      "ratio": 11.0
+    },
+    {
+      "id": "tests_test_worker_sync",
+      "name": "test_worker_sync.mjs",
       "out_degree": 11,
       "in_degree": 0,
       "ratio": 11.0
@@ -542,15 +549,6 @@
   ],
   "cycles": [
     [
-      "web_app_addmedicineinput",
-      "web_app"
-    ],
-    [
-      "web_app_markoccurrencetaken",
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
       "web_app_renderschedules",
       "web_app",
       "web_app_renderall"
@@ -566,19 +564,9 @@
       "web_app_renderall"
     ],
     [
-      "web_app_saveeditor",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
       "web_app_rendertoday",
-      "web_app"
+      "web_app",
+      "web_app_markoccurrencetaken"
     ],
     [
       "web_app_rendertoday",
@@ -587,6 +575,27 @@
     ],
     [
       "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
+    ],
+    [
+      "web_app_shownextduemodal",
+      "web_app",
+      "web_app_checkduemodals",
+      "web_app_enqueuedue"
+    ],
+    [
+      "web_app_shownextduemodal",
+      "web_app",
+      "web_app_enqueuedue"
+    ],
+    [
+      "web_app_shownextduemodal",
       "web_app"
     ],
     [
@@ -599,40 +608,38 @@
       "web_app"
     ],
     [
-      "web_app",
-      "web_app_checkduemodals",
-      "web_app_enqueuedue",
-      "web_app_shownextduemodal"
+      "web_app_renderall",
+      "web_app"
     ],
     [
+      "web_app_renderall",
       "web_app",
+      "web_app_saveeditor"
+    ],
+    [
       "web_app_enablenotifications",
-      "web_app_updatenotificationstatus"
+      "web_app_updatenotificationstatus",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_enqueuedue",
-      "web_app_shownextduemodal"
+      "web_app_renderpairingqr",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_renderall"
+      "web_app_updatenotificationstatus",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_rendermedicineinputs"
+      "web_app_rendermedicineinputs",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_renderpairingqr"
+      "web_app_saveeditor",
+      "web_app"
     ],
     [
-      "web_app",
-      "web_app_shownextduemodal"
-    ],
-    [
-      "web_app",
-      "web_app_updatenotificationstatus"
+      "web_app_addmedicineinput",
+      "web_app"
     ]
   ],
   "top_files_by_links": [
@@ -703,6 +710,12 @@
       "source_file": "tests/test_medication_core.py"
     },
     {
+      "id": "tests_test_worker_sync",
+      "name": "test_worker_sync.mjs",
+      "degree": 11,
+      "source_file": "tests/test_worker_sync.mjs"
+    },
+    {
       "id": "tests_test_pairing",
       "name": "test_pairing.py",
       "degree": 10,
@@ -749,12 +762,6 @@
       "name": "due-modal.js",
       "degree": 2,
       "source_file": "web/due-modal.js"
-    },
-    {
-      "id": "agents",
-      "name": "AGENTS.md",
-      "degree": 0,
-      "source_file": "AGENTS.md"
     }
   ]
 }
