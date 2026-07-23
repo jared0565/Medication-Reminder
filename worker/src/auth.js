@@ -162,6 +162,10 @@ function accountView(user, entitlements) {
   };
 }
 
+export function hasCloudSync(account) {
+  return Boolean(account?.entitlements?.has('advanced'));
+}
+
 export async function authenticateSession(
   request,
   env,
@@ -191,7 +195,7 @@ function validOptionalDate(value) {
   return value;
 }
 
-async function audit(env, userId, eventType, metadata = {}) {
+export async function recordAudit(env, userId, eventType, metadata = {}) {
   await env.DB.prepare('INSERT INTO account_audit_events (event_id, user_id, event_type, metadata_json) VALUES (?, ?, ?, ?)')
     .bind(crypto.randomUUID(), userId || null, eventType, JSON.stringify(metadata).slice(0, 4000)).run();
 }
@@ -250,7 +254,7 @@ export async function handleAuthRequest(request, env, url, helpers) {
     const user = await env.DB.prepare(`SELECT user_id, email_normalized, display_name, picture_url,
       intended_start_date, intended_end_date FROM app_users WHERE user_id = ?`).bind(userId).first();
     const entitlements = await activeEntitlements(env, userId);
-    await audit(env, userId, 'google_sign_in');
+    await recordAudit(env, userId, 'google_sign_in');
     // Temporary v1 compatibility. index.js assigns v1 only to original,
     // unprefixed workers.dev auth routes; /api requests can never enter here.
     if (apiVersion === 1) {
@@ -290,7 +294,7 @@ export async function handleAuthRequest(request, env, url, helpers) {
         });
       }
       try {
-        await audit(env, account.user.user_id, 'signed_out');
+        await recordAudit(env, account.user.user_id, 'signed_out');
       } catch {
         console.warn('session_sign_out_audit_failed');
       }
@@ -315,7 +319,7 @@ export async function handleAuthRequest(request, env, url, helpers) {
     }
     await env.DB.prepare(`UPDATE app_users SET intended_start_date = ?, intended_end_date = ?,
       updated_at = CURRENT_TIMESTAMP WHERE user_id = ?`).bind(startDate, endDate, account.user.user_id).run();
-    await audit(env, account.user.user_id, 'usage_period_updated', { startDate, endDate });
+    await recordAudit(env, account.user.user_id, 'usage_period_updated', { startDate, endDate });
     const user = { ...account.user, intended_start_date: startDate, intended_end_date: endDate };
     return json(request, accountView(user, account.entitlements));
   }

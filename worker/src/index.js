@@ -1,16 +1,20 @@
 import webpush from 'web-push';
 import {
   authenticateSession,
+  hasCloudSync,
   handleAuthRequest,
   parseSessionCredential,
+  recordAudit,
   validCsrfRequest,
 } from './auth.js';
 
 const MAX_SYNC_BODY_BYTES = 96 * 1024;
 const ID_PATTERN = /^[A-Za-z0-9_-]{16,128}$/;
+const MOBILE_TOKEN_PATTERN = /^[A-Za-z0-9_-]{43}$/;
 const ALLOWED_ORIGINS = new Set(['https://medication.bytesfx.com', 'https://medication-reminder-8h3.pages.dev']);
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_REQUESTS = 120;
+const MOBILE_CREDENTIAL_DOMAIN = 'medication-reminder/mobile-credential/v1';
 const CSRF_PROTECTED_AUTH_ROUTES = new Set([
   'POST /auth/google',
   'PATCH /auth/me',
@@ -45,8 +49,101 @@ async function tokenHash(token) {
   return [...new Uint8Array(digest)].map(value => value.toString(16).padStart(2, '0')).join('');
 }
 
-function validEncryptedBody(body) {
-  return typeof body?.ciphertext === 'string' && body.ciphertext.length >= 16 && body.ciphertext.length <= 80_000 && typeof body?.iv === 'string' && body.iv.length >= 12 && body.iv.length <= 64 && typeof body?.updatedBy === 'string' && ID_PATTERN.test(body.updatedBy);
+function randomId(byteLength = 24) {
+  const bytes = crypto.getRandomValues(new Uint8Array(byteLength));
+  return encodeBase64Url(bytes);
+}
+
+function encodeBase64Url(bytes) {
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function decodeBase64Url(value) {
+  const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
+  return Uint8Array.from(
+    atob(normalized + '='.repeat((4 - normalized.length % 4) % 4)),
+    character => character.charCodeAt(0),
+  );
+}
+
+function cloudCapabilitySql(userIdExpression) {
+  return `EXISTS (
+    SELECT 1
+    FROM app_users capability_user
+    JOIN user_entitlements capability_entitlement
+      ON capability_entitlement.user_id = capability_user.user_id
+    WHERE capability_user.user_id = ${userIdExpression}
+      AND capability_user.status = 'active'
+      AND capability_entitlement.feature_key = 'advanced'
+      AND capability_entitlement.state = 'active'
+      AND capability_entitlement.valid_from <= CURRENT_TIMESTAMP
+      AND (capability_entitlement.valid_until IS NULL
+        OR capability_entitlement.valid_until > CURRENT_TIMESTAMP)
+  )`;
+}
+
+const PAIR_CLOUD_CAPABILITY_SQL = cloudCapabilitySql('sync_pairs.user_id');
+
+export async function deriveMobileToken(env, value) {
+  const secret = env.MOBILE_CREDENTIAL_SECRET;
+  if (!MOBILE_TOKEN_PATTERN.test(secret || '')) throw new Error('mobile_credential_unavailable');
+  let secretBytes;
+  try {
+    secretBytes = decodeBase64Url(secret);
+  } catch {
+    throw new Error('mobile_credential_unavailable');
+  }
+  if (secretBytes.length !== 32) throw new Error('mobile_credential_unavailable');
+  const key = await crypto.subtle.importKey(
+    'raw',
+    secretBytes,
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+  const message = [
+    MOBILE_CREDENTIAL_DOMAIN,
+    value.pairId,
+    value.invitationTokenHash,
+    value.mobileDeviceId,
+    value.claimNonce,
+  ].join('\0');
+  const signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(message),
+  );
+  return encodeBase64Url(new Uint8Array(signature));
+}
+
+function invitationExpiry(now = Date.now()) {
+  const invitationExpiresAt = new Date(now + 15 * 60_000).toISOString();
+  return {
+    invitationExpiresAt,
+    storedInvitationExpiresAt: invitationExpiresAt.replace('T', ' ').replace(/\.\d{3}Z$/, ''),
+  };
+}
+
+function bearerToken(request) {
+  const match = (request.headers.get('Authorization') || '').match(/^Bearer ([A-Za-z0-9_-]{32,256})$/);
+  return match?.[1] || '';
+}
+
+function validEncryptedPayload(body) {
+  return typeof body?.ciphertext === 'string'
+    && body.ciphertext.length >= 16
+    && body.ciphertext.length <= 80_000
+    && typeof body?.iv === 'string'
+    && body.iv.length >= 12
+    && body.iv.length <= 64;
+}
+
+function validLegacyEncryptedBody(body) {
+  return validEncryptedPayload(body)
+    && typeof body?.updatedBy === 'string'
+    && ID_PATTERN.test(body.updatedBy);
 }
 
 function validPushEndpoint(value) {
@@ -60,11 +157,138 @@ function validPushEndpoint(value) {
   }
 }
 
-async function authenticatedPair(request, env, pairId) {
-  const authorization = request.headers.get('Authorization') || '';
-  const token = authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
-  if (!ID_PATTERN.test(pairId) || token.length < 32 || token.length > 256) return null;
-  return env.DB.prepare('SELECT pair_id, source_id, mobile_device_id, mobile_push_endpoint, ciphertext, iv, revision, updated_by, updated_at FROM sync_pairs WHERE pair_id = ? AND token_hash = ?').bind(pairId, await tokenHash(token)).first();
+export async function loadAccountPair(env, pairId, userId) {
+  return env.DB.prepare(`SELECT pair_id, source_id, user_id, invitation_token_hash,
+      invitation_expires_at, invitation_consumed_at, mobile_device_id,
+      mobile_push_endpoint, ciphertext, iv, revision, updated_by, updated_at,
+      ${PAIR_CLOUD_CAPABILITY_SQL} AS cloud_sync_active
+    FROM sync_pairs
+    WHERE pair_id = ? AND user_id = ?`).bind(pairId, userId).first();
+}
+
+export async function loadMobilePair(env, pairId, deviceId, mobileTokenHash) {
+  return env.DB.prepare(`SELECT pair_id, source_id, user_id, mobile_device_id,
+      mobile_push_endpoint, ciphertext, iv, revision, updated_by, updated_at,
+      ${PAIR_CLOUD_CAPABILITY_SQL} AS cloud_sync_active
+    FROM sync_pairs
+    WHERE pair_id = ? AND mobile_device_id = ? AND mobile_token_hash = ?`)
+    .bind(pairId, deviceId, mobileTokenHash).first();
+}
+
+export async function loadLegacyPair(env, pairId, legacyTokenHash) {
+  return env.DB.prepare(`SELECT pair_id, source_id, mobile_device_id,
+      mobile_push_endpoint, ciphertext, iv, revision, updated_by, updated_at
+    FROM sync_pairs
+    WHERE pair_id = ? AND user_id IS NULL AND token_hash = ?`)
+    .bind(pairId, legacyTokenHash).first();
+}
+
+export async function consumeInvitation(env, value) {
+  return env.DB.prepare(`UPDATE sync_pairs SET
+      mobile_token_hash = ?, mobile_device_id = ?,
+      mobile_push_endpoint = COALESCE(?, mobile_push_endpoint),
+      mobile_claimed_at = CURRENT_TIMESTAMP,
+      invitation_consumed_at = CURRENT_TIMESTAMP
+    WHERE pair_id = ? AND invitation_token_hash = ?
+      AND invitation_consumed_at IS NULL
+      AND invitation_expires_at > CURRENT_TIMESTAMP
+      AND mobile_device_id IS NULL
+      AND ${PAIR_CLOUD_CAPABILITY_SQL}
+    RETURNING pair_id, source_id, user_id, mobile_device_id, mobile_push_endpoint,
+      ciphertext, iv, revision, updated_by, updated_at`)
+    .bind(
+      value.mobileTokenHash,
+      value.mobileDeviceId,
+      value.pushEndpoint || null,
+      value.pairId,
+      value.invitationTokenHash,
+    )
+    .first();
+}
+
+export async function claimLegacyPair(env, value) {
+  return env.DB.prepare(`UPDATE sync_pairs SET
+      mobile_device_id = ?,
+      mobile_push_endpoint = COALESCE(?, mobile_push_endpoint),
+      updated_at = CURRENT_TIMESTAMP
+    WHERE pair_id = ? AND user_id IS NULL AND token_hash = ?
+      AND (mobile_device_id IS NULL OR mobile_device_id = ?)
+    RETURNING pair_id, source_id, mobile_device_id, mobile_push_endpoint,
+      ciphertext, iv, revision, updated_by, updated_at`)
+    .bind(
+      value.mobileDeviceId,
+      value.pushEndpoint || null,
+      value.pairId,
+      value.legacyTokenHash,
+      value.mobileDeviceId,
+    )
+    .first();
+}
+
+async function loadInvitationState(env, pairId, invitationTokenHash) {
+  return env.DB.prepare(`SELECT pair_id, source_id, user_id, invitation_consumed_at,
+      invitation_expires_at, mobile_token_hash, mobile_device_id,
+      mobile_push_endpoint, ciphertext, iv, revision, updated_by, updated_at,
+      invitation_expires_at > CURRENT_TIMESTAMP AS invitation_active,
+      ${PAIR_CLOUD_CAPABILITY_SQL} AS cloud_sync_active
+    FROM sync_pairs
+    WHERE pair_id = ? AND user_id IS NOT NULL AND invitation_token_hash = ?`)
+    .bind(pairId, invitationTokenHash).first();
+}
+
+function claimedPairResponse(pair, mobileToken) {
+  return {
+    pairId: pair.pair_id,
+    mobileToken,
+    ciphertext: pair.ciphertext,
+    iv: pair.iv,
+    revision: pair.revision,
+    updatedBy: pair.updated_by,
+    updatedAt: pair.updated_at,
+  };
+}
+
+async function cookieAccount(request, env, includeEntitlements = true) {
+  const credential = parseSessionCredential(request);
+  if (credential?.kind !== 'cookie') return null;
+  return authenticateSession(request, env, { touch: false, includeEntitlements });
+}
+
+async function accountPair(request, env, pairId) {
+  const account = await cookieAccount(request, env);
+  if (!account) return { account, pair: null };
+  return { account, pair: await loadAccountPair(env, pairId, account.user.user_id) };
+}
+
+async function activeCloudSyncForUser(env, userId) {
+  const row = await env.DB.prepare(
+    `SELECT ${cloudCapabilitySql('?')} AS active`,
+  ).bind(userId).first();
+  return Boolean(Number(row?.active));
+}
+
+async function mobilePair(request, env, pairId) {
+  const token = bearerToken(request);
+  const deviceId = request.headers.get('X-Medication-Device') || '';
+  if (!ID_PATTERN.test(pairId) || !ID_PATTERN.test(deviceId) || token.length < 40) return null;
+  return loadMobilePair(env, pairId, deviceId, await tokenHash(token));
+}
+
+async function safeRecordPairAudit(env, userId, eventType, metadata) {
+  try {
+    await recordAudit(env, userId, eventType, metadata);
+  } catch {
+    console.error('sync_pair_audit_failed', { eventType, pairId: metadata.pairId });
+  }
+}
+
+function pairAuditMetadata(pairId, deviceId, revision, result) {
+  return {
+    pairId,
+    deviceId: deviceId || null,
+    revision: Number(revision || 0),
+    result,
+  };
 }
 
 async function enforceRateLimit(request, env, namespace = 'sync', limit = RATE_LIMIT_REQUESTS) {
@@ -97,50 +321,327 @@ async function notifyPairedMobile(env, endpoint, notification = {}) {
   }
 }
 
+const PAIR_AUTHORIZATION_FAILURE = { error: 'Pairing not found or credentials invalid' };
+
 async function handleSync(request, env, url, ctx) {
   if (request.method === 'OPTIONS') {
     const origin = request.headers.get('Origin');
     if (!origin || !ALLOWED_ORIGINS.has(origin)) return new Response(null, { status: 403 });
-    return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Access-Control-Max-Age': '86400' } });
+    return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Medication-CSRF, X-Medication-Device', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Access-Control-Max-Age': '86400' } });
   }
   const origin = request.headers.get('Origin');
   if (origin && !ALLOWED_ORIGINS.has(origin)) return json(request, { error: 'Origin not allowed' }, { status: 403 });
   if (!(await enforceRateLimit(request, env))) return json(request, { error: 'Too many sync requests. Try again shortly.' }, { status: 429, headers: { 'Retry-After': '60' } });
+
   if (request.method === 'POST' && url.pathname === '/sync/pairs') {
+    const account = await cookieAccount(request, env);
+    if (!account) return json(request, { error: 'Sign-in required.' }, { status: 401 });
+    if (!validCsrfRequest(request)) {
+      return json(request, { error: 'Invalid browser request' }, { status: 403 });
+    }
+    if (!hasCloudSync(account)) return json(request, { error: 'Cloud synchronization is not enabled for this account.' }, { status: 403 });
     const body = await readJson(request);
-    if (!ID_PATTERN.test(body?.pairId || '') || !ID_PATTERN.test(body?.sourceId || '') || typeof body?.token !== 'string' || body.token.length < 32 || body.token.length > 256 || !validEncryptedBody(body)) return json(request, { error: 'Invalid pairing request' }, { status: 400 });
-    const account = await authenticateSession(request, env, { touch: false });
-    if (request.headers.has('Authorization') && !account) return json(request, { error: 'Your account session has expired. Sign in again.' }, { status: 401 });
-    const hash = await tokenHash(body.token);
+    if (!ID_PATTERN.test(body?.sourceId || '') || !validEncryptedPayload(body)) {
+      return json(request, { error: 'Invalid pairing request' }, { status: 400 });
+    }
+    const pairId = randomId();
+    const invitationToken = randomId(32);
+    const { invitationExpiresAt, storedInvitationExpiresAt } = invitationExpiry();
+    const invitationTokenHash = await tokenHash(invitationToken);
     await env.DB.batch([
-      env.DB.prepare('DELETE FROM sync_pairs WHERE source_id = ?').bind(body.sourceId),
-      env.DB.prepare('INSERT INTO sync_pairs (pair_id, source_id, user_id, token_hash, ciphertext, iv, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(body.pairId, body.sourceId, account?.user.user_id || null, hash, body.ciphertext, body.iv, body.updatedBy),
+      env.DB.prepare('DELETE FROM sync_pairs WHERE source_id = ? AND user_id = ?')
+        .bind(body.sourceId, account.user.user_id),
+      env.DB.prepare(`INSERT INTO sync_pairs
+        (pair_id, source_id, user_id, token_hash, invitation_token_hash, invitation_expires_at,
+          ciphertext, iv, updated_by)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+        .bind(
+          pairId,
+          body.sourceId,
+          account.user.user_id,
+          invitationTokenHash,
+          invitationTokenHash,
+          storedInvitationExpiresAt,
+          body.ciphertext,
+          body.iv,
+          body.sourceId,
+        ),
     ]);
-    return json(request, { ok: true, pairId: body.pairId, revision: 1 }, { status: 201 });
+    await safeRecordPairAudit(
+      env,
+      account.user.user_id,
+      'sync_pair_created',
+      pairAuditMetadata(pairId, body.sourceId, 1, 'created'),
+    );
+    return json(request, { pairId, invitationToken, invitationExpiresAt, revision: 1 }, { status: 201 });
   }
-  const match = url.pathname.match(/^\/sync\/pairs\/([A-Za-z0-9_-]{16,128})(?:\/(claim))?$/);
+
+  const match = url.pathname.match(/^\/sync\/pairs\/([A-Za-z0-9_-]{16,128})(?:\/(claim|invitations))?$/);
   if (!match) return null;
-  const pair = await authenticatedPair(request, env, match[1]);
-  if (!pair) return json(request, { error: 'Pairing not found or credentials invalid' }, { status: 404 });
+
+  const pairId = match[1];
   if (request.method === 'POST' && match[2] === 'claim') {
+    if (await cookieAccount(request, env, false)) {
+      return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+    }
     const body = await readJson(request);
     if (!ID_PATTERN.test(body?.mobileDeviceId || '')) return json(request, { error: 'Invalid mobile device identifier' }, { status: 400 });
-    if (body.pushEndpoint != null && (typeof body.pushEndpoint !== 'string' || body.pushEndpoint.length > 4096 || !body.pushEndpoint.startsWith('https://'))) return json(request, { error: 'Invalid push endpoint' }, { status: 400 });
-    if (pair.mobile_device_id && pair.mobile_device_id !== body.mobileDeviceId) return json(request, { error: 'This pairing is already claimed by another mobile device' }, { status: 409 });
-    await env.DB.prepare('UPDATE sync_pairs SET mobile_device_id = ?, mobile_push_endpoint = COALESCE(?, mobile_push_endpoint), updated_at = CURRENT_TIMESTAMP WHERE pair_id = ?').bind(body.mobileDeviceId, body.pushEndpoint || null, pair.pair_id).run();
-    return json(request, { ok: true, revision: pair.revision });
+    if (body.pushEndpoint != null && !validPushEndpoint(body.pushEndpoint)) {
+      return json(request, { error: 'Invalid push endpoint' }, { status: 400 });
+    }
+    if (body.claimNonce != null && !MOBILE_TOKEN_PATTERN.test(body.claimNonce)) {
+      return json(request, { error: 'Invalid claim nonce' }, { status: 400 });
+    }
+    const invitationToken = bearerToken(request);
+    if (!invitationToken) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+    const invitationTokenHash = await tokenHash(invitationToken);
+
+    const legacyPair = await claimLegacyPair(env, {
+      pairId,
+      legacyTokenHash: invitationTokenHash,
+      mobileDeviceId: body.mobileDeviceId,
+      pushEndpoint: body.pushEndpoint || null,
+    });
+    if (legacyPair) {
+      return json(request, { ok: true, revision: legacyPair.revision });
+    }
+    if (await loadLegacyPair(env, pairId, invitationTokenHash)) {
+      return json(request, { error: 'This pairing is already claimed by another mobile device' }, { status: 409 });
+    }
+
+    const claimNonce = body?.claimNonce;
+    if (!MOBILE_TOKEN_PATTERN.test(claimNonce || '')) {
+      return json(request, { error: 'Invalid claim nonce' }, { status: 400 });
+    }
+    const mobileToken = await deriveMobileToken(env, {
+      pairId,
+      invitationTokenHash,
+      mobileDeviceId: body.mobileDeviceId,
+      claimNonce,
+    });
+    const mobileTokenHash = await tokenHash(mobileToken);
+    const claimedPair = await consumeInvitation(env, {
+      pairId,
+      invitationTokenHash,
+      mobileTokenHash,
+      mobileDeviceId: body.mobileDeviceId,
+      pushEndpoint: body.pushEndpoint || null,
+    });
+    if (!claimedPair) {
+      const state = await loadInvitationState(env, pairId, invitationTokenHash);
+      if (!state) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+      const exactRetry = state.invitation_consumed_at
+        && state.mobile_device_id === body.mobileDeviceId
+        && state.mobile_token_hash === mobileTokenHash;
+      if (exactRetry) {
+        if (!Number(state.cloud_sync_active)) {
+          return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+        }
+        return json(request, claimedPairResponse(state, mobileToken));
+      }
+      if (state.invitation_consumed_at) {
+        return json(request, { error: 'Pairing invitation already used' }, { status: 410 });
+      }
+      if (Number(state.invitation_active) && !Number(state.cloud_sync_active)) {
+        return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+      }
+      return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+    }
+    await safeRecordPairAudit(
+      env,
+      claimedPair.user_id,
+      'sync_pair_claimed',
+      pairAuditMetadata(pairId, body.mobileDeviceId, claimedPair.revision, 'claimed'),
+    );
+    return json(request, claimedPairResponse(claimedPair, mobileToken));
   }
-  if (request.method === 'GET' && !match[2]) return json(request, { pairId: pair.pair_id, ciphertext: pair.ciphertext, iv: pair.iv, revision: pair.revision, updatedBy: pair.updated_by, updatedAt: pair.updated_at, claimed: Boolean(pair.mobile_device_id) });
-  if (request.method === 'PUT' && !match[2]) {
+
+  if (request.method === 'POST' && match[2] === 'invitations') {
+    const { account, pair } = await accountPair(request, env, pairId);
+    if (!pair) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+    if (account.credentialKind === 'cookie' && !validCsrfRequest(request)) {
+      return json(request, { error: 'Invalid browser request' }, { status: 403 });
+    }
+    if (!Number(pair.cloud_sync_active)) {
+      return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+    }
+    if (pair.mobile_device_id) return json(request, { error: 'This pairing already has a mobile device.' }, { status: 409 });
     const body = await readJson(request);
-    if (!Number.isInteger(body?.baseRevision) || body.baseRevision < 1 || !validEncryptedBody(body)) return json(request, { error: 'Invalid sync update' }, { status: 400 });
-    const result = await env.DB.prepare('UPDATE sync_pairs SET ciphertext = ?, iv = ?, revision = revision + 1, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE pair_id = ? AND token_hash = ? AND revision = ?').bind(body.ciphertext, body.iv, body.updatedBy, pair.pair_id, await tokenHash((request.headers.get('Authorization') || '').slice(7)), body.baseRevision).run();
-    if (!result.meta.changes) return json(request, { error: 'Schedule changed on another device', currentRevision: pair.revision }, { status: 409 });
-    if (pair.mobile_device_id && body.updatedBy !== pair.mobile_device_id && pair.mobile_push_endpoint) ctx.waitUntil(notifyPairedMobile(env, pair.mobile_push_endpoint));
+    if (!MOBILE_TOKEN_PATTERN.test(body?.previousInvitationToken || '')) {
+      return json(request, { error: 'Current invitation credential required' }, { status: 400 });
+    }
+    const previousInvitationTokenHash = await tokenHash(body.previousInvitationToken);
+    const invitationToken = randomId(32);
+    const { invitationExpiresAt, storedInvitationExpiresAt } = invitationExpiry();
+    const result = await env.DB.prepare(`UPDATE sync_pairs SET invitation_token_hash = ?,
+      invitation_expires_at = ?, invitation_consumed_at = NULL, updated_at = CURRENT_TIMESTAMP
+      WHERE pair_id = ? AND user_id = ? AND invitation_token_hash = ?
+        AND mobile_device_id IS NULL
+        AND ${PAIR_CLOUD_CAPABILITY_SQL}
+      RETURNING pair_id`)
+      .bind(
+        await tokenHash(invitationToken),
+        storedInvitationExpiresAt,
+        pairId,
+        account.user.user_id,
+        previousInvitationTokenHash,
+      ).first();
+    if (!result) {
+      if (!(await activeCloudSyncForUser(env, account.user.user_id))) {
+        return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+      }
+      return json(request, { error: 'Pairing invitation changed. Refresh and try again.' }, { status: 409 });
+    }
+    await safeRecordPairAudit(
+      env,
+      account.user.user_id,
+      'sync_pair_invited',
+      pairAuditMetadata(pairId, null, pair.revision, 'invited'),
+    );
+    return json(request, { pairId, invitationToken, invitationExpiresAt });
+  }
+
+  if (match[2]) return json(request, { error: 'Method not allowed' }, { status: 405 });
+
+  let account = null;
+  let pair = null;
+  let authorizationKind = '';
+  const credential = parseSessionCredential(request);
+  if (credential?.kind === 'cookie') {
+    const accountResult = await accountPair(request, env, pairId);
+    account = accountResult.account;
+    pair = accountResult.pair;
+    if (account) {
+      if (bearerToken(request) || !pair) {
+        return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+      }
+      authorizationKind = 'account';
+    }
+  }
+  if (!pair) {
+    pair = await mobilePair(request, env, pairId);
+    if (pair) authorizationKind = 'mobile';
+  }
+  let legacyTokenHash = '';
+  if (!pair) {
+    const token = bearerToken(request);
+    if (token) {
+      legacyTokenHash = await tokenHash(token);
+      pair = await loadLegacyPair(env, pairId, legacyTokenHash);
+      if (pair) authorizationKind = 'legacy';
+    }
+  }
+  if (!pair) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+
+  if (['GET', 'PUT'].includes(request.method)) {
+    const cloudSyncActive = authorizationKind === 'account'
+      ? Boolean(Number(pair.cloud_sync_active))
+      : authorizationKind === 'mobile'
+        ? Boolean(Number(pair.cloud_sync_active))
+        : true;
+    if (!cloudSyncActive) {
+      return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+    }
+  }
+
+  if (request.method === 'GET') {
+    return json(request, {
+      pairId: pair.pair_id,
+      ciphertext: pair.ciphertext,
+      iv: pair.iv,
+      revision: pair.revision,
+      updatedBy: pair.updated_by,
+      updatedAt: pair.updated_at,
+      claimed: Boolean(pair.mobile_device_id),
+    });
+  }
+
+  if (request.method === 'PUT' && !match[2]) {
+    if (authorizationKind === 'account' && account.credentialKind === 'cookie' && !validCsrfRequest(request)) {
+      return json(request, { error: 'Invalid browser request' }, { status: 403 });
+    }
+    const body = await readJson(request);
+    const encryptedBodyValid = authorizationKind === 'legacy'
+      ? validLegacyEncryptedBody(body)
+      : validEncryptedPayload(body);
+    if (!Number.isInteger(body?.baseRevision) || body.baseRevision < 1 || !encryptedBodyValid) {
+      return json(request, { error: 'Invalid sync update' }, { status: 400 });
+    }
+    let statement;
+    let deviceId = null;
+    if (authorizationKind === 'account') {
+      statement = env.DB.prepare(`UPDATE sync_pairs SET ciphertext = ?, iv = ?,
+        revision = revision + 1, updated_by = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE pair_id = ? AND user_id = ? AND revision = ?
+          AND ${PAIR_CLOUD_CAPABILITY_SQL}`)
+        .bind(body.ciphertext, body.iv, pair.source_id, pairId, account.user.user_id, body.baseRevision);
+      deviceId = pair.source_id;
+    } else if (authorizationKind === 'mobile') {
+      const mobileTokenHash = await tokenHash(bearerToken(request));
+      deviceId = request.headers.get('X-Medication-Device');
+      statement = env.DB.prepare(`UPDATE sync_pairs SET ciphertext = ?, iv = ?,
+        revision = revision + 1, updated_by = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE pair_id = ? AND mobile_device_id = ? AND mobile_token_hash = ? AND revision = ?
+          AND ${PAIR_CLOUD_CAPABILITY_SQL}`)
+        .bind(body.ciphertext, body.iv, deviceId, pairId, deviceId, mobileTokenHash, body.baseRevision);
+    } else {
+      statement = env.DB.prepare(`UPDATE sync_pairs SET ciphertext = ?, iv = ?,
+        revision = revision + 1, updated_by = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE pair_id = ? AND user_id IS NULL AND token_hash = ? AND revision = ?`)
+        .bind(body.ciphertext, body.iv, body.updatedBy, pairId, legacyTokenHash, body.baseRevision);
+    }
+    const result = await statement.run();
+    if (!result.meta.changes) {
+      if (authorizationKind === 'account'
+        && !(await activeCloudSyncForUser(env, account.user.user_id))) {
+        return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+      }
+      if (authorizationKind === 'mobile') {
+        const current = await loadMobilePair(
+          env,
+          pairId,
+          deviceId,
+          await tokenHash(bearerToken(request)),
+        );
+        if (current && !Number(current.cloud_sync_active)) {
+          return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+        }
+      }
+      return json(request, { error: 'Schedule changed on another device', currentRevision: pair.revision }, { status: 409 });
+    }
+    if (authorizationKind === 'account' || authorizationKind === 'mobile') {
+      await safeRecordPairAudit(
+        env,
+        authorizationKind === 'account' ? account.user.user_id : pair.user_id,
+        'sync_pair_updated',
+        pairAuditMetadata(pairId, deviceId, body.baseRevision + 1, 'updated'),
+      );
+    }
+    if (pair.mobile_device_id && authorizationKind !== 'mobile' && pair.mobile_push_endpoint) {
+      ctx.waitUntil(notifyPairedMobile(env, pair.mobile_push_endpoint));
+    }
     return json(request, { ok: true, revision: body.baseRevision + 1 });
   }
+
   if (request.method === 'DELETE' && !match[2]) {
-    await env.DB.prepare('DELETE FROM sync_pairs WHERE pair_id = ?').bind(pair.pair_id).run();
+    if (authorizationKind === 'mobile') return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+    if (authorizationKind === 'account' && account.credentialKind === 'cookie' && !validCsrfRequest(request)) {
+      return json(request, { error: 'Invalid browser request' }, { status: 403 });
+    }
+    const result = authorizationKind === 'account'
+      ? await env.DB.prepare('DELETE FROM sync_pairs WHERE pair_id = ? AND user_id = ?')
+        .bind(pairId, account.user.user_id).run()
+      : await env.DB.prepare('DELETE FROM sync_pairs WHERE pair_id = ? AND user_id IS NULL AND token_hash = ?')
+        .bind(pairId, legacyTokenHash).run();
+    if (Number(result.meta?.changes || 0) !== 1) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+    if (authorizationKind === 'account') {
+      await safeRecordPairAudit(
+        env,
+        account.user.user_id,
+        'sync_pair_revoked',
+        pairAuditMetadata(pairId, null, pair.revision, 'revoked'),
+      );
+    }
     if (pair.mobile_push_endpoint) ctx.waitUntil(notifyPairedMobile(env, pair.mobile_push_endpoint, { title: 'Mobile schedule unpaired', body: 'This pairing ended. Open Medication Reminder to remove the old schedule.', tag: 'medication-pair-revoked', type: 'pair-revoked', url: '/' }));
     return json(request, { ok: true });
   }
