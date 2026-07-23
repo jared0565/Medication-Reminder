@@ -75,6 +75,21 @@
     </section>
   </main>
 
+  <dialog id="signOutDialog" aria-labelledby="signOutTitle" aria-describedby="signOutDescription">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">SIGN OUT</p><h2 id="signOutTitle">Keep your local reminders?</h2></div>
+        <button value="cancel" class="close-button" aria-label="Cancel sign out">×</button>
+      </div>
+      <p id="signOutDescription">Signing out does not revoke or erase a paired mobile device. Choose what happens to schedules and taken history in this browser.</p>
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary-button">Cancel</button>
+        <button value="erase" class="secondary-button">Erase from this device</button>
+        <button value="keep" class="primary-button">Keep on this device</button>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="scheduleDialog"><form method="dialog" id="scheduleForm" class="dialog-card">
     <div class="dialog-heading"><div><p class="eyebrow">SCHEDULE</p><h2 id="dialogTitle">Add schedule</h2></div><button value="cancel" formnovalidate class="close-button" aria-label="Close">×</button></div>
     <input id="eventId" type="hidden" />

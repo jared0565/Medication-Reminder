@@ -628,7 +628,10 @@ test('mobile invitation is one-use and returns a pair-and-device scoped credenti
 
   for (const credentials of [
     { bearer: claimed.mobileToken, deviceId: 'different_device_1234' },
-    { bearer: `${claimed.mobileToken.slice(0, -1)}A`, deviceId: mobileDeviceId },
+    {
+      bearer: `${claimed.mobileToken.slice(0, -1)}${claimed.mobileToken.endsWith('A') ? 'B' : 'A'}`,
+      deviceId: mobileDeviceId,
+    },
   ]) {
     const denied = await fixture.request(`/api/sync/pairs/${created.pairId}`, credentials);
     assert.equal(denied.status, 404);
