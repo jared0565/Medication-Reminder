@@ -54,7 +54,7 @@
       "source_file": "",
       "source_location": "",
       "id": "valueerror",
-      "community": 2,
+      "community": 3,
       "norm_label": "valueerror"
     },
     {
@@ -1269,7 +1269,7 @@
       "source_file": "vendor/qrcode/__init__.py",
       "source_location": "L1",
       "id": "qrcode_init",
-      "community": 2,
+      "community": 39,
       "norm_label": "__init__.py"
     },
     {
@@ -1278,7 +1278,7 @@
       "source_file": "vendor/qrcode/__init__.py",
       "source_location": "L13",
       "id": "qrcode_init_run_example",
-      "community": 2,
+      "community": 39,
       "norm_label": "run_example()"
     },
     {
@@ -1287,7 +1287,7 @@
       "source_file": "vendor/qrcode/__init__.py",
       "source_location": "L14",
       "id": "qrcode_init_rationale_14",
-      "community": 2,
+      "community": 39,
       "norm_label": "build an example qr code and display it.      there's an even easier way than th"
     },
     {
@@ -1494,7 +1494,7 @@
       "source_file": "vendor/qrcode/constants.py",
       "source_location": "L1",
       "id": "qrcode_constants",
-      "community": 2,
+      "community": 39,
       "norm_label": "constants.py"
     },
     {
@@ -1530,7 +1530,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L1",
       "id": "image_base",
-      "community": 2,
+      "community": 37,
       "norm_label": "base.py"
     },
     {
@@ -1656,7 +1656,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L110",
       "id": "image_base_baseimagewithdrawer",
-      "community": 12,
+      "community": 38,
       "norm_label": "baseimagewithdrawer"
     },
     {
@@ -1665,7 +1665,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L114",
       "id": "image_base_baseimagewithdrawer_get_default_module_drawer",
-      "community": 12,
+      "community": 38,
       "norm_label": ".get_default_module_drawer()"
     },
     {
@@ -1674,7 +1674,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L114",
       "id": "vendor_qrcode_image_base_py_qrmoduledrawer",
-      "community": 12,
+      "community": 38,
       "norm_label": "qrmoduledrawer"
     },
     {
@@ -1683,7 +1683,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L117",
       "id": "image_base_baseimagewithdrawer_get_default_eye_drawer",
-      "community": 12,
+      "community": 38,
       "norm_label": ".get_default_eye_drawer()"
     },
     {
@@ -1692,7 +1692,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L125",
       "id": "image_base_baseimagewithdrawer_init",
-      "community": 12,
+      "community": 38,
       "norm_label": ".__init__()"
     },
     {
@@ -1701,7 +1701,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L141",
       "id": "image_base_baseimagewithdrawer_get_drawer",
-      "community": 12,
+      "community": 38,
       "norm_label": ".get_drawer()"
     },
     {
@@ -1800,7 +1800,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L1",
       "id": "image_pil",
-      "community": 2,
+      "community": 36,
       "norm_label": "pil.py"
     },
     {
@@ -1809,7 +1809,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L5",
       "id": "image_pil_pilimage",
-      "community": 2,
+      "community": 36,
       "norm_label": "pilimage"
     },
     {
@@ -1818,7 +1818,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L12",
       "id": "image_pil_pilimage_new_image",
-      "community": 2,
+      "community": 36,
       "norm_label": ".new_image()"
     },
     {
@@ -1827,7 +1827,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L46",
       "id": "image_pil_pilimage_drawrect",
-      "community": 2,
+      "community": 36,
       "norm_label": ".drawrect()"
     },
     {
@@ -1836,7 +1836,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L50",
       "id": "image_pil_pilimage_save",
-      "community": 2,
+      "community": 36,
       "norm_label": ".save()"
     },
     {
@@ -1845,7 +1845,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L56",
       "id": "image_pil_pilimage_getattr",
-      "community": 2,
+      "community": 36,
       "norm_label": ".__getattr__()"
     },
     {
@@ -1854,7 +1854,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L6",
       "id": "image_pil_rationale_6",
-      "community": 2,
+      "community": 36,
       "norm_label": "pil image builder, default format is png."
     },
     {
@@ -1863,7 +1863,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L1",
       "id": "image_pure",
-      "community": 2,
+      "community": 35,
       "norm_label": "pure.py"
     },
     {
@@ -1872,7 +1872,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L7",
       "id": "image_pure_pypngimage",
-      "community": 2,
+      "community": 35,
       "norm_label": "pypngimage"
     },
     {
@@ -1881,7 +1881,7 @@
       "source_file": "",
       "source_location": "",
       "id": "baseimage",
-      "community": 2,
+      "community": 35,
       "norm_label": "baseimage"
     },
     {
@@ -1890,7 +1890,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L16",
       "id": "image_pure_pypngimage_new_image",
-      "community": 2,
+      "community": 35,
       "norm_label": ".new_image()"
     },
     {
@@ -1899,7 +1899,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L22",
       "id": "image_pure_pypngimage_drawrect",
-      "community": 2,
+      "community": 35,
       "norm_label": ".drawrect()"
     },
     {
@@ -1908,7 +1908,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L27",
       "id": "image_pure_pypngimage_save",
-      "community": 2,
+      "community": 35,
       "norm_label": ".save()"
     },
     {
@@ -1917,7 +1917,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L32",
       "id": "image_pure_pypngimage_rows_iter",
-      "community": 2,
+      "community": 35,
       "norm_label": ".rows_iter()"
     },
     {
@@ -1926,7 +1926,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L49",
       "id": "image_pure_pypngimage_border_rows_iter",
-      "community": 2,
+      "community": 35,
       "norm_label": ".border_rows_iter()"
     },
     {
@@ -2448,7 +2448,7 @@
       "source_file": "",
       "source_location": "",
       "id": "qrmoduledrawer",
-      "community": 14,
+      "community": 10,
       "norm_label": "qrmoduledrawer"
     },
     {
@@ -3195,7 +3195,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L1",
       "id": "qrcode_main",
-      "community": 2,
+      "community": 37,
       "norm_label": "main.py"
     },
     {
@@ -3204,7 +3204,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L22",
       "id": "qrcode_main_make",
-      "community": 2,
+      "community": 37,
       "norm_label": "make()"
     },
     {
@@ -3213,7 +3213,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L28",
       "id": "qrcode_main_check_box_size",
-      "community": 2,
+      "community": 35,
       "norm_label": "_check_box_size()"
     },
     {
@@ -3222,7 +3222,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L33",
       "id": "qrcode_main_check_border",
-      "community": 2,
+      "community": 35,
       "norm_label": "_check_border()"
     },
     {
@@ -3231,7 +3231,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L40",
       "id": "qrcode_main_check_mask_pattern",
-      "community": 2,
+      "community": 37,
       "norm_label": "_check_mask_pattern()"
     },
     {
@@ -3240,7 +3240,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L51",
       "id": "qrcode_main_copy_2d_array",
-      "community": 2,
+      "community": 37,
       "norm_label": "copy_2d_array()"
     },
     {
@@ -3249,7 +3249,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L55",
       "id": "qrcode_main_activewithneighbors",
-      "community": 10,
+      "community": 36,
       "norm_label": "activewithneighbors"
     },
     {
@@ -3258,7 +3258,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L66",
       "id": "qrcode_main_activewithneighbors_bool",
-      "community": 10,
+      "community": 36,
       "norm_label": ".__bool__()"
     },
     {
@@ -3276,7 +3276,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L78",
       "id": "qrcode_main_qrcode_init",
-      "community": 2,
+      "community": 35,
       "norm_label": ".__init__()"
     },
     {
@@ -3285,7 +3285,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L78",
       "id": "genericimage",
-      "community": 2,
+      "community": 35,
       "norm_label": "genericimage"
     },
     {
@@ -3303,7 +3303,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L115",
       "id": "qrcode_main_qrcode_mask_pattern",
-      "community": 2,
+      "community": 37,
       "norm_label": ".mask_pattern()"
     },
     {
@@ -3312,7 +3312,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L123",
       "id": "qrcode_main_qrcode_clear",
-      "community": 2,
+      "community": 35,
       "norm_label": ".clear()"
     },
     {
@@ -3321,7 +3321,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L132",
       "id": "qrcode_main_qrcode_add_data",
-      "community": 2,
+      "community": 37,
       "norm_label": ".add_data()"
     },
     {
@@ -3393,7 +3393,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L330",
       "id": "qrcode_main_qrcode_make_image",
-      "community": 2,
+      "community": 35,
       "norm_label": ".make_image()"
     },
     {
@@ -3402,7 +3402,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L335",
       "id": "genericimagelocal",
-      "community": 2,
+      "community": 35,
       "norm_label": "genericimagelocal"
     },
     {
@@ -3411,7 +3411,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L390",
       "id": "qrcode_main_qrcode_is_constrained",
-      "community": 2,
+      "community": 36,
       "norm_label": ".is_constrained()"
     },
     {
@@ -3474,7 +3474,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L536",
       "id": "qrcode_main_qrcode_active_with_neighbors",
-      "community": 2,
+      "community": 36,
       "norm_label": ".active_with_neighbors()"
     },
     {
@@ -3483,7 +3483,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L124",
       "id": "qrcode_main_rationale_124",
-      "community": 2,
+      "community": 35,
       "norm_label": "reset the internal data."
     },
     {
@@ -3492,7 +3492,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L133",
       "id": "qrcode_main_rationale_133",
-      "community": 2,
+      "community": 37,
       "norm_label": "add data to this qr code.          :param optimize: data will be split into mult"
     },
     {
@@ -3546,7 +3546,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L340",
       "id": "qrcode_main_rationale_340",
-      "community": 2,
+      "community": 35,
       "norm_label": "make an image from the qr code data.          if the data has not been compiled"
     },
     {
@@ -3618,7 +3618,7 @@
       "source_file": "vendor/qrcode/tests/test_example.py",
       "source_location": "L1",
       "id": "tests_test_example",
-      "community": 2,
+      "community": 39,
       "norm_label": "test_example.py"
     },
     {
@@ -3627,7 +3627,7 @@
       "source_file": "vendor/qrcode/tests/test_example.py",
       "source_location": "L11",
       "id": "tests_test_example_test_example",
-      "community": 2,
+      "community": 39,
       "norm_label": "test_example()"
     },
     {
@@ -4738,10 +4738,19 @@
       "norm_label": "taken"
     },
     {
-      "label": "active()",
+      "label": "localDateKey()",
       "file_type": "code",
       "source_file": "web/app.js",
       "source_location": "L5",
+      "id": "web_app_localdatekey",
+      "community": 22,
+      "norm_label": "localdatekey()"
+    },
+    {
+      "label": "active()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L6",
       "id": "web_app_active",
       "community": 22,
       "norm_label": "active()"
@@ -4750,7 +4759,7 @@
       "label": "renderToday()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L6",
+      "source_location": "L7",
       "id": "web_app_rendertoday",
       "community": 22,
       "norm_label": "rendertoday()"
@@ -4759,7 +4768,7 @@
       "label": "renderSchedules()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L7",
+      "source_location": "L8",
       "id": "web_app_renderschedules",
       "community": 22,
       "norm_label": "renderschedules()"
@@ -4768,7 +4777,7 @@
       "label": "openEditor()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L8",
+      "source_location": "L9",
       "id": "web_app_openeditor",
       "community": 22,
       "norm_label": "openeditor()"
@@ -4777,7 +4786,7 @@
       "label": "renderMedicineInputs()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L9",
+      "source_location": "L10",
       "id": "web_app_rendermedicineinputs",
       "community": 22,
       "norm_label": "rendermedicineinputs()"
@@ -4786,7 +4795,7 @@
       "label": "addMedicineInput()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L9",
+      "source_location": "L10",
       "id": "web_app_addmedicineinput",
       "community": 22,
       "norm_label": "addmedicineinput()"
@@ -4795,7 +4804,7 @@
       "label": "saveEditor()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L10",
+      "source_location": "L11",
       "id": "web_app_saveeditor",
       "community": 22,
       "norm_label": "saveeditor()"
@@ -4804,7 +4813,7 @@
       "label": "playSound()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L11",
+      "source_location": "L12",
       "id": "web_app_playsound",
       "community": 22,
       "norm_label": "playsound()"
@@ -4813,7 +4822,7 @@
       "label": "renderAll()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L12",
+      "source_location": "L13",
       "id": "web_app_renderall",
       "community": 22,
       "norm_label": "renderall()"
@@ -4822,7 +4831,7 @@
       "label": "updateNotificationStatus()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L14",
+      "source_location": "L15",
       "id": "web_app_updatenotificationstatus",
       "community": 22,
       "norm_label": "updatenotificationstatus()"
@@ -4831,7 +4840,7 @@
       "label": "enableNotifications()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "web_app_enablenotifications",
       "community": 22,
       "norm_label": "enablenotifications()"
@@ -4840,7 +4849,7 @@
       "label": "notifiedKeys",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L16",
+      "source_location": "L17",
       "id": "web_app_notifiedkeys",
       "community": 22,
       "norm_label": "notifiedkeys"
@@ -4849,7 +4858,7 @@
       "label": "checkForegroundNotifications()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "web_app_checkforegroundnotifications",
       "community": 22,
       "norm_label": "checkforegroundnotifications()"
@@ -4858,7 +4867,7 @@
       "label": "nextPushReminders()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "web_app_nextpushreminders",
       "community": 22,
       "norm_label": "nextpushreminders()"
@@ -4867,16 +4876,25 @@
       "label": "syncPushSubscription()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L21",
+      "source_location": "L22",
       "id": "web_app_syncpushsubscription",
       "community": 22,
       "norm_label": "syncpushsubscription()"
     },
     {
+      "label": "clearPrematureTaken()",
+      "file_type": "code",
+      "source_file": "web/app.js",
+      "source_location": "L24",
+      "id": "web_app_clearprematuretaken",
+      "community": 22,
+      "norm_label": "clearprematuretaken()"
+    },
+    {
       "label": "reminderState()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L23",
+      "source_location": "L25",
       "id": "web_app_reminderstate",
       "community": 22,
       "norm_label": "reminderstate()"
@@ -4885,7 +4903,7 @@
       "label": "qrDialog",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L27",
+      "source_location": "L29",
       "id": "web_app_qrdialog",
       "community": 22,
       "norm_label": "qrdialog"
@@ -4894,7 +4912,7 @@
       "label": "pairingPayload()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L28",
+      "source_location": "L30",
       "id": "web_app_pairingpayload",
       "community": 22,
       "norm_label": "pairingpayload()"
@@ -4903,7 +4921,7 @@
       "label": "decodePairingPayload()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L29",
+      "source_location": "L31",
       "id": "web_app_decodepairingpayload",
       "community": 22,
       "norm_label": "decodepairingpayload()"
@@ -4912,7 +4930,7 @@
       "label": "renderPairingQr()",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L30",
+      "source_location": "L32",
       "id": "web_app_renderpairingqr",
       "community": 22,
       "norm_label": "renderpairingqr()"
@@ -4921,7 +4939,7 @@
       "label": "pairFromUrl",
       "file_type": "code",
       "source_file": "web/app.js",
-      "source_location": "L33",
+      "source_location": "L35",
       "id": "web_app_pairfromurl",
       "community": 22,
       "norm_label": "pairfromurl"
@@ -16185,6 +16203,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "web/app.js",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "web_app",
+      "target": "web_app_clearprematuretaken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
       "source_location": "L31",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16210,6 +16238,16 @@
       "confidence_score": 1.0,
       "source": "web_app",
       "target": "web_app_esc"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "web_app",
+      "target": "web_app_localdatekey",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16288,9 +16326,9 @@
       "source_file": "web/app.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_readstoredjson",
-      "confidence_score": 1.0
+      "target": "web_app_readstoredjson"
     },
     {
       "relation": "contains",
@@ -16467,11 +16505,44 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web/app.js",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "web_app_clearprematuretaken",
+      "target": "web_app_localdatekey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "web_app_reminderstate",
+      "target": "web_app_localdatekey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
       "source_location": "L11",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "web_app_renderall",
       "target": "web_app_rendertoday"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.js",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "web_app_rendertoday",
+      "target": "web_app_clearprematuretaken",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16854,5 +16925,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "469ca753b27cc1d442d3630787e6e53143a810ad"
+  "built_at_commit": "20c7d16aff64ff50ae8256355770ea8baa1266f6"
 }

@@ -100,18 +100,18 @@
     "semantic_hash": ""
   },
   "web/app.js": {
-    "mtime": 1784755221.994267,
-    "ast_hash": "6021b44ea7fb7e17480a2aa10d7e022c",
+    "mtime": 1784773066.5221262,
+    "ast_hash": "61a46bb91426aa71f43a866bd69113e7",
     "semantic_hash": ""
   },
   "web/sw.js": {
-    "mtime": 1784755199.3505204,
-    "ast_hash": "4d20fc14dd536d42c2cf15da67db302c",
+    "mtime": 1784773088.2153149,
+    "ast_hash": "9af51e1666bc2dbef194b3d94b272fe0",
     "semantic_hash": ""
   },
   "web/index.html": {
-    "mtime": 1784755194.9467616,
-    "ast_hash": "0475ebb9eae5b7912dd4ca13bf211749",
+    "mtime": 1784773083.2727191,
+    "ast_hash": "ac39a384b2cd44bdbaf47a61c94ac7f1",
     "semantic_hash": ""
   },
   ".wrangler/cache/pages.json": {
@@ -322,11 +322,6 @@
   "tests/test_pairing.py": {
     "mtime": 1784752437.7629137,
     "ast_hash": "305282c415fb21f0ea965c977794268d",
-    "semantic_hash": ""
-  },
-  "production-verification.png": {
-    "mtime": 1784755347.025056,
-    "ast_hash": "3fe773690847a7890a44609178f66429",
     "semantic_hash": ""
   }
 }
