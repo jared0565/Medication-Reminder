@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" class="access-pending">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -12,6 +12,18 @@
   <title>Medication Reminder v2026.07.23.16</title>
 </head>
 <body>
+  <dialog id="accessDialog" class="access-dialog" aria-labelledby="accessTitle" aria-describedby="accessDescription accessStatus">
+    <article class="access-card">
+      <p class="eyebrow">PRIVATE BY DEFAULT</p>
+      <h1 id="accessTitle">How would you like to use Medication Reminder?</h1>
+      <p id="accessDescription">Your medicines can stay only on this device, or you can sign in to unlock eligible cloud features.</p>
+      <div id="accessGoogleSignIn" class="google-sign-in" aria-label="Sign in with Google"></div>
+      <button type="button" id="continueLocally" class="secondary-button">Continue on this device</button>
+      <p class="privacy-note">Local-only schedules cannot be paired, synchronized, or recovered on another device.</p>
+      <p id="accessStatus" class="access-status" role="status" aria-live="polite"></p>
+    </article>
+  </dialog>
+  <div id="applicationShell" hidden>
   <main class="shell">
     <header class="hero">
       <div>
@@ -83,6 +95,8 @@
       <div class="dialog-actions"><button type="button" id="acknowledgeDue" class="secondary-button">Close</button><button type="button" id="markDueTaken" class="primary-button">Mark taken</button></div>
     </article>
   </dialog>
+  </div>
+  <script src="access.js?v=20260723.16"></script>
   <script src="qrcode.js?v=20260723.16"></script>
   <script src="due-modal.js?v=20260723.16"></script>
   <script src="app.js?v=20260723.16"></script>
