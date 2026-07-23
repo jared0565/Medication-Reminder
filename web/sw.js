@@ -1,5 +1,5 @@
-const CACHE='medication-reminder-web-v21';
-const ASSETS=['./','./index.html','./styles.css?v=20260723.12','./app.js?v=20260723.12','./update.js?v=20260723.12','./sync.js?v=20260723.12','./qrcode.js?v=20260723.12','./manifest.webmanifest','./icon.svg'];
+const CACHE='medication-reminder-web-v22';
+const ASSETS=['./','./index.html','./styles.css?v=20260723.13','./app.js?v=20260723.13','./update.js?v=20260723.13','./sync.js?v=20260723.13','./qrcode.js?v=20260723.13','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting()});
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));

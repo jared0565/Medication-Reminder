@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
 
-function updateHarness({ remoteVersion = '2026.07.23.13', approve = true } = {}) {
+function updateHarness({ remoteVersion = '2026.07.23.14', approve = true } = {}) {
   const worker = {
     state: 'installed',
     messages: [],
@@ -22,7 +22,7 @@ function updateHarness({ remoteVersion = '2026.07.23.13', approve = true } = {})
     async update() { this.updates += 1; },
   };
   const checkButton = { textContent: 'Check for updates', disabled: false, onclick: null };
-  const versionElement = { textContent: '2026.07.23.12' };
+  const versionElement = { textContent: '2026.07.23.13' };
   const windowListeners = {};
   const documentListeners = {};
   let confirmations = 0;
@@ -96,7 +96,7 @@ test('declined updates are not activated or repeatedly prompted in the same sess
 });
 
 test('startup reports no update when Cloudflare version matches the installed app', async () => {
-  const app = updateHarness({ remoteVersion: '2026.07.23.12' });
+  const app = updateHarness({ remoteVersion: '2026.07.23.13' });
   await flush();
   await flush();
   assert.equal(app.registration.updates, 0);

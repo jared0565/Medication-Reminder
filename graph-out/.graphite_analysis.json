@@ -500,68 +500,72 @@
   ],
   "cycles": [
     [
+      "medication_core_dpapiprotector",
+      "medication_core_init"
+    ],
+    [
       "medication_core_protectedjsonfile",
       "medication_core_init"
     ],
     [
-      "medication_core_init",
-      "medication_core_dpapiprotector"
+      "web_app_renderall",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_enablenotifications",
+      "web_app_updatenotificationstatus",
+      "web_app"
     ],
     [
       "web_app_renderpairingqr",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_updatenotificationstatus",
-      "web_app",
-      "web_app_enablenotifications"
-    ],
-    [
-      "web_app_updatenotificationstatus",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app",
-      "web_app_openeditor"
-    ],
-    [
-      "web_app_rendermedicineinputs",
       "web_app"
     ],
     [
@@ -569,16 +573,12 @@
       "web_app"
     ],
     [
-      "web_app_renderschedules",
+      "web_app_updatenotificationstatus",
       "web_app"
     ],
     [
-      "web_app_openeditor",
+      "web_app_saveeditor",
       "web_app"
-    ],
-    [
-      "web_app",
-      "web_app_rendertoday"
     ]
   ],
   "top_files_by_links": [

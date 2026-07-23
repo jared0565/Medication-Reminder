@@ -59,8 +59,8 @@
     {
       "rel_path": "medication_schedule.json",
       "language": "json",
-      "size": 2645,
-      "hash": "36cac25bf29c9f2b6bab8787916d61f5d12deba15b9a32dc9a1d7c3b2029c6cc"
+      "size": 50,
+      "hash": "f5325507433f78cc93a3b54a68305a9ac70fea5d45055a55b1d436c5cfdfbff9"
     },
     {
       "rel_path": "requirements.txt",
@@ -101,14 +101,14 @@
     {
       "rel_path": "tests/test_web_sync.mjs",
       "language": "javascript",
-      "size": 7253,
-      "hash": "c786e9733dae7817b7491918558c3902fea13cc8fc8f174f5bb2449a1129a6de"
+      "size": 7810,
+      "hash": "37bd1fd2b6d64da925436d569d092031911d55e19b93da33e10fe728dbe1bec9"
     },
     {
       "rel_path": "tests/test_web_update.mjs",
       "language": "javascript",
       "size": 3253,
-      "hash": "5b52fd22f152771969182e8052c40a3841060bf06ef0add691f4874dbefbacfa"
+      "hash": "dbf8a4e79ea9bb5488c835acf6e369bddc500cfeb5390a384ecae8636ef2293c"
     },
     {
       "rel_path": "web/_headers",
@@ -119,14 +119,14 @@
     {
       "rel_path": "web/app.js",
       "language": "javascript",
-      "size": 21921,
-      "hash": "70acaf3d20310574f1d5e2f9895b97030c856c74a0caa024799d69e39855c8d7"
+      "size": 20243,
+      "hash": "59d733eb6316328bb0f656a96eeca91eebca35aa3fd87eed65155cbca52e9956"
     },
     {
       "rel_path": "web/index.html",
       "language": "html",
       "size": 5594,
-      "hash": "9baf81fc48f44b2c02dc6440bdac96e744b0648f3cbe3ce3116a35dad1076125"
+      "hash": "a5e671d5ea5328d588cbacf81f707421ff8023bac331b12a69b9a5cf151c434b"
     },
     {
       "rel_path": "web/manifest.webmanifest",
@@ -150,7 +150,7 @@
       "rel_path": "web/sw.js",
       "language": "javascript",
       "size": 2191,
-      "hash": "3c20a7b365107c53805fedb0ad676b830a0f98b7f9dfcba246f44a91556fe2d7"
+      "hash": "66d454d505043923521deb9c12deda61dadf4b3375d1213134195723d5ccfd36"
     },
     {
       "rel_path": "web/sync.js",
@@ -168,7 +168,7 @@
       "rel_path": "web/version.json",
       "language": "json",
       "size": 33,
-      "hash": "3601e0f52229f7a591e971f72ac44e2b88c78ab1e353852086fbddd1f4c949da"
+      "hash": "71c811ae141c6b9c57a21a07be2aac44ef7f3d351b6f4657254a41c839b2d9bd"
     },
     {
       "rel_path": "worker/package-lock.json",

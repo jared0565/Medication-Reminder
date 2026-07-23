@@ -206,3 +206,20 @@ test('an explicitly unpaired mobile stays empty after app reload', () => {
   assert.equal(context.loadedSchedule.events.length, 0);
   assert.equal(JSON.parse(storage.get('medication-reminder-schedule-v1')).events.length, 0);
 });
+
+test('a new visitor starts with an empty private schedule', () => {
+  const storage = new Map();
+  const context = {
+    localStorage: {
+      getItem: key => storage.has(key) ? storage.get(key) : null,
+      setItem: (key, value) => storage.set(key, value),
+    },
+    Intl,
+    JSON,
+    console,
+    structuredClone,
+  };
+  const initialization = readFileSync('web/app.js', 'utf8').split('const $=')[0];
+  vm.runInNewContext(`${initialization};globalThis.loadedSchedule=schedule;`, context);
+  assert.equal(context.loadedSchedule.events.length, 0);
+});
