@@ -25,20 +25,20 @@
       "out_degree": 45
     },
     {
-      "id": "web_app",
-      "name": "app.js",
-      "kind": "file",
-      "degree": 44,
-      "in_degree": 17,
-      "out_degree": 27
-    },
-    {
       "id": "medication_reminder_medicationreminderapp",
       "name": "MedicationReminderApp",
       "kind": "class",
       "degree": 43,
       "in_degree": 2,
       "out_degree": 41
+    },
+    {
+      "id": "web_app",
+      "name": "app.js",
+      "kind": "file",
+      "degree": 43,
+      "in_degree": 15,
+      "out_degree": 28
     },
     {
       "id": "web_sync",
@@ -238,18 +238,8 @@
       "kind": "function"
     },
     {
-      "id": "web_app_navigator_serviceworker_addeventlistener_controllerchange_l39_c404",
-      "name": "navigator.serviceWorker.addEventListener controllerchange",
-      "kind": "function"
-    },
-    {
       "id": "web_app_readstoredjson_l2_c165",
       "name": "readStoredJson",
-      "kind": "function"
-    },
-    {
-      "id": "web_app_setinterval_l39_c1423",
-      "name": "setInterval",
       "kind": "function"
     },
     {
@@ -260,6 +250,16 @@
     {
       "id": "web_app_sort_l7_c223",
       "name": "sort",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_sort_l8_c65",
+      "name": "sort",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_timenow_l3_c540",
+      "name": "timeNow",
       "kind": "function"
     }
   ],
@@ -335,11 +335,25 @@
       "ratio": 6.666666666666667
     },
     {
+      "id": "tests_test_web_update",
+      "name": "test_web_update.mjs",
+      "out_degree": 6,
+      "in_degree": 0,
+      "ratio": 6.0
+    },
+    {
+      "id": "web_update",
+      "name": "update.js",
+      "out_degree": 3,
+      "in_degree": 0,
+      "ratio": 3.0
+    },
+    {
       "id": "web_app",
       "name": "app.js",
-      "out_degree": 27,
-      "in_degree": 17,
-      "ratio": 1.588235294117647
+      "out_degree": 28,
+      "in_degree": 15,
+      "ratio": 1.8666666666666667
     }
   ],
   "surprising_connections": [
@@ -490,81 +504,81 @@
       "medication_core_init"
     ],
     [
-      "medication_core_dpapiprotector",
-      "medication_core_init"
-    ],
-    [
-      "web_app_addmedicineinput",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_rendertoday",
-      "web_app",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_rendertoday",
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_enablenotifications",
-      "web_app_updatenotificationstatus",
-      "web_app"
-    ],
-    [
-      "web_app_updatenotificationstatus",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app"
+      "medication_core_init",
+      "medication_core_dpapiprotector"
     ],
     [
       "web_app_renderpairingqr",
       "web_app"
     ],
     [
+      "web_app_saveeditor",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_updatenotificationstatus",
       "web_app",
-      "web_app_renderschedules"
+      "web_app_enablenotifications"
+    ],
+    [
+      "web_app_updatenotificationstatus",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_addmedicineinput",
+      "web_app"
+    ],
+    [
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app"
+    ],
+    [
+      "web_app",
+      "web_app_rendertoday"
     ]
   ],
   "top_files_by_links": [
@@ -589,7 +603,7 @@
     {
       "id": "web_app",
       "name": "app.js",
-      "degree": 44,
+      "degree": 43,
       "source_file": "web/app.js"
     },
     {
@@ -635,6 +649,18 @@
       "source_file": "tests/test_web_sync.mjs"
     },
     {
+      "id": "tests_test_web_update",
+      "name": "test_web_update.mjs",
+      "degree": 6,
+      "source_file": "tests/test_web_update.mjs"
+    },
+    {
+      "id": "web_update",
+      "name": "update.js",
+      "degree": 3,
+      "source_file": "web/update.js"
+    },
+    {
       "id": "agents",
       "name": "AGENTS.md",
       "degree": 0,
@@ -675,18 +701,6 @@
       "name": "README.md",
       "degree": 0,
       "source_file": "README.md"
-    },
-    {
-      "id": "requirements",
-      "name": "requirements.txt",
-      "degree": 0,
-      "source_file": "requirements.txt"
-    },
-    {
-      "id": "run_medication_reminder",
-      "name": "run_medication_reminder.bat",
-      "degree": 0,
-      "source_file": "run_medication_reminder.bat"
     }
   ]
 }

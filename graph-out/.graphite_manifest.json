@@ -1,6 +1,6 @@
 {
   "root": "Medication Reminder",
-  "file_count": 29,
+  "file_count": 32,
   "engine": {
     "cache_version": "v5",
     "schema_version": "1",
@@ -105,22 +105,28 @@
       "hash": "c786e9733dae7817b7491918558c3902fea13cc8fc8f174f5bb2449a1129a6de"
     },
     {
+      "rel_path": "tests/test_web_update.mjs",
+      "language": "javascript",
+      "size": 3253,
+      "hash": "5b52fd22f152771969182e8052c40a3841060bf06ef0add691f4874dbefbacfa"
+    },
+    {
       "rel_path": "web/_headers",
       "language": null,
-      "size": 279,
-      "hash": "9ba534bf8ea9194185f6a456aeae9fc98123a7904320cd7ac4e8840921ee1ced"
+      "size": 402,
+      "hash": "bfff1d50fb67b9178400b7dfbd3bc76be2988753f5c3dd732c72e06148d4f084"
     },
     {
       "rel_path": "web/app.js",
       "language": "javascript",
-      "size": 23491,
-      "hash": "117cdb33b175606f4d73e34bc51cbbbf11447853e1755f53f61e65f533193ef9"
+      "size": 21921,
+      "hash": "70acaf3d20310574f1d5e2f9895b97030c856c74a0caa024799d69e39855c8d7"
     },
     {
       "rel_path": "web/index.html",
       "language": "html",
-      "size": 5544,
-      "hash": "e82c6f6c17070d29568e1667cfe0eb1a353d58c39ccacd2330095bfccccae90c"
+      "size": 5594,
+      "hash": "9baf81fc48f44b2c02dc6440bdac96e744b0648f3cbe3ce3116a35dad1076125"
     },
     {
       "rel_path": "web/manifest.webmanifest",
@@ -143,14 +149,26 @@
     {
       "rel_path": "web/sw.js",
       "language": "javascript",
-      "size": 2163,
-      "hash": "f33cbb7d8a2146ab88ab226d360ddf849d72d482d1237d80b254cac6f4840514"
+      "size": 2191,
+      "hash": "3c20a7b365107c53805fedb0ad676b830a0f98b7f9dfcba246f44a91556fe2d7"
     },
     {
       "rel_path": "web/sync.js",
       "language": "javascript",
       "size": 20170,
       "hash": "50116aaf793c011476c67e58057260fe8c5900136d4983f4e44e4e8a40c93bcb"
+    },
+    {
+      "rel_path": "web/update.js",
+      "language": "javascript",
+      "size": 3758,
+      "hash": "0e5ee6668232832609ffd27bee13f12705d5b43f1472160b57c51e26e6ee054e"
+    },
+    {
+      "rel_path": "web/version.json",
+      "language": "json",
+      "size": 33,
+      "hash": "3601e0f52229f7a591e971f72ac44e2b88c78ab1e353852086fbddd1f4c949da"
     },
     {
       "rel_path": "worker/package-lock.json",
