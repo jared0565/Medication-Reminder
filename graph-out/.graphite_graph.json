@@ -25,12 +25,20 @@
       "community": 3
     },
     {
+      "id": "docs_superpowers_plans_2026_07_23_browser_account_boundary",
+      "kind": "file",
+      "name": "2026-07-23-browser-account-boundary.md",
+      "source_file": "docs/superpowers/plans/2026-07-23-browser-account-boundary.md",
+      "label": "2026-07-23-browser-account-boundary.md",
+      "community": 4
+    },
+    {
       "id": "docs_superpowers_specs_2026_07_23_browser_account_boundary_design",
       "kind": "file",
       "name": "2026-07-23-browser-account-boundary-design.md",
       "source_file": "docs/superpowers/specs/2026-07-23-browser-account-boundary-design.md",
       "label": "2026-07-23-browser-account-boundary-design.md",
-      "community": 4
+      "community": 5
     },
     {
       "id": "install_dependencies",
@@ -38,7 +46,7 @@
       "name": "install_dependencies.bat",
       "source_file": "install_dependencies.bat",
       "label": "install_dependencies.bat",
-      "community": 5
+      "community": 6
     },
     {
       "id": "license",
@@ -46,7 +54,7 @@
       "name": "LICENSE",
       "source_file": "LICENSE",
       "label": "LICENSE",
-      "community": 6
+      "community": 7
     },
     {
       "id": "medication_core",
@@ -63,7 +71,7 @@
       "source_file": "medication_core.py",
       "source_location": "L385",
       "label": "append_audit",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_appstorage",
@@ -72,7 +80,7 @@
       "source_file": "medication_core.py",
       "source_location": "L306",
       "label": "AppStorage",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_atomic_write_bytes",
@@ -81,7 +89,7 @@
       "source_file": "medication_core.py",
       "source_location": "L175",
       "label": "atomic_write_bytes",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_cleanup",
@@ -90,7 +98,7 @@
       "source_file": "medication_core.py",
       "source_location": "L597",
       "label": "_cleanup",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_collect_due",
@@ -99,7 +107,7 @@
       "source_file": "medication_core.py",
       "source_location": "L499",
       "label": "collect_due",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_configure_functions",
@@ -108,7 +116,7 @@
       "source_file": "medication_core.py",
       "source_location": "L212",
       "label": "_configure_functions",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_configvalidationerror",
@@ -117,7 +125,7 @@
       "source_file": "medication_core.py",
       "source_location": "L28",
       "label": "ConfigValidationError",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_datablob",
@@ -126,7 +134,7 @@
       "source_file": "medication_core.py",
       "source_location": "L195",
       "label": "_DataBlob",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_default_data_dir",
@@ -135,7 +143,7 @@
       "source_file": "medication_core.py",
       "source_location": "L296",
       "label": "default_data_dir",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_default_state",
@@ -144,7 +152,7 @@
       "source_file": "medication_core.py",
       "source_location": "L441",
       "label": "default_state",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_delete_sync_credentials",
@@ -153,7 +161,7 @@
       "source_file": "medication_core.py",
       "source_location": "L329",
       "label": "delete_sync_credentials",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_dpapiprotector",
@@ -162,7 +170,7 @@
       "source_file": "medication_core.py",
       "source_location": "L199",
       "label": "DpapiProtector",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_drop_invalid_pending",
@@ -171,7 +179,7 @@
       "source_file": "medication_core.py",
       "source_location": "L590",
       "label": "_drop_invalid_pending",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_dueoccurrence",
@@ -180,7 +188,7 @@
       "source_file": "medication_core.py",
       "source_location": "L474",
       "label": "DueOccurrence",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_event_active",
@@ -189,7 +197,7 @@
       "source_file": "medication_core.py",
       "source_location": "L157",
       "label": "event_active",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_exists",
@@ -198,7 +206,7 @@
       "source_file": "medication_core.py",
       "source_location": "L270",
       "label": "exists",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_export_taken_csv",
@@ -207,7 +215,7 @@
       "source_file": "medication_core.py",
       "source_location": "L397",
       "label": "export_taken_csv",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_init",
@@ -216,7 +224,7 @@
       "source_file": "medication_core.py",
       "source_location": "L205",
       "label": "__init__",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_input_blob",
@@ -225,7 +233,7 @@
       "source_file": "medication_core.py",
       "source_location": "L227",
       "label": "_input_blob",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_load",
@@ -234,7 +242,7 @@
       "source_file": "medication_core.py",
       "source_location": "L273",
       "label": "load",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_load_schedule",
@@ -243,7 +251,7 @@
       "source_file": "medication_core.py",
       "source_location": "L355",
       "label": "load_schedule",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_load_settings",
@@ -252,7 +260,7 @@
       "source_file": "medication_core.py",
       "source_location": "L335",
       "label": "load_settings",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_load_state",
@@ -261,7 +269,7 @@
       "source_file": "medication_core.py",
       "source_location": "L375",
       "label": "load_state",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_load_sync_credentials",
@@ -270,7 +278,7 @@
       "source_file": "medication_core.py",
       "source_location": "L317",
       "label": "load_sync_credentials",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_localize",
@@ -279,7 +287,7 @@
       "source_file": "medication_core.py",
       "source_location": "L608",
       "label": "_localize",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_mark_taken",
@@ -288,7 +296,7 @@
       "source_file": "medication_core.py",
       "source_location": "L563",
       "label": "mark_taken",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_next_ready",
@@ -297,7 +305,7 @@
       "source_file": "medication_core.py",
       "source_location": "L528",
       "label": "next_ready",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_next_scheduled",
@@ -306,7 +314,7 @@
       "source_file": "medication_core.py",
       "source_location": "L577",
       "label": "next_scheduled",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_normalize_state",
@@ -315,7 +323,7 @@
       "source_file": "medication_core.py",
       "source_location": "L453",
       "label": "normalize_state",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_occurrence_key",
@@ -324,7 +332,7 @@
       "source_file": "medication_core.py",
       "source_location": "L171",
       "label": "occurrence_key",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_overdue",
@@ -333,7 +341,7 @@
       "source_file": "medication_core.py",
       "source_location": "L484",
       "label": "overdue",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_parse_iso_date",
@@ -342,7 +350,7 @@
       "source_file": "medication_core.py",
       "source_location": "L42",
       "label": "parse_iso_date",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_parse_time",
@@ -351,7 +359,7 @@
       "source_file": "medication_core.py",
       "source_location": "L49",
       "label": "parse_time",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_protect",
@@ -360,7 +368,7 @@
       "source_file": "medication_core.py",
       "source_location": "L37",
       "label": "protect",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_protectedjsonfile",
@@ -369,7 +377,7 @@
       "source_file": "medication_core.py",
       "source_location": "L265",
       "label": "ProtectedJsonFile",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_protector",
@@ -378,7 +386,7 @@
       "source_file": "medication_core.py",
       "source_location": "L36",
       "label": "Protector",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_replace_schedule",
@@ -387,7 +395,7 @@
       "source_file": "medication_core.py",
       "source_location": "L494",
       "label": "replace_schedule",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_require_text",
@@ -396,7 +404,7 @@
       "source_file": "medication_core.py",
       "source_location": "L55",
       "label": "_require_text",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_resolve",
@@ -405,7 +413,7 @@
       "source_file": "medication_core.py",
       "source_location": "L540",
       "label": "resolve",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_safe_datetime",
@@ -414,7 +422,7 @@
       "source_file": "medication_core.py",
       "source_location": "L431",
       "label": "_safe_datetime",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_save",
@@ -423,7 +431,7 @@
       "source_file": "medication_core.py",
       "source_location": "L285",
       "label": "save",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_save_schedule",
@@ -432,7 +440,7 @@
       "source_file": "medication_core.py",
       "source_location": "L370",
       "label": "save_schedule",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_save_settings",
@@ -441,7 +449,7 @@
       "source_file": "medication_core.py",
       "source_location": "L347",
       "label": "save_settings",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_save_state",
@@ -450,7 +458,7 @@
       "source_file": "medication_core.py",
       "source_location": "L382",
       "label": "save_state",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_save_sync_credentials",
@@ -459,7 +467,7 @@
       "source_file": "medication_core.py",
       "source_location": "L326",
       "label": "save_sync_credentials",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_scheduleengine",
@@ -468,7 +476,7 @@
       "source_file": "medication_core.py",
       "source_location": "L488",
       "label": "ScheduleEngine",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_snooze",
@@ -477,7 +485,7 @@
       "source_file": "medication_core.py",
       "source_location": "L570",
       "label": "snooze",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_storageerror",
@@ -486,7 +494,7 @@
       "source_file": "medication_core.py",
       "source_location": "L32",
       "label": "StorageError",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_transform",
@@ -495,7 +503,7 @@
       "source_file": "medication_core.py",
       "source_location": "L231",
       "label": "_transform",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_unprotect",
@@ -504,7 +512,7 @@
       "source_file": "medication_core.py",
       "source_location": "L39",
       "label": "unprotect",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_validate_schedule",
@@ -513,7 +521,7 @@
       "source_file": "medication_core.py",
       "source_location": "L66",
       "label": "validate_schedule",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_reminder",
@@ -530,7 +538,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L746",
       "label": "add_medicine",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_add_schedule",
@@ -539,7 +547,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L648",
       "label": "add_schedule",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_add_schedule_main",
@@ -548,7 +556,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L304",
       "label": "add_schedule_main",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_apply_remote_schedule",
@@ -557,7 +565,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L937",
       "label": "_apply_remote_schedule",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_apply_timezone",
@@ -566,7 +574,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L591",
       "label": "apply_timezone",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_build_main_window",
@@ -575,7 +583,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L212",
       "label": "build_main_window",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_check_schedule",
@@ -584,7 +592,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L355",
       "label": "check_schedule",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_close",
@@ -602,7 +610,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L532",
       "label": "_close_popup",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_configure_theme",
@@ -611,7 +619,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L167",
       "label": "_configure_theme",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_configured_timezone",
@@ -620,7 +628,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L204",
       "label": "_configured_timezone",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_copy_link",
@@ -629,7 +637,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L850",
       "label": "copy_link",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_edit_event_dialog",
@@ -638,7 +646,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L714",
       "label": "edit_event_dialog",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_edit_medicine",
@@ -647,7 +655,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L749",
       "label": "edit_medicine",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_edit_selected",
@@ -656,7 +664,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L641",
       "label": "edit_selected",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_edit_selected_main",
@@ -665,7 +673,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L307",
       "label": "edit_selected_main",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_enable_dpi_awareness",
@@ -674,7 +682,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L47",
       "label": "enable_dpi_awareness",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_export_taken_log",
@@ -683,7 +691,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L979",
       "label": "export_taken_log",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_finish_sync",
@@ -692,7 +700,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L903",
       "label": "_finish_sync",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_hide_to_tray",
@@ -701,7 +709,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1016",
       "label": "hide_to_tray",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_init",
@@ -710,7 +718,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L103",
       "label": "__init__",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_main",
@@ -728,7 +736,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L501",
       "label": "mark_taken",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_medicationreminderapp",
@@ -737,7 +745,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L124",
       "label": "MedicationReminderApp",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_now",
@@ -746,7 +754,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L209",
       "label": "now",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_open_alert_settings",
@@ -755,7 +763,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L324",
       "label": "open_alert_settings",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_open_schedule_editor",
@@ -764,7 +772,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L577",
       "label": "open_schedule_editor",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_pair_created",
@@ -773,7 +781,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L817",
       "label": "_pair_created",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_pair_device",
@@ -782,7 +790,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L803",
       "label": "pair_device",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_periodic_sync",
@@ -791,7 +799,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L871",
       "label": "_periodic_sync",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_play_alert_sound",
@@ -800,7 +808,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L374",
       "label": "play_alert_sound",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_populate",
@@ -809,7 +817,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L621",
       "label": "populate",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_quit_app",
@@ -818,7 +826,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1039",
       "label": "quit_app",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_refresh_schedule_table",
@@ -827,7 +835,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L270",
       "label": "refresh_schedule_table",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_register_startup",
@@ -845,7 +853,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L754",
       "label": "remove_medicine",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_remove_schedule",
@@ -854,7 +862,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L651",
       "label": "remove_schedule",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_remove_selected_main",
@@ -863,7 +871,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L313",
       "label": "remove_selected_main",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_resource_dir",
@@ -890,7 +898,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1000",
       "label": "_safe_audit",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_save",
@@ -899,7 +907,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L775",
       "label": "save",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_save_alert_settings",
@@ -908,7 +916,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L337",
       "label": "save_alert_settings",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_save_config",
@@ -917,7 +925,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L555",
       "label": "save_config",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_selected_main_event_index",
@@ -926,7 +934,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L293",
       "label": "_selected_main_event_index",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_set_sync_status",
@@ -935,7 +943,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L860",
       "label": "_set_sync_status",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_show_due_popup",
@@ -944,7 +952,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L415",
       "label": "show_due_popup",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_show_pairing_qr",
@@ -953,7 +961,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L827",
       "label": "show_pairing_qr",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_show_startup_error",
@@ -962,7 +970,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1054",
       "label": "show_startup_error",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_show_window",
@@ -971,7 +979,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1019",
       "label": "show_window",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_show_window_main_thread",
@@ -980,7 +988,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1022",
       "label": "_show_window_main_thread",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_singleinstance",
@@ -998,7 +1006,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L519",
       "label": "snooze_event",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_start_sync",
@@ -1007,7 +1015,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L875",
       "label": "_start_sync",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_start_tray_icon",
@@ -1016,7 +1024,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1027",
       "label": "start_tray_icon",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_startup_command",
@@ -1034,7 +1042,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L952",
       "label": "_sync_failed",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_test_alert_settings",
@@ -1043,7 +1051,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L345",
       "label": "test_alert_settings",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_test_reminder",
@@ -1052,7 +1060,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L542",
       "label": "test_reminder",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_toggle",
@@ -1061,7 +1069,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L630",
       "label": "toggle",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_tone",
@@ -1070,7 +1078,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L392",
       "label": "tone",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_unpair_device",
@@ -1079,7 +1087,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L958",
       "label": "unpair_device",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_update_next_due_text",
@@ -1088,7 +1096,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L279",
       "label": "update_next_due_text",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_warn_persistence",
@@ -1097,7 +1105,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L1006",
       "label": "_warn_persistence",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_worker",
@@ -1106,7 +1114,7 @@
       "source_file": "medication_reminder.py",
       "source_location": "L376",
       "label": "worker",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_schedule",
@@ -1114,7 +1122,7 @@
       "name": "medication_schedule.json",
       "source_file": "medication_schedule.json",
       "label": "medication_schedule.json",
-      "community": 16
+      "community": 12
     },
     {
       "id": "readme",
@@ -1122,7 +1130,7 @@
       "name": "README.md",
       "source_file": "README.md",
       "label": "README.md",
-      "community": 18
+      "community": 14
     },
     {
       "id": "requirements",
@@ -1130,7 +1138,7 @@
       "name": "requirements.txt",
       "source_file": "requirements.txt",
       "label": "requirements.txt",
-      "community": 19
+      "community": 15
     },
     {
       "id": "run_medication_reminder",
@@ -1138,7 +1146,7 @@
       "name": "run_medication_reminder.bat",
       "source_file": "run_medication_reminder.bat",
       "label": "run_medication_reminder.bat",
-      "community": 20
+      "community": 16
     },
     {
       "id": "sync_client",
@@ -1155,7 +1163,7 @@
       "source_file": "sync_client.py",
       "source_location": "L27",
       "label": "_b64",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_create_pair",
@@ -1164,7 +1172,7 @@
       "source_file": "sync_client.py",
       "source_location": "L96",
       "label": "create_pair",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_decrypt",
@@ -1173,7 +1181,7 @@
       "source_file": "sync_client.py",
       "source_location": "L89",
       "label": "_decrypt",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_encrypt",
@@ -1182,7 +1190,7 @@
       "source_file": "sync_client.py",
       "source_location": "L82",
       "label": "_encrypt",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_encryptedsyncclient",
@@ -1191,7 +1199,7 @@
       "source_file": "sync_client.py",
       "source_location": "L47",
       "label": "EncryptedSyncClient",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_fetch",
@@ -1200,7 +1208,7 @@
       "source_file": "sync_client.py",
       "source_location": "L102",
       "label": "fetch",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_init",
@@ -1209,7 +1217,7 @@
       "source_file": "sync_client.py",
       "source_location": "L22",
       "label": "__init__",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_pairing_link",
@@ -1218,7 +1226,7 @@
       "source_file": "sync_client.py",
       "source_location": "L77",
       "label": "pairing_link",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_random_id",
@@ -1227,7 +1235,7 @@
       "source_file": "sync_client.py",
       "source_location": "L35",
       "label": "_random_id",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_remoteschedule",
@@ -1236,7 +1244,7 @@
       "source_file": "sync_client.py",
       "source_location": "L40",
       "label": "RemoteSchedule",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_request",
@@ -1245,7 +1253,7 @@
       "source_file": "sync_client.py",
       "source_location": "L52",
       "label": "_request",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_revoke",
@@ -1254,7 +1262,7 @@
       "source_file": "sync_client.py",
       "source_location": "L111",
       "label": "revoke",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_syncerror",
@@ -1263,7 +1271,7 @@
       "source_file": "sync_client.py",
       "source_location": "L21",
       "label": "SyncError",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_unb64",
@@ -1272,7 +1280,7 @@
       "source_file": "sync_client.py",
       "source_location": "L31",
       "label": "_unb64",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_update",
@@ -1281,7 +1289,7 @@
       "source_file": "sync_client.py",
       "source_location": "L106",
       "label": "update",
-      "community": 21
+      "community": 17
     },
     {
       "id": "tests_e2e_sync",
@@ -1306,7 +1314,7 @@
       "name": "test_due_modal.mjs",
       "source_file": "tests/test_due_modal.mjs",
       "label": "test_due_modal.mjs",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_due_modal_close",
@@ -1316,7 +1324,7 @@
       "source_location": "L12",
       "is_method": true,
       "label": "close",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_due_modal_replacechildren",
@@ -1326,7 +1334,7 @@
       "source_location": "L17",
       "is_method": true,
       "label": "replaceChildren",
-      "community": 17
+      "community": 19
     },
     {
       "id": "tests_test_due_modal_showmodal",
@@ -1336,7 +1344,7 @@
       "source_location": "L11",
       "is_method": true,
       "label": "showModal",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_due_modal_test_notification_taps_route_the_private_due_timestamp_back_to_local_modal_data_l43_c84",
@@ -1346,7 +1354,7 @@
       "source_location": "L43",
       "anonymous": true,
       "label": "test notification taps route the private due timestamp back to local modal data",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_due_modal_test_pwa_due_reminder_opens_a_modal_with_one_safe_list_row_per_medication_l6_c78",
@@ -1356,7 +1364,7 @@
       "source_location": "L6",
       "anonymous": true,
       "label": "test PWA due reminder opens a modal with one safe list row per medication",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_due_modal_test_windows_reminder_is_modal_and_creates_one_visible_label_for_every_medicine_l52_c84",
@@ -1366,7 +1374,7 @@
       "source_location": "L52",
       "anonymous": true,
       "label": "test Windows reminder is modal and creates one visible label for every medicine",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_medication_core",
@@ -1383,7 +1391,7 @@
       "source_file": "tests/test_medication_core.py",
       "source_location": "L11",
       "label": "schedule",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_scheduleenginetests",
@@ -1392,7 +1400,7 @@
       "source_file": "tests/test_medication_core.py",
       "source_location": "L28",
       "label": "ScheduleEngineTests",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_test_catches_up_after_sleep_or_restart",
@@ -1401,7 +1409,7 @@
       "source_file": "tests/test_medication_core.py",
       "source_location": "L35",
       "label": "test_catches_up_after_sleep_or_restart",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_test_invalid_schedule_is_rejected",
@@ -1410,7 +1418,7 @@
       "source_file": "tests/test_medication_core.py",
       "source_location": "L29",
       "label": "test_invalid_schedule_is_rejected",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_test_mark_taken_removes_pending_and_records_completion",
@@ -1419,7 +1427,7 @@
       "source_file": "tests/test_medication_core.py",
       "source_location": "L60",
       "label": "test_mark_taken_removes_pending_and_records_completion",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_test_snooze_suppresses_until_expiry",
@@ -1428,7 +1436,7 @@
       "source_file": "tests/test_medication_core.py",
       "source_location": "L46",
       "label": "test_snooze_suppresses_until_expiry",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_pairing",
@@ -1445,7 +1453,7 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L9",
       "label": "PairingTests",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_pairing_test_encrypted_pairing_payload_round_trips_schedule",
@@ -1454,7 +1462,7 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L10",
       "label": "test_encrypted_pairing_payload_round_trips_schedule",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_pairing_test_pairing_link_uses_fragment_and_contains_no_schedule",
@@ -1463,7 +1471,7 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L20",
       "label": "test_pairing_link_uses_fragment_and_contains_no_schedule",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_web_account",
@@ -1471,7 +1479,7 @@
       "name": "test_web_account.mjs",
       "source_file": "tests/test_web_account.mjs",
       "label": "test_web_account.mjs",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_account_test_account_client_uses_the_public_client_id_indirectly_and_never_embeds_an_oau_l5_c94",
@@ -1481,7 +1489,7 @@
       "source_location": "L5",
       "anonymous": true,
       "label": "test account client uses the public client ID indirectly and never embeds an OAu",
-      "community": 25
+      "community": 22
     },
     {
       "id": "tests_test_web_account_test_pair_creation_requires_server_derived_advanced_access_and_sends_the_account_l13_c93",
@@ -1491,7 +1499,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "test pair creation requires server-derived Advanced access and sends the account",
-      "community": 25
+      "community": 22
     },
     {
       "id": "tests_test_web_account_test_security_policy_permits_google_identity_services_while_blocking_plugins_and_l19_c93",
@@ -1501,7 +1509,7 @@
       "source_location": "L19",
       "anonymous": true,
       "label": "test security policy permits Google Identity Services while blocking plugins and",
-      "community": 25
+      "community": 22
     },
     {
       "id": "tests_test_web_sync",
@@ -1509,7 +1517,7 @@
       "name": "test_web_sync.mjs",
       "source_file": "tests/test_web_sync.mjs",
       "label": "test_web_sync.mjs",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_add",
@@ -1519,7 +1527,7 @@
       "source_location": "L35",
       "is_method": true,
       "label": "add",
-      "community": 17
+      "community": 18
     },
     {
       "id": "tests_test_web_sync_addeventlistener",
@@ -1529,7 +1537,7 @@
       "source_location": "L26",
       "is_method": true,
       "label": "addEventListener",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_alert",
@@ -1539,7 +1547,7 @@
       "source_location": "L97",
       "is_method": true,
       "label": "alert",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_append",
@@ -1549,7 +1557,7 @@
       "source_location": "L74",
       "is_method": true,
       "label": "append",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_cancelanimationframe",
@@ -1559,7 +1567,7 @@
       "source_location": "L110",
       "is_method": true,
       "label": "cancelAnimationFrame",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_close",
@@ -1569,7 +1577,7 @@
       "source_location": "L28",
       "is_method": true,
       "label": "close",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_web_sync_contains",
@@ -1579,7 +1587,7 @@
       "source_location": "L78",
       "is_method": true,
       "label": "contains",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_control",
@@ -1588,7 +1596,7 @@
       "source_file": "tests/test_web_sync.mjs",
       "source_location": "L7",
       "label": "control",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_createelement",
@@ -1598,7 +1606,7 @@
       "source_location": "L83",
       "is_method": true,
       "label": "createElement",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_detect",
@@ -1608,7 +1616,7 @@
       "source_location": "L62",
       "is_method": true,
       "label": "detect",
-      "community": 26
+      "community": 23
     },
     {
       "id": "tests_test_web_sync_dialog",
@@ -1617,7 +1625,7 @@
       "source_file": "tests/test_web_sync.mjs",
       "source_location": "L11",
       "label": "dialog",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_encode_l268_c18",
@@ -1627,7 +1635,7 @@
       "source_location": "L268",
       "anonymous": true,
       "label": "encode",
-      "community": 28
+      "community": 24
     },
     {
       "id": "tests_test_web_sync_fillrect",
@@ -1637,7 +1645,7 @@
       "source_location": "L13",
       "is_method": true,
       "label": "fillRect",
-      "community": 26
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_getusermedia",
@@ -1647,7 +1655,7 @@
       "source_location": "L49",
       "is_method": true,
       "label": "getUserMedia",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_web_sync_installedmobileharness",
@@ -1656,7 +1664,7 @@
       "source_file": "tests/test_web_sync.mjs",
       "source_location": "L32",
       "label": "installedMobileHarness",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_json",
@@ -1666,7 +1674,7 @@
       "source_location": "L130",
       "is_method": true,
       "label": "json",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_sync_play",
@@ -1676,7 +1684,7 @@
       "source_location": "L14",
       "is_method": true,
       "label": "play",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_queryselector",
@@ -1686,7 +1694,7 @@
       "source_location": "L25",
       "is_method": true,
       "label": "querySelector",
-      "community": 26
+      "community": 23
     },
     {
       "id": "tests_test_web_sync_remove",
@@ -1696,7 +1704,7 @@
       "source_location": "L35",
       "is_method": true,
       "label": "remove",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_replacestate",
@@ -1706,7 +1714,7 @@
       "source_location": "L92",
       "is_method": true,
       "label": "replaceState",
-      "community": 26
+      "community": 23
     },
     {
       "id": "tests_test_web_sync_revokefromsource_l135_c23",
@@ -1716,7 +1724,7 @@
       "source_location": "L135",
       "anonymous": true,
       "label": "revokeFromSource",
-      "community": 29
+      "community": 25
     },
     {
       "id": "tests_test_web_sync_showmodal",
@@ -1726,7 +1734,7 @@
       "source_location": "L27",
       "is_method": true,
       "label": "showModal",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_web_sync_stop",
@@ -1736,7 +1744,7 @@
       "source_location": "L50",
       "is_method": true,
       "label": "stop",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_web_sync_test_a_new_visitor_starts_with_an_empty_private_schedule_l212_c61",
@@ -1746,7 +1754,7 @@
       "source_location": "L212",
       "anonymous": true,
       "label": "test a new visitor starts with an empty private schedule",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l188_c68",
@@ -1756,7 +1764,7 @@
       "source_location": "L188",
       "anonymous": true,
       "label": "test an explicitly unpaired mobile stays empty after app reload",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l180_c77",
@@ -1766,7 +1774,7 @@
       "source_location": "L180",
       "anonymous": true,
       "label": "test an installed mobile with no active pairing clears legacy local data",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_test_desktop_encrypted_schedule_import_works_end_to_end_without_storing_pairing_l243_c96",
@@ -1776,7 +1784,7 @@
       "source_location": "L243",
       "anonymous": true,
       "label": "test desktop encrypted schedule import works end-to-end without storing pairing",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_sync_test_desktop_pairing_links_are_routed_to_a_non_claiming_snapshot_import_l229_c76",
@@ -1786,7 +1794,7 @@
       "source_location": "L229",
       "anonymous": true,
       "label": "test desktop pairing links are routed to a non-claiming snapshot import",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l142_c80",
@@ -1796,7 +1804,7 @@
       "source_location": "L142",
       "anonymous": true,
       "label": "test installed mobile exposes only pairing sync controls and safely unpairs",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l170_c72",
@@ -1806,7 +1814,7 @@
       "source_location": "L170",
       "anonymous": true,
       "label": "test source-side revocation immediately forgets the mobile schedule",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_toggle",
@@ -1816,7 +1824,7 @@
       "source_location": "L77",
       "is_method": true,
       "label": "toggle",
-      "community": 17
+      "community": 18
     },
     {
       "id": "tests_test_web_update",
@@ -1824,7 +1832,7 @@
       "name": "test_web_update.mjs",
       "source_file": "tests/test_web_update.mjs",
       "label": "test_web_update.mjs",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_update_addeventlistener",
@@ -1834,7 +1842,7 @@
       "source_location": "L13",
       "is_method": true,
       "label": "addEventListener",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_alert",
@@ -1844,7 +1852,7 @@
       "source_location": "L55",
       "is_method": true,
       "label": "alert",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_anon_l6_c33",
@@ -1854,7 +1862,7 @@
       "source_location": "L6",
       "anonymous": true,
       "label": "anon",
-      "community": 31
+      "community": 26
     },
     {
       "id": "tests_test_web_update_json",
@@ -1864,7 +1872,7 @@
       "source_location": "L52",
       "is_method": true,
       "label": "json",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_postmessage",
@@ -1874,7 +1882,7 @@
       "source_location": "L14",
       "is_method": true,
       "label": "postMessage",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_queryselector",
@@ -1884,7 +1892,7 @@
       "source_location": "L40",
       "is_method": true,
       "label": "querySelector",
-      "community": 26
+      "community": 23
     },
     {
       "id": "tests_test_web_update_register",
@@ -1894,7 +1902,7 @@
       "source_location": "L35",
       "is_method": true,
       "label": "register",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_reload",
@@ -1904,7 +1912,7 @@
       "source_location": "L48",
       "is_method": true,
       "label": "reload",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_test_cloudflare_release_discovery_asks_before_activating_an_update_l75_c71",
@@ -1914,7 +1922,7 @@
       "source_location": "L75",
       "anonymous": true,
       "label": "test Cloudflare release discovery asks before activating an update",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_test_declined_updates_are_not_activated_or_repeatedly_prompted_in_the_same_sessi_l85_c87",
@@ -1924,7 +1932,7 @@
       "source_location": "L85",
       "anonymous": true,
       "label": "test declined updates are not activated or repeatedly prompted in the same sessi",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_test_startup_reports_no_update_when_cloudflare_version_matches_the_installed_app_l98_c85",
@@ -1934,7 +1942,7 @@
       "source_location": "L98",
       "anonymous": true,
       "label": "test startup reports no update when Cloudflare version matches the installed app",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_update",
@@ -1944,7 +1952,7 @@
       "source_location": "L22",
       "is_method": true,
       "label": "update",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_updateharness",
@@ -1953,7 +1961,7 @@
       "source_file": "tests/test_web_update.mjs",
       "source_location": "L8",
       "label": "updateHarness",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_worker_auth",
@@ -1961,7 +1969,7 @@
       "name": "test_worker_auth.mjs",
       "source_file": "tests/test_worker_auth.mjs",
       "label": "test_worker_auth.mjs",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_assert_rejects_l58_c24",
@@ -1971,7 +1979,7 @@
       "source_location": "L58",
       "anonymous": true,
       "label": "assert.rejects",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_assert_rejects_l64_c24",
@@ -1981,7 +1989,7 @@
       "source_location": "L64",
       "anonymous": true,
       "label": "assert.rejects",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_assert_rejects_l67_c24",
@@ -1991,7 +1999,7 @@
       "source_location": "L67",
       "anonymous": true,
       "label": "assert.rejects",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_b64url_l10_c16",
@@ -2001,7 +2009,7 @@
       "source_location": "L10",
       "anonymous": true,
       "label": "b64url",
-      "community": 34
+      "community": 27
     },
     {
       "id": "tests_test_worker_auth_fixture",
@@ -2010,7 +2018,7 @@
       "source_file": "tests/test_worker_auth.mjs",
       "source_location": "L12",
       "label": "fixture",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_json",
@@ -2020,7 +2028,7 @@
       "source_location": "L38",
       "is_method": true,
       "label": "json",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_worker_auth_test_a_token_issued_for_another_oauth_client_is_rejected_l55_c61",
@@ -2030,7 +2038,7 @@
       "source_location": "L55",
       "anonymous": true,
       "label": "test a token issued for another OAuth client is rejected",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_test_expired_and_unverified_google_identities_are_rejected_l61_c63",
@@ -2040,7 +2048,7 @@
       "source_location": "L61",
       "anonymous": true,
       "label": "test expired and unverified Google identities are rejected",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_test_google_identity_tokens_are_signature_issuer_audience_expiry_and_email_v_l43_c92",
@@ -2050,7 +2058,7 @@
       "source_location": "L43",
       "anonymous": true,
       "label": "test Google identity tokens are signature, issuer, audience, expiry, and email v",
-      "community": 33
+      "community": 13
     },
     {
       "id": "web_account",
@@ -2058,7 +2066,7 @@
       "name": "account.js",
       "source_file": "web/account.js",
       "label": "account.js",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_advanced",
@@ -2068,7 +2076,7 @@
       "source_location": "L139",
       "is_method": true,
       "label": "advanced",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_anon_l1_c2",
@@ -2078,7 +2086,7 @@
       "source_location": "L1",
       "anonymous": true,
       "label": "anon",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_authorizationheaders",
@@ -2088,7 +2096,7 @@
       "source_location": "L140",
       "is_method": true,
       "label": "authorizationHeaders",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_current",
@@ -2098,7 +2106,7 @@
       "source_location": "L137",
       "is_method": true,
       "label": "current",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_elements_save_onclick_l115_c25",
@@ -2108,7 +2116,7 @@
       "source_location": "L115",
       "anonymous": true,
       "label": "elements.save.onclick",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_elements_signout_onclick_l125_c28",
@@ -2118,7 +2126,7 @@
       "source_location": "L125",
       "anonymous": true,
       "label": "elements.signOut.onclick",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_handlegooglecredential",
@@ -2127,7 +2135,7 @@
       "source_file": "web/account.js",
       "source_location": "L75",
       "label": "handleGoogleCredential",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_initialize",
@@ -2136,7 +2144,7 @@
       "source_file": "web/account.js",
       "source_location": "L103",
       "label": "initialize",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_loadgooglelibrary",
@@ -2145,7 +2153,7 @@
       "source_file": "web/account.js",
       "source_location": "L64",
       "label": "loadGoogleLibrary",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_render",
@@ -2154,7 +2162,7 @@
       "source_file": "web/account.js",
       "source_location": "L39",
       "label": "render",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_rendergooglebutton",
@@ -2163,7 +2171,7 @@
       "source_file": "web/account.js",
       "source_location": "L57",
       "label": "renderGoogleButton",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_request",
@@ -2172,7 +2180,7 @@
       "source_file": "web/account.js",
       "source_location": "L27",
       "label": "request",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_requireadvanced",
@@ -2182,7 +2190,7 @@
       "source_location": "L141",
       "is_method": true,
       "label": "requireAdvanced",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_restoresession",
@@ -2191,7 +2199,7 @@
       "source_file": "web/account.js",
       "source_location": "L93",
       "label": "restoreSession",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_signedin",
@@ -2201,7 +2209,7 @@
       "source_location": "L138",
       "is_method": true,
       "label": "signedIn",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_storesession",
@@ -2210,7 +2218,7 @@
       "source_file": "web/account.js",
       "source_location": "L34",
       "label": "storeSession",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_app",
@@ -2218,7 +2226,7 @@
       "name": "app.js",
       "source_file": "web/app.js",
       "label": "app.js",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_active",
@@ -2227,7 +2235,7 @@
       "source_file": "web/app.js",
       "source_location": "L6",
       "label": "active",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_addeventlistener_click_l37_c42",
@@ -2237,7 +2245,7 @@
       "source_location": "L37",
       "anonymous": true,
       "label": "addEventListener click",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_addeventlistener_close_l34_c42",
@@ -2247,7 +2255,7 @@
       "source_location": "L34",
       "anonymous": true,
       "label": "addEventListener close",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_addmedicine_onclick_l13_c361",
@@ -2257,7 +2265,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#addMedicine').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_addmedicineinput",
@@ -2266,7 +2274,7 @@
       "source_file": "web/app.js",
       "source_location": "L9",
       "label": "addMedicineInput",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_addschedule_onclick_l13_c318",
@@ -2276,7 +2284,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#addSchedule').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_b_onclick_l13_c56",
@@ -2286,7 +2294,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "b.onclick",
-      "community": 17
+      "community": 18
     },
     {
       "id": "web_app_checkduemodals",
@@ -2295,7 +2303,7 @@
       "source_file": "web/app.js",
       "source_location": "L33",
       "label": "checkDueModals",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_checkforegroundnotifications",
@@ -2304,7 +2312,7 @@
       "source_file": "web/app.js",
       "source_location": "L18",
       "label": "checkForegroundNotifications",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_clearprematuretaken",
@@ -2313,7 +2321,7 @@
       "source_file": "web/app.js",
       "source_location": "L24",
       "label": "clearPrematureTaken",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_closeduemodal",
@@ -2322,7 +2330,7 @@
       "source_file": "web/app.js",
       "source_location": "L32",
       "label": "closeDueModal",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_decodepairingpayload",
@@ -2331,7 +2339,7 @@
       "source_file": "web/app.js",
       "source_location": "L42",
       "label": "decodePairingPayload",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_e_medicines_map_l36_c933",
@@ -2341,7 +2349,7 @@
       "source_location": "L36",
       "anonymous": true,
       "label": "e.medicines.map",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_e_medicines_map_l7_c642",
@@ -2351,7 +2359,7 @@
       "source_location": "L7",
       "anonymous": true,
       "label": "e.medicines.map",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_emptyschedule_l2_c398",
@@ -2361,7 +2369,7 @@
       "source_location": "L2",
       "anonymous": true,
       "label": "emptySchedule",
-      "community": 35
+      "community": 28
     },
     {
       "id": "web_app_enablenotifications",
@@ -2370,7 +2378,7 @@
       "source_file": "web/app.js",
       "source_location": "L16",
       "label": "enableNotifications",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_enablenotifications_onclick_l23_c100",
@@ -2380,7 +2388,7 @@
       "source_location": "L23",
       "anonymous": true,
       "label": "$('#enableNotifications').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_enqueuedue",
@@ -2389,7 +2397,7 @@
       "source_file": "web/app.js",
       "source_location": "L31",
       "label": "enqueueDue",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_esc_l3_c48",
@@ -2399,7 +2407,7 @@
       "source_location": "L3",
       "anonymous": true,
       "label": "esc",
-      "community": 36
+      "community": 29
     },
     {
       "id": "web_app_exportschedule_onclick_l47_c30",
@@ -2409,7 +2417,7 @@
       "source_location": "L47",
       "anonymous": true,
       "label": "$('#exportSchedule').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_foreach_l21_c202",
@@ -2419,7 +2427,7 @@
       "source_location": "L21",
       "anonymous": true,
       "label": "forEach",
-      "community": 37
+      "community": 30
     },
     {
       "id": "web_app_foreach_l45_c502",
@@ -2429,7 +2437,7 @@
       "source_location": "L45",
       "anonymous": true,
       "label": "forEach",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_importschedule_onclick_l48_c30",
@@ -2439,7 +2447,7 @@
       "source_location": "L48",
       "anonymous": true,
       "label": "$('#importSchedule').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_installbutton_onclick_l13_c1299",
@@ -2449,7 +2457,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#installButton').onclick",
-      "community": 38
+      "community": 31
     },
     {
       "id": "web_app_items_map_l36_c312",
@@ -2459,7 +2467,7 @@
       "source_location": "L36",
       "anonymous": true,
       "label": "items.map",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_list_map_l7_c152",
@@ -2469,7 +2477,7 @@
       "source_location": "L7",
       "anonymous": true,
       "label": "list.map",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_localdatekey_l5_c20",
@@ -2479,7 +2487,7 @@
       "source_location": "L5",
       "anonymous": true,
       "label": "localDateKey",
-      "community": 39
+      "community": 32
     },
     {
       "id": "web_app_map_l10_c480",
@@ -2489,7 +2497,7 @@
       "source_location": "L10",
       "anonymous": true,
       "label": "map",
-      "community": 40
+      "community": 33
     },
     {
       "id": "web_app_markduetaken_onclick_l35_c71",
@@ -2499,7 +2507,7 @@
       "source_location": "L35",
       "anonymous": true,
       "label": "$('#markDueTaken').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_markoccurrencetaken",
@@ -2508,7 +2516,7 @@
       "source_file": "web/app.js",
       "source_location": "L29",
       "label": "markOccurrenceTaken",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_nextpushreminders",
@@ -2517,7 +2525,7 @@
       "source_file": "web/app.js",
       "source_location": "L21",
       "label": "nextPushReminders",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_notes_foreach_l11_c523",
@@ -2527,7 +2535,7 @@
       "source_location": "L11",
       "anonymous": true,
       "label": "notes.forEach",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_openeditor",
@@ -2536,7 +2544,7 @@
       "source_file": "web/app.js",
       "source_location": "L8",
       "label": "openEditor",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_pairingpayload",
@@ -2545,7 +2553,7 @@
       "source_file": "web/app.js",
       "source_location": "L41",
       "label": "pairingPayload",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_persisttaken",
@@ -2554,7 +2562,7 @@
       "source_file": "web/app.js",
       "source_location": "L28",
       "label": "persistTaken",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_playsound",
@@ -2563,7 +2571,7 @@
       "source_file": "web/app.js",
       "source_location": "L11",
       "label": "playSound",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_readstoredjson_l2_c165",
@@ -2573,7 +2581,7 @@
       "source_location": "L2",
       "anonymous": true,
       "label": "readStoredJson",
-      "community": 41
+      "community": 34
     },
     {
       "id": "web_app_reminderstate",
@@ -2582,7 +2590,7 @@
       "source_file": "web/app.js",
       "source_location": "L25",
       "label": "reminderState",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_renderall",
@@ -2591,7 +2599,7 @@
       "source_file": "web/app.js",
       "source_location": "L12",
       "label": "renderAll",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_rendermedicineinputs",
@@ -2600,7 +2608,7 @@
       "source_file": "web/app.js",
       "source_location": "L9",
       "label": "renderMedicineInputs",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_renderpairingqr",
@@ -2609,7 +2617,7 @@
       "source_file": "web/app.js",
       "source_location": "L43",
       "label": "renderPairingQr",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_renderschedules",
@@ -2618,7 +2626,7 @@
       "source_file": "web/app.js",
       "source_location": "L7",
       "label": "renderSchedules",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_rendertoday",
@@ -2627,7 +2635,7 @@
       "source_file": "web/app.js",
       "source_location": "L36",
       "label": "renderToday",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_save_l3_c162",
@@ -2637,7 +2645,7 @@
       "source_location": "L3",
       "anonymous": true,
       "label": "save",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_saveeditor",
@@ -2646,7 +2654,7 @@
       "source_file": "web/app.js",
       "source_location": "L10",
       "label": "saveEditor",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_saveschedule_onclick_l13_c411",
@@ -2656,7 +2664,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#saveSchedule').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_savesettings_onclick_l13_c721",
@@ -2666,7 +2674,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#saveSettings').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_savesettings_onclick_l39_c79",
@@ -2676,7 +2684,7 @@
       "source_location": "L39",
       "anonymous": true,
       "label": "$('#saveSettings').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_scan_l45_c401",
@@ -2686,7 +2694,7 @@
       "source_location": "L45",
       "anonymous": true,
       "label": "scan",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_scanqr_onclick_l45_c22",
@@ -2696,7 +2704,7 @@
       "source_location": "L45",
       "anonymous": true,
       "label": "$('#scanQr').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_schedule_events_filter_l18_c254",
@@ -2706,7 +2714,7 @@
       "source_location": "L18",
       "anonymous": true,
       "label": "schedule.events.filter",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_schedule_events_filter_l21_c178",
@@ -2716,7 +2724,7 @@
       "source_location": "L21",
       "anonymous": true,
       "label": "schedule.events.filter",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_schedule_events_filter_l33_c156",
@@ -2726,7 +2734,7 @@
       "source_location": "L33",
       "anonymous": true,
       "label": "schedule.events.filter",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_schedule_events_filter_l36_c205",
@@ -2736,7 +2744,7 @@
       "source_location": "L36",
       "anonymous": true,
       "label": "schedule.events.filter",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_schedulelist_onclick_l13_c1007",
@@ -2746,7 +2754,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#scheduleList').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_settimeout_l11_c939",
@@ -2756,7 +2764,7 @@
       "source_location": "L11",
       "anonymous": true,
       "label": "setTimeout",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_showbrowsernotification",
@@ -2765,7 +2773,7 @@
       "source_file": "web/app.js",
       "source_location": "L15",
       "label": "showBrowserNotification",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_shownextduemodal",
@@ -2774,7 +2782,7 @@
       "source_file": "web/app.js",
       "source_location": "L30",
       "label": "showNextDueModal",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_showqr_onclick_l44_c22",
@@ -2784,7 +2792,7 @@
       "source_location": "L44",
       "anonymous": true,
       "label": "$('#showQr').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_sort_l36_c226",
@@ -2794,7 +2802,7 @@
       "source_location": "L36",
       "anonymous": true,
       "label": "sort",
-      "community": 42
+      "community": 35
     },
     {
       "id": "web_app_sort_l7_c65",
@@ -2804,7 +2812,7 @@
       "source_location": "L7",
       "anonymous": true,
       "label": "sort",
-      "community": 43
+      "community": 36
     },
     {
       "id": "web_app_syncpushsubscription",
@@ -2813,7 +2821,7 @@
       "source_file": "web/app.js",
       "source_location": "L22",
       "label": "syncPushSubscription",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_testsound_onclick_l13_c585",
@@ -2823,7 +2831,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#testSound').onclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_timenow_l3_c540",
@@ -2833,7 +2841,7 @@
       "source_location": "L3",
       "anonymous": true,
       "label": "timeNow",
-      "community": 44
+      "community": 37
     },
     {
       "id": "web_app_uint8array_from_l22_c620",
@@ -2843,7 +2851,7 @@
       "source_location": "L22",
       "anonymous": true,
       "label": "Uint8Array.from",
-      "community": 45
+      "community": 38
     },
     {
       "id": "web_app_updatenotificationstatus",
@@ -2852,7 +2860,7 @@
       "source_file": "web/app.js",
       "source_location": "L14",
       "label": "updateNotificationStatus",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_volumeinput_oninput_l13_c512",
@@ -2862,7 +2870,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "$('#volumeInput').oninput",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_window_addeventlistener_beforeinstallprompt_l13_c1420",
@@ -2872,7 +2880,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "window.addEventListener beforeinstallprompt",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_window_applysyncedschedule_l50_c28",
@@ -2882,7 +2890,7 @@
       "source_location": "L50",
       "anonymous": true,
       "label": "window.applySyncedSchedule",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_window_clearmedicationschedule_l51_c32",
@@ -2892,7 +2900,7 @@
       "source_location": "L51",
       "anonymous": true,
       "label": "window.clearMedicationSchedule",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_window_getmedicationpushendpoint_l52_c34",
@@ -2902,7 +2910,7 @@
       "source_location": "L52",
       "anonymous": true,
       "label": "window.getMedicationPushEndpoint",
-      "community": 46
+      "community": 39
     },
     {
       "id": "web_app_window_getmedicationschedule_l49_c30",
@@ -2912,7 +2920,7 @@
       "source_location": "L49",
       "anonymous": true,
       "label": "window.getMedicationSchedule",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_due_modal",
@@ -2920,7 +2928,7 @@
       "name": "due-modal.js",
       "source_file": "web/due-modal.js",
       "label": "due-modal.js",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_due_modal_close",
@@ -2930,7 +2938,7 @@
       "source_location": "L17",
       "is_method": true,
       "label": "close",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_due_modal_show",
@@ -2940,7 +2948,7 @@
       "source_location": "L6",
       "is_method": true,
       "label": "show",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_headers",
@@ -2948,7 +2956,7 @@
       "name": "_headers",
       "source_file": "web/_headers",
       "label": "_headers",
-      "community": 47
+      "community": 40
     },
     {
       "id": "web_index",
@@ -2956,7 +2964,7 @@
       "name": "index.html",
       "source_file": "web/index.html",
       "label": "index.html",
-      "community": 48
+      "community": 41
     },
     {
       "id": "web_manifest",
@@ -2964,7 +2972,7 @@
       "name": "manifest.webmanifest",
       "source_file": "web/manifest.webmanifest",
       "label": "manifest.webmanifest",
-      "community": 49
+      "community": 42
     },
     {
       "id": "web_qrcode",
@@ -2972,7 +2980,7 @@
       "name": "qrcode.js",
       "source_file": "web/qrcode.js",
       "label": "qrcode.js",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_qrpolynomial",
@@ -2981,7 +2989,7 @@
       "source_file": "web/qrcode.js",
       "source_location": "L1182",
       "label": "qrPolynomial",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_toutf8array",
@@ -2990,7 +2998,7 @@
       "source_file": "web/qrcode.js",
       "source_location": "L2254",
       "label": "toUTF8Array",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_styles",
@@ -2998,7 +3006,7 @@
       "name": "styles.css",
       "source_file": "web/styles.css",
       "label": "styles.css",
-      "community": 52
+      "community": 45
     },
     {
       "id": "web_sw",
@@ -3006,7 +3014,7 @@
       "name": "sw.js",
       "source_file": "web/sw.js",
       "label": "sw.js",
-      "community": 53
+      "community": 46
     },
     {
       "id": "web_sw_list_foreach_l7_c569",
@@ -3016,7 +3024,7 @@
       "source_location": "L7",
       "anonymous": true,
       "label": "list.forEach",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_sw_self_addeventlistener_activate_l5_c34",
@@ -3026,7 +3034,7 @@
       "source_location": "L5",
       "anonymous": true,
       "label": "self.addEventListener activate",
-      "community": 55
+      "community": 48
     },
     {
       "id": "web_sw_self_addeventlistener_fetch_l6_c31",
@@ -3036,7 +3044,7 @@
       "source_location": "L6",
       "anonymous": true,
       "label": "self.addEventListener fetch",
-      "community": 54
+      "community": 47
     },
     {
       "id": "web_sw_self_addeventlistener_install_l3_c33",
@@ -3046,7 +3054,7 @@
       "source_location": "L3",
       "anonymous": true,
       "label": "self.addEventListener install",
-      "community": 56
+      "community": 49
     },
     {
       "id": "web_sw_self_addeventlistener_message_l4_c33",
@@ -3056,7 +3064,7 @@
       "source_location": "L4",
       "anonymous": true,
       "label": "self.addEventListener message",
-      "community": 57
+      "community": 50
     },
     {
       "id": "web_sw_self_addeventlistener_notificationclick_l8_c43",
@@ -3066,7 +3074,7 @@
       "source_location": "L8",
       "anonymous": true,
       "label": "self.addEventListener notificationclick",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_sw_self_addeventlistener_push_l7_c30",
@@ -3076,7 +3084,7 @@
       "source_location": "L7",
       "anonymous": true,
       "label": "self.addEventListener push",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_sw_then_l3_c80",
@@ -3086,7 +3094,7 @@
       "source_location": "L3",
       "anonymous": true,
       "label": "then",
-      "community": 58
+      "community": 51
     },
     {
       "id": "web_sw_then_l5_c160",
@@ -3096,7 +3104,7 @@
       "source_location": "L5",
       "anonymous": true,
       "label": "then",
-      "community": 59
+      "community": 52
     },
     {
       "id": "web_sw_then_l6_c336",
@@ -3106,7 +3114,7 @@
       "source_location": "L6",
       "anonymous": true,
       "label": "then",
-      "community": 60
+      "community": 53
     },
     {
       "id": "web_sw_then_l6_c399",
@@ -3116,7 +3124,7 @@
       "source_location": "L6",
       "anonymous": true,
       "label": "then",
-      "community": 61
+      "community": 54
     },
     {
       "id": "web_sw_then_l6_c551",
@@ -3126,7 +3134,7 @@
       "source_location": "L6",
       "anonymous": true,
       "label": "then",
-      "community": 54
+      "community": 47
     },
     {
       "id": "web_sw_then_l8_c202",
@@ -3136,7 +3144,7 @@
       "source_location": "L8",
       "anonymous": true,
       "label": "then",
-      "community": 62
+      "community": 55
     },
     {
       "id": "web_sync",
@@ -3144,7 +3152,7 @@
       "name": "sync.js",
       "source_file": "web/sync.js",
       "label": "sync.js",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_acceptpairing",
@@ -3153,7 +3161,7 @@
       "source_file": "web/sync.js",
       "source_location": "L59",
       "label": "acceptPairing",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_anon_l1_c2",
@@ -3163,7 +3171,7 @@
       "source_location": "L1",
       "anonymous": true,
       "label": "anon",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_anon_l59_c1038",
@@ -3173,7 +3181,7 @@
       "source_location": "L59",
       "anonymous": true,
       "label": "anon",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_anon_l59_c921",
@@ -3183,7 +3191,7 @@
       "source_location": "L59",
       "anonymous": true,
       "label": "anon",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_api",
@@ -3192,7 +3200,7 @@
       "source_file": "web/sync.js",
       "source_location": "L29",
       "label": "api",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_b64",
@@ -3201,7 +3209,7 @@
       "source_file": "web/sync.js",
       "source_location": "L10",
       "label": "b64",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_catch_l65_c139",
@@ -3211,7 +3219,7 @@
       "source_location": "L65",
       "anonymous": true,
       "label": "catch",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_copypairlink",
@@ -3220,7 +3228,7 @@
       "source_file": "web/sync.js",
       "source_location": "L45",
       "label": "copyPairLink",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_copytext",
@@ -3229,7 +3237,7 @@
       "source_file": "web/sync.js",
       "source_location": "L44",
       "label": "copyText",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_createpair",
@@ -3238,7 +3246,7 @@
       "source_file": "web/sync.js",
       "source_location": "L42",
       "label": "createPair",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_credentials",
@@ -3247,7 +3255,7 @@
       "source_file": "web/sync.js",
       "source_location": "L14",
       "label": "credentials",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_decryptschedule",
@@ -3256,7 +3264,7 @@
       "source_file": "web/sync.js",
       "source_location": "L28",
       "label": "decryptSchedule",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_dialog_queryselector_copysecurepairlink_onclick_l63_c184",
@@ -3266,7 +3274,7 @@
       "source_location": "L63",
       "anonymous": true,
       "label": "dialog.querySelector('#copySecurePairLink').onclick",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_document_addeventlistener_visibilitychange_l64_c190",
@@ -3276,7 +3284,7 @@
       "source_location": "L64",
       "anonymous": true,
       "label": "document.addEventListener visibilitychange",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_drawqr",
@@ -3285,7 +3293,7 @@
       "source_file": "web/sync.js",
       "source_location": "L41",
       "label": "drawQr",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_encryptschedule",
@@ -3294,7 +3302,7 @@
       "source_file": "web/sync.js",
       "source_location": "L27",
       "label": "encryptSchedule",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_filter_l23_c721",
@@ -3304,7 +3312,7 @@
       "source_location": "L23",
       "anonymous": true,
       "label": "filter",
-      "community": 63
+      "community": 56
     },
     {
       "id": "web_sync_foreach_l36_c162",
@@ -3314,7 +3322,7 @@
       "source_location": "L36",
       "anonymous": true,
       "label": "forEach",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_sync_forgetmobileschedule",
@@ -3323,7 +3331,7 @@
       "source_file": "web/sync.js",
       "source_location": "L19",
       "label": "forgetMobileSchedule",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_importkey_l26_c19",
@@ -3333,7 +3341,7 @@
       "source_location": "L26",
       "anonymous": true,
       "label": "importKey",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_importschedulecopy",
@@ -3342,7 +3350,7 @@
       "source_file": "web/sync.js",
       "source_location": "L46",
       "label": "importScheduleCopy",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_item_days_map_l23_c682",
@@ -3352,7 +3360,7 @@
       "source_location": "L23",
       "anonymous": true,
       "label": "item.days.map",
-      "community": 64
+      "community": 57
     },
     {
       "id": "web_sync_navigator_serviceworker_addeventlistener_message_l64_c382",
@@ -3362,7 +3370,7 @@
       "source_location": "L64",
       "anonymous": true,
       "label": "navigator.serviceWorker.addEventListener message",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_openscanner",
@@ -3371,7 +3379,7 @@
       "source_file": "web/sync.js",
       "source_location": "L38",
       "label": "openScanner",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_pairinglink",
@@ -3380,7 +3388,7 @@
       "source_file": "web/sync.js",
       "source_location": "L31",
       "label": "pairingLink",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_parseinvitation",
@@ -3389,7 +3397,7 @@
       "source_file": "web/sync.js",
       "source_location": "L32",
       "label": "parseInvitation",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_randomid_l12_c18",
@@ -3399,7 +3407,7 @@
       "source_location": "L12",
       "anonymous": true,
       "label": "randomId",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_refreshcontrols",
@@ -3408,7 +3416,7 @@
       "source_file": "web/sync.js",
       "source_location": "L17",
       "label": "refreshControls",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_refreshstatus",
@@ -3417,7 +3425,7 @@
       "source_file": "web/sync.js",
       "source_location": "L18",
       "label": "refreshStatus",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_savecredentials",
@@ -3426,7 +3434,7 @@
       "source_file": "web/sync.js",
       "source_location": "L15",
       "label": "saveCredentials",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_scan_l38_c830",
@@ -3436,7 +3444,7 @@
       "source_location": "L38",
       "anonymous": true,
       "label": "scan",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_scannerdialog_queryselector_pastesecurepairlink_onclick_l40_c63",
@@ -3446,7 +3454,7 @@
       "source_location": "L40",
       "anonymous": true,
       "label": "scannerDialog.querySelector('#pasteSecurePairLink').onclick",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_setinterval_l64_c563",
@@ -3456,7 +3464,7 @@
       "source_location": "L64",
       "anonymous": true,
       "label": "setInterval",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_settimeout_l59_c1058",
@@ -3466,7 +3474,7 @@
       "source_location": "L59",
       "anonymous": true,
       "label": "setTimeout",
-      "community": 65
+      "community": 58
     },
     {
       "id": "web_sync_settimeout_l60_c2179",
@@ -3476,7 +3484,7 @@
       "source_location": "L60",
       "anonymous": true,
       "label": "setTimeout",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_settimeout_l62_c210",
@@ -3486,7 +3494,7 @@
       "source_location": "L62",
       "anonymous": true,
       "label": "setTimeout",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_showerror",
@@ -3495,7 +3503,7 @@
       "source_file": "web/sync.js",
       "source_location": "L20",
       "label": "showError",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_showpairing",
@@ -3504,7 +3512,7 @@
       "source_file": "web/sync.js",
       "source_location": "L43",
       "label": "showPairing",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_stableid",
@@ -3513,7 +3521,7 @@
       "source_file": "web/sync.js",
       "source_location": "L16",
       "label": "stableId",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_stopscanner",
@@ -3522,7 +3530,7 @@
       "source_file": "web/sync.js",
       "source_location": "L36",
       "label": "stopScanner",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_storedjson",
@@ -3531,7 +3539,7 @@
       "source_file": "web/sync.js",
       "source_location": "L13",
       "label": "storedJson",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_syncbutton_onclick_l63_c85",
@@ -3541,7 +3549,7 @@
       "source_location": "L63",
       "anonymous": true,
       "label": "syncButton.onclick",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_syncnow",
@@ -3550,7 +3558,7 @@
       "source_file": "web/sync.js",
       "source_location": "L60",
       "label": "syncNow",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_uint8array_from_l11_c176",
@@ -3560,7 +3568,7 @@
       "source_location": "L11",
       "anonymous": true,
       "label": "Uint8Array.from",
-      "community": 66
+      "community": 59
     },
     {
       "id": "web_sync_unb64",
@@ -3569,7 +3577,7 @@
       "source_file": "web/sync.js",
       "source_location": "L11",
       "label": "unb64",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_unpair",
@@ -3578,7 +3586,7 @@
       "source_file": "web/sync.js",
       "source_location": "L61",
       "label": "unpair",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_usescannedpairing",
@@ -3587,7 +3595,7 @@
       "source_file": "web/sync.js",
       "source_location": "L37",
       "label": "useScannedPairing",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_validateschedule",
@@ -3596,7 +3604,7 @@
       "source_file": "web/sync.js",
       "source_location": "L21",
       "label": "validateSchedule",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_value_events_map_l23_c35",
@@ -3606,7 +3614,7 @@
       "source_location": "L23",
       "anonymous": true,
       "label": "value.events.map",
-      "community": 67
+      "community": 60
     },
     {
       "id": "web_sync_window_addeventlistener_focus_l64_c297",
@@ -3616,7 +3624,7 @@
       "source_location": "L64",
       "anonymous": true,
       "label": "window.addEventListener focus",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_window_addeventlistener_medication_schedule_changed_l62_c57",
@@ -3626,7 +3634,7 @@
       "source_location": "L62",
       "anonymous": true,
       "label": "window.addEventListener medication-schedule-changed",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_update",
@@ -3634,7 +3642,7 @@
       "name": "update.js",
       "source_file": "web/update.js",
       "label": "update.js",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_anon_l1_c2",
@@ -3644,7 +3652,7 @@
       "source_location": "L1",
       "anonymous": true,
       "label": "anon",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_checkbutton_onclick_l87_c29",
@@ -3654,7 +3662,7 @@
       "source_location": "L87",
       "anonymous": true,
       "label": "checkButton.onclick",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_checkforupdate",
@@ -3663,7 +3671,7 @@
       "source_file": "web/update.js",
       "source_location": "L41",
       "label": "checkForUpdate",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_document_addeventlistener_visibilitychange_l102_c51",
@@ -3673,7 +3681,7 @@
       "source_location": "L102",
       "anonymous": true,
       "label": "document.addEventListener visibilitychange",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_fetchrelease",
@@ -3682,7 +3690,7 @@
       "source_file": "web/update.js",
       "source_location": "L28",
       "label": "fetchRelease",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_navigator_serviceworker_addeventlistener_controllerchange_l67_c64",
@@ -3692,7 +3700,7 @@
       "source_location": "L67",
       "anonymous": true,
       "label": "navigator.serviceWorker.addEventListener controllerchange",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_offerupdate",
@@ -3701,7 +3709,7 @@
       "source_file": "web/update.js",
       "source_location": "L14",
       "label": "offerUpdate",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_setinterval_l105_c17",
@@ -3711,7 +3719,7 @@
       "source_location": "L105",
       "anonymous": true,
       "label": "setInterval",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_then_l73_c50",
@@ -3721,7 +3729,7 @@
       "source_location": "L73",
       "anonymous": true,
       "label": "then",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_window_addeventlistener_focus_l101_c38",
@@ -3731,7 +3739,7 @@
       "source_location": "L101",
       "anonymous": true,
       "label": "window.addEventListener focus",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_worker_addeventlistener_statechange_l79_c46",
@@ -3741,7 +3749,7 @@
       "source_location": "L79",
       "anonymous": true,
       "label": "worker.addEventListener statechange",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_version",
@@ -3749,7 +3757,7 @@
       "name": "version.json",
       "source_file": "web/version.json",
       "label": "version.json",
-      "community": 68
+      "community": 61
     },
     {
       "id": "worker_migrations_0002_google_accounts",
@@ -3757,7 +3765,7 @@
       "name": "0002_google_accounts.sql",
       "source_file": "worker/migrations/0002_google_accounts.sql",
       "label": "0002_google_accounts.sql",
-      "community": 69
+      "community": 62
     },
     {
       "id": "worker_package",
@@ -3765,7 +3773,7 @@
       "name": "package.json",
       "source_file": "worker/package.json",
       "label": "package.json",
-      "community": 8
+      "community": 63
     },
     {
       "id": "worker_package_lock",
@@ -3773,7 +3781,7 @@
       "name": "package-lock.json",
       "source_file": "worker/package-lock.json",
       "label": "package-lock.json",
-      "community": 9
+      "community": 64
     },
     {
       "id": "worker_schema",
@@ -3781,7 +3789,7 @@
       "name": "schema.sql",
       "source_file": "worker/schema.sql",
       "label": "schema.sql",
-      "community": 10
+      "community": 65
     },
     {
       "id": "worker_src_auth",
@@ -3789,7 +3797,7 @@
       "name": "auth.js",
       "source_file": "worker/src/auth.js",
       "label": "auth.js",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_accountview",
@@ -3798,7 +3806,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L95",
       "label": "accountView",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_activeentitlements",
@@ -3807,7 +3815,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L88",
       "label": "activeEntitlements",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_audit",
@@ -3816,7 +3824,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L130",
       "label": "audit",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_authenticatesession",
@@ -3825,7 +3833,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L110",
       "label": "authenticateSession",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_cacheseconds",
@@ -3834,7 +3842,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L40",
       "label": "cacheSeconds",
-      "community": 32
+      "community": 19
     },
     {
       "id": "worker_src_auth_decodebase64url",
@@ -3843,7 +3851,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L11",
       "label": "decodeBase64Url",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_encodebase64url",
@@ -3852,7 +3860,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L25",
       "label": "encodeBase64Url",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_googlekeys",
@@ -3861,7 +3869,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L45",
       "label": "googleKeys",
-      "community": 32
+      "community": 19
     },
     {
       "id": "worker_src_auth_handleauthrequest",
@@ -3870,7 +3878,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L135",
       "label": "handleAuthRequest",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_map_l33_c42",
@@ -3880,7 +3888,7 @@
       "source_location": "L33",
       "anonymous": true,
       "label": "map",
-      "community": 11
+      "community": 66
     },
     {
       "id": "worker_src_auth_parsejsonpart",
@@ -3889,7 +3897,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L17",
       "label": "parseJsonPart",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_randomtoken",
@@ -3898,7 +3906,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L36",
       "label": "randomToken",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_resetgooglekeysfortests",
@@ -3907,7 +3915,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L216",
       "label": "resetGoogleKeysForTests",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_sha256",
@@ -3916,7 +3924,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L31",
       "label": "sha256",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_uint8array_from_l13_c97",
@@ -3926,7 +3934,7 @@
       "source_location": "L13",
       "anonymous": true,
       "label": "Uint8Array.from",
-      "community": 15
+      "community": 67
     },
     {
       "id": "worker_src_auth_validoptionaldate",
@@ -3935,7 +3943,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L124",
       "label": "validOptionalDate",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_verifygooglecredential",
@@ -3944,7 +3952,7 @@
       "source_file": "worker/src/auth.js",
       "source_location": "L55",
       "label": "verifyGoogleCredential",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index",
@@ -3952,7 +3960,7 @@
       "name": "index.js",
       "source_file": "worker/src/index.js",
       "label": "index.js",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_authenticatedpair",
@@ -3961,7 +3969,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L48",
       "label": "authenticatedPair",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_corsheaders",
@@ -3970,7 +3978,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L10",
       "label": "corsHeaders",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_enforceratelimit",
@@ -3979,7 +3987,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L55",
       "label": "enforceRateLimit",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_fetch",
@@ -3989,7 +3997,7 @@
       "source_location": "L136",
       "is_method": true,
       "label": "fetch",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_handlesync",
@@ -3998,7 +4006,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L85",
       "label": "handleSync",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_json",
@@ -4007,7 +4015,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L15",
       "label": "json",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_map_l30_c42",
@@ -4017,7 +4025,7 @@
       "source_location": "L30",
       "anonymous": true,
       "label": "map",
-      "community": 27
+      "community": 68
     },
     {
       "id": "worker_src_index_notifypairedmobile",
@@ -4026,7 +4034,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L69",
       "label": "notifyPairedMobile",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_readjson",
@@ -4035,7 +4043,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L20",
       "label": "readJson",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_scheduled",
@@ -4045,7 +4053,7 @@
       "source_location": "L183",
       "is_method": true,
       "label": "scheduled",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_tokenhash",
@@ -4054,7 +4062,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L28",
       "label": "tokenHash",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_validencryptedbody",
@@ -4063,7 +4071,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L33",
       "label": "validEncryptedBody",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_index_validpushendpoint",
@@ -4072,7 +4080,7 @@
       "source_file": "worker/src/index.js",
       "source_location": "L37",
       "label": "validPushEndpoint",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_wrangler",
@@ -4080,7 +4088,7 @@
       "name": "wrangler.jsonc",
       "source_file": "worker/wrangler.jsonc",
       "label": "wrangler.jsonc",
-      "community": 30
+      "community": 10
     },
     {
       "id": "any",
@@ -4157,7 +4165,7 @@
       "kind": "unknown",
       "name": "medication_core_ctypes",
       "label": "medication_core_ctypes",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_dataclass",
@@ -4178,7 +4186,7 @@
       "kind": "unknown",
       "name": "medication_core_timedelta",
       "label": "medication_core_timedelta",
-      "community": 7
+      "community": 8
     },
     {
       "id": "os",
@@ -4206,7 +4214,7 @@
       "kind": "unknown",
       "name": "protocol",
       "label": "protocol",
-      "community": 7
+      "community": 8
     },
     {
       "id": "re",
@@ -4262,427 +4270,427 @@
       "kind": "unknown",
       "name": "medication_core_now",
       "label": "medication_core_now",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_record",
       "kind": "unknown",
       "name": "medication_core_record",
       "label": "medication_core_record",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_retained",
       "kind": "unknown",
       "name": "medication_core_retained",
       "label": "medication_core_retained",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_f",
       "kind": "unknown",
       "name": "medication_core_f",
       "label": "medication_core_f",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_mkdir",
       "kind": "unknown",
       "name": "medication_core_mkdir",
       "label": "medication_core_mkdir",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_os",
       "kind": "unknown",
       "name": "medication_core_os",
       "label": "medication_core_os",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_path",
       "kind": "unknown",
       "name": "medication_core_path",
       "label": "medication_core_path",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_temp_path",
       "kind": "unknown",
       "name": "medication_core_temp_path",
       "label": "medication_core_temp_path",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_tempfile",
       "kind": "unknown",
       "name": "medication_core_tempfile",
       "label": "medication_core_tempfile",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_astimezone",
       "kind": "unknown",
       "name": "medication_core_astimezone",
       "label": "medication_core_astimezone",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_items",
       "kind": "unknown",
       "name": "medication_core_items",
       "label": "medication_core_items",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_datetime",
       "kind": "unknown",
       "name": "medication_core_datetime",
       "label": "medication_core_datetime",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_get",
       "kind": "unknown",
       "name": "medication_core_get",
       "label": "medication_core_get",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_known",
       "kind": "unknown",
       "name": "medication_core_known",
       "label": "medication_core_known",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_last_check",
       "kind": "unknown",
       "name": "medication_core_last_check",
       "label": "medication_core_last_check",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_self",
       "kind": "unknown",
       "name": "medication_core_self",
       "label": "medication_core_self",
-      "community": 7
+      "community": 8
     },
     {
       "id": "valueerror",
       "kind": "unknown",
       "name": "valueerror",
       "label": "valueerror",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_expanduser",
       "kind": "unknown",
       "name": "medication_core_expanduser",
       "label": "medication_core_expanduser",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_valueerror",
       "kind": "unknown",
       "name": "medication_core_valueerror",
       "label": "medication_core_valueerror",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_unlink",
       "kind": "unknown",
       "name": "medication_core_unlink",
       "label": "medication_core_unlink",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_pop",
       "kind": "unknown",
       "name": "medication_core_pop",
       "label": "medication_core_pop",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_date",
       "kind": "unknown",
       "name": "medication_core_date",
       "label": "medication_core_date",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_lower",
       "kind": "unknown",
       "name": "medication_core_lower",
       "label": "medication_core_lower",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_target_date",
       "kind": "unknown",
       "name": "medication_core_target_date",
       "label": "medication_core_target_date",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_is_file",
       "kind": "unknown",
       "name": "medication_core_is_file",
       "label": "medication_core_is_file",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_csv",
       "kind": "unknown",
       "name": "medication_core_csv",
       "label": "medication_core_csv",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_destination",
       "kind": "unknown",
       "name": "medication_core_destination",
       "label": "medication_core_destination",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_join",
       "kind": "unknown",
       "name": "medication_core_join",
       "label": "medication_core_join",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_writer",
       "kind": "unknown",
       "name": "medication_core_writer",
       "label": "medication_core_writer",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_deepcopy",
       "kind": "unknown",
       "name": "medication_core_deepcopy",
       "label": "medication_core_deepcopy",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_zoneinfo",
       "kind": "unknown",
       "name": "medication_core_zoneinfo",
       "label": "medication_core_zoneinfo",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_from_buffer_copy",
       "kind": "unknown",
       "name": "medication_core_from_buffer_copy",
       "label": "medication_core_from_buffer_copy",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_json",
       "kind": "unknown",
       "name": "medication_core_json",
       "label": "medication_core_json",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_plain",
       "kind": "unknown",
       "name": "medication_core_plain",
       "label": "medication_core_plain",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_read_bytes",
       "kind": "unknown",
       "name": "medication_core_read_bytes",
       "label": "medication_core_read_bytes",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_stat",
       "kind": "unknown",
       "name": "medication_core_stat",
       "label": "medication_core_stat",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_seed_path",
       "kind": "unknown",
       "name": "medication_core_seed_path",
       "label": "medication_core_seed_path",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_legacy",
       "kind": "unknown",
       "name": "medication_core_legacy",
       "label": "medication_core_legacy",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_value",
       "kind": "unknown",
       "name": "medication_core_value",
       "label": "medication_core_value",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_required",
       "kind": "unknown",
       "name": "medication_core_required",
       "label": "medication_core_required",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_candidates",
       "kind": "unknown",
       "name": "medication_core_candidates",
       "label": "medication_core_candidates",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_isoformat",
       "kind": "unknown",
       "name": "medication_core_isoformat",
       "label": "medication_core_isoformat",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_key",
       "kind": "unknown",
       "name": "medication_core_key",
       "label": "medication_core_key",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_raw",
       "kind": "unknown",
       "name": "medication_core_raw",
       "label": "medication_core_raw",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_time",
       "kind": "unknown",
       "name": "medication_core_time",
       "label": "medication_core_time",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_parsed",
       "kind": "unknown",
       "name": "medication_core_parsed",
       "label": "medication_core_parsed",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_encode",
       "kind": "unknown",
       "name": "medication_core_encode",
       "label": "medication_core_encode",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_settings",
       "kind": "unknown",
       "name": "medication_core_settings",
       "label": "medication_core_settings",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_until",
       "kind": "unknown",
       "name": "medication_core_until",
       "label": "medication_core_until",
-      "community": 7
+      "community": 8
     },
     {
       "id": "runtimeerror",
       "kind": "unknown",
       "name": "runtimeerror",
       "label": "runtimeerror",
-      "community": 21
+      "community": 17
     },
     {
       "id": "medication_core_cryptprotectdata",
       "kind": "unknown",
       "name": "medication_core_cryptprotectdata",
       "label": "medication_core_cryptprotectdata",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_cryptunprotectdata",
       "kind": "unknown",
       "name": "medication_core_cryptunprotectdata",
       "label": "medication_core_cryptunprotectdata",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_localfree",
       "kind": "unknown",
       "name": "medication_core_localfree",
       "label": "medication_core_localfree",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_data",
       "kind": "unknown",
       "name": "medication_core_data",
       "label": "medication_core_data",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_event_id_pattern",
       "kind": "unknown",
       "name": "medication_core_event_id_pattern",
       "label": "medication_core_event_id_pattern",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_normalized_days",
       "kind": "unknown",
       "name": "medication_core_normalized_days",
       "label": "medication_core_normalized_days",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_normalized_events",
       "kind": "unknown",
       "name": "medication_core_normalized_events",
       "label": "medication_core_normalized_events",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_parsed_end",
       "kind": "unknown",
       "name": "medication_core_parsed_end",
       "label": "medication_core_parsed_end",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_parsed_start",
       "kind": "unknown",
       "name": "medication_core_parsed_start",
       "label": "medication_core_parsed_start",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_raw_event",
       "kind": "unknown",
       "name": "medication_core_raw_event",
       "label": "medication_core_raw_event",
-      "community": 7
+      "community": 8
     },
     {
       "id": "medication_core_seen_ids",
       "kind": "unknown",
       "name": "medication_core_seen_ids",
       "label": "medication_core_seen_ids",
-      "community": 7
+      "community": 8
     },
     {
       "id": "appstorage",
@@ -4759,14 +4767,14 @@
       "kind": "unknown",
       "name": "medication_reminder_insert",
       "label": "medication_reminder_insert",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_join",
       "kind": "unknown",
       "name": "medication_reminder_join",
       "label": "medication_reminder_join",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_systemexit",
@@ -4920,182 +4928,182 @@
       "kind": "unknown",
       "name": "medication_reminder_medicines_box",
       "label": "medication_reminder_medicines_box",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_simpledialog",
       "kind": "unknown",
       "name": "medication_reminder_simpledialog",
       "label": "medication_reminder_simpledialog",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_value",
       "kind": "unknown",
       "name": "medication_reminder_value",
       "label": "medication_reminder_value",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_self",
       "kind": "unknown",
       "name": "medication_reminder_self",
       "label": "medication_reminder_self",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_replace_schedule",
       "kind": "unknown",
       "name": "medication_reminder_replace_schedule",
       "label": "medication_reminder_replace_schedule",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_save_schedule",
       "kind": "unknown",
       "name": "medication_reminder_save_schedule",
       "label": "medication_reminder_save_schedule",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_save_state",
       "kind": "unknown",
       "name": "medication_reminder_save_state",
       "label": "medication_reminder_save_state",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_save_sync_credentials",
       "kind": "unknown",
       "name": "medication_reminder_save_sync_credentials",
       "label": "medication_reminder_save_sync_credentials",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_update",
       "kind": "unknown",
       "name": "medication_reminder_update",
       "label": "medication_reminder_update",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_deepcopy",
       "kind": "unknown",
       "name": "medication_reminder_deepcopy",
       "label": "medication_reminder_deepcopy",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_messagebox",
       "kind": "unknown",
       "name": "medication_reminder_messagebox",
       "label": "medication_reminder_messagebox",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_strip",
       "kind": "unknown",
       "name": "medication_reminder_strip",
       "label": "medication_reminder_strip",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_timezone_var",
       "kind": "unknown",
       "name": "medication_reminder_timezone_var",
       "label": "medication_reminder_timezone_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_bind",
       "kind": "unknown",
       "name": "medication_reminder_bind",
       "label": "medication_reminder_bind",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_button_bar",
       "kind": "unknown",
       "name": "medication_reminder_button_bar",
       "label": "medication_reminder_button_bar",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_column",
       "kind": "unknown",
       "name": "medication_reminder_column",
       "label": "medication_reminder_column",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_heading",
       "kind": "unknown",
       "name": "medication_reminder_heading",
       "label": "medication_reminder_heading",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_outer",
       "kind": "unknown",
       "name": "medication_reminder_outer",
       "label": "medication_reminder_outer",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_pack",
       "kind": "unknown",
       "name": "medication_reminder_pack",
       "label": "medication_reminder_pack",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_schedule_bar",
       "kind": "unknown",
       "name": "medication_reminder_schedule_bar",
       "label": "medication_reminder_schedule_bar",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_tk",
       "kind": "unknown",
       "name": "medication_reminder_tk",
       "label": "medication_reminder_tk",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_ttk",
       "kind": "unknown",
       "name": "medication_reminder_ttk",
       "label": "medication_reminder_ttk",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_after",
       "kind": "unknown",
       "name": "medication_reminder_after",
       "label": "medication_reminder_after",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_collect_due",
       "kind": "unknown",
       "name": "medication_reminder_collect_due",
       "label": "medication_reminder_collect_due",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_next_ready",
       "kind": "unknown",
       "name": "medication_reminder_next_ready",
       "label": "medication_reminder_next_ready",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_winfo_exists",
       "kind": "unknown",
       "name": "medication_reminder_winfo_exists",
       "label": "medication_reminder_winfo_exists",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_closehandle",
@@ -5109,259 +5117,259 @@
       "kind": "unknown",
       "name": "medication_reminder_popup",
       "label": "medication_reminder_popup",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_configure",
       "kind": "unknown",
       "name": "medication_reminder_configure",
       "label": "medication_reminder_configure",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_style",
       "kind": "unknown",
       "name": "medication_reminder_style",
       "label": "medication_reminder_style",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_zoneinfo",
       "kind": "unknown",
       "name": "medication_reminder_zoneinfo",
       "label": "medication_reminder_zoneinfo",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_clipboard_append",
       "kind": "unknown",
       "name": "medication_reminder_clipboard_append",
       "label": "medication_reminder_clipboard_append",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_clipboard_clear",
       "kind": "unknown",
       "name": "medication_reminder_clipboard_clear",
       "label": "medication_reminder_clipboard_clear",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_date_row",
       "kind": "unknown",
       "name": "medication_reminder_date_row",
       "label": "medication_reminder_date_row",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_dialog",
       "kind": "unknown",
       "name": "medication_reminder_dialog",
       "label": "medication_reminder_dialog",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_end_frame",
       "kind": "unknown",
       "name": "medication_reminder_end_frame",
       "label": "medication_reminder_end_frame",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_form",
       "kind": "unknown",
       "name": "medication_reminder_form",
       "label": "medication_reminder_form",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_medicine_buttons",
       "kind": "unknown",
       "name": "medication_reminder_medicine_buttons",
       "label": "medication_reminder_medicine_buttons",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_start_frame",
       "kind": "unknown",
       "name": "medication_reminder_start_frame",
       "label": "medication_reminder_start_frame",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_time",
       "kind": "unknown",
       "name": "medication_reminder_time",
       "label": "medication_reminder_time",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_tree",
       "kind": "unknown",
       "name": "medication_reminder_tree",
       "label": "medication_reminder_tree",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_ctypes",
       "kind": "unknown",
       "name": "medication_reminder_ctypes",
       "label": "medication_reminder_ctypes",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_set_context",
       "kind": "unknown",
       "name": "medication_reminder_set_context",
       "label": "medication_reminder_set_context",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_shcore",
       "kind": "unknown",
       "name": "medication_reminder_shcore",
       "label": "medication_reminder_shcore",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_export_taken_csv",
       "kind": "unknown",
       "name": "medication_reminder_export_taken_csv",
       "label": "medication_reminder_export_taken_csv",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_filedialog",
       "kind": "unknown",
       "name": "medication_reminder_filedialog",
       "label": "medication_reminder_filedialog",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_path",
       "kind": "unknown",
       "name": "medication_reminder_path",
       "label": "medication_reminder_path",
-      "community": 14
+      "community": 0
     },
     {
       "id": "medication_reminder_withdraw",
       "kind": "unknown",
       "name": "medication_reminder_withdraw",
       "label": "medication_reminder_withdraw",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_appstorage",
       "kind": "unknown",
       "name": "medication_reminder_appstorage",
       "label": "medication_reminder_appstorage",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_astimezone",
       "kind": "unknown",
       "name": "medication_reminder_astimezone",
       "label": "medication_reminder_astimezone",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_datetime",
       "kind": "unknown",
       "name": "medication_reminder_datetime",
       "label": "medication_reminder_datetime",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_encryptedsyncclient",
       "kind": "unknown",
       "name": "medication_reminder_encryptedsyncclient",
       "label": "medication_reminder_encryptedsyncclient",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_geometry",
       "kind": "unknown",
       "name": "medication_reminder_geometry",
       "label": "medication_reminder_geometry",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_kernel32",
       "kind": "unknown",
       "name": "medication_reminder_kernel32",
       "label": "medication_reminder_kernel32",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_load_schedule",
       "kind": "unknown",
       "name": "medication_reminder_load_schedule",
       "label": "medication_reminder_load_schedule",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_load_settings",
       "kind": "unknown",
       "name": "medication_reminder_load_settings",
       "label": "medication_reminder_load_settings",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_load_state",
       "kind": "unknown",
       "name": "medication_reminder_load_state",
       "label": "medication_reminder_load_state",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_load_sync_credentials",
       "kind": "unknown",
       "name": "medication_reminder_load_sync_credentials",
       "label": "medication_reminder_load_sync_credentials",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_minsize",
       "kind": "unknown",
       "name": "medication_reminder_minsize",
       "label": "medication_reminder_minsize",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_oserror",
       "kind": "unknown",
       "name": "medication_reminder_oserror",
       "label": "medication_reminder_oserror",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_protocol",
       "kind": "unknown",
       "name": "medication_reminder_protocol",
       "label": "medication_reminder_protocol",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_runtimeerror",
       "kind": "unknown",
       "name": "medication_reminder_runtimeerror",
       "label": "medication_reminder_runtimeerror",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_scheduleengine",
       "kind": "unknown",
       "name": "medication_reminder_scheduleengine",
       "label": "medication_reminder_scheduleengine",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_title",
       "kind": "unknown",
       "name": "medication_reminder_title",
       "label": "medication_reminder_title",
-      "community": 12
+      "community": 11
     },
     {
       "id": "medication_reminder_instance",
@@ -5375,119 +5383,119 @@
       "kind": "unknown",
       "name": "medication_reminder_append_audit",
       "label": "medication_reminder_append_audit",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_isoformat",
       "kind": "unknown",
       "name": "medication_reminder_isoformat",
       "label": "medication_reminder_isoformat",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_alert_buttons",
       "kind": "unknown",
       "name": "medication_reminder_alert_buttons",
       "label": "medication_reminder_alert_buttons",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_get",
       "kind": "unknown",
       "name": "medication_reminder_get",
       "label": "medication_reminder_get",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_settings",
       "kind": "unknown",
       "name": "medication_reminder_settings",
       "label": "medication_reminder_settings",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_buttons",
       "kind": "unknown",
       "name": "medication_reminder_buttons",
       "label": "medication_reminder_buttons",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_container",
       "kind": "unknown",
       "name": "medication_reminder_container",
       "label": "medication_reminder_container",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_editor",
       "kind": "unknown",
       "name": "medication_reminder_editor",
       "label": "medication_reminder_editor",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_pairing_bar",
       "kind": "unknown",
       "name": "medication_reminder_pairing_bar",
       "label": "medication_reminder_pairing_bar",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_quick_actions",
       "kind": "unknown",
       "name": "medication_reminder_quick_actions",
       "label": "medication_reminder_quick_actions",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_timezone_bar",
       "kind": "unknown",
       "name": "medication_reminder_timezone_bar",
       "label": "medication_reminder_timezone_bar",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_secrets",
       "kind": "unknown",
       "name": "medication_reminder_secrets",
       "label": "medication_reminder_secrets",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_start",
       "kind": "unknown",
       "name": "medication_reminder_start",
       "label": "medication_reminder_start",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_threading",
       "kind": "unknown",
       "name": "medication_reminder_threading",
       "label": "medication_reminder_threading",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_destroy",
       "kind": "unknown",
       "name": "medication_reminder_destroy",
       "label": "medication_reminder_destroy",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_stop",
       "kind": "unknown",
       "name": "medication_reminder_stop",
       "label": "medication_reminder_stop",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_get_children",
       "kind": "unknown",
       "name": "medication_reminder_get_children",
       "label": "medication_reminder_get_children",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_winreg",
@@ -5501,7 +5509,7 @@
       "kind": "unknown",
       "name": "medication_reminder_pop",
       "label": "medication_reminder_pop",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_resolve",
@@ -5522,266 +5530,266 @@
       "kind": "unknown",
       "name": "medication_reminder_days_var",
       "label": "medication_reminder_days_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_enabled_var",
       "kind": "unknown",
       "name": "medication_reminder_enabled_var",
       "label": "medication_reminder_enabled_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_end_var",
       "kind": "unknown",
       "name": "medication_reminder_end_var",
       "label": "medication_reminder_end_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_item",
       "kind": "unknown",
       "name": "medication_reminder_item",
       "label": "medication_reminder_item",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_label_var",
       "kind": "unknown",
       "name": "medication_reminder_label_var",
       "label": "medication_reminder_label_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_lower",
       "kind": "unknown",
       "name": "medication_reminder_lower",
       "label": "medication_reminder_lower",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_parse_time",
       "kind": "unknown",
       "name": "medication_reminder_parse_time",
       "label": "medication_reminder_parse_time",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_refresh_callback",
       "kind": "unknown",
       "name": "medication_reminder_refresh_callback",
       "label": "medication_reminder_refresh_callback",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_split",
       "kind": "unknown",
       "name": "medication_reminder_split",
       "label": "medication_reminder_split",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_start_var",
       "kind": "unknown",
       "name": "medication_reminder_start_var",
       "label": "medication_reminder_start_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_time_var",
       "kind": "unknown",
       "name": "medication_reminder_time_var",
       "label": "medication_reminder_time_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_updated",
       "kind": "unknown",
       "name": "medication_reminder_updated",
       "label": "medication_reminder_updated",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_validate_schedule",
       "kind": "unknown",
       "name": "medication_reminder_validate_schedule",
       "label": "medication_reminder_validate_schedule",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_save_settings",
       "kind": "unknown",
       "name": "medication_reminder_save_settings",
       "label": "medication_reminder_save_settings",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_sound_var",
       "kind": "unknown",
       "name": "medication_reminder_sound_var",
       "label": "medication_reminder_sound_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_volume_var",
       "kind": "unknown",
       "name": "medication_reminder_volume_var",
       "label": "medication_reminder_volume_var",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_selection",
       "kind": "unknown",
       "name": "medication_reminder_selection",
       "label": "medication_reminder_selection",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_frame",
       "kind": "unknown",
       "name": "medication_reminder_frame",
       "label": "medication_reminder_frame",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_meds_box",
       "kind": "unknown",
       "name": "medication_reminder_meds_box",
       "label": "medication_reminder_meds_box",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_replace",
       "kind": "unknown",
       "name": "medication_reminder_replace",
       "label": "medication_reminder_replace",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_strftime",
       "kind": "unknown",
       "name": "medication_reminder_strftime",
       "label": "medication_reminder_strftime",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_actions",
       "kind": "unknown",
       "name": "medication_reminder_actions",
       "label": "medication_reminder_actions",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_code",
       "kind": "unknown",
       "name": "medication_reminder_code",
       "label": "medication_reminder_code",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_convert",
       "kind": "unknown",
       "name": "medication_reminder_convert",
       "label": "medication_reminder_convert",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_image_label",
       "kind": "unknown",
       "name": "medication_reminder_image_label",
       "label": "medication_reminder_image_label",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_imagetk",
       "kind": "unknown",
       "name": "medication_reminder_imagetk",
       "label": "medication_reminder_imagetk",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_pairing_link",
       "kind": "unknown",
       "name": "medication_reminder_pairing_link",
       "label": "medication_reminder_pairing_link",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_qrcode",
       "kind": "unknown",
       "name": "medication_reminder_qrcode",
       "label": "medication_reminder_qrcode",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_root",
       "kind": "unknown",
       "name": "medication_reminder_root",
       "label": "medication_reminder_root",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_deiconify",
       "kind": "unknown",
       "name": "medication_reminder_deiconify",
       "label": "medication_reminder_deiconify",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_focus_force",
       "kind": "unknown",
       "name": "medication_reminder_focus_force",
       "label": "medication_reminder_focus_force",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_lift",
       "kind": "unknown",
       "name": "medication_reminder_lift",
       "label": "medication_reminder_lift",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_snooze",
       "kind": "unknown",
       "name": "medication_reminder_snooze",
       "label": "medication_reminder_snooze",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_until",
       "kind": "unknown",
       "name": "medication_reminder_until",
       "label": "medication_reminder_until",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_icon_path",
       "kind": "unknown",
       "name": "medication_reminder_icon_path",
       "label": "medication_reminder_icon_path",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_image",
       "kind": "unknown",
       "name": "medication_reminder_image",
       "label": "medication_reminder_image",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_pystray",
       "kind": "unknown",
       "name": "medication_reminder_pystray",
       "label": "medication_reminder_pystray",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_storageerror",
       "kind": "unknown",
       "name": "medication_reminder_storageerror",
       "label": "medication_reminder_storageerror",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_executable",
@@ -5809,126 +5817,126 @@
       "kind": "unknown",
       "name": "medication_reminder_dueoccurrence",
       "label": "medication_reminder_dueoccurrence",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_bytearray",
       "kind": "unknown",
       "name": "medication_reminder_bytearray",
       "label": "medication_reminder_bytearray",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_io",
       "kind": "unknown",
       "name": "medication_reminder_io",
       "label": "medication_reminder_io",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_math",
       "kind": "unknown",
       "name": "medication_reminder_math",
       "label": "medication_reminder_math",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_output",
       "kind": "unknown",
       "name": "medication_reminder_output",
       "label": "medication_reminder_output",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_raw",
       "kind": "unknown",
       "name": "medication_reminder_raw",
       "label": "medication_reminder_raw",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_struct",
       "kind": "unknown",
       "name": "medication_reminder_struct",
       "label": "medication_reminder_struct",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_wav",
       "kind": "unknown",
       "name": "medication_reminder_wav",
       "label": "medication_reminder_wav",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_wave",
       "kind": "unknown",
       "name": "medication_reminder_wave",
       "label": "medication_reminder_wave",
-      "community": 13
+      "community": 9
     },
     {
       "id": "medication_reminder_delete_sync_credentials",
       "kind": "unknown",
       "name": "medication_reminder_delete_sync_credentials",
       "label": "medication_reminder_delete_sync_credentials",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_revoke",
       "kind": "unknown",
       "name": "medication_reminder_revoke",
       "label": "medication_reminder_revoke",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_next_scheduled",
       "kind": "unknown",
       "name": "medication_reminder_next_scheduled",
       "label": "medication_reminder_next_scheduled",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_when",
       "kind": "unknown",
       "name": "medication_reminder_when",
       "label": "medication_reminder_when",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_create_pair",
       "kind": "unknown",
       "name": "medication_reminder_create_pair",
       "label": "medication_reminder_create_pair",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_credentials",
       "kind": "unknown",
       "name": "medication_reminder_credentials",
       "label": "medication_reminder_credentials",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_fetch",
       "kind": "unknown",
       "name": "medication_reminder_fetch",
       "label": "medication_reminder_fetch",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_sound_api",
       "kind": "unknown",
       "name": "medication_reminder_sound_api",
       "label": "medication_reminder_sound_api",
-      "community": 14
+      "community": 9
     },
     {
       "id": "medication_reminder_sound_profiles",
       "kind": "unknown",
       "name": "medication_reminder_sound_profiles",
       "label": "medication_reminder_sound_profiles",
-      "community": 14
+      "community": 9
     },
     {
       "id": "aesgcm",
@@ -5977,112 +5985,112 @@
       "kind": "unknown",
       "name": "sync_client_base64",
       "label": "sync_client_base64",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_decode",
       "kind": "unknown",
       "name": "sync_client_decode",
       "label": "sync_client_decode",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_rstrip",
       "kind": "unknown",
       "name": "sync_client_rstrip",
       "label": "sync_client_rstrip",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_self",
       "kind": "unknown",
       "name": "sync_client_self",
       "label": "sync_client_self",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_aesgcm",
       "kind": "unknown",
       "name": "sync_client_aesgcm",
       "label": "sync_client_aesgcm",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_json",
       "kind": "unknown",
       "name": "sync_client_json",
       "label": "sync_client_json",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_plain",
       "kind": "unknown",
       "name": "sync_client_plain",
       "label": "sync_client_plain",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_validate_schedule",
       "kind": "unknown",
       "name": "sync_client_validate_schedule",
       "label": "sync_client_validate_schedule",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_encode",
       "kind": "unknown",
       "name": "sync_client_encode",
       "label": "sync_client_encode",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_secrets",
       "kind": "unknown",
       "name": "sync_client_secrets",
       "label": "sync_client_secrets",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_payload",
       "kind": "unknown",
       "name": "sync_client_payload",
       "label": "sync_client_payload",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_api_url",
       "kind": "unknown",
       "name": "sync_client_api_url",
       "label": "sync_client_api_url",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_exc",
       "kind": "unknown",
       "name": "sync_client_exc",
       "label": "sync_client_exc",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_raw",
       "kind": "unknown",
       "name": "sync_client_raw",
       "label": "sync_client_raw",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_response",
       "kind": "unknown",
       "name": "sync_client_response",
       "label": "sync_client_response",
-      "community": 21
+      "community": 17
     },
     {
       "id": "sync_client_urlopen",
       "kind": "unknown",
       "name": "sync_client_urlopen",
       "label": "sync_client_urlopen",
-      "community": 21
+      "community": 17
     },
     {
       "id": "tests_e2e_sync_insert",
@@ -6194,42 +6202,42 @@
       "kind": "unknown",
       "name": "node_assert_strict",
       "label": "node_assert_strict",
-      "community": 17
+      "community": 13
     },
     {
       "id": "node_fs",
       "kind": "unknown",
       "name": "node_fs",
       "label": "node_fs",
-      "community": 17
+      "community": 13
     },
     {
       "id": "node_test",
       "kind": "unknown",
       "name": "node_test",
       "label": "node_test",
-      "community": 17
+      "community": 13
     },
     {
       "id": "node_vm",
       "kind": "unknown",
       "name": "node_vm",
       "label": "node_vm",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_due_modal_test",
       "kind": "unknown",
       "name": "tests_test_due_modal_test",
       "label": "tests_test_due_modal_test",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_due_modal_readfilesync",
       "kind": "unknown",
       "name": "tests_test_due_modal_readfilesync",
       "label": "tests_test_due_modal_readfilesync",
-      "community": 22
+      "community": 18
     },
     {
       "id": "tests_test_medication_core_unittest",
@@ -6257,42 +6265,42 @@
       "kind": "unknown",
       "name": "tests_test_medication_core_datetime",
       "label": "tests_test_medication_core_datetime",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_engine",
       "kind": "unknown",
       "name": "tests_test_medication_core_engine",
       "label": "tests_test_medication_core_engine",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_isoformat",
       "kind": "unknown",
       "name": "tests_test_medication_core_isoformat",
       "label": "tests_test_medication_core_isoformat",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_scheduleengine",
       "kind": "unknown",
       "name": "tests_test_medication_core_scheduleengine",
       "label": "tests_test_medication_core_scheduleengine",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_self",
       "kind": "unknown",
       "name": "tests_test_medication_core_self",
       "label": "tests_test_medication_core_self",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_medication_core_validate_schedule",
       "kind": "unknown",
       "name": "tests_test_medication_core_validate_schedule",
       "label": "tests_test_medication_core_validate_schedule",
-      "community": 23
+      "community": 20
     },
     {
       "id": "tests_test_pairing_unittest",
@@ -6306,812 +6314,812 @@
       "kind": "unknown",
       "name": "tests_test_pairing_encryptedsyncclient",
       "label": "tests_test_pairing_encryptedsyncclient",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_pairing_json",
       "kind": "unknown",
       "name": "tests_test_pairing_json",
       "label": "tests_test_pairing_json",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_pairing_path",
       "kind": "unknown",
       "name": "tests_test_pairing_path",
       "label": "tests_test_pairing_path",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_pairing_read_text",
       "kind": "unknown",
       "name": "tests_test_pairing_read_text",
       "label": "tests_test_pairing_read_text",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_pairing_self",
       "kind": "unknown",
       "name": "tests_test_pairing_self",
       "label": "tests_test_pairing_self",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_pairing_validate_schedule",
       "kind": "unknown",
       "name": "tests_test_pairing_validate_schedule",
       "label": "tests_test_pairing_validate_schedule",
-      "community": 24
+      "community": 21
     },
     {
       "id": "tests_test_web_account_test",
       "kind": "unknown",
       "name": "tests_test_web_account_test",
       "label": "tests_test_web_account_test",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_account_readfilesync",
       "kind": "unknown",
       "name": "tests_test_web_account_readfilesync",
       "label": "tests_test_web_account_readfilesync",
-      "community": 25
+      "community": 22
     },
     {
       "id": "node_crypto",
       "kind": "unknown",
       "name": "node_crypto",
       "label": "node_crypto",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_test",
       "kind": "unknown",
       "name": "tests_test_web_sync_test",
       "label": "tests_test_web_sync_test",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_readfilesync",
       "kind": "unknown",
       "name": "tests_test_web_sync_readfilesync",
       "label": "tests_test_web_sync_readfilesync",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_sync_encode",
       "kind": "unknown",
       "name": "tests_test_web_sync_encode",
       "label": "tests_test_web_sync_encode",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_sync_serviceworkermessagehandler",
       "kind": "unknown",
       "name": "tests_test_web_sync_serviceworkermessagehandler",
       "label": "tests_test_web_sync_serviceworkermessagehandler",
-      "community": 29
+      "community": 25
     },
     {
       "id": "tests_test_web_update_test",
       "kind": "unknown",
       "name": "tests_test_web_update_test",
       "label": "tests_test_web_update_test",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_web_update_setimmediate",
       "kind": "unknown",
       "name": "tests_test_web_update_setimmediate",
       "label": "tests_test_web_update_setimmediate",
-      "community": 31
+      "community": 26
     },
     {
       "id": "tests_test_web_update_flush",
       "kind": "unknown",
       "name": "tests_test_web_update_flush",
       "label": "tests_test_web_update_flush",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_web_update_readfilesync",
       "kind": "unknown",
       "name": "tests_test_web_update_readfilesync",
       "label": "tests_test_web_update_readfilesync",
-      "community": 32
+      "community": 19
     },
     {
       "id": "tests_test_worker_auth_test",
       "kind": "unknown",
       "name": "tests_test_worker_auth_test",
       "label": "tests_test_worker_auth_test",
-      "community": 17
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_verifygooglecredential",
       "kind": "unknown",
       "name": "tests_test_worker_auth_verifygooglecredential",
       "label": "tests_test_worker_auth_verifygooglecredential",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_b64url",
       "kind": "unknown",
       "name": "tests_test_worker_auth_b64url",
       "label": "tests_test_worker_auth_b64url",
-      "community": 33
+      "community": 13
     },
     {
       "id": "tests_test_worker_auth_resetgooglekeysfortests",
       "kind": "unknown",
       "name": "tests_test_worker_auth_resetgooglekeysfortests",
       "label": "tests_test_worker_auth_resetgooglekeysfortests",
-      "community": 33
+      "community": 13
     },
     {
       "id": "web_account_alert",
       "kind": "unknown",
       "name": "web_account_alert",
       "label": "web_account_alert",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_confirm",
       "kind": "unknown",
       "name": "web_account_confirm",
       "label": "web_account_confirm",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_matchmedia",
       "kind": "unknown",
       "name": "web_account_matchmedia",
       "label": "web_account_matchmedia",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_account_fetch",
       "kind": "unknown",
       "name": "web_account_fetch",
       "label": "web_account_fetch",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_app_alert",
       "kind": "unknown",
       "name": "web_app_alert",
       "label": "web_app_alert",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_emptyschedule",
       "kind": "unknown",
       "name": "web_app_emptyschedule",
       "label": "web_app_emptyschedule",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_readstoredjson",
       "kind": "unknown",
       "name": "web_app_readstoredjson",
       "label": "web_app_readstoredjson",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_setinterval",
       "kind": "unknown",
       "name": "web_app_setinterval",
       "label": "web_app_setinterval",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_structuredclone",
       "kind": "unknown",
       "name": "web_app_structuredclone",
       "label": "web_app_structuredclone",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_settimeout",
       "kind": "unknown",
       "name": "web_app_settimeout",
       "label": "web_app_settimeout",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_esc",
       "kind": "unknown",
       "name": "web_app_esc",
       "label": "web_app_esc",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_localdatekey",
       "kind": "unknown",
       "name": "web_app_localdatekey",
       "label": "web_app_localdatekey",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_atob",
       "kind": "unknown",
       "name": "web_app_atob",
       "label": "web_app_atob",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_escape",
       "kind": "unknown",
       "name": "web_app_escape",
       "label": "web_app_escape",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_priornotificationhandler",
       "kind": "unknown",
       "name": "web_app_priornotificationhandler",
       "label": "web_app_priornotificationhandler",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_prompt",
       "kind": "unknown",
       "name": "web_app_prompt",
       "label": "web_app_prompt",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_save",
       "kind": "unknown",
       "name": "web_app_save",
       "label": "web_app_save",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_btoa",
       "kind": "unknown",
       "name": "web_app_btoa",
       "label": "web_app_btoa",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_unescape",
       "kind": "unknown",
       "name": "web_app_unescape",
       "label": "web_app_unescape",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_qrcode",
       "kind": "unknown",
       "name": "web_app_qrcode",
       "label": "web_app_qrcode",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_priorsavesettings",
       "kind": "unknown",
       "name": "web_app_priorsavesettings",
       "label": "web_app_priorsavesettings",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_requestanimationframe",
       "kind": "unknown",
       "name": "web_app_requestanimationframe",
       "label": "web_app_requestanimationframe",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_scan",
       "kind": "unknown",
       "name": "web_app_scan",
       "label": "web_app_scan",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_confirm",
       "kind": "unknown",
       "name": "web_app_confirm",
       "label": "web_app_confirm",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_await",
       "kind": "unknown",
       "name": "web_app_await",
       "label": "web_app_await",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_app_fetch",
       "kind": "unknown",
       "name": "web_app_fetch",
       "label": "web_app_fetch",
-      "community": 22
+      "community": 18
     },
     {
       "id": "web_qrcode_base64decodeinputstream",
       "kind": "unknown",
       "name": "web_qrcode_base64decodeinputstream",
       "label": "web_qrcode_base64decodeinputstream",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_base64encodeoutputstream",
       "kind": "unknown",
       "name": "web_qrcode_base64encodeoutputstream",
       "label": "web_qrcode_base64encodeoutputstream",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_bitoutputstream",
       "kind": "unknown",
       "name": "web_qrcode_bitoutputstream",
       "label": "web_qrcode_bitoutputstream",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_bytearrayoutputstream",
       "kind": "unknown",
       "name": "web_qrcode_bytearrayoutputstream",
       "label": "web_qrcode_bytearrayoutputstream",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_chattonum",
       "kind": "unknown",
       "name": "web_qrcode_chattonum",
       "label": "web_qrcode_chattonum",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_createbytes",
       "kind": "unknown",
       "name": "web_qrcode_createbytes",
       "label": "web_qrcode_createbytes",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_createdata",
       "kind": "unknown",
       "name": "web_qrcode_createdata",
       "label": "web_qrcode_createdata",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_createdataurl",
       "kind": "unknown",
       "name": "web_qrcode_createdataurl",
       "label": "web_qrcode_createdataurl",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_createhalfascii",
       "kind": "unknown",
       "name": "web_qrcode_createhalfascii",
       "label": "web_qrcode_createhalfascii",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_decode",
       "kind": "unknown",
       "name": "web_qrcode_decode",
       "label": "web_qrcode_decode",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_define",
       "kind": "unknown",
       "name": "web_qrcode_define",
       "label": "web_qrcode_define",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_encode",
       "kind": "unknown",
       "name": "web_qrcode_encode",
       "label": "web_qrcode_encode",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_escapexml",
       "kind": "unknown",
       "name": "web_qrcode_escapexml",
       "label": "web_qrcode_escapexml",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_factory",
       "kind": "unknown",
       "name": "web_qrcode_factory",
       "label": "web_qrcode_factory",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_getbchdigit",
       "kind": "unknown",
       "name": "web_qrcode_getbchdigit",
       "label": "web_qrcode_getbchdigit",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_getbestmaskpattern",
       "kind": "unknown",
       "name": "web_qrcode_getbestmaskpattern",
       "label": "web_qrcode_getbestmaskpattern",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_getcode",
       "kind": "unknown",
       "name": "web_qrcode_getcode",
       "label": "web_qrcode_getcode",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_getlzwraster",
       "kind": "unknown",
       "name": "web_qrcode_getlzwraster",
       "label": "web_qrcode_getlzwraster",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_getpixel",
       "kind": "unknown",
       "name": "web_qrcode_getpixel",
       "label": "web_qrcode_getpixel",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_getrsblocktable",
       "kind": "unknown",
       "name": "web_qrcode_getrsblocktable",
       "label": "web_qrcode_getrsblocktable",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_gifimage",
       "kind": "unknown",
       "name": "web_qrcode_gifimage",
       "label": "web_qrcode_gifimage",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_lzwtable",
       "kind": "unknown",
       "name": "web_qrcode_lzwtable",
       "label": "web_qrcode_lzwtable",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_makeimpl",
       "kind": "unknown",
       "name": "web_qrcode_makeimpl",
       "label": "web_qrcode_makeimpl",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_mapdata",
       "kind": "unknown",
       "name": "web_qrcode_mapdata",
       "label": "web_qrcode_mapdata",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_maskfunc",
       "kind": "unknown",
       "name": "web_qrcode_maskfunc",
       "label": "web_qrcode_maskfunc",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_qr8bitbyte",
       "kind": "unknown",
       "name": "web_qrcode_qr8bitbyte",
       "label": "web_qrcode_qr8bitbyte",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_qralphanum",
       "kind": "unknown",
       "name": "web_qrcode_qralphanum",
       "label": "web_qrcode_qralphanum",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_qrbitbuffer",
       "kind": "unknown",
       "name": "web_qrcode_qrbitbuffer",
       "label": "web_qrcode_qrbitbuffer",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_qrkanji",
       "kind": "unknown",
       "name": "web_qrcode_qrkanji",
       "label": "web_qrcode_qrkanji",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_qrnumber",
       "kind": "unknown",
       "name": "web_qrcode_qrnumber",
       "label": "web_qrcode_qrnumber",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_qrrsblock",
       "kind": "unknown",
       "name": "web_qrcode_qrrsblock",
       "label": "web_qrcode_qrrsblock",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_read",
       "kind": "unknown",
       "name": "web_qrcode_read",
       "label": "web_qrcode_read",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_setuppositionadjustpattern",
       "kind": "unknown",
       "name": "web_qrcode_setuppositionadjustpattern",
       "label": "web_qrcode_setuppositionadjustpattern",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_setuppositionprobepattern",
       "kind": "unknown",
       "name": "web_qrcode_setuppositionprobepattern",
       "label": "web_qrcode_setuppositionprobepattern",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_setuptimingpattern",
       "kind": "unknown",
       "name": "web_qrcode_setuptimingpattern",
       "label": "web_qrcode_setuptimingpattern",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_setuptypeinfo",
       "kind": "unknown",
       "name": "web_qrcode_setuptypeinfo",
       "label": "web_qrcode_setuptypeinfo",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_setuptypenumber",
       "kind": "unknown",
       "name": "web_qrcode_setuptypenumber",
       "label": "web_qrcode_setuptypenumber",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_stringtobytes",
       "kind": "unknown",
       "name": "web_qrcode_stringtobytes",
       "label": "web_qrcode_stringtobytes",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_strtonum",
       "kind": "unknown",
       "name": "web_qrcode_strtonum",
       "label": "web_qrcode_strtonum",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_qrcode_writeencoded",
       "kind": "unknown",
       "name": "web_qrcode_writeencoded",
       "label": "web_qrcode_writeencoded",
-      "community": 51
+      "community": 44
     },
     {
       "id": "web_sw_fetch",
       "kind": "unknown",
       "name": "web_sw_fetch",
       "label": "web_sw_fetch",
-      "community": 54
+      "community": 47
     },
     {
       "id": "web_sync_alert",
       "kind": "unknown",
       "name": "web_sync_alert",
       "label": "web_sync_alert",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_auth",
       "kind": "unknown",
       "name": "web_sync_auth",
       "label": "web_sync_auth",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_confirm",
       "kind": "unknown",
       "name": "web_sync_confirm",
       "label": "web_sync_confirm",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_matchmedia",
       "kind": "unknown",
       "name": "web_sync_matchmedia",
       "label": "web_sync_matchmedia",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_setinterval",
       "kind": "unknown",
       "name": "web_sync_setinterval",
       "label": "web_sync_setinterval",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_settimeout",
       "kind": "unknown",
       "name": "web_sync_settimeout",
       "label": "web_sync_settimeout",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_fetch",
       "kind": "unknown",
       "name": "web_sync_fetch",
       "label": "web_sync_fetch",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_btoa",
       "kind": "unknown",
       "name": "web_sync_btoa",
       "label": "web_sync_btoa",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_prompt",
       "kind": "unknown",
       "name": "web_sync_prompt",
       "label": "web_sync_prompt",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_randomid",
       "kind": "unknown",
       "name": "web_sync_randomid",
       "label": "web_sync_randomid",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_importkey",
       "kind": "unknown",
       "name": "web_sync_importkey",
       "label": "web_sync_importkey",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_qrcode",
       "kind": "unknown",
       "name": "web_sync_qrcode",
       "label": "web_sync_qrcode",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_requestanimationframe",
       "kind": "unknown",
       "name": "web_sync_requestanimationframe",
       "label": "web_sync_requestanimationframe",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_resolve",
       "kind": "unknown",
       "name": "web_sync_resolve",
       "label": "web_sync_resolve",
-      "community": 65
+      "community": 58
     },
     {
       "id": "web_sync_cancelanimationframe",
       "kind": "unknown",
       "name": "web_sync_cancelanimationframe",
       "label": "web_sync_cancelanimationframe",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_cleartimeout",
       "kind": "unknown",
       "name": "web_sync_cleartimeout",
       "label": "web_sync_cleartimeout",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_sync_atob",
       "kind": "unknown",
       "name": "web_sync_atob",
       "label": "web_sync_atob",
-      "community": 26
+      "community": 23
     },
     {
       "id": "web_update_alert",
       "kind": "unknown",
       "name": "web_update_alert",
       "label": "web_update_alert",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_fetch",
       "kind": "unknown",
       "name": "web_update_fetch",
       "label": "web_update_fetch",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_confirm",
       "kind": "unknown",
       "name": "web_update_confirm",
       "label": "web_update_confirm",
-      "community": 32
+      "community": 19
     },
     {
       "id": "web_update_setinterval",
       "kind": "unknown",
       "name": "web_update_setinterval",
       "label": "web_update_setinterval",
-      "community": 32
+      "community": 19
     },
     {
       "id": "worker_src_auth_atob",
       "kind": "unknown",
       "name": "worker_src_auth_atob",
       "label": "worker_src_auth_atob",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_btoa",
       "kind": "unknown",
       "name": "worker_src_auth_btoa",
       "label": "worker_src_auth_btoa",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_fetcher",
       "kind": "unknown",
       "name": "worker_src_auth_fetcher",
       "label": "worker_src_auth_fetcher",
-      "community": 32
+      "community": 19
     },
     {
       "id": "worker_src_auth_enforceratelimit",
       "kind": "unknown",
       "name": "worker_src_auth_enforceratelimit",
       "label": "worker_src_auth_enforceratelimit",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_json",
       "kind": "unknown",
       "name": "worker_src_auth_json",
       "label": "worker_src_auth_json",
-      "community": 50
+      "community": 43
     },
     {
       "id": "worker_src_auth_readjson",
       "kind": "unknown",
       "name": "worker_src_auth_readjson",
       "label": "worker_src_auth_readjson",
-      "community": 50
+      "community": 43
     },
     {
       "id": "web_push",
       "kind": "unknown",
       "name": "web_push",
       "label": "web_push",
-      "community": 50
+      "community": 43
     }
   ],
   "edges": [
@@ -20572,7 +20580,7 @@
     }
   ],
   "metadata": {
-    "node_count": 873,
+    "node_count": 874,
     "edge_count": 1495
   }
 }
