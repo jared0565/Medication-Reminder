@@ -1,0 +1,685 @@
+{
+  "god_nodes": [
+    {
+      "id": "medication_reminder",
+      "name": "medication_reminder.py",
+      "kind": "file",
+      "degree": 52,
+      "in_degree": 0,
+      "out_degree": 52
+    },
+    {
+      "id": "medication_core",
+      "name": "medication_core.py",
+      "kind": "file",
+      "degree": 50,
+      "in_degree": 5,
+      "out_degree": 45
+    },
+    {
+      "id": "medication_reminder_medicationreminderapp",
+      "name": "MedicationReminderApp",
+      "kind": "class",
+      "degree": 43,
+      "in_degree": 2,
+      "out_degree": 41
+    },
+    {
+      "id": "web_qrcode",
+      "name": "qrcode.js",
+      "kind": "file",
+      "degree": 42,
+      "in_degree": 0,
+      "out_degree": 42
+    },
+    {
+      "id": "web_app",
+      "name": "app.js",
+      "kind": "file",
+      "degree": 41,
+      "in_degree": 17,
+      "out_degree": 24
+    },
+    {
+      "id": "medication_reminder_init",
+      "name": "__init__",
+      "kind": "function",
+      "degree": 24,
+      "in_degree": 2,
+      "out_degree": 22
+    },
+    {
+      "id": "sync_client",
+      "name": "sync_client.py",
+      "kind": "file",
+      "degree": 23,
+      "in_degree": 3,
+      "out_degree": 20
+    },
+    {
+      "id": "web_sync",
+      "name": "sync.js",
+      "kind": "file",
+      "degree": 22,
+      "in_degree": 0,
+      "out_degree": 22
+    },
+    {
+      "id": "medication_reminder_save",
+      "name": "save",
+      "kind": "function",
+      "degree": 20,
+      "in_degree": 1,
+      "out_degree": 19
+    },
+    {
+      "id": "web_sync_syncnow",
+      "name": "syncNow",
+      "kind": "function",
+      "degree": 20,
+      "in_degree": 8,
+      "out_degree": 12
+    },
+    {
+      "id": "medication_core_validate_schedule",
+      "name": "validate_schedule",
+      "kind": "function",
+      "degree": 19,
+      "in_degree": 5,
+      "out_degree": 14
+    },
+    {
+      "id": "medication_reminder_open_schedule_editor",
+      "name": "open_schedule_editor",
+      "kind": "function",
+      "degree": 19,
+      "in_degree": 1,
+      "out_degree": 18
+    },
+    {
+      "id": "medication_reminder_edit_event_dialog",
+      "name": "edit_event_dialog",
+      "kind": "function",
+      "degree": 18,
+      "in_degree": 1,
+      "out_degree": 17
+    },
+    {
+      "id": "tests_e2e_sync",
+      "name": "e2e_sync.py",
+      "kind": "file",
+      "degree": 16,
+      "in_degree": 0,
+      "out_degree": 16
+    },
+    {
+      "id": "medication_core_export_taken_csv",
+      "name": "export_taken_csv",
+      "kind": "function",
+      "degree": 15,
+      "in_degree": 1,
+      "out_degree": 14
+    },
+    {
+      "id": "medication_core_init",
+      "name": "__init__",
+      "kind": "function",
+      "degree": 15,
+      "in_degree": 4,
+      "out_degree": 11
+    },
+    {
+      "id": "medication_reminder_show_pairing_qr",
+      "name": "show_pairing_qr",
+      "kind": "function",
+      "degree": 15,
+      "in_degree": 1,
+      "out_degree": 14
+    },
+    {
+      "id": "medication_core_storageerror",
+      "name": "StorageError",
+      "kind": "class",
+      "degree": 14,
+      "in_degree": 13,
+      "out_degree": 1
+    },
+    {
+      "id": "medication_reminder_show_due_popup",
+      "name": "show_due_popup",
+      "kind": "function",
+      "degree": 14,
+      "in_degree": 1,
+      "out_degree": 13
+    },
+    {
+      "id": "medication_reminder_worker",
+      "name": "worker",
+      "kind": "function",
+      "degree": 14,
+      "in_degree": 3,
+      "out_degree": 11
+    }
+  ],
+  "orphans": [
+    {
+      "id": "agents",
+      "name": "AGENTS.md",
+      "kind": "file"
+    },
+    {
+      "id": "build_windows_exe",
+      "name": "build_windows_exe.bat",
+      "kind": "file"
+    },
+    {
+      "id": "install_dependencies",
+      "name": "install_dependencies.bat",
+      "kind": "file"
+    },
+    {
+      "id": "license",
+      "name": "LICENSE",
+      "kind": "file"
+    },
+    {
+      "id": "medication_schedule",
+      "name": "medication_schedule.json",
+      "kind": "file"
+    },
+    {
+      "id": "readme",
+      "name": "README.md",
+      "kind": "file"
+    },
+    {
+      "id": "requirements",
+      "name": "requirements.txt",
+      "kind": "file"
+    },
+    {
+      "id": "run_medication_reminder",
+      "name": "run_medication_reminder.bat",
+      "kind": "file"
+    },
+    {
+      "id": "web_app_esc_l3_c48",
+      "name": "esc",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_foreach_l22_c202",
+      "name": "forEach",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_foreach_l35_c502",
+      "name": "forEach",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_installbutton_onclick_l14_c1299",
+      "name": "$('#installButton').onclick",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_localdatekey_l5_c20",
+      "name": "localDateKey",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_map_l11_c480",
+      "name": "map",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_navigator_serviceworker_addeventlistener_controllerchange_l39_c404",
+      "name": "navigator.serviceWorker.addEventListener controllerchange",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_notes_foreach_l12_c523",
+      "name": "notes.forEach",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_readstoredjson_l2_c112",
+      "name": "readStoredJson",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_setinterval_l39_c1423",
+      "name": "setInterval",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_settimeout_l12_c939",
+      "name": "setTimeout",
+      "kind": "function"
+    },
+    {
+      "id": "web_app_sort_l27_c226",
+      "name": "sort",
+      "kind": "function"
+    }
+  ],
+  "entry_points": [
+    {
+      "id": "medication_reminder",
+      "name": "medication_reminder.py",
+      "out_degree": 52,
+      "in_degree": 0,
+      "ratio": 52.0
+    },
+    {
+      "id": "web_qrcode",
+      "name": "qrcode.js",
+      "out_degree": 42,
+      "in_degree": 0,
+      "ratio": 42.0
+    },
+    {
+      "id": "web_sync",
+      "name": "sync.js",
+      "out_degree": 22,
+      "in_degree": 0,
+      "ratio": 22.0
+    },
+    {
+      "id": "tests_e2e_sync",
+      "name": "e2e_sync.py",
+      "out_degree": 16,
+      "in_degree": 0,
+      "ratio": 16.0
+    },
+    {
+      "id": "worker_src_index",
+      "name": "index.js",
+      "out_degree": 13,
+      "in_degree": 0,
+      "ratio": 13.0
+    },
+    {
+      "id": "tests_test_medication_core",
+      "name": "test_medication_core.py",
+      "out_degree": 11,
+      "in_degree": 0,
+      "ratio": 11.0
+    },
+    {
+      "id": "tests_test_pairing",
+      "name": "test_pairing.py",
+      "out_degree": 10,
+      "in_degree": 0,
+      "ratio": 10.0
+    },
+    {
+      "id": "medication_core",
+      "name": "medication_core.py",
+      "out_degree": 45,
+      "in_degree": 5,
+      "ratio": 9.0
+    },
+    {
+      "id": "sync_client",
+      "name": "sync_client.py",
+      "out_degree": 20,
+      "in_degree": 3,
+      "ratio": 6.666666666666667
+    },
+    {
+      "id": "web_app",
+      "name": "app.js",
+      "out_degree": 24,
+      "in_degree": 17,
+      "ratio": 1.411764705882353
+    }
+  ],
+  "surprising_connections": [
+    {
+      "source": "medication_core",
+      "target": "medication_core_appstorage",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_configvalidationerror",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_datablob",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_default_state",
+      "source_kind": "file",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_dpapiprotector",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_dueoccurrence",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_event_active",
+      "source_kind": "file",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_occurrence_key",
+      "source_kind": "file",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_protectedjsonfile",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_safe_datetime",
+      "source_kind": "file",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_scheduleengine",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core",
+      "target": "medication_core_storageerror",
+      "source_kind": "file",
+      "target_kind": "class",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core_append_audit",
+      "target": "medication_core_exists",
+      "source_kind": "function",
+      "target_kind": "function",
+      "relation": "calls"
+    },
+    {
+      "source": "medication_core_append_audit",
+      "target": "medication_core_safe_datetime",
+      "source_kind": "function",
+      "target_kind": "function",
+      "relation": "calls"
+    },
+    {
+      "source": "medication_core_append_audit",
+      "target": "medication_core_storageerror",
+      "source_kind": "function",
+      "target_kind": "class",
+      "relation": "calls"
+    },
+    {
+      "source": "medication_core_appstorage",
+      "target": "medication_core_append_audit",
+      "source_kind": "class",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core_appstorage",
+      "target": "medication_core_delete_sync_credentials",
+      "source_kind": "class",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core_appstorage",
+      "target": "medication_core_export_taken_csv",
+      "source_kind": "class",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core_appstorage",
+      "target": "medication_core_init",
+      "source_kind": "class",
+      "target_kind": "function",
+      "relation": "contains"
+    },
+    {
+      "source": "medication_core_appstorage",
+      "target": "medication_core_load_schedule",
+      "source_kind": "class",
+      "target_kind": "function",
+      "relation": "contains"
+    }
+  ],
+  "cycles": [
+    [
+      "medication_core_protectedjsonfile",
+      "medication_core_init"
+    ],
+    [
+      "medication_core_dpapiprotector",
+      "medication_core_init"
+    ],
+    [
+      "web_app_addmedicineinput",
+      "web_app"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_updatenotificationstatus",
+      "web_app",
+      "web_app_enablenotifications"
+    ],
+    [
+      "web_app_updatenotificationstatus",
+      "web_app"
+    ],
+    [
+      "web_app",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app",
+      "web_app_renderall"
+    ],
+    [
+      "web_app",
+      "web_app_renderall",
+      "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_renderall",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_renderpairingqr"
+    ],
+    [
+      "web_app",
+      "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_rendertoday"
+    ]
+  ],
+  "top_files_by_links": [
+    {
+      "id": "medication_reminder",
+      "name": "medication_reminder.py",
+      "degree": 52,
+      "source_file": "medication_reminder.py"
+    },
+    {
+      "id": "medication_core",
+      "name": "medication_core.py",
+      "degree": 50,
+      "source_file": "medication_core.py"
+    },
+    {
+      "id": "web_qrcode",
+      "name": "qrcode.js",
+      "degree": 42,
+      "source_file": "web/qrcode.js"
+    },
+    {
+      "id": "web_app",
+      "name": "app.js",
+      "degree": 41,
+      "source_file": "web/app.js"
+    },
+    {
+      "id": "sync_client",
+      "name": "sync_client.py",
+      "degree": 23,
+      "source_file": "sync_client.py"
+    },
+    {
+      "id": "web_sync",
+      "name": "sync.js",
+      "degree": 22,
+      "source_file": "web/sync.js"
+    },
+    {
+      "id": "tests_e2e_sync",
+      "name": "e2e_sync.py",
+      "degree": 16,
+      "source_file": "tests/e2e_sync.py"
+    },
+    {
+      "id": "worker_src_index",
+      "name": "index.js",
+      "degree": 13,
+      "source_file": "worker/src/index.js"
+    },
+    {
+      "id": "tests_test_medication_core",
+      "name": "test_medication_core.py",
+      "degree": 11,
+      "source_file": "tests/test_medication_core.py"
+    },
+    {
+      "id": "tests_test_pairing",
+      "name": "test_pairing.py",
+      "degree": 10,
+      "source_file": "tests/test_pairing.py"
+    },
+    {
+      "id": "agents",
+      "name": "AGENTS.md",
+      "degree": 0,
+      "source_file": "AGENTS.md"
+    },
+    {
+      "id": "build_windows_exe",
+      "name": "build_windows_exe.bat",
+      "degree": 0,
+      "source_file": "build_windows_exe.bat"
+    },
+    {
+      "id": "install_dependencies",
+      "name": "install_dependencies.bat",
+      "degree": 0,
+      "source_file": "install_dependencies.bat"
+    },
+    {
+      "id": "license",
+      "name": "LICENSE",
+      "degree": 0,
+      "source_file": "LICENSE"
+    },
+    {
+      "id": "medication_schedule",
+      "name": "medication_schedule.json",
+      "degree": 0,
+      "source_file": "medication_schedule.json"
+    },
+    {
+      "id": "readme",
+      "name": "README.md",
+      "degree": 0,
+      "source_file": "README.md"
+    },
+    {
+      "id": "requirements",
+      "name": "requirements.txt",
+      "degree": 0,
+      "source_file": "requirements.txt"
+    },
+    {
+      "id": "run_medication_reminder",
+      "name": "run_medication_reminder.bat",
+      "degree": 0,
+      "source_file": "run_medication_reminder.bat"
+    },
+    {
+      "id": "web_headers",
+      "name": "_headers",
+      "degree": 0,
+      "source_file": "web/_headers"
+    },
+    {
+      "id": "web_index",
+      "name": "index.html",
+      "degree": 0,
+      "source_file": "web/index.html"
+    }
+  ]
+}

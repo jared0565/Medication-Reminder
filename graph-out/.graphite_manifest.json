@@ -1,0 +1,175 @@
+{
+  "root": "Medication Reminder",
+  "file_count": 27,
+  "engine": {
+    "cache_version": "v5",
+    "schema_version": "1",
+    "version": "0.1.0",
+    "fingerprint": "457bf14a84f3bc8d4cad9d3d82f139648f26924d36928614bd7bdd5087514531"
+  },
+  "files": [
+    {
+      "rel_path": "AGENTS.md",
+      "language": "markdown",
+      "size": 667,
+      "hash": "0f6afe584364118f1f6d50e6ffeed4b147c47110896ae276eae9227250491dbe"
+    },
+    {
+      "rel_path": "LICENSE",
+      "language": null,
+      "size": 1083,
+      "hash": "2f2077a8ee073c45dbb5129d5282b9c77e976b59a521e5397a04067573db4172"
+    },
+    {
+      "rel_path": "README.md",
+      "language": "markdown",
+      "size": 5489,
+      "hash": "aa661542ce4f2e3317e48d7baf708a36cbb8302ef3bfc5825322702e4688226a"
+    },
+    {
+      "rel_path": "build_windows_exe.bat",
+      "language": null,
+      "size": 411,
+      "hash": "c5eb91441815785725807ed9a393e580548daab52afb86b99b153bb79bbc718a"
+    },
+    {
+      "rel_path": "install_dependencies.bat",
+      "language": null,
+      "size": 122,
+      "hash": "2b3fa40deb4d64f553b2a10d40ad54d4de01550b609b4a8159099644aea8e8f4"
+    },
+    {
+      "rel_path": "medication_core.py",
+      "language": "python",
+      "size": 26252,
+      "hash": "b5acf7ccefbb1db37e9e34b1ab0b2997282ee09d7491904a5acaf2e0cd9bbf0c"
+    },
+    {
+      "rel_path": "medication_reminder.py",
+      "language": "python",
+      "size": 50301,
+      "hash": "b0a18d92613f25bdfad57c9d433f535ab75b77d76a6f8cb0d2b14a649246844d"
+    },
+    {
+      "rel_path": "medication_schedule.json",
+      "language": "json",
+      "size": 2645,
+      "hash": "36cac25bf29c9f2b6bab8787916d61f5d12deba15b9a32dc9a1d7c3b2029c6cc"
+    },
+    {
+      "rel_path": "requirements.txt",
+      "language": null,
+      "size": 84,
+      "hash": "003644593e0dc9dfe0fe871dfab18930b4ea317e06465a2a18917f29d0eff294"
+    },
+    {
+      "rel_path": "run_medication_reminder.bat",
+      "language": null,
+      "size": 60,
+      "hash": "7a8cb80ebc5762865a27c0d61e648552d9be9741f8f12fdb69da8c1e1dd4cb86"
+    },
+    {
+      "rel_path": "sync_client.py",
+      "language": "python",
+      "size": 5513,
+      "hash": "b58458529e0ebae065a384ee446ea26410a7e8851c40be90d42a8d7051721874"
+    },
+    {
+      "rel_path": "tests/e2e_sync.py",
+      "language": "python",
+      "size": 2918,
+      "hash": "599c8bc90e9bea65b925c52fc15e44432f37f1bce3cc7abb67e836dbf0c0c1aa"
+    },
+    {
+      "rel_path": "tests/test_medication_core.py",
+      "language": "python",
+      "size": 2585,
+      "hash": "d89f30589c702daae4b93b1898b7006c0653e431981e423a5c6660d763e634c0"
+    },
+    {
+      "rel_path": "tests/test_pairing.py",
+      "language": "python",
+      "size": 1049,
+      "hash": "158bf10bed2523a1a13c2ff907e8d320cb007ad06ce647e109781c98b0dda169"
+    },
+    {
+      "rel_path": "web/_headers",
+      "language": null,
+      "size": 279,
+      "hash": "9ba534bf8ea9194185f6a456aeae9fc98123a7904320cd7ac4e8840921ee1ced"
+    },
+    {
+      "rel_path": "web/app.js",
+      "language": "javascript",
+      "size": 22283,
+      "hash": "f84eecc8950aac43d28c85c1a11460097693716bc8d36c2db43ca34fd6fbcb44"
+    },
+    {
+      "rel_path": "web/index.html",
+      "language": "html",
+      "size": 5538,
+      "hash": "be0c4b4292444c542ed3f994f8dcc5a84690bdf4d5ecfbb733dab54373f6613e"
+    },
+    {
+      "rel_path": "web/manifest.webmanifest",
+      "language": null,
+      "size": 304,
+      "hash": "6f06172059e7f74c3b5e22c51d8b75ccc4c3aa2dab52b6c8494b39c1aa067975"
+    },
+    {
+      "rel_path": "web/qrcode.js",
+      "language": "javascript",
+      "size": 56694,
+      "hash": "79ec86f82856005b1c887905cfccfcfbec3821ca61c7fd5a952faa5f778f791c"
+    },
+    {
+      "rel_path": "web/styles.css",
+      "language": "css",
+      "size": 5545,
+      "hash": "dfd544cc11d732125ad1b2548a26c527cfe11c0a732bb131a774d4f0e662a9b9"
+    },
+    {
+      "rel_path": "web/sw.js",
+      "language": "javascript",
+      "size": 1899,
+      "hash": "a3ddde0958edd207c73ea96f3a3ba899e9d1358f7031bd3abef4719f221281c7"
+    },
+    {
+      "rel_path": "web/sync.js",
+      "language": "javascript",
+      "size": 13790,
+      "hash": "146b81f0e332bd6171684ad604f207b708713dbd93a3c7bf6547ba177cb82862"
+    },
+    {
+      "rel_path": "worker/package-lock.json",
+      "language": "json",
+      "size": 6831,
+      "hash": "250b50c5925855e0539490acd8c6764bc7ad7de6f74897517cbe4cf9d71d726b"
+    },
+    {
+      "rel_path": "worker/package.json",
+      "language": "json",
+      "size": 292,
+      "hash": "56a14a8026a6ae63b4b4445046fcbd61eeb45d03d495fb075059983d2ebaf68f"
+    },
+    {
+      "rel_path": "worker/schema.sql",
+      "language": "sql",
+      "size": 937,
+      "hash": "96c3e66c58f87819e94f618c28c33d33abaa1e58bb6ec22515f0e7634ebf5558"
+    },
+    {
+      "rel_path": "worker/src/index.js",
+      "language": "javascript",
+      "size": 13853,
+      "hash": "5c1b6f8113c2fa41cf24f7d0ae92a4858268327025bd4bd65ad97fe3b2bb1e19"
+    },
+    {
+      "rel_path": "worker/wrangler.jsonc",
+      "language": null,
+      "size": 389,
+      "hash": "57d45126097d3a3d97a8cec688cc69ab3ece1b67c80934194a78352d91f0db7f"
+    }
+  ],
+  "typescript_resolver": "auto"
+}
