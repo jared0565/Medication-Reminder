@@ -369,6 +369,18 @@ try {
     $sharpAdvisories = @($Audit.vulnerabilities.sharp.via | Where-Object {
       $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
     })
+    $fixMetadata = @(
+      $Audit.vulnerabilities.sharp.fixAvailable
+      $Audit.vulnerabilities.miniflare.fixAvailable
+      $Audit.vulnerabilities.wrangler.fixAvailable
+    )
+    $allNoFix = @($fixMetadata | Where-Object { $_ -ne $false }).Count -eq 0
+    $allKnownForcedDowngrade = @($fixMetadata | Where-Object {
+      $_ -isnot [pscustomobject] -or
+      $_.name -cne 'wrangler' -or
+      $_.version -cne '4.15.2' -or
+      $_.isSemVerMajor -ne $true
+    }).Count -eq 0
     $checks = [ordered]@{
       exactFindingNames = @(Compare-Object -CaseSensitive $expectedNames $findingNames).Count -eq 0
       totalCount = $Audit.metadata.vulnerabilities.total -eq 3
@@ -383,9 +395,7 @@ try {
       sharpAdvisoryRange = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].range -eq '<0.35.0'
       miniflareVia = @($Audit.vulnerabilities.miniflare.via).Count -eq 1 -and $Audit.vulnerabilities.miniflare.via[0] -eq 'sharp'
       wranglerVia = @($Audit.vulnerabilities.wrangler.via).Count -eq 1 -and $Audit.vulnerabilities.wrangler.via[0] -eq 'miniflare'
-      noFixAvailable = $Audit.vulnerabilities.sharp.fixAvailable -eq $false -and
-        $Audit.vulnerabilities.miniflare.fixAvailable -eq $false -and
-        $Audit.vulnerabilities.wrangler.fixAvailable -eq $false
+      approvedFixMetadata = $allNoFix -or $allKnownForcedDowngrade
       wranglerVersion = $PackageLock.packages.'node_modules/wrangler'.version -eq '4.112.0'
       wranglerDevOnly = $PackageLock.packages.'node_modules/wrangler'.dev -eq $true
       miniflareVersion = $PackageLock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0'
@@ -1356,6 +1366,18 @@ try {
     $sharpAdvisories = @($Audit.vulnerabilities.sharp.via | Where-Object {
       $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
     })
+    $fixMetadata = @(
+      $Audit.vulnerabilities.sharp.fixAvailable
+      $Audit.vulnerabilities.miniflare.fixAvailable
+      $Audit.vulnerabilities.wrangler.fixAvailable
+    )
+    $allNoFix = @($fixMetadata | Where-Object { $_ -ne $false }).Count -eq 0
+    $allKnownForcedDowngrade = @($fixMetadata | Where-Object {
+      $_ -isnot [pscustomobject] -or
+      $_.name -cne 'wrangler' -or
+      $_.version -cne '4.15.2' -or
+      $_.isSemVerMajor -ne $true
+    }).Count -eq 0
     $checks = [ordered]@{
       exactFindingNames = @(Compare-Object -CaseSensitive $expectedNames $findingNames).Count -eq 0
       totalCount = $Audit.metadata.vulnerabilities.total -eq 3
@@ -1370,9 +1392,7 @@ try {
       sharpAdvisoryRange = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].range -eq '<0.35.0'
       miniflareVia = @($Audit.vulnerabilities.miniflare.via).Count -eq 1 -and $Audit.vulnerabilities.miniflare.via[0] -eq 'sharp'
       wranglerVia = @($Audit.vulnerabilities.wrangler.via).Count -eq 1 -and $Audit.vulnerabilities.wrangler.via[0] -eq 'miniflare'
-      noFixAvailable = $Audit.vulnerabilities.sharp.fixAvailable -eq $false -and
-        $Audit.vulnerabilities.miniflare.fixAvailable -eq $false -and
-        $Audit.vulnerabilities.wrangler.fixAvailable -eq $false
+      approvedFixMetadata = $allNoFix -or $allKnownForcedDowngrade
       wranglerVersion = $PackageLock.packages.'node_modules/wrangler'.version -eq '4.112.0'
       wranglerDevOnly = $PackageLock.packages.'node_modules/wrangler'.dev -eq $true
       miniflareVersion = $PackageLock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0'
@@ -1457,10 +1477,14 @@ wrangler@4.112.0 -> miniflare@4.20260714.0 -> sharp@0.34.5
 ```
 
 The advisory covers inherited libvips vulnerabilities in Sharp versions below
-0.35.0. npm reports no supported `fixAvailable` for this chain, and the then-current
-Wrangler 4.113.0 still pinned Miniflare to Sharp 0.34.5. Wrangler, Miniflare, and
-Sharp are marked `dev: true` in the lockfile and inspection of the Worker dry-run
-bundle confirms they are not bundled into the deployed Worker runtime.
+0.35.0. Depending on the npm registry response path, `fixAvailable` is either `false`
+or an identical forced semver-major downgrade to Wrangler 4.15.2 for all three
+nodes. That downgrade is not an approved remediation: the then-current Wrangler
+4.113.0 still pinned Miniflare to Sharp 0.34.5. The release gate accepts only those
+two exact metadata shapes and rejects any other advertised fix. Wrangler,
+Miniflare, and Sharp are marked `dev: true` in the lockfile and inspection of the
+Worker dry-run bundle confirms they are not bundled into the deployed Worker
+runtime.
 
 This is a constrained development-tool exception, not a production-runtime
 exception. Run Wrangler and Miniflare only on trusted repository inputs in restricted
