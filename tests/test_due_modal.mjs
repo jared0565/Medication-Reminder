@@ -49,6 +49,22 @@ test('notification taps route the private due timestamp back to local modal data
   assert.doesNotMatch(worker, /item\.medicines/);
 });
 
+test('service worker updates are consent gated and never cache same-origin API responses', () => {
+  const serviceWorker = readFileSync('web/sw.js', 'utf8');
+  const updater = readFileSync('web/update.js', 'utf8');
+  const installHandler = serviceWorker.match(
+    /self\.addEventListener\('install',[\s\S]*?(?=\r?\nself\.addEventListener)/,
+  )?.[0] || '';
+
+  assert.doesNotMatch(installHandler, /skipWaiting/);
+  assert.match(serviceWorker, /event\.data\?\.type === 'SKIP_WAITING'/);
+  assert.match(updater, /confirm\(`Medication Reminder \$\{version\} is available/);
+  assert.match(updater, /worker\.postMessage\(\{ type: 'SKIP_WAITING' \}\)/);
+  assert.match(serviceWorker, /requestUrl\.pathname\.startsWith\('\/api\/'\)/);
+  assert.match(serviceWorker, /requestUrl\.pathname === '\/version\.json'/);
+  assert.match(serviceWorker, /key\.startsWith\(CACHE_PREFIX\) && key !== CACHE/);
+});
+
 test('Windows reminder is modal and creates one visible label for every medicine', () => {
   const widget = readFileSync('medication_reminder.py', 'utf8');
   assert.match(widget, /popup\.grab_set\(\)/);

@@ -10,9 +10,12 @@
   let prompting = false;
   let refreshing = false;
   let checkInProgress = false;
+  const offeredWorkers = new WeakSet();
 
   function offerUpdate(worker, version = latestVersion, force = false) {
-    if (!worker || prompting || (!force && declinedVersion === version)) return false;
+    if (!worker || prompting || offeredWorkers.has(worker)
+      || (!force && declinedVersion === version)) return false;
+    offeredWorkers.add(worker);
     prompting = true;
     const accepted = confirm(`Medication Reminder ${version} is available.\n\nUpdate now?`);
     prompting = false;

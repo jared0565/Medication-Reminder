@@ -5,7 +5,12 @@ import vm from 'node:vm';
 
 const flush = () => new Promise(resolve => setImmediate(resolve));
 
-function updateHarness({ remoteVersion = '2026.07.23.14', approve = true } = {}) {
+function updateHarness({
+  remoteVersion = '2026.07.23.14',
+  approve = true,
+  raceOnUpdate = false,
+} = {}) {
+  let servedVersion = remoteVersion;
   const worker = {
     state: 'installed',
     messages: [],
@@ -19,7 +24,16 @@ function updateHarness({ remoteVersion = '2026.07.23.14', approve = true } = {})
     updates: 0,
     listeners: {},
     addEventListener(name, handler) { this.listeners[name] = handler; },
-    async update() { this.updates += 1; },
+    async update() {
+      this.updates += 1;
+      if (raceOnUpdate) {
+        this.installing = worker;
+        this.listeners.updatefound?.();
+        worker.state = 'installed';
+        worker.listeners.statechange?.();
+        this.waiting = worker;
+      }
+    },
   };
   const checkButton = { textContent: 'Check for updates', disabled: false, onclick: null };
   const versionElement = { textContent: '2026.07.23.13' };
@@ -49,7 +63,7 @@ function updateHarness({ remoteVersion = '2026.07.23.14', approve = true } = {})
     fetch: async () => ({
       ok: true,
       status: 200,
-      async json() { return { version: remoteVersion }; },
+      async json() { return { version: servedVersion }; },
     }),
     confirm: () => { confirmations += 1; return approve; },
     alert() {},
@@ -69,6 +83,7 @@ function updateHarness({ remoteVersion = '2026.07.23.14', approve = true } = {})
     documentListeners,
     confirmations: () => confirmations,
     reloads: () => reloads,
+    setRemoteVersion(value) { servedVersion = value; },
   };
 }
 
@@ -102,4 +117,18 @@ test('startup reports no update when Cloudflare version matches the installed ap
   assert.equal(app.registration.updates, 0);
   assert.equal(app.confirmations(), 0);
   assert.equal(app.worker.messages.length, 0);
+});
+
+test('updatefound and manual waiting checks prompt once for the same worker identity', async () => {
+  const app = updateHarness({
+    remoteVersion: '2026.07.23.13',
+    raceOnUpdate: true,
+  });
+  await flush();
+  await flush();
+  app.setRemoteVersion('2026.07.23.14');
+  await app.checkButton.onclick();
+  await flush();
+  assert.equal(app.confirmations(), 1);
+  assert.equal(app.worker.messages.length, 1);
 });

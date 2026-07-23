@@ -368,3 +368,104 @@ test('privacy-lock markup is present before medication content', () => {
     );
   }
 });
+
+test('PWA loads access control before every application client', () => {
+  const html = readFileSync('web/index.html', 'utf8');
+  const scripts = [...html.matchAll(/<script\s+src="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(scripts[0], 'access.js?v=20260723.17');
+  for (const dependent of ['app.js', 'update.js', 'account.js', 'sync.js']) {
+    assert.ok(
+      scripts.findIndex(value => value.startsWith(`${dependent}?`)) > 0,
+      `access.js must execute before ${dependent}`,
+    );
+  }
+  assert.match(html, /<html[^>]*class="access-pending"/);
+  assert.match(html, /<div id="applicationShell" hidden>/);
+});
+
+test('browser APIs are same-origin and push payloads stay generic', () => {
+  for (const file of ['web/account.js', 'web/app.js', 'web/sync.js']) {
+    const source = readFileSync(file, 'utf8');
+    assert.doesNotMatch(source, /https?:\/\/[^'"]*workers\.dev/i, file);
+  }
+
+  const app = readFileSync('web/app.js', 'utf8');
+  assert.match(app, /const pushApi='\/api'/);
+  assert.match(app, /credentials:'same-origin'/);
+  assert.match(app, /'X-Medication-CSRF':'1'/);
+  assert.match(app, /title:'Medication reminder due'/);
+  assert.match(app, /body:'Open Medication Reminder to view the scheduled medicines\.'/);
+});
+
+test('release metadata and every versioned PWA asset are coherent', () => {
+  const html = readFileSync('web/index.html', 'utf8');
+  const serviceWorker = readFileSync('web/sw.js', 'utf8');
+  const release = JSON.parse(readFileSync('web/version.json', 'utf8'));
+  const expectedAssets = [
+    'styles.css',
+    'access.js',
+    'qrcode.js',
+    'due-modal.js',
+    'app.js',
+    'update.js',
+    'account.js',
+    'sync.js',
+  ];
+
+  assert.equal(release.version, '2026.07.23.17');
+  assert.match(html, /Medication Reminder v2026\.07\.23\.17/);
+  assert.match(html, /id="appVersion">2026\.07\.23\.17</);
+  assert.match(serviceWorker, /medication-reminder-web-v26/);
+  for (const asset of expectedAssets) {
+    assert.match(html, new RegExp(`${asset.replace('.', '\\.')}\\?v=20260723\\.17`), asset);
+    assert.match(serviceWorker, new RegExp(`\\./${asset.replace('.', '\\.')}\\?v=20260723\\.17`), asset);
+  }
+  assert.doesNotMatch(`${html}\n${serviceWorker}`, /20260723\.(?!17)\d+/);
+});
+
+test('Pages headers keep API and release responses private with a narrow CSP', () => {
+  const headers = readFileSync('web/_headers', 'utf8');
+  const csp = headers.match(/Content-Security-Policy: ([^\r\n]+)/)?.[1] || '';
+
+  assert.match(headers, /\/version\.json\s+Cache-Control: no-cache, no-store, must-revalidate/);
+  assert.doesNotMatch(headers, /^\/api\/\*/m);
+  assert.doesNotMatch(headers, /\/\*\s+Cache-Control:/);
+  assert.match(csp, /connect-src 'self' https:\/\/accounts\.google\.com\/gsi\//);
+  assert.match(csp, /script-src 'self' https:\/\/accounts\.google\.com\/gsi\/client/);
+  assert.match(csp, /img-src 'self' data: https:\/\/lh3\.googleusercontent\.com/);
+  assert.doesNotMatch(csp, /workers\.dev|\*/);
+});
+
+test('Pages cache rules are explicit and non-conflicting for every application path', () => {
+  const headers = readFileSync('web/_headers', 'utf8');
+  const rules = headers.trim().split(/\r?\n(?=\/)/).map(block => {
+    const [pattern, ...lines] = block.split(/\r?\n/);
+    return {
+      pattern,
+      cache: lines
+        .map(line => line.match(/^\s+Cache-Control:\s*(.+)$/)?.[1])
+        .filter(Boolean),
+    };
+  });
+  const catchAll = rules.find(rule => rule.pattern === '/*');
+  assert.deepEqual(catchAll?.cache, []);
+
+  for (const path of [
+    '/',
+    '/index.html',
+    '/sw.js',
+    '/version.json',
+    '/styles.css',
+    '/access.js',
+    '/qrcode.js',
+    '/due-modal.js',
+    '/app.js',
+    '/update.js',
+    '/account.js',
+    '/sync.js',
+  ]) {
+    const exact = rules.filter(rule => rule.pattern === path);
+    assert.equal(exact.length, 1, `${path} must have one exact header rule`);
+    assert.equal(exact[0].cache.length, 1, `${path} must have one Cache-Control value`);
+  }
+});
