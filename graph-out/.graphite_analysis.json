@@ -81,6 +81,14 @@
       "out_degree": 19
     },
     {
+      "id": "tests_test_web_sync_installedmobileharness",
+      "name": "installedMobileHarness",
+      "kind": "function",
+      "degree": 20,
+      "in_degree": 4,
+      "out_degree": 16
+    },
+    {
       "id": "medication_core_validate_schedule",
       "name": "validate_schedule",
       "kind": "function",
@@ -95,14 +103,6 @@
       "degree": 19,
       "in_degree": 1,
       "out_degree": 18
-    },
-    {
-      "id": "tests_test_web_sync_installedmobileharness",
-      "name": "installedMobileHarness",
-      "kind": "function",
-      "degree": 19,
-      "in_degree": 3,
-      "out_degree": 16
     },
     {
       "id": "medication_reminder_edit_event_dialog",
@@ -486,12 +486,56 @@
   ],
   "cycles": [
     [
-      "medication_core_protectedjsonfile",
-      "medication_core_init"
+      "web_app_updatenotificationstatus",
+      "web_app",
+      "web_app_enablenotifications"
     ],
     [
-      "medication_core_dpapiprotector",
-      "medication_core_init"
+      "web_app_updatenotificationstatus",
+      "web_app"
+    ],
+    [
+      "web_app_renderpairingqr",
+      "web_app"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_renderall"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
     ],
     [
       "web_app",
@@ -499,20 +543,6 @@
     ],
     [
       "web_app",
-      "web_app_enablenotifications",
-      "web_app_updatenotificationstatus"
-    ],
-    [
-      "web_app",
-      "web_app_openeditor"
-    ],
-    [
-      "web_app",
-      "web_app_openeditor",
-      "web_app_rendermedicineinputs"
-    ],
-    [
-      "web_app",
       "web_app_renderall"
     ],
     [
@@ -522,49 +552,19 @@
     ],
     [
       "web_app",
-      "web_app_renderall",
-      "web_app_rendertoday"
-    ],
-    [
-      "web_app",
       "web_app_rendermedicineinputs"
     ],
     [
       "web_app",
-      "web_app_renderpairingqr"
-    ],
-    [
-      "web_app",
       "web_app_renderschedules"
     ],
     [
-      "web_app",
-      "web_app_rendertoday"
+      "medication_core_init",
+      "medication_core_dpapiprotector"
     ],
     [
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app_renderschedules"
-    ],
-    [
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app_rendertoday"
-    ],
-    [
-      "web_app",
-      "web_app_updatenotificationstatus"
+      "medication_core_init",
+      "medication_core_protectedjsonfile"
     ]
   ],
   "top_files_by_links": [

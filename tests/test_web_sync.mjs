@@ -29,7 +29,7 @@ function dialog() {
   };
 }
 
-function installedMobileHarness() {
+function installedMobileHarness({ paired = true } = {}) {
   const storage = new Map();
   const pair = control(), copy = control(), sync = control(), unpair = control();
   const status = { textContent: '', classList: { add() {}, remove() {} } };
@@ -122,7 +122,7 @@ function installedMobileHarness() {
     claimed: true,
     dirty: false,
   };
-  storage.set('medication-reminder-sync-v1', JSON.stringify(credentials));
+  if (paired) storage.set('medication-reminder-sync-v1', JSON.stringify(credentials));
   vm.runInNewContext(readFileSync('web/sync.js', 'utf8'), context);
   context.fetch = async () => {
     fetchCount += 1;
@@ -169,6 +169,14 @@ test('source-side revocation immediately forgets the mobile schedule', () => {
   app.revokeFromSource();
   assert.equal(app.clearCount(), 1);
   assert.equal(app.storage.has('medication-reminder-sync-v1'), false);
+  assert.equal(app.storage.get('medication-reminder-mobile-unpaired-v1'), '1');
+  assert.equal(app.sync.hidden, true);
+  assert.equal(app.unpair.textContent, 'Pair Schedule');
+});
+
+test('an installed mobile with no active pairing clears legacy local data', () => {
+  const app = installedMobileHarness({ paired: false });
+  assert.equal(app.clearCount(), 1);
   assert.equal(app.storage.get('medication-reminder-mobile-unpaired-v1'), '1');
   assert.equal(app.sync.hidden, true);
   assert.equal(app.unpair.textContent, 'Pair Schedule');
