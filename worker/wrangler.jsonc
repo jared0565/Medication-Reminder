@@ -4,8 +4,12 @@
   "main": "src/index.js",
   "compatibility_date": "2026-07-22",
   "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [{ "pattern": "medication.bytesfx.com/api/*", "zone_name": "bytesfx.com" }],
   "vars": {
-    "GOOGLE_CLIENT_ID": "2793524917-3ghmb71lup4scgs96a65kf73i9vreed1.apps.googleusercontent.com"
+    "GOOGLE_CLIENT_ID": "2793524917-3ghmb71lup4scgs96a65kf73i9vreed1.apps.googleusercontent.com",
+    "LEGACY_V1_HOST": "medication-reminder-push.bmorris0565.workers.dev"
   },
   "triggers": { "crons": ["* * * * *"] },
   "d1_databases": [{ "binding": "DB", "database_name": "medication-reminder-push", "database_id": "2841c919-502b-4528-b872-db144d789ada" }]

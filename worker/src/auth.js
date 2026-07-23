@@ -2,6 +2,9 @@ const GOOGLE_ISSUERS = new Set(['accounts.google.com', 'https://accounts.google.
 const GOOGLE_JWKS_URL = 'https://www.googleapis.com/oauth2/v3/certs';
 const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60;
 const SESSION_PREFIX = 'mrs_';
+export const SESSION_COOKIE = 'mrs_session';
+export const APP_ORIGIN = 'https://medication.bytesfx.com';
+const SESSION_TOKEN_PATTERN = /^mrs_[A-Za-z0-9_-]{43}$/;
 const MAX_CREDENTIAL_LENGTH = 8192;
 const MAX_NAME_LENGTH = 120;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -35,6 +38,58 @@ async function sha256(value) {
 
 function randomToken(byteLength = 32) {
   return encodeBase64Url(crypto.getRandomValues(new Uint8Array(byteLength)));
+}
+
+export function sessionCookie(token, maxAge = SESSION_TTL_SECONDS) {
+  const normalizedMaxAge = Number.isFinite(maxAge)
+    ? Math.min(SESSION_TTL_SECONDS, Math.max(0, Math.trunc(maxAge)))
+    : 0;
+  return `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/api; HttpOnly; Secure; SameSite=Strict; Max-Age=${normalizedMaxAge}`;
+}
+
+export function clearSessionCookie() {
+  return sessionCookie('', 0);
+}
+
+export function parseSessionCredential(request) {
+  const cookieHeader = request.headers.get('Cookie') || '';
+  const sessionCookieValues = [];
+  for (const part of cookieHeader.split(';')) {
+    const separator = part.indexOf('=');
+    if (separator < 0 || part.slice(0, separator).trim() !== SESSION_COOKIE) continue;
+    sessionCookieValues.push(part.slice(separator + 1).trim());
+  }
+  if (sessionCookieValues.length > 1) return null;
+
+  let cookieToken = null;
+  if (sessionCookieValues.length === 1) {
+    try {
+      const decoded = decodeURIComponent(sessionCookieValues[0]);
+      if (SESSION_TOKEN_PATTERN.test(decoded)) cookieToken = decoded;
+    } catch {
+      // A malformed single cookie may fall back to a valid migration bearer.
+    }
+  }
+
+  const authorization = request.headers.get('Authorization') || '';
+  const bearerMatch = authorization.match(/^Bearer (mrs_[A-Za-z0-9_-]{43})$/);
+  const bearerToken = bearerMatch?.[1] || null;
+  if (cookieToken && bearerToken) {
+    return cookieToken === bearerToken ? { kind: 'cookie', token: cookieToken } : null;
+  }
+  if (cookieToken) return { kind: 'cookie', token: cookieToken };
+  if (bearerToken) return { kind: 'bearer', token: bearerToken };
+  return null;
+}
+
+export function readSessionToken(request) {
+  return parseSessionCredential(request)?.token || '';
+}
+
+export function validCsrfRequest(request) {
+  if (['GET', 'HEAD', 'OPTIONS'].includes(request.method)) return true;
+  return request.headers.get('Origin') === APP_ORIGIN
+    && request.headers.get('X-Medication-CSRF') === '1';
 }
 
 function cacheSeconds(response) {
@@ -107,10 +162,14 @@ function accountView(user, entitlements) {
   };
 }
 
-export async function authenticateSession(request, env, { touch = true } = {}) {
-  const authorization = request.headers.get('Authorization') || '';
-  const token = authorization.startsWith(`Bearer ${SESSION_PREFIX}`) ? authorization.slice(7) : '';
-  if (token.length < 40 || token.length > 128) return null;
+export async function authenticateSession(
+  request,
+  env,
+  { touch = true, includeEntitlements = true } = {},
+) {
+  const credential = parseSessionCredential(request);
+  if (!credential) return null;
+  const { token } = credential;
   const sessionHash = await sha256(token);
   const user = await env.DB.prepare(`SELECT u.user_id, u.email_normalized, u.display_name, u.picture_url,
       u.intended_start_date, u.intended_end_date, u.status, s.session_hash
@@ -118,7 +177,12 @@ export async function authenticateSession(request, env, { touch = true } = {}) {
     WHERE s.session_hash = ? AND s.expires_at > CURRENT_TIMESTAMP AND u.status = 'active'`).bind(sessionHash).first();
   if (!user) return null;
   if (touch) await env.DB.prepare('UPDATE app_sessions SET last_seen_at = CURRENT_TIMESTAMP WHERE session_hash = ?').bind(sessionHash).run();
-  return { user, sessionHash, entitlements: await activeEntitlements(env, user.user_id) };
+  return {
+    user,
+    sessionHash,
+    credentialKind: credential.kind,
+    entitlements: includeEntitlements ? await activeEntitlements(env, user.user_id) : new Set(),
+  };
 }
 
 function validOptionalDate(value) {
@@ -133,7 +197,12 @@ async function audit(env, userId, eventType, metadata = {}) {
 }
 
 export async function handleAuthRequest(request, env, url, helpers) {
-  const { json, readJson, enforceRateLimit } = helpers;
+  const {
+    json,
+    readJson,
+    enforceRateLimit,
+    apiVersion = 2,
+  } = helpers;
   if (request.method === 'GET' && url.pathname === '/auth/config') {
     return json(request, { googleClientId: env.GOOGLE_CLIENT_ID || '', enabled: Boolean(env.GOOGLE_CLIENT_ID) });
   }
@@ -182,9 +251,54 @@ export async function handleAuthRequest(request, env, url, helpers) {
       intended_start_date, intended_end_date FROM app_users WHERE user_id = ?`).bind(userId).first();
     const entitlements = await activeEntitlements(env, userId);
     await audit(env, userId, 'google_sign_in');
-    return json(request, { ...accountView(user, entitlements), sessionToken: token, expiresAt });
+    // Temporary v1 compatibility. index.js assigns v1 only to original,
+    // unprefixed workers.dev auth routes; /api requests can never enter here.
+    if (apiVersion === 1) {
+      return json(request, {
+        ...accountView(user, entitlements),
+        sessionToken: token,
+        expiresAt,
+      });
+    }
+    return json(request, accountView(user, entitlements), {
+      headers: { 'Set-Cookie': sessionCookie(token) },
+    });
   }
   if (!['/auth/me', '/auth/session'].includes(url.pathname)) return null;
+  if (request.method === 'DELETE' && url.pathname === '/auth/session') {
+    let account;
+    try {
+      account = await authenticateSession(request, env, {
+        touch: false,
+        includeEntitlements: false,
+      });
+    } catch {
+      console.error('session_sign_out_lookup_failed');
+      return json(request, { error: 'Session revocation could not be confirmed.' }, {
+        status: 503,
+        headers: { 'Set-Cookie': clearSessionCookie() },
+      });
+    }
+    if (account) {
+      try {
+        await env.DB.prepare('DELETE FROM app_sessions WHERE session_hash = ?').bind(account.sessionHash).run();
+      } catch {
+        console.error('session_sign_out_revocation_failed');
+        return json(request, { error: 'Session revocation could not be confirmed.' }, {
+          status: 503,
+          headers: { 'Set-Cookie': clearSessionCookie() },
+        });
+      }
+      try {
+        await audit(env, account.user.user_id, 'signed_out');
+      } catch {
+        console.warn('session_sign_out_audit_failed');
+      }
+    }
+    return json(request, { ok: true }, {
+      headers: { 'Set-Cookie': clearSessionCookie() },
+    });
+  }
   const account = await authenticateSession(request, env);
   if (!account) return json(request, { error: 'Sign-in required.' }, { status: 401 });
   if (request.method === 'GET' && url.pathname === '/auth/me') return json(request, accountView(account.user, account.entitlements));
@@ -204,11 +318,6 @@ export async function handleAuthRequest(request, env, url, helpers) {
     await audit(env, account.user.user_id, 'usage_period_updated', { startDate, endDate });
     const user = { ...account.user, intended_start_date: startDate, intended_end_date: endDate };
     return json(request, accountView(user, account.entitlements));
-  }
-  if (request.method === 'DELETE' && url.pathname === '/auth/session') {
-    await env.DB.prepare('DELETE FROM app_sessions WHERE session_hash = ?').bind(account.sessionHash).run();
-    await audit(env, account.user.user_id, 'signed_out');
-    return json(request, { ok: true });
   }
   return json(request, { error: 'Method not allowed' }, { status: 405 });
 }

@@ -1,11 +1,26 @@
 import webpush from 'web-push';
-import { authenticateSession, handleAuthRequest } from './auth.js';
+import {
+  authenticateSession,
+  handleAuthRequest,
+  parseSessionCredential,
+  validCsrfRequest,
+} from './auth.js';
 
 const MAX_SYNC_BODY_BYTES = 96 * 1024;
 const ID_PATTERN = /^[A-Za-z0-9_-]{16,128}$/;
 const ALLOWED_ORIGINS = new Set(['https://medication.bytesfx.com', 'https://medication-reminder-8h3.pages.dev']);
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_REQUESTS = 120;
+const CSRF_PROTECTED_AUTH_ROUTES = new Set([
+  'POST /auth/google',
+  'PATCH /auth/me',
+  'DELETE /auth/session',
+]);
+
+export function normalizePathname(pathname) {
+  if (pathname === '/api') return '/';
+  return pathname.startsWith('/api/') ? pathname.slice(4) : pathname;
+}
 
 function corsHeaders(request) {
   const origin = request.headers.get('Origin');
@@ -135,16 +150,36 @@ async function handleSync(request, env, url, ctx) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    const isV2ApiRequest = url.pathname === '/api' || url.pathname.startsWith('/api/');
+    // Temporary v1 rollout branch: only the configured exact legacy hostname
+    // and original unprefixed paths retain bearer behavior. Capture before normalization.
+    const isLegacyV1Request = !isV2ApiRequest && url.hostname === env.LEGACY_V1_HOST;
+    url.pathname = normalizePathname(url.pathname);
     try {
       if (request.method === 'OPTIONS' && url.pathname.startsWith('/auth/')) {
         const origin = request.headers.get('Origin');
         if (!origin || !ALLOWED_ORIGINS.has(origin)) return new Response(null, { status: 403 });
-        return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS', 'Access-Control-Max-Age': '86400' } });
+        return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Medication-CSRF', 'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS', 'Access-Control-Max-Age': '86400' } });
       }
       if (url.pathname.startsWith('/auth/')) {
         const origin = request.headers.get('Origin');
         if (origin && !ALLOWED_ORIGINS.has(origin)) return json(request, { error: 'Origin not allowed' }, { status: 403 });
-        const response = await handleAuthRequest(request, env, url, { json, readJson, enforceRateLimit });
+        if (CSRF_PROTECTED_AUTH_ROUTES.has(`${request.method} ${url.pathname}`)) {
+          const credential = parseSessionCredential(request);
+          const legacyCookieMutation = isLegacyV1Request
+            && ['PATCH', 'DELETE'].includes(request.method)
+            && credential?.kind === 'cookie';
+          const csrfRequired = !isLegacyV1Request || legacyCookieMutation;
+          if (csrfRequired && !validCsrfRequest(request)) {
+            return json(request, { error: 'Invalid browser request' }, { status: 403 });
+          }
+        }
+        const response = await handleAuthRequest(request, env, url, {
+          json,
+          readJson,
+          enforceRateLimit,
+          apiVersion: isLegacyV1Request ? 1 : 2,
+        });
         if (response) return response;
       }
       if (url.pathname.startsWith('/sync/')) {
