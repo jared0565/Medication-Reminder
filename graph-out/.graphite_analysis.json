@@ -9,6 +9,14 @@
       "out_degree": 52
     },
     {
+      "id": "web_app",
+      "name": "app.js",
+      "kind": "file",
+      "degree": 52,
+      "in_degree": 16,
+      "out_degree": 36
+    },
+    {
       "id": "medication_core",
       "name": "medication_core.py",
       "kind": "file",
@@ -31,14 +39,6 @@
       "degree": 43,
       "in_degree": 2,
       "out_degree": 41
-    },
-    {
-      "id": "web_app",
-      "name": "app.js",
-      "kind": "file",
-      "degree": 43,
-      "in_degree": 15,
-      "out_degree": 28
     },
     {
       "id": "web_sync",
@@ -121,6 +121,14 @@
       "out_degree": 16
     },
     {
+      "id": "web_sync_openscanner",
+      "name": "openScanner",
+      "kind": "function",
+      "degree": 16,
+      "in_degree": 2,
+      "out_degree": 14
+    },
+    {
       "id": "worker_src_auth",
       "name": "auth.js",
       "kind": "file",
@@ -151,14 +159,6 @@
       "degree": 15,
       "in_degree": 1,
       "out_degree": 14
-    },
-    {
-      "id": "web_app_syncpushsubscription",
-      "name": "syncPushSubscription",
-      "kind": "function",
-      "degree": 15,
-      "in_degree": 8,
-      "out_degree": 7
     }
   ],
   "orphans": [
@@ -223,12 +223,12 @@
       "kind": "function"
     },
     {
-      "id": "web_app_foreach_l22_c202",
+      "id": "web_app_foreach_l21_c202",
       "name": "forEach",
       "kind": "function"
     },
     {
-      "id": "web_app_installbutton_onclick_l14_c1299",
+      "id": "web_app_installbutton_onclick_l13_c1299",
       "name": "$('#installButton').onclick",
       "kind": "function"
     },
@@ -238,7 +238,7 @@
       "kind": "function"
     },
     {
-      "id": "web_app_map_l11_c480",
+      "id": "web_app_map_l10_c480",
       "name": "map",
       "kind": "function"
     },
@@ -248,18 +248,18 @@
       "kind": "function"
     },
     {
-      "id": "web_app_sort_l27_c226",
+      "id": "web_app_sort_l36_c226",
       "name": "sort",
       "kind": "function"
     },
     {
-      "id": "web_app_sort_l7_c223",
+      "id": "web_app_sort_l7_c65",
       "name": "sort",
       "kind": "function"
     },
     {
-      "id": "web_app_sort_l8_c65",
-      "name": "sort",
+      "id": "web_app_timenow_l3_c540",
+      "name": "timeNow",
       "kind": "function"
     }
   ],
@@ -342,6 +342,13 @@
       "ratio": 9.0
     },
     {
+      "id": "tests_test_due_modal",
+      "name": "test_due_modal.mjs",
+      "out_degree": 8,
+      "in_degree": 0,
+      "ratio": 8.0
+    },
+    {
       "id": "sync_client",
       "name": "sync_client.py",
       "out_degree": 20,
@@ -379,9 +386,16 @@
     {
       "id": "web_app",
       "name": "app.js",
-      "out_degree": 28,
-      "in_degree": 15,
-      "ratio": 1.8666666666666667
+      "out_degree": 36,
+      "in_degree": 16,
+      "ratio": 2.25
+    },
+    {
+      "id": "web_due_modal",
+      "name": "due-modal.js",
+      "out_degree": 2,
+      "in_degree": 0,
+      "ratio": 2.0
     }
   ],
   "surprising_connections": [
@@ -528,52 +542,19 @@
   ],
   "cycles": [
     [
-      "web_app_enablenotifications",
-      "web_app_updatenotificationstatus",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_rendertoday",
+      "web_app_renderschedules",
       "web_app",
       "web_app_renderall"
     ],
     [
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_rendertoday",
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
       "web_app_renderschedules",
       "web_app"
+    ],
+    [
+      "web_app_renderschedules",
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
     ],
     [
       "web_app",
@@ -581,12 +562,46 @@
     ],
     [
       "web_app",
+      "web_app_checkduemodals",
+      "web_app_enqueuedue",
+      "web_app_shownextduemodal"
+    ],
+    [
+      "web_app",
+      "web_app_enablenotifications",
+      "web_app_updatenotificationstatus"
+    ],
+    [
+      "web_app",
+      "web_app_enqueuedue",
+      "web_app_shownextduemodal"
+    ],
+    [
+      "web_app",
+      "web_app_markoccurrencetaken",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app",
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs"
+    ],
+    [
+      "web_app",
       "web_app_renderall"
     ],
     [
       "web_app",
       "web_app_renderall",
-      "web_app_renderschedules"
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_rendermedicineinputs"
     ],
     [
       "web_app",
@@ -594,19 +609,30 @@
     ],
     [
       "web_app",
-      "web_app_renderschedules"
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_shownextduemodal"
     ],
     [
       "web_app",
       "web_app_updatenotificationstatus"
-    ],
-    [
-      "medication_core_protectedjsonfile",
-      "medication_core_init"
-    ],
-    [
-      "medication_core_dpapiprotector",
-      "medication_core_init"
     ]
   ],
   "top_files_by_links": [
@@ -615,6 +641,12 @@
       "name": "medication_reminder.py",
       "degree": 52,
       "source_file": "medication_reminder.py"
+    },
+    {
+      "id": "web_app",
+      "name": "app.js",
+      "degree": 52,
+      "source_file": "web/app.js"
     },
     {
       "id": "medication_core",
@@ -627,12 +659,6 @@
       "name": "qrcode.js",
       "degree": 45,
       "source_file": "web/qrcode.js"
-    },
-    {
-      "id": "web_app",
-      "name": "app.js",
-      "degree": 43,
-      "source_file": "web/app.js"
     },
     {
       "id": "web_sync",
@@ -689,6 +715,12 @@
       "source_file": "tests/test_web_sync.mjs"
     },
     {
+      "id": "tests_test_due_modal",
+      "name": "test_due_modal.mjs",
+      "degree": 8,
+      "source_file": "tests/test_due_modal.mjs"
+    },
+    {
       "id": "tests_test_web_update",
       "name": "test_web_update.mjs",
       "degree": 6,
@@ -713,22 +745,16 @@
       "source_file": "web/update.js"
     },
     {
+      "id": "web_due_modal",
+      "name": "due-modal.js",
+      "degree": 2,
+      "source_file": "web/due-modal.js"
+    },
+    {
       "id": "agents",
       "name": "AGENTS.md",
       "degree": 0,
       "source_file": "AGENTS.md"
-    },
-    {
-      "id": "build_windows_exe",
-      "name": "build_windows_exe.bat",
-      "degree": 0,
-      "source_file": "build_windows_exe.bat"
-    },
-    {
-      "id": "docs_graphite_query_interface_recommendation",
-      "name": "GRAPHITE_QUERY_INTERFACE_RECOMMENDATION.md",
-      "degree": 0,
-      "source_file": "docs/GRAPHITE_QUERY_INTERFACE_RECOMMENDATION.md"
     }
   ]
 }

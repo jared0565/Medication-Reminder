@@ -415,17 +415,20 @@ class MedicationReminderApp:
     def show_due_popup(self, occurrence: DueOccurrence, *, is_test: bool = False) -> None:
         self.play_alert_sound()
         if self.active_popup and self.active_popup.winfo_exists():
-            self.active_popup.destroy()
+            self._close_popup(self.active_popup)
 
         popup = tk.Toplevel(self.root)
         self.active_popup = popup
         popup.configure(bg="#FFF8F2")
         popup.title("Medication due")
-        popup.geometry("540x420")
-        popup.resizable(False, False)
+        popup.geometry("620x560")
+        popup.minsize(560, 480)
+        popup.resizable(True, True)
+        popup.transient(self.root)
         popup.attributes("-topmost", True)
         popup.lift()
         popup.focus_force()
+        popup.grab_set()
 
         if is_test:
             popup.protocol("WM_DELETE_WINDOW", lambda: self._close_popup(popup))
@@ -445,20 +448,28 @@ class MedicationReminderApp:
             anchor="center", pady=(0, 14)
         )
 
-        meds_box = tk.Text(
+        meds_box = tk.Frame(
             frame,
-            height=max(5, len(occurrence.medicines) + 1),
-            width=48,
-            wrap="word",
-            font=("Segoe UI", 13),
-            relief="solid",
-            borderwidth=1,
-            padx=12,
+            bg="#FFFFFF",
+            highlightbackground="#B8D8D8",
+            highlightthickness=1,
+            padx=14,
             pady=10,
         )
-        meds_box.pack(fill="x")
-        meds_box.insert("1.0", "\n".join(f"• {item}" for item in occurrence.medicines))
-        meds_box.configure(state="disabled")
+        meds_box.pack(fill="x", pady=(0, 4))
+        for item in occurrence.medicines:
+            tk.Label(
+                meds_box,
+                text=f"•  {item}",
+                bg="#FFFFFF",
+                fg="#17324D",
+                anchor="w",
+                justify="left",
+                wraplength=540,
+                font=("Segoe UI", 13, "bold"),
+                padx=2,
+                pady=5,
+            ).pack(fill="x", anchor="w")
 
         if occurrence.instructions:
             ttk.Label(
@@ -520,6 +531,10 @@ class MedicationReminderApp:
 
     def _close_popup(self, popup: tk.Toplevel) -> None:
         if popup.winfo_exists():
+            try:
+                popup.grab_release()
+            except tk.TclError:
+                pass
             popup.destroy()
         if self.active_popup is popup:
             self.active_popup = None

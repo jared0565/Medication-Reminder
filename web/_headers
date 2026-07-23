@@ -21,6 +21,9 @@
 /account.js
   Cache-Control: no-cache, must-revalidate
 
+/due-modal.js
+  Cache-Control: no-cache, must-revalidate
+
 /update.js
   Cache-Control: no-cache, must-revalidate
 

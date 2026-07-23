@@ -190,7 +190,7 @@ export default {
       if (!due.length) continue;
       try {
         webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY);
-        for (const item of due) await webpush.sendNotification({ endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } }, JSON.stringify({ title: item.title || 'Medication due', body: item.body || 'A scheduled reminder is due.', tag: item.tag || `medication-${item.dueAt}` }));
+        for (const item of due) await webpush.sendNotification({ endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } }, JSON.stringify({ title: item.title || 'Medication due', body: item.body || 'A scheduled reminder is due.', tag: item.tag || `medication-${item.dueAt}`, dueAt: Number(item.dueAt), url: `/?dueAt=${Number(item.dueAt)}` }));
         const remaining = reminders.filter(item => Number(item.dueAt) > now);
         await env.DB.prepare('UPDATE push_subscriptions SET reminders = ?, last_sent_at = CURRENT_TIMESTAMP WHERE endpoint = ?').bind(JSON.stringify(remaining), row.endpoint).run();
       } catch (error) {
