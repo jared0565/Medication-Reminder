@@ -359,40 +359,57 @@ try {
     throw 'Production dependency audit returned vulnerabilities; stop deployment.'
   }
 
+  function Assert-ApprovedDevToolAuditException {
+    param(
+      [Parameter(Mandatory)][object] $Audit,
+      [Parameter(Mandatory)][hashtable] $PackageLock
+    )
+    $findingNames = @($Audit.vulnerabilities.PSObject.Properties.Name | Sort-Object)
+    $expectedNames = @('miniflare', 'sharp', 'wrangler')
+    $sharpAdvisories = @($Audit.vulnerabilities.sharp.via | Where-Object {
+      $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
+    })
+    $checks = [ordered]@{
+      exactFindingNames = @(Compare-Object -CaseSensitive $expectedNames $findingNames).Count -eq 0
+      totalCount = $Audit.metadata.vulnerabilities.total -eq 3
+      highCount = $Audit.metadata.vulnerabilities.high -eq 3
+      infoCount = $Audit.metadata.vulnerabilities.info -eq 0
+      lowCount = $Audit.metadata.vulnerabilities.low -eq 0
+      moderateCount = $Audit.metadata.vulnerabilities.moderate -eq 0
+      criticalCount = $Audit.metadata.vulnerabilities.critical -eq 0
+      sharpViaCount = @($Audit.vulnerabilities.sharp.via).Count -eq 1
+      sharpAdvisoryCount = $sharpAdvisories.Count -eq 1
+      sharpAdvisorySource = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].source -eq 1124066
+      sharpAdvisoryRange = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].range -eq '<0.35.0'
+      miniflareVia = @($Audit.vulnerabilities.miniflare.via).Count -eq 1 -and $Audit.vulnerabilities.miniflare.via[0] -eq 'sharp'
+      wranglerVia = @($Audit.vulnerabilities.wrangler.via).Count -eq 1 -and $Audit.vulnerabilities.wrangler.via[0] -eq 'miniflare'
+      noFixAvailable = $Audit.vulnerabilities.sharp.fixAvailable -eq $false -and
+        $Audit.vulnerabilities.miniflare.fixAvailable -eq $false -and
+        $Audit.vulnerabilities.wrangler.fixAvailable -eq $false
+      wranglerVersion = $PackageLock.packages.'node_modules/wrangler'.version -eq '4.112.0'
+      wranglerDevOnly = $PackageLock.packages.'node_modules/wrangler'.dev -eq $true
+      miniflareVersion = $PackageLock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0'
+      miniflareDevOnly = $PackageLock.packages.'node_modules/miniflare'.dev -eq $true
+      sharpDependency = $PackageLock.packages.'node_modules/miniflare'.dependencies.sharp -eq '0.34.5'
+      sharpVersion = $PackageLock.packages.'node_modules/sharp'.version -eq '0.34.5'
+      sharpDevOnly = $PackageLock.packages.'node_modules/sharp'.dev -eq $true
+    }
+    $failedChecks = @(
+      $checks.GetEnumerator() |
+        Where-Object { -not [bool]$_.Value } |
+        ForEach-Object { $_.Key }
+    )
+    if ($failedChecks.Count -ne 0) {
+      throw "Full dependency audit differs from the approved dev-tool exception. Failed checks: $($failedChecks -join ', ')."
+    }
+  }
+
   $devAuditJson = npm audit --json
   $devAuditExit = $LASTEXITCODE
   if ($devAuditExit -notin @(0, 1)) { throw 'Full dependency audit could not complete.' }
   $devAudit = $devAuditJson | ConvertFrom-Json
   if ($devAuditExit -eq 1) {
-    $findingNames = @($devAudit.vulnerabilities.PSObject.Properties.Name | Sort-Object)
-    $expectedNames = @('miniflare', 'sharp', 'wrangler')
-    $sharpAdvisories = @($devAudit.vulnerabilities.sharp.via | Where-Object {
-      $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
-    })
-    $knownException =
-      (Compare-Object $expectedNames $findingNames).Count -eq 0 -and
-      $devAudit.metadata.vulnerabilities.total -eq 3 -and
-      $devAudit.metadata.vulnerabilities.high -eq 3 -and
-      $devAudit.vulnerabilities.sharp.via.Count -eq 1 -and
-      $sharpAdvisories.Count -eq 1 -and
-      $sharpAdvisories[0].source -eq 1124066 -and
-      $sharpAdvisories[0].range -eq '<0.35.0' -and
-      $devAudit.vulnerabilities.miniflare.via.Count -eq 1 -and
-      $devAudit.vulnerabilities.miniflare.via[0] -eq 'sharp' -and
-      $devAudit.vulnerabilities.wrangler.via.Count -eq 1 -and
-      $devAudit.vulnerabilities.wrangler.via[0] -eq 'miniflare' -and
-      $devAudit.vulnerabilities.sharp.fixAvailable -eq $false -and
-      $devAudit.vulnerabilities.miniflare.fixAvailable -eq $false -and
-      $devAudit.vulnerabilities.wrangler.fixAvailable -eq $false -and
-      $lock.packages.'node_modules/wrangler'.dev -eq $true -and
-      $lock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0' -and
-      $lock.packages.'node_modules/miniflare'.dev -eq $true -and
-      $lock.packages.'node_modules/miniflare'.dependencies.sharp -eq '0.34.5' -and
-      $lock.packages.'node_modules/sharp'.version -eq '0.34.5' -and
-      $lock.packages.'node_modules/sharp'.dev -eq $true
-    if (-not $knownException) {
-      throw 'Full dependency audit differs from the approved dev-tool exception; stop release.'
-    }
+    Assert-ApprovedDevToolAuditException -Audit $devAudit -PackageLock $lock
     Write-Warning 'Known dev-tool audit exception matched exactly; production dependency audit is clean.'
   }
 } finally {
@@ -1329,40 +1346,57 @@ try {
     throw 'Production dependency audit returned vulnerabilities.'
   }
 
+  function Assert-ApprovedDevToolAuditException {
+    param(
+      [Parameter(Mandatory)][object] $Audit,
+      [Parameter(Mandatory)][hashtable] $PackageLock
+    )
+    $findingNames = @($Audit.vulnerabilities.PSObject.Properties.Name | Sort-Object)
+    $expectedNames = @('miniflare', 'sharp', 'wrangler')
+    $sharpAdvisories = @($Audit.vulnerabilities.sharp.via | Where-Object {
+      $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
+    })
+    $checks = [ordered]@{
+      exactFindingNames = @(Compare-Object -CaseSensitive $expectedNames $findingNames).Count -eq 0
+      totalCount = $Audit.metadata.vulnerabilities.total -eq 3
+      highCount = $Audit.metadata.vulnerabilities.high -eq 3
+      infoCount = $Audit.metadata.vulnerabilities.info -eq 0
+      lowCount = $Audit.metadata.vulnerabilities.low -eq 0
+      moderateCount = $Audit.metadata.vulnerabilities.moderate -eq 0
+      criticalCount = $Audit.metadata.vulnerabilities.critical -eq 0
+      sharpViaCount = @($Audit.vulnerabilities.sharp.via).Count -eq 1
+      sharpAdvisoryCount = $sharpAdvisories.Count -eq 1
+      sharpAdvisorySource = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].source -eq 1124066
+      sharpAdvisoryRange = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].range -eq '<0.35.0'
+      miniflareVia = @($Audit.vulnerabilities.miniflare.via).Count -eq 1 -and $Audit.vulnerabilities.miniflare.via[0] -eq 'sharp'
+      wranglerVia = @($Audit.vulnerabilities.wrangler.via).Count -eq 1 -and $Audit.vulnerabilities.wrangler.via[0] -eq 'miniflare'
+      noFixAvailable = $Audit.vulnerabilities.sharp.fixAvailable -eq $false -and
+        $Audit.vulnerabilities.miniflare.fixAvailable -eq $false -and
+        $Audit.vulnerabilities.wrangler.fixAvailable -eq $false
+      wranglerVersion = $PackageLock.packages.'node_modules/wrangler'.version -eq '4.112.0'
+      wranglerDevOnly = $PackageLock.packages.'node_modules/wrangler'.dev -eq $true
+      miniflareVersion = $PackageLock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0'
+      miniflareDevOnly = $PackageLock.packages.'node_modules/miniflare'.dev -eq $true
+      sharpDependency = $PackageLock.packages.'node_modules/miniflare'.dependencies.sharp -eq '0.34.5'
+      sharpVersion = $PackageLock.packages.'node_modules/sharp'.version -eq '0.34.5'
+      sharpDevOnly = $PackageLock.packages.'node_modules/sharp'.dev -eq $true
+    }
+    $failedChecks = @(
+      $checks.GetEnumerator() |
+        Where-Object { -not [bool]$_.Value } |
+        ForEach-Object { $_.Key }
+    )
+    if ($failedChecks.Count -ne 0) {
+      throw "Full dependency audit differs from the approved dev-tool exception. Failed checks: $($failedChecks -join ', ')."
+    }
+  }
+
   $devAuditJson = npm audit --json
   $devAuditExit = $LASTEXITCODE
   if ($devAuditExit -notin @(0, 1)) { throw 'Full dependency audit could not complete.' }
   $devAudit = $devAuditJson | ConvertFrom-Json
   if ($devAuditExit -eq 1) {
-    $findingNames = @($devAudit.vulnerabilities.PSObject.Properties.Name | Sort-Object)
-    $expectedNames = @('miniflare', 'sharp', 'wrangler')
-    $sharpAdvisories = @($devAudit.vulnerabilities.sharp.via | Where-Object {
-      $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
-    })
-    $knownException = ($findingNames -join ',') -eq ($expectedNames -join ',') -and
-      $devAudit.metadata.vulnerabilities.total -eq 3 -and
-      $devAudit.metadata.vulnerabilities.high -eq 3 -and
-      $devAudit.vulnerabilities.sharp.via.Count -eq 1 -and
-      $sharpAdvisories.Count -eq 1 -and
-      $sharpAdvisories[0].source -eq 1124066 -and
-      $sharpAdvisories[0].range -eq '<0.35.0' -and
-      $devAudit.vulnerabilities.miniflare.via.Count -eq 1 -and
-      $devAudit.vulnerabilities.miniflare.via[0] -eq 'sharp' -and
-      $devAudit.vulnerabilities.wrangler.via.Count -eq 1 -and
-      $devAudit.vulnerabilities.wrangler.via[0] -eq 'miniflare' -and
-      $devAudit.vulnerabilities.sharp.fixAvailable -eq $false -and
-      $devAudit.vulnerabilities.miniflare.fixAvailable -eq $false -and
-      $devAudit.vulnerabilities.wrangler.fixAvailable -eq $false -and
-      $lock.packages.'node_modules/wrangler'.version -eq '4.112.0' -and
-      $lock.packages.'node_modules/wrangler'.dev -eq $true -and
-      $lock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0' -and
-      $lock.packages.'node_modules/miniflare'.dev -eq $true -and
-      $lock.packages.'node_modules/miniflare'.dependencies.sharp -eq '0.34.5' -and
-      $lock.packages.'node_modules/sharp'.version -eq '0.34.5' -and
-      $lock.packages.'node_modules/sharp'.dev -eq $true
-    if (-not $knownException) {
-      throw 'Full dependency audit differs from the approved dev-tool exception; stop and review.'
-    }
+    Assert-ApprovedDevToolAuditException -Audit $devAudit -PackageLock $lock
     Write-Warning 'Known dev-tool audit exception matched exactly; production dependency audit is clean.'
   }
 } finally {
