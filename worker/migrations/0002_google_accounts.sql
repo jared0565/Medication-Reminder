@@ -1,36 +1,5 @@
-CREATE TABLE IF NOT EXISTS push_subscriptions (
-  endpoint TEXT PRIMARY KEY,
-  p256dh TEXT NOT NULL,
-  auth TEXT NOT NULL,
-  timezone TEXT NOT NULL DEFAULT 'UTC',
-  reminders TEXT NOT NULL DEFAULT '[]',
-  last_sent_at TEXT,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS sync_pairs (
-  pair_id TEXT PRIMARY KEY,
-  source_id TEXT NOT NULL UNIQUE,
-  user_id TEXT,
-  token_hash TEXT NOT NULL,
-  mobile_device_id TEXT,
-  mobile_push_endpoint TEXT,
-  ciphertext TEXT NOT NULL,
-  iv TEXT NOT NULL,
-  revision INTEGER NOT NULL DEFAULT 1 CHECK (revision > 0),
-  updated_by TEXT NOT NULL,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE INDEX IF NOT EXISTS idx_sync_pairs_source_id ON sync_pairs(source_id);
+ALTER TABLE sync_pairs ADD COLUMN user_id TEXT;
 CREATE INDEX IF NOT EXISTS idx_sync_pairs_user_id ON sync_pairs(user_id);
-
-CREATE TABLE IF NOT EXISTS sync_rate_limits (
-  bucket_key TEXT PRIMARY KEY,
-  window_start INTEGER NOT NULL,
-  request_count INTEGER NOT NULL
-);
 
 CREATE TABLE IF NOT EXISTS app_users (
   user_id TEXT PRIMARY KEY,
@@ -54,7 +23,6 @@ CREATE TABLE IF NOT EXISTS app_sessions (
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   last_seen_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE INDEX IF NOT EXISTS idx_app_sessions_user_id ON app_sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_app_sessions_expires_at ON app_sessions(expires_at);
 
@@ -78,7 +46,6 @@ CREATE TABLE IF NOT EXISTS user_devices (
   last_seen_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE INDEX IF NOT EXISTS idx_user_devices_user_id ON user_devices(user_id);
 
 CREATE TABLE IF NOT EXISTS account_audit_events (
@@ -88,5 +55,4 @@ CREATE TABLE IF NOT EXISTS account_audit_events (
   metadata_json TEXT NOT NULL DEFAULT '{}',
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE INDEX IF NOT EXISTS idx_account_audit_user_created ON account_audit_events(user_id, created_at);

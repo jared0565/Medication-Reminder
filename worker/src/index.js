@@ -1,4 +1,5 @@
 import webpush from 'web-push';
+import { authenticateSession, handleAuthRequest } from './auth.js';
 
 const MAX_SYNC_BODY_BYTES = 96 * 1024;
 const ID_PATTERN = /^[A-Za-z0-9_-]{16,128}$/;
@@ -12,7 +13,7 @@ function corsHeaders(request) {
 }
 
 function json(request, value, init = {}) {
-  const headers = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...corsHeaders(request), ...(init.headers || {}) };
+  const headers = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', ...corsHeaders(request), ...(init.headers || {}) };
   return new Response(JSON.stringify(value), { ...init, headers });
 }
 
@@ -51,13 +52,13 @@ async function authenticatedPair(request, env, pairId) {
   return env.DB.prepare('SELECT pair_id, source_id, mobile_device_id, mobile_push_endpoint, ciphertext, iv, revision, updated_by, updated_at FROM sync_pairs WHERE pair_id = ? AND token_hash = ?').bind(pairId, await tokenHash(token)).first();
 }
 
-async function enforceRateLimit(request, env) {
+async function enforceRateLimit(request, env, namespace = 'sync', limit = RATE_LIMIT_REQUESTS) {
   const identity = request.headers.get('CF-Connecting-IP') || 'unknown';
-  const bucketKey = await tokenHash(`sync:${identity}`);
+  const bucketKey = await tokenHash(`${namespace}:${identity}`);
   const now = Date.now();
   const windowStart = now - (now % RATE_LIMIT_WINDOW_MS);
   const row = await env.DB.prepare('SELECT window_start, request_count FROM sync_rate_limits WHERE bucket_key = ?').bind(bucketKey).first();
-  if (row && Number(row.window_start) === windowStart && Number(row.request_count) >= RATE_LIMIT_REQUESTS) return false;
+  if (row && Number(row.window_start) === windowStart && Number(row.request_count) >= limit) return false;
   await env.DB.prepare(`INSERT INTO sync_rate_limits (bucket_key, window_start, request_count) VALUES (?, ?, 1)
     ON CONFLICT(bucket_key) DO UPDATE SET window_start = excluded.window_start,
     request_count = CASE WHEN sync_rate_limits.window_start = excluded.window_start THEN sync_rate_limits.request_count + 1 ELSE 1 END`)
@@ -93,10 +94,12 @@ async function handleSync(request, env, url, ctx) {
   if (request.method === 'POST' && url.pathname === '/sync/pairs') {
     const body = await readJson(request);
     if (!ID_PATTERN.test(body?.pairId || '') || !ID_PATTERN.test(body?.sourceId || '') || typeof body?.token !== 'string' || body.token.length < 32 || body.token.length > 256 || !validEncryptedBody(body)) return json(request, { error: 'Invalid pairing request' }, { status: 400 });
+    const account = await authenticateSession(request, env, { touch: false });
+    if (request.headers.has('Authorization') && !account) return json(request, { error: 'Your account session has expired. Sign in again.' }, { status: 401 });
     const hash = await tokenHash(body.token);
     await env.DB.batch([
       env.DB.prepare('DELETE FROM sync_pairs WHERE source_id = ?').bind(body.sourceId),
-      env.DB.prepare('INSERT INTO sync_pairs (pair_id, source_id, token_hash, ciphertext, iv, updated_by) VALUES (?, ?, ?, ?, ?, ?)').bind(body.pairId, body.sourceId, hash, body.ciphertext, body.iv, body.updatedBy),
+      env.DB.prepare('INSERT INTO sync_pairs (pair_id, source_id, user_id, token_hash, ciphertext, iv, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(body.pairId, body.sourceId, account?.user.user_id || null, hash, body.ciphertext, body.iv, body.updatedBy),
     ]);
     return json(request, { ok: true, pairId: body.pairId, revision: 1 }, { status: 201 });
   }
@@ -133,14 +136,25 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     try {
+      if (request.method === 'OPTIONS' && url.pathname.startsWith('/auth/')) {
+        const origin = request.headers.get('Origin');
+        if (!origin || !ALLOWED_ORIGINS.has(origin)) return new Response(null, { status: 403 });
+        return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS', 'Access-Control-Max-Age': '86400' } });
+      }
+      if (url.pathname.startsWith('/auth/')) {
+        const origin = request.headers.get('Origin');
+        if (origin && !ALLOWED_ORIGINS.has(origin)) return json(request, { error: 'Origin not allowed' }, { status: 403 });
+        const response = await handleAuthRequest(request, env, url, { json, readJson, enforceRateLimit });
+        if (response) return response;
+      }
       if (url.pathname.startsWith('/sync/')) {
         const response = await handleSync(request, env, url, ctx);
         if (response) return response;
       }
     } catch (error) {
       if (error instanceof Response) return new Response(error.body, { status: error.status, headers: { ...corsHeaders(request), 'Cache-Control': 'no-store' } });
-      console.error('sync_request_failed', { path: url.pathname, error: String(error) });
-      return json(request, { error: 'Sync service unavailable' }, { status: 503 });
+      console.error('request_failed', { path: url.pathname, error: String(error) });
+      return json(request, { error: 'Service temporarily unavailable' }, { status: 503 });
     }
     if (request.method === 'OPTIONS' && ['/subscriptions', '/vapid-public-key'].includes(url.pathname)) {
       const origin = request.headers.get('Origin');

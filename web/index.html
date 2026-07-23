@@ -8,8 +8,8 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260723.13" />
-  <title>Medication Reminder v2026.07.23.13</title>
+  <link rel="stylesheet" href="styles.css?v=20260723.14" />
+  <title>Medication Reminder v2026.07.23.14</title>
 </head>
 <body>
   <main class="shell">
@@ -41,12 +41,22 @@
 
     <section id="settingsView" class="view" aria-labelledby="settingsTitle">
       <div class="section-heading"><div><p class="eyebrow">PERSONALISE</p><h2 id="settingsTitle">Settings</h2></div></div>
+      <div class="settings-card account-card">
+        <div class="account-heading"><div><strong>Your account</strong><p id="accountStatus" class="privacy-note" role="status">Checking account availability…</p></div><span id="accountPlan" class="plan-badge" hidden></span></div>
+        <div id="googleSignIn" class="google-sign-in" aria-label="Sign in with Google"></div>
+        <div id="signedInAccount" class="account-details" hidden>
+          <p id="accountIdentity" class="account-identity"></p>
+          <div class="date-grid"><label>Planned start date<input id="usageStartDate" type="date" /></label><label>Planned end date<input id="usageEndDate" type="date" /></label></div>
+          <p class="privacy-note">These dates help manage your account lifecycle. They do not disable local medication reminders.</p>
+          <div class="setting-actions"><button type="button" id="signOut" class="secondary-button">Sign out</button><button type="button" id="saveUsagePeriod" class="primary-button">Save usage period</button></div>
+        </div>
+      </div>
       <div class="settings-card">
         <label>Schedule timezone<input id="timezoneInput" autocomplete="off" /></label>
         <label>Alert volume<input id="volumeInput" type="range" min="0" max="100" step="5" /><output id="volumeOutput"></output></label>
         <label>Reminder sound<select id="soundInput"><option value="chime">Soft chime</option><option value="bright">Bright bells</option><option value="warm">Warm marimba</option><option value="urgent">Urgent double tone</option><option value="quiet">Quiet tap</option></select></label>
         <div class="notification-row"><div><strong>Browser notifications</strong><p id="notificationStatus">Not enabled</p></div><button id="enableNotifications" class="secondary-button">Enable notifications</button></div>
-        <div class="notification-row"><div><strong>Application version</strong><p id="appVersion">2026.07.23.13</p></div><button type="button" id="checkUpdates" class="secondary-button">Check for updates</button></div>
+        <div class="notification-row"><div><strong>Application version</strong><p id="appVersion">2026.07.23.14</p></div><button type="button" id="checkUpdates" class="secondary-button">Check for updates</button></div>
         <div class="setting-actions"><button id="testSound" class="secondary-button">Test sound</button><button id="saveSettings" class="primary-button">Save settings</button></div>
       </div>
       <p class="privacy-note">Your schedule remains on your devices. When paired, the relay stores only encrypted data and cannot read your medication details.</p>
@@ -65,9 +75,10 @@
     <label class="switch-label"><input id="eventEnabled" type="checkbox" /> Reminder enabled</label>
     <div class="dialog-actions"><button value="cancel" formnovalidate class="secondary-button">Cancel</button><button type="button" id="saveSchedule" class="primary-button">Save schedule</button></div>
   </form></dialog>
-  <script src="qrcode.js?v=20260723.13"></script>
-  <script src="app.js?v=20260723.13"></script>
-  <script src="update.js?v=20260723.13"></script>
-  <script src="sync.js?v=20260723.13"></script>
+  <script src="qrcode.js?v=20260723.14"></script>
+  <script src="app.js?v=20260723.14"></script>
+  <script src="update.js?v=20260723.14"></script>
+  <script src="account.js?v=20260723.14"></script>
+  <script src="sync.js?v=20260723.14"></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 {
   "root": "Medication Reminder",
-  "file_count": 32,
+  "file_count": 37,
   "engine": {
-    "cache_version": "v5",
+    "cache_version": "v6",
     "schema_version": "1",
     "version": "0.1.0",
-    "fingerprint": "457bf14a84f3bc8d4cad9d3d82f139648f26924d36928614bd7bdd5087514531"
+    "fingerprint": "30bea73bd0228a0a90f96aa9d06f7ec253b4a7e91d14819c736d0fb114ad6910"
   },
   "files": [
     {
@@ -23,8 +23,8 @@
     {
       "rel_path": "README.md",
       "language": "markdown",
-      "size": 5489,
-      "hash": "aa661542ce4f2e3317e48d7baf708a36cbb8302ef3bfc5825322702e4688226a"
+      "size": 6813,
+      "hash": "4c67ee5ad0338a539c1f1016972c169eae1c3237b9394d2d741e3e77effd7b46"
     },
     {
       "rel_path": "build_windows_exe.bat",
@@ -99,6 +99,12 @@
       "hash": "158bf10bed2523a1a13c2ff907e8d320cb007ad06ce647e109781c98b0dda169"
     },
     {
+      "rel_path": "tests/test_web_account.mjs",
+      "language": "javascript",
+      "size": 1109,
+      "hash": "8339c75a48f549e240692619927cedf5c18ab1f79328a5d1dcd10898d337cb98"
+    },
+    {
       "rel_path": "tests/test_web_sync.mjs",
       "language": "javascript",
       "size": 7810,
@@ -111,10 +117,22 @@
       "hash": "dbf8a4e79ea9bb5488c835acf6e369bddc500cfeb5390a384ecae8636ef2293c"
     },
     {
+      "rel_path": "tests/test_worker_auth.mjs",
+      "language": "javascript",
+      "size": 2967,
+      "hash": "070ff4a7e80ca0db289abec918039582d06ce1c78febccdeb44dfd187c055abb"
+    },
+    {
       "rel_path": "web/_headers",
       "language": null,
-      "size": 402,
-      "hash": "bfff1d50fb67b9178400b7dfbd3bc76be2988753f5c3dd732c72e06148d4f084"
+      "size": 1149,
+      "hash": "74a26fd5607c404789d93bce950faf5f9191adacb66e2f701619e4a022d89511"
+    },
+    {
+      "rel_path": "web/account.js",
+      "language": "javascript",
+      "size": 6539,
+      "hash": "fff0c9fba7a47971c9ba1321aa066b8185642cafe45f03699443ba7fe2ed0f7c"
     },
     {
       "rel_path": "web/app.js",
@@ -125,8 +143,8 @@
     {
       "rel_path": "web/index.html",
       "language": "html",
-      "size": 5594,
-      "hash": "a5e671d5ea5328d588cbacf81f707421ff8023bac331b12a69b9a5cf151c434b"
+      "size": 6710,
+      "hash": "f5ecdc257db0ed353ff4a04dd29e7400acef3ccfc8cfa718a6340c459c041d89"
     },
     {
       "rel_path": "web/manifest.webmanifest",
@@ -143,20 +161,20 @@
     {
       "rel_path": "web/styles.css",
       "language": "css",
-      "size": 5765,
-      "hash": "28bb27d6c3fb09e99afb0f37605a8a8c03ead7ec76618f1d8a0553b4e4b3cc08"
+      "size": 6332,
+      "hash": "c9a4d4007083c0192fdb507ef9d33bc095273d13a4610b02a3afa9d6181378d2"
     },
     {
       "rel_path": "web/sw.js",
       "language": "javascript",
-      "size": 2191,
-      "hash": "66d454d505043923521deb9c12deda61dadf4b3375d1213134195723d5ccfd36"
+      "size": 2220,
+      "hash": "a9660d74a07f12dcf0f6e49a30643416aa909aa086b523863643472eb9e9d22e"
     },
     {
       "rel_path": "web/sync.js",
       "language": "javascript",
-      "size": 20170,
-      "hash": "50116aaf793c011476c67e58057260fe8c5900136d4983f4e44e4e8a40c93bcb"
+      "size": 20275,
+      "hash": "9b87b080954ee6e8f8a5b620826fb16c01194a08982041fcf7acf825e2adaba9"
     },
     {
       "rel_path": "web/update.js",
@@ -168,7 +186,13 @@
       "rel_path": "web/version.json",
       "language": "json",
       "size": 33,
-      "hash": "71c811ae141c6b9c57a21a07be2aac44ef7f3d351b6f4657254a41c839b2d9bd"
+      "hash": "1b446b8b6b38062786b7edec21b09d9af95c1cac494ab892b08f253975e5ef2a"
+    },
+    {
+      "rel_path": "worker/migrations/0002_google_accounts.sql",
+      "language": "sql",
+      "size": 2403,
+      "hash": "1e69db9ae52e72011c9f5e0bbb2cd0b334232ed7b956197214153d8d656a55c1"
     },
     {
       "rel_path": "worker/package-lock.json",
@@ -179,26 +203,32 @@
     {
       "rel_path": "worker/package.json",
       "language": "json",
-      "size": 292,
-      "hash": "56a14a8026a6ae63b4b4445046fcbd61eeb45d03d495fb075059983d2ebaf68f"
+      "size": 330,
+      "hash": "381821bb9582f65e248764fd3726b81afe9fab0da392c23ece4fe5bd25eb6d06"
     },
     {
       "rel_path": "worker/schema.sql",
       "language": "sql",
-      "size": 937,
-      "hash": "96c3e66c58f87819e94f618c28c33d33abaa1e58bb6ec22515f0e7634ebf5558"
+      "size": 3311,
+      "hash": "2e956c57cb4a94a96fd2105a5d849c192083487d27281ba7cc6d5a6764162452"
+    },
+    {
+      "rel_path": "worker/src/auth.js",
+      "language": "javascript",
+      "size": 12069,
+      "hash": "9ce33cf40517f9a8b44994f2d60f5f8173e7c752345db44c27cca246a1497067"
     },
     {
       "rel_path": "worker/src/index.js",
       "language": "javascript",
-      "size": 14176,
-      "hash": "47db7b914e525e3860cf0d977d14a6832913ca73f381ceb2d4e2579b3d9a8daf"
+      "size": 15479,
+      "hash": "db02f1da6bce8d09180ed35cbb6ebc86396594e3547638e53b75fed1c190610e"
     },
     {
       "rel_path": "worker/wrangler.jsonc",
       "language": null,
-      "size": 389,
-      "hash": "57d45126097d3a3d97a8cec688cc69ab3ece1b67c80934194a78352d91f0db7f"
+      "size": 503,
+      "hash": "641089decebd434eb59b4e8b83836f5e981f38a4edde0c52a59dc01a768e4830"
     }
   ],
   "typescript_resolver": "auto"

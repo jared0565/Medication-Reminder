@@ -9,8 +9,16 @@
 
 /
   Cache-Control: no-cache, must-revalidate
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; frame-src https://accounts.google.com/gsi/; connect-src 'self' https://accounts.google.com/gsi/ https://medication-reminder-push.bmorris0565.workers.dev; img-src 'self' data: https://lh3.googleusercontent.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+  Permissions-Policy: camera=(self), microphone=(), geolocation=()
 
 /app.js
+  Cache-Control: no-cache, must-revalidate
+
+/account.js
   Cache-Control: no-cache, must-revalidate
 
 /update.js

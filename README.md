@@ -115,3 +115,28 @@ Web Push reminders. Unpaired devices remain completely local. Paired devices upl
 only encrypted schedule blobs to the Worker. The separate push scheduler stores generic
 due-time metadata without medication names so it can wake a closed PWA. Browser reminders are still subject to
 the mobile operating system's notification permissions and power-management policies.
+
+### Web accounts and tenant boundaries
+
+Google Sign-In is used to establish the server-side account identity for cloud
+features. Google ID tokens are verified by the Worker against Google's signing keys,
+issuer, OAuth audience, expiry, and verified-email claim. Application sessions are
+random bearer tokens whose SHA-256 hashes, rather than the tokens themselves, are
+stored in D1.
+
+- Free use remains local-first and does not upload readable medication details.
+- Advanced access is an entitlement returned by the Worker, not a browser-controlled flag.
+- The owner account is granted Advanced through the `OWNER_EMAIL` Worker secret.
+- Pairing payloads remain AES-GCM encrypted; account IDs never replace the private
+  pairing token or encryption key.
+- Existing pre-account pairings remain compatible during the account migration.
+
+Cloudflare configuration:
+
+- `GOOGLE_CLIENT_ID` is a public Worker variable in `worker/wrangler.jsonc`.
+- `OWNER_EMAIL` must be configured with `wrangler secret put OWNER_EMAIL`.
+- Apply `worker/migrations/0002_google_accounts.sql` before deploying the account-enabled Worker.
+- Google OAuth authorised JavaScript origins must include
+  `https://medication.bytesfx.com` and
+  `https://medication-reminder-8h3.pages.dev`. The popup callback flow does not use
+  an authorised redirect URL.

@@ -121,6 +121,14 @@
       "out_degree": 16
     },
     {
+      "id": "worker_src_auth",
+      "name": "auth.js",
+      "kind": "file",
+      "degree": 16,
+      "in_degree": 1,
+      "out_degree": 15
+    },
+    {
       "id": "medication_core_export_taken_csv",
       "name": "export_taken_csv",
       "kind": "function",
@@ -145,20 +153,12 @@
       "out_degree": 14
     },
     {
-      "id": "medication_core_storageerror",
-      "name": "StorageError",
-      "kind": "class",
-      "degree": 14,
-      "in_degree": 13,
-      "out_degree": 1
-    },
-    {
-      "id": "medication_reminder_show_due_popup",
-      "name": "show_due_popup",
+      "id": "web_app_syncpushsubscription",
+      "name": "syncPushSubscription",
       "kind": "function",
-      "degree": 14,
-      "in_degree": 1,
-      "out_degree": 13
+      "degree": 15,
+      "in_degree": 8,
+      "out_degree": 7
     }
   ],
   "orphans": [
@@ -206,6 +206,11 @@
       "id": "run_medication_reminder",
       "name": "run_medication_reminder.bat",
       "kind": "file"
+    },
+    {
+      "id": "tests_test_worker_auth_b64url_l10_c16",
+      "name": "b64url",
+      "kind": "function"
     },
     {
       "id": "web_app_emptyschedule_l2_c398",
@@ -256,11 +261,6 @@
       "id": "web_app_sort_l8_c65",
       "name": "sort",
       "kind": "function"
-    },
-    {
-      "id": "web_app_timenow_l3_c540",
-      "name": "timeNow",
-      "kind": "function"
     }
   ],
   "entry_points": [
@@ -293,8 +293,22 @@
       "ratio": 16.0
     },
     {
+      "id": "worker_src_auth",
+      "name": "auth.js",
+      "out_degree": 15,
+      "in_degree": 1,
+      "ratio": 15.0
+    },
+    {
       "id": "worker_src_index",
       "name": "index.js",
+      "out_degree": 14,
+      "in_degree": 0,
+      "ratio": 14.0
+    },
+    {
+      "id": "web_account",
+      "name": "account.js",
       "out_degree": 13,
       "in_degree": 0,
       "ratio": 13.0
@@ -340,6 +354,20 @@
       "out_degree": 6,
       "in_degree": 0,
       "ratio": 6.0
+    },
+    {
+      "id": "tests_test_worker_auth",
+      "name": "test_worker_auth.mjs",
+      "out_degree": 5,
+      "in_degree": 0,
+      "ratio": 5.0
+    },
+    {
+      "id": "tests_test_web_account",
+      "name": "test_web_account.mjs",
+      "out_degree": 4,
+      "in_degree": 0,
+      "ratio": 4.0
     },
     {
       "id": "web_update",
@@ -500,85 +528,85 @@
   ],
   "cycles": [
     [
-      "medication_core_dpapiprotector",
-      "medication_core_init"
+      "web_app_enablenotifications",
+      "web_app_updatenotificationstatus",
+      "web_app"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app"
+    ],
+    [
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_renderall"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
+    ],
+    [
+      "web_app_rendermedicineinputs",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app",
+      "web_app_addmedicineinput"
+    ],
+    [
+      "web_app",
+      "web_app_renderall"
+    ],
+    [
+      "web_app",
+      "web_app_renderall",
+      "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_renderpairingqr"
+    ],
+    [
+      "web_app",
+      "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_updatenotificationstatus"
     ],
     [
       "medication_core_protectedjsonfile",
       "medication_core_init"
     ],
     [
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_rendertoday",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_enablenotifications",
-      "web_app_updatenotificationstatus",
-      "web_app"
-    ],
-    [
-      "web_app_renderpairingqr",
-      "web_app"
-    ],
-    [
-      "web_app_addmedicineinput",
-      "web_app"
-    ],
-    [
-      "web_app_updatenotificationstatus",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app"
+      "medication_core_dpapiprotector",
+      "medication_core_init"
     ]
   ],
   "top_files_by_links": [
@@ -625,10 +653,22 @@
       "source_file": "tests/e2e_sync.py"
     },
     {
+      "id": "worker_src_auth",
+      "name": "auth.js",
+      "degree": 16,
+      "source_file": "worker/src/auth.js"
+    },
+    {
       "id": "worker_src_index",
       "name": "index.js",
-      "degree": 13,
+      "degree": 14,
       "source_file": "worker/src/index.js"
+    },
+    {
+      "id": "web_account",
+      "name": "account.js",
+      "degree": 13,
+      "source_file": "web/account.js"
     },
     {
       "id": "tests_test_medication_core",
@@ -655,6 +695,18 @@
       "source_file": "tests/test_web_update.mjs"
     },
     {
+      "id": "tests_test_worker_auth",
+      "name": "test_worker_auth.mjs",
+      "degree": 5,
+      "source_file": "tests/test_worker_auth.mjs"
+    },
+    {
+      "id": "tests_test_web_account",
+      "name": "test_web_account.mjs",
+      "degree": 4,
+      "source_file": "tests/test_web_account.mjs"
+    },
+    {
       "id": "web_update",
       "name": "update.js",
       "degree": 3,
@@ -677,30 +729,6 @@
       "name": "GRAPHITE_QUERY_INTERFACE_RECOMMENDATION.md",
       "degree": 0,
       "source_file": "docs/GRAPHITE_QUERY_INTERFACE_RECOMMENDATION.md"
-    },
-    {
-      "id": "install_dependencies",
-      "name": "install_dependencies.bat",
-      "degree": 0,
-      "source_file": "install_dependencies.bat"
-    },
-    {
-      "id": "license",
-      "name": "LICENSE",
-      "degree": 0,
-      "source_file": "LICENSE"
-    },
-    {
-      "id": "medication_schedule",
-      "name": "medication_schedule.json",
-      "degree": 0,
-      "source_file": "medication_schedule.json"
-    },
-    {
-      "id": "readme",
-      "name": "README.md",
-      "degree": 0,
-      "source_file": "README.md"
     }
   ]
 }
