@@ -17,3 +17,5 @@ web/.cache/
 worker/node_modules/
 .wrangler/
 .cache/
+.graphite/
+.worktrees/
