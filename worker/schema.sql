@@ -13,7 +13,12 @@ CREATE TABLE IF NOT EXISTS sync_pairs (
   source_id TEXT NOT NULL UNIQUE,
   user_id TEXT,
   token_hash TEXT NOT NULL,
+  invitation_token_hash TEXT,
+  invitation_expires_at TEXT,
+  invitation_consumed_at TEXT,
+  mobile_token_hash TEXT,
   mobile_device_id TEXT,
+  mobile_claimed_at TEXT,
   mobile_push_endpoint TEXT,
   ciphertext TEXT NOT NULL,
   iv TEXT NOT NULL,
@@ -25,6 +30,14 @@ CREATE TABLE IF NOT EXISTS sync_pairs (
 
 CREATE INDEX IF NOT EXISTS idx_sync_pairs_source_id ON sync_pairs(source_id);
 CREATE INDEX IF NOT EXISTS idx_sync_pairs_user_id ON sync_pairs(user_id);
+CREATE INDEX IF NOT EXISTS idx_sync_pairs_user_id_pair
+  ON sync_pairs(user_id, pair_id);
+CREATE INDEX IF NOT EXISTS idx_sync_pairs_invitation_expiry
+  ON sync_pairs(invitation_expires_at)
+  WHERE invitation_token_hash IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_sync_pairs_mobile_token
+  ON sync_pairs(mobile_token_hash)
+  WHERE mobile_token_hash IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS sync_rate_limits (
   bucket_key TEXT PRIMARY KEY,

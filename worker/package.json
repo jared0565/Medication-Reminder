@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node --test ../tests/test_worker_auth.mjs",
+    "test": "node --test ../tests/test_worker_auth.mjs ../tests/test_worker_sync.mjs",
     "build": "wrangler deploy --dry-run"
   },
   "keywords": [],
