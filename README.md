@@ -600,10 +600,15 @@ foreach ($inventoryPayload in $inventoryPayloads) {
 
 ```
 
-Stop here for operator confirmation. Using the captured inventory payloads and Cloudflare
-Dashboard, establish exactly one currently active Worker version receiving 100% of
-traffic and exactly one current successful Pages **production** deployment. Record
-these exact fields in environment variables without copying tokens, bindings, or
+Stop here for operator confirmation. Compare the captured inventory payloads with
+fresh independent Cloudflare current-status queries: pinned Wrangler
+`deployments status --name medication-reminder-push --json` and
+`pages deployment list --project-name medication-reminder --environment production
+--json`. Establish exactly one currently active Worker version receiving 100% of
+traffic and exactly one first/current successful Pages **production** deployment.
+Resolve the Pages source abbreviation to one unique 40-character commit with
+`git rev-parse`; ambiguity or a non-ancestor commit stops the release. Record these
+exact fields in environment variables without copying tokens, bindings, or
 application data:
 
 - `MEDICATION_ROLLBACK_WORKER_VERSION` — active Worker version ID;
@@ -613,9 +618,9 @@ application data:
 - `MEDICATION_RELEASE_OPERATOR` — accountable operator name or approved identifier.
 
 If either prior target is missing, ambiguous, split, unsuccessful, or cannot be
-matched between inventory and Dashboard, stop. Preview deployments are not valid
-rollback targets. After manual confirmation, create the timestamped operator
-attestation without exposing secrets:
+matched between the captured inventory and the fresh current-status query, stop.
+Preview deployments are not valid Pages rollback targets. After manual confirmation,
+create the timestamped operator attestation without exposing secrets:
 
 ```powershell
 $rollbackWorkerVersion = [Environment]::GetEnvironmentVariable('MEDICATION_ROLLBACK_WORKER_VERSION')
@@ -692,7 +697,7 @@ $rollbackRecord = [ordered]@{
     inventorySha256 = (Get-FileHash -LiteralPath $pagesDeploymentsPath -Algorithm SHA256).Hash
     inventoryCapturedAtUtc = $pagesDeploymentsCapturedAt.ToString('o')
   }
-  attestation = 'Operator confirmed both targets against captured CLI inventory payloads and Cloudflare Dashboard before mutation.'
+  attestation = 'Operator confirmed both targets against captured CLI inventory payloads and independent Cloudflare current-status queries before mutation.'
 }
 [IO.File]::WriteAllText(
   $rollbackRecordPath,
@@ -734,7 +739,7 @@ function Assert-ReleaseAttestation {
     throw 'Release attestation is not valid JSON or contains invalid typed fields.'
   }
   $requiredUuidPattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
-  $constantAttestation = 'Operator confirmed both targets against captured CLI inventory payloads and Cloudflare Dashboard before mutation.'
+  $constantAttestation = 'Operator confirmed both targets against captured CLI inventory payloads and independent Cloudflare current-status queries before mutation.'
   if ($record.schema -cne 'medication-reminder-release-attestation/v3' -or
       $record.releaseRunId -cne $releaseRunId -or
       $record.releaseBranch -cne $expectedBranch -or
