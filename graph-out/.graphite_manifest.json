@@ -1,6 +1,6 @@
 {
   "root": "Medication Reminder",
-  "file_count": 27,
+  "file_count": 28,
   "engine": {
     "cache_version": "v5",
     "schema_version": "1",
@@ -93,6 +93,12 @@
       "hash": "158bf10bed2523a1a13c2ff907e8d320cb007ad06ce647e109781c98b0dda169"
     },
     {
+      "rel_path": "tests/test_web_sync.mjs",
+      "language": "javascript",
+      "size": 4804,
+      "hash": "e2711b9365f8c2ef814e85c42d2d658d2c1e04c13400b37918835d241dc84fba"
+    },
+    {
       "rel_path": "web/_headers",
       "language": null,
       "size": 279,
@@ -101,14 +107,14 @@
     {
       "rel_path": "web/app.js",
       "language": "javascript",
-      "size": 22283,
-      "hash": "f84eecc8950aac43d28c85c1a11460097693716bc8d36c2db43ca34fd6fbcb44"
+      "size": 22750,
+      "hash": "39b564a9bccb8203e92f9f8825ef315be3693c8f91e976c47749633cc02c479b"
     },
     {
       "rel_path": "web/index.html",
       "language": "html",
       "size": 5538,
-      "hash": "be0c4b4292444c542ed3f994f8dcc5a84690bdf4d5ecfbb733dab54373f6613e"
+      "hash": "a30eb54d6b46b8fb0ad22458ca21fd44136ba8f1757bea41be573b8a722cf9e5"
     },
     {
       "rel_path": "web/manifest.webmanifest",
@@ -125,20 +131,20 @@
     {
       "rel_path": "web/styles.css",
       "language": "css",
-      "size": 5545,
-      "hash": "dfd544cc11d732125ad1b2548a26c527cfe11c0a732bb131a774d4f0e662a9b9"
+      "size": 5662,
+      "hash": "85c29be1618a246ea19a0079fa31f78054a3aa53f6ecd4440387bc53445b2e70"
     },
     {
       "rel_path": "web/sw.js",
       "language": "javascript",
       "size": 1899,
-      "hash": "a3ddde0958edd207c73ea96f3a3ba899e9d1358f7031bd3abef4719f221281c7"
+      "hash": "61fa2dc7efaa333539135295ea04f4fa05121175c9a94d86d404a2b22190c55d"
     },
     {
       "rel_path": "web/sync.js",
       "language": "javascript",
-      "size": 13790,
-      "hash": "146b81f0e332bd6171684ad604f207b708713dbd93a3c7bf6547ba177cb82862"
+      "size": 19358,
+      "hash": "799ef98b35240fae72c6528527255e3b712ea84105b7c38b13c7f12df2a358bd"
     },
     {
       "rel_path": "worker/package-lock.json",

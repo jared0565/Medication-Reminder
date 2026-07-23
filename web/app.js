@@ -40,4 +40,5 @@ if('serviceWorker'in navigator){let refreshing=false,prompting=false,updateAppro
 
 window.getMedicationSchedule=()=>structuredClone(schedule);
 window.applySyncedSchedule=incoming=>{window.__medicationSyncApplying=true;try{schedule=structuredClone(incoming);if(!save())throw new Error('Local schedule storage failed');renderAll();void syncPushSubscription()}finally{window.__medicationSyncApplying=false}};
+window.clearMedicationSchedule=()=>{window.__medicationSyncApplying=true;try{schedule={version:1,timezone:schedule.timezone||Intl.DateTimeFormat().resolvedOptions().timeZone||'Europe/London',events:[]};localStorage.setItem(key,JSON.stringify(schedule));taken={};notifiedKeys=new Set();localStorage.removeItem(takenKey);localStorage.removeItem('medication-reminder-notified-v1');renderAll();void syncPushSubscription()}finally{window.__medicationSyncApplying=false}};
 window.getMedicationPushEndpoint=async()=>{if(!('serviceWorker'in navigator)||!('Notification'in window)||Notification.permission!=='granted')return null;const registration=await navigator.serviceWorker.ready;return(await registration.pushManager.getSubscription())?.endpoint||null};
