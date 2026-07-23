@@ -125,14 +125,14 @@
     {
       "rel_path": "tests/test_web_account.mjs",
       "language": "javascript",
-      "size": 19696,
-      "hash": "887391f2112f8b2ac2c8e8e28e4f3eea7266a0ae38853869b2249adaae534218"
+      "size": 19773,
+      "hash": "596e929da9b64a23476e83c9e92ad2d2ff5a9d29289c871844594d07794b88d8"
     },
     {
       "rel_path": "tests/test_web_sync.mjs",
       "language": "javascript",
-      "size": 10648,
-      "hash": "d5aa6c29c495b0fdcb72a8390f6eefef9ca3ab7c0a3e450e7c51e56895bf5f04"
+      "size": 62233,
+      "hash": "f6d4fac3c86d8d9419fe5a2922999502b7acc9135874bb969c0fa9de14103224"
     },
     {
       "rel_path": "tests/test_web_update.mjs",
@@ -149,8 +149,8 @@
     {
       "rel_path": "tests/test_worker_sync.mjs",
       "language": "javascript",
-      "size": 48718,
-      "hash": "3fa199b487c9653a6a49b6473fe42048bc5c02c4b70b3d59ade7b96378dcc3ba"
+      "size": 55032,
+      "hash": "afed8379aeec42bf02d78a328029dc42844b9055255f59e6fb26a76477697460"
     },
     {
       "rel_path": "web/_headers",
@@ -167,14 +167,14 @@
     {
       "rel_path": "web/account.js",
       "language": "javascript",
-      "size": 14195,
-      "hash": "a4c1fd28e6aea63c44e4f7cc47e6e06a4cbd4ed1dedd33a53388d5194b39bf75"
+      "size": 13941,
+      "hash": "066ef418781e2014401240489077cdd6a97e4570e6460f67e572d33939689068"
     },
     {
       "rel_path": "web/app.js",
       "language": "javascript",
-      "size": 21762,
-      "hash": "35e568073f15abe4120ab8587fe840dd83ae6ab82c30e03b1ac9e65b6cedf1ce"
+      "size": 22172,
+      "hash": "33032707c8ea385ab28ec3bec51b64837b4d3a7da4e9a2f44d7c31c4147899df"
     },
     {
       "rel_path": "web/due-modal.js",
@@ -215,8 +215,8 @@
     {
       "rel_path": "web/sync.js",
       "language": "javascript",
-      "size": 21355,
-      "hash": "8cdcf983a6367a8b0758704c39594f8ed57dbf93650a6a6c8a0f24cc1d7a92e5"
+      "size": 54347,
+      "hash": "a7e6ae6ed1081589267cd45aa4715b355d16902f4c721bbf6297177fcc654619"
     },
     {
       "rel_path": "web/update.js",
@@ -269,8 +269,8 @@
     {
       "rel_path": "worker/src/index.js",
       "language": "javascript",
-      "size": 34495,
-      "hash": "6a296df03a90cb960a5a731087196ebfae9aef6e704de55968a019a9ac684a6a"
+      "size": 36933,
+      "hash": "92f048648c3a9a5863b416d6099529ae3b3695ecb4581777e39334cb52ac2673"
     },
     {
       "rel_path": "worker/wrangler.jsonc",

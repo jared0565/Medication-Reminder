@@ -1,20 +1,36 @@
 {
   "god_nodes": [
     {
+      "id": "tests_test_web_sync_installedmobileharness",
+      "name": "installedMobileHarness",
+      "kind": "function",
+      "degree": 65,
+      "in_degree": 42,
+      "out_degree": 23
+    },
+    {
+      "id": "web_sync",
+      "name": "sync.js",
+      "kind": "file",
+      "degree": 64,
+      "in_degree": 0,
+      "out_degree": 64
+    },
+    {
+      "id": "web_app",
+      "name": "app.js",
+      "kind": "file",
+      "degree": 54,
+      "in_degree": 16,
+      "out_degree": 38
+    },
+    {
       "id": "tests_test_web_account_accountharness",
       "name": "accountHarness",
       "kind": "function",
       "degree": 53,
       "in_degree": 24,
       "out_degree": 29
-    },
-    {
-      "id": "web_app",
-      "name": "app.js",
-      "kind": "file",
-      "degree": 53,
-      "in_degree": 16,
-      "out_degree": 37
     },
     {
       "id": "medication_reminder",
@@ -41,6 +57,30 @@
       "out_degree": 47
     },
     {
+      "id": "tests_test_worker_auth_prepare",
+      "name": "prepare",
+      "kind": "function",
+      "degree": 45,
+      "in_degree": 41,
+      "out_degree": 4
+    },
+    {
+      "id": "tests_test_worker_sync_prepare",
+      "name": "prepare",
+      "kind": "function",
+      "degree": 45,
+      "in_degree": 41,
+      "out_degree": 4
+    },
+    {
+      "id": "worker_src_index_handlesync",
+      "name": "handleSync",
+      "kind": "function",
+      "degree": 44,
+      "in_degree": 2,
+      "out_degree": 42
+    },
+    {
       "id": "medication_reminder_medicationreminderapp",
       "name": "MedicationReminderApp",
       "kind": "class",
@@ -49,36 +89,28 @@
       "out_degree": 41
     },
     {
-      "id": "tests_test_worker_auth_prepare",
-      "name": "prepare",
-      "kind": "function",
-      "degree": 42,
-      "in_degree": 38,
-      "out_degree": 4
-    },
-    {
-      "id": "tests_test_worker_sync_prepare",
-      "name": "prepare",
-      "kind": "function",
-      "degree": 42,
-      "in_degree": 38,
-      "out_degree": 4
-    },
-    {
-      "id": "worker_src_index_handlesync",
-      "name": "handleSync",
-      "kind": "function",
-      "degree": 42,
-      "in_degree": 2,
-      "out_degree": 40
-    },
-    {
       "id": "worker_src_index",
       "name": "index.js",
       "kind": "file",
-      "degree": 36,
+      "degree": 39,
       "in_degree": 1,
-      "out_degree": 35
+      "out_degree": 38
+    },
+    {
+      "id": "tests_test_worker_sync_workerfixture",
+      "name": "workerFixture",
+      "kind": "function",
+      "degree": 36,
+      "in_degree": 25,
+      "out_degree": 11
+    },
+    {
+      "id": "web_sync_syncnow",
+      "name": "syncNow",
+      "kind": "function",
+      "degree": 35,
+      "in_degree": 10,
+      "out_degree": 25
     },
     {
       "id": "worker_src_index_fetch",
@@ -97,20 +129,28 @@
       "out_degree": 17
     },
     {
-      "id": "tests_test_worker_sync_workerfixture",
-      "name": "workerFixture",
+      "id": "tests_test_worker_sync_request",
+      "name": "request",
       "kind": "function",
-      "degree": 32,
-      "in_degree": 21,
-      "out_degree": 11
+      "degree": 30,
+      "in_degree": 29,
+      "out_degree": 1
     },
     {
-      "id": "web_sync",
-      "name": "sync.js",
-      "kind": "file",
+      "id": "web_sync_credentials",
+      "name": "credentials",
+      "kind": "function",
       "degree": 28,
-      "in_degree": 0,
-      "out_degree": 28
+      "in_degree": 26,
+      "out_degree": 2
+    },
+    {
+      "id": "tests_test_worker_sync_createpair",
+      "name": "createPair",
+      "kind": "function",
+      "degree": 27,
+      "in_degree": 26,
+      "out_degree": 1
     },
     {
       "id": "worker_src_auth_handleauthrequest",
@@ -119,46 +159,6 @@
       "degree": 25,
       "in_degree": 2,
       "out_degree": 23
-    },
-    {
-      "id": "medication_reminder_init",
-      "name": "__init__",
-      "kind": "function",
-      "degree": 24,
-      "in_degree": 2,
-      "out_degree": 22
-    },
-    {
-      "id": "tests_test_worker_sync_request",
-      "name": "request",
-      "kind": "function",
-      "degree": 24,
-      "in_degree": 23,
-      "out_degree": 1
-    },
-    {
-      "id": "sync_client",
-      "name": "sync_client.py",
-      "kind": "file",
-      "degree": 23,
-      "in_degree": 3,
-      "out_degree": 20
-    },
-    {
-      "id": "web_sync_syncnow",
-      "name": "syncNow",
-      "kind": "function",
-      "degree": 23,
-      "in_degree": 8,
-      "out_degree": 15
-    },
-    {
-      "id": "worker_src_auth",
-      "name": "auth.js",
-      "kind": "file",
-      "degree": 23,
-      "in_degree": 2,
-      "out_degree": 21
     }
   ],
   "orphans": [
@@ -228,42 +228,49 @@
       "kind": "function"
     },
     {
-      "id": "tests_test_web_sync_encode_l268_c18",
+      "id": "tests_test_web_sync_app_confirmations_some_l1414_c41",
+      "name": "app.confirmations.some",
+      "kind": "function"
+    },
+    {
+      "id": "tests_test_web_sync_assert_throws_l602_c17",
+      "name": "assert.throws",
+      "kind": "function"
+    },
+    {
+      "id": "tests_test_web_sync_decryptgate_l132_c23",
+      "name": "decryptGate",
+      "kind": "function"
+    },
+    {
+      "id": "tests_test_web_sync_encode_l456_c18",
       "name": "encode",
       "kind": "function"
     },
     {
-      "id": "tests_test_worker_auth_b64url_l18_c16",
-      "name": "b64url",
+      "id": "tests_test_web_sync_encryptgate_l129_c23",
+      "name": "encryptGate",
       "kind": "function"
     },
     {
-      "id": "tests_test_worker_auth_map_l21_c42",
-      "name": "map",
+      "id": "tests_test_web_sync_getrandomvalues_l125_c22",
+      "name": "getRandomValues",
       "kind": "function"
     },
     {
-      "id": "tests_test_worker_auth_readjson_l321_c19",
-      "name": "readJson",
-      "kind": "function"
-    },
-    {
-      "id": "tests_test_worker_auth_readjson_l353_c17",
-      "name": "readJson",
-      "kind": "function"
-    },
-    {
-      "id": "tests_test_worker_auth_sha256hex_l19_c19",
-      "name": "sha256Hex",
-      "kind": "function"
-    },
-    {
-      "id": "tests_test_worker_auth_test_a_malformed_session_cookie_does_not_suppress_a_valid_migration_bearer_l227_c79",
-      "name": "test a malformed session cookie does not suppress a valid migration bearer",
+      "id": "tests_test_web_sync_importkey_l127_c18",
+      "name": "importKey",
       "kind": "function"
     }
   ],
   "entry_points": [
+    {
+      "id": "web_sync",
+      "name": "sync.js",
+      "out_degree": 64,
+      "in_degree": 0,
+      "ratio": 64.0
+    },
     {
       "id": "medication_reminder",
       "name": "medication_reminder.py",
@@ -281,16 +288,9 @@
     {
       "id": "worker_src_index",
       "name": "index.js",
-      "out_degree": 35,
+      "out_degree": 38,
       "in_degree": 1,
-      "ratio": 35.0
-    },
-    {
-      "id": "web_sync",
-      "name": "sync.js",
-      "out_degree": 28,
-      "in_degree": 0,
-      "ratio": 28.0
+      "ratio": 38.0
     },
     {
       "id": "tests_test_worker_sync",
@@ -307,11 +307,18 @@
       "ratio": 20.0
     },
     {
+      "id": "tests_test_web_sync",
+      "name": "test_web_sync.mjs",
+      "out_degree": 18,
+      "in_degree": 0,
+      "ratio": 18.0
+    },
+    {
       "id": "web_account",
       "name": "account.js",
-      "out_degree": 20,
+      "out_degree": 18,
       "in_degree": 0,
-      "ratio": 20.0
+      "ratio": 18.0
     },
     {
       "id": "tests_e2e_sync",
@@ -344,13 +351,6 @@
     {
       "id": "tests_test_pairing",
       "name": "test_pairing.py",
-      "out_degree": 10,
-      "in_degree": 0,
-      "ratio": 10.0
-    },
-    {
-      "id": "tests_test_web_sync",
-      "name": "test_web_sync.mjs",
       "out_degree": 10,
       "in_degree": 0,
       "ratio": 10.0
@@ -549,18 +549,44 @@
   ],
   "cycles": [
     [
-      "web_app_renderpairingqr",
-      "web_app"
-    ],
-    [
       "web_app_checkduemodals",
       "web_app_enqueuedue",
       "web_app_shownextduemodal",
       "web_app"
     ],
     [
-      "web_app_enqueuedue",
-      "web_app_shownextduemodal",
+      "web_app_renderall",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_renderall",
+      "web_app_rendertoday",
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app_addmedicineinput",
       "web_app"
     ],
     [
@@ -573,80 +599,60 @@
       "web_app"
     ],
     [
-      "web_app_updatenotificationstatus",
       "web_app",
-      "web_app_enablenotifications"
+      "web_app_enablenotifications",
+      "web_app_updatenotificationstatus"
     ],
     [
-      "web_app_updatenotificationstatus",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
       "web_app",
-      "web_app_saveeditor"
+      "web_app_enqueuedue",
+      "web_app_shownextduemodal"
     ],
     [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
       "web_app",
-      "web_app_saveeditor"
+      "web_app_markoccurrencetaken",
+      "web_app_rendertoday"
     ],
     [
-      "web_app_renderall",
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_rendertoday",
       "web_app",
-      "web_app_saveeditor"
+      "web_app_openeditor"
     ],
     [
-      "web_app_rendertoday",
       "web_app",
-      "web_app_markoccurrencetaken"
-    ],
-    [
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app"
-    ],
-    [
-      "web_app_addmedicineinput",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app"
-    ],
-    [
-      "web_app_shownextduemodal",
-      "web_app"
+      "web_app_renderpairingqr"
     ],
     [
       "web_app",
       "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor"
+    ],
+    [
+      "web_app",
+      "web_app_shownextduemodal"
+    ],
+    [
+      "web_app",
+      "web_app_updatenotificationstatus"
     ]
   ],
   "top_files_by_links": [
     {
+      "id": "web_sync",
+      "name": "sync.js",
+      "degree": 64,
+      "source_file": "web/sync.js"
+    },
+    {
       "id": "web_app",
       "name": "app.js",
-      "degree": 53,
+      "degree": 54,
       "source_file": "web/app.js"
     },
     {
@@ -670,14 +676,8 @@
     {
       "id": "worker_src_index",
       "name": "index.js",
-      "degree": 36,
+      "degree": 39,
       "source_file": "worker/src/index.js"
-    },
-    {
-      "id": "web_sync",
-      "name": "sync.js",
-      "degree": 28,
-      "source_file": "web/sync.js"
     },
     {
       "id": "sync_client",
@@ -704,9 +704,15 @@
       "source_file": "web/access.js"
     },
     {
+      "id": "tests_test_web_sync",
+      "name": "test_web_sync.mjs",
+      "degree": 18,
+      "source_file": "tests/test_web_sync.mjs"
+    },
+    {
       "id": "web_account",
       "name": "account.js",
-      "degree": 20,
+      "degree": 18,
       "source_file": "web/account.js"
     },
     {
@@ -732,12 +738,6 @@
       "name": "test_pairing.py",
       "degree": 10,
       "source_file": "tests/test_pairing.py"
-    },
-    {
-      "id": "tests_test_web_sync",
-      "name": "test_web_sync.mjs",
-      "degree": 10,
-      "source_file": "tests/test_web_sync.mjs"
     },
     {
       "id": "tests_test_due_modal",
