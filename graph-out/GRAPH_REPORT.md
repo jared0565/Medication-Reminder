@@ -1,4 +1,4 @@
-# Graphite Report: `account-boundary`
+# Graphite Report: `Medication Reminder`
 
 ## Summary
 - **Files scanned:** 46
