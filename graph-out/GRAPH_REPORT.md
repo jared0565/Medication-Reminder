@@ -112,6 +112,6 @@
 ### Community 38 (tests, functions)
 - size: 3 (files: 0, functions: 2, classes: 0)
 - members: `tests_test_web_sync_anon_l245_c25`, `tests_test_web_sync_anon_l246_c25`, `tests_test_web_sync_settimeout`
-### Community 35 (tests, functions)
+### Community 35 (tests)
 - size: 2 (files: 0, functions: 1, classes: 0)
 - members: `tests_test_web_sw_anon_l8_c33`, `tests_test_web_sw_setimmediate`
