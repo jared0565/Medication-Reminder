@@ -2971,8 +2971,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
-        "functions"
+        "tests"
       ]
     },
     {
@@ -2986,8 +2985,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
-        "functions"
+        "tests"
       ]
     },
     {
@@ -3001,7 +2999,8 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests"
+        "tests",
+        "functions"
       ]
     },
     {
@@ -3015,8 +3014,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
-        "functions"
+        "tests"
       ]
     },
     {
@@ -3044,8 +3042,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "web",
-        "functions"
+        "web"
       ]
     },
     {

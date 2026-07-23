@@ -23,8 +23,8 @@
     {
       "rel_path": "README.md",
       "language": "markdown",
-      "size": 79704,
-      "hash": "dd44d40a79a1f605191e737b4278fb99ad130c2bc30fc3c2995af9f6d770d571"
+      "size": 71778,
+      "hash": "afa1481c3dd36d37f63488a21a7b2eba6d77f2979bf54ceef82e4192a88cb87e"
     },
     {
       "rel_path": "build_windows_exe.bat",
@@ -137,8 +137,8 @@
     {
       "rel_path": "tests/test_web_sync.mjs",
       "language": "javascript",
-      "size": 63670,
-      "hash": "55a0e662bed2268bff9e711d75ba4ca20e060df080e298d176c6477026307f8c"
+      "size": 63673,
+      "hash": "4d7027fa08f7d897ae0f486476e7c130abecbaea6a358c1636223b09331a14d5"
     },
     {
       "rel_path": "tests/test_web_update.mjs",
@@ -251,14 +251,14 @@
     {
       "rel_path": "worker/package-lock.json",
       "language": "json",
-      "size": 57499,
-      "hash": "2895c2c5c086637505be3fa266b72a17c0a8a666755761caa0d140f532e02629"
+      "size": 58453,
+      "hash": "cd7792e4bf2118611fffd339315606f6c38aa823005ff7f388e088c862fe0b23"
     },
     {
       "rel_path": "worker/package.json",
       "language": "json",
       "size": 434,
-      "hash": "02687a97fda5ed80f468f1f4580f88250216c84bb843191df01210f666d645bb"
+      "hash": "0d644c72ce8cfa81028006e0835dd80097d6c018ad74f0fa34f84da05425cf64"
     },
     {
       "rel_path": "worker/schema.sql",

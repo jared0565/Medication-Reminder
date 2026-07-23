@@ -38162,8 +38162,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
-        "functions"
+        "tests"
       ]
     },
     {
@@ -38177,8 +38176,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
-        "functions"
+        "tests"
       ]
     },
     {
@@ -38192,7 +38190,8 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests"
+        "tests",
+        "functions"
       ]
     },
     {
@@ -38206,8 +38205,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
-        "functions"
+        "tests"
       ]
     },
     {
@@ -38235,8 +38233,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "web",
-        "functions"
+        "web"
       ]
     },
     {
@@ -40365,84 +40362,33 @@
     ],
     "cycles": [
       [
-        "web_app_rendermedicineinputs",
-        "web_app",
-        "web_app_openeditor"
-      ],
-      [
-        "web_app_rendermedicineinputs",
-        "web_app"
-      ],
-      [
-        "web_app_markoccurrencetaken",
-        "web_app_rendertoday",
-        "web_app"
-      ],
-      [
-        "web_app_rendertoday",
-        "web_app",
-        "web_app_renderall"
-      ],
-      [
-        "web_app_rendertoday",
-        "web_app"
-      ],
-      [
-        "web_app_rendertoday",
-        "web_app",
-        "web_app_saveeditor",
-        "web_app_renderall"
-      ],
-      [
-        "web_app_updatenotificationstatus",
-        "web_app",
-        "web_app_enablenotifications"
-      ],
-      [
-        "web_app_updatenotificationstatus",
-        "web_app"
-      ],
-      [
-        "web_app_enqueuedue",
-        "web_app_shownextduemodal",
-        "web_app",
-        "web_app_checkduemodals"
-      ],
-      [
-        "web_app_enqueuedue",
-        "web_app_shownextduemodal",
-        "web_app"
-      ],
-      [
         "web_app_openeditor",
         "web_app"
       ],
       [
-        "web_app_addmedicineinput",
+        "web_app_openeditor",
+        "web_app_rendermedicineinputs",
         "web_app"
       ],
       [
-        "web_app_renderschedules",
+        "web_app_rendertoday",
+        "web_app",
+        "web_app_markoccurrencetaken"
+      ],
+      [
+        "web_app_rendertoday",
         "web_app",
         "web_app_renderall"
       ],
       [
-        "web_app_renderschedules",
+        "web_app_rendertoday",
         "web_app"
       ],
       [
-        "web_app_renderschedules",
+        "web_app_rendertoday",
         "web_app",
         "web_app_saveeditor",
         "web_app_renderall"
-      ],
-      [
-        "web_app_renderpairingqr",
-        "web_app"
-      ],
-      [
-        "web_app_shownextduemodal",
-        "web_app"
       ],
       [
         "web_app_saveeditor",
@@ -40454,8 +40400,59 @@
         "web_app"
       ],
       [
+        "web_app_saveeditor",
+        "web_app_renderall",
+        "web_app_renderschedules",
+        "web_app"
+      ],
+      [
+        "web_app",
+        "web_app_addmedicineinput"
+      ],
+      [
+        "web_app",
+        "web_app_checkduemodals",
+        "web_app_enqueuedue",
+        "web_app_shownextduemodal"
+      ],
+      [
+        "web_app",
+        "web_app_enablenotifications",
+        "web_app_updatenotificationstatus"
+      ],
+      [
+        "web_app",
+        "web_app_enqueuedue",
+        "web_app_shownextduemodal"
+      ],
+      [
         "web_app",
         "web_app_renderall"
+      ],
+      [
+        "web_app",
+        "web_app_renderall",
+        "web_app_renderschedules"
+      ],
+      [
+        "web_app",
+        "web_app_rendermedicineinputs"
+      ],
+      [
+        "web_app",
+        "web_app_renderpairingqr"
+      ],
+      [
+        "web_app",
+        "web_app_renderschedules"
+      ],
+      [
+        "web_app",
+        "web_app_shownextduemodal"
+      ],
+      [
+        "web_app",
+        "web_app_updatenotificationstatus"
       ]
     ],
     "top_files_by_links": [
