@@ -54,7 +54,7 @@
       "source_file": "",
       "source_location": "",
       "id": "valueerror",
-      "community": 3,
+      "community": 2,
       "norm_label": "valueerror"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "",
       "source_location": "",
       "id": "runtimeerror",
-      "community": 7,
+      "community": 3,
       "norm_label": "runtimeerror"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "medication_core.py",
       "source_location": "L195",
       "id": "medication_core_datablob",
-      "community": 3,
+      "community": 37,
       "norm_label": "_datablob"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "medication_core.py",
       "source_location": "L199",
       "id": "medication_core_dpapiprotector",
-      "community": 3,
+      "community": 37,
       "norm_label": "dpapiprotector"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "medication_core.py",
       "source_location": "L205",
       "id": "medication_core_dpapiprotector_init",
-      "community": 3,
+      "community": 37,
       "norm_label": ".__init__()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "medication_core.py",
       "source_location": "L212",
       "id": "medication_core_dpapiprotector_configure_functions",
-      "community": 3,
+      "community": 37,
       "norm_label": "._configure_functions()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "medication_core.py",
       "source_location": "L227",
       "id": "medication_core_dpapiprotector_input_blob",
-      "community": 3,
+      "community": 37,
       "norm_label": "._input_blob()"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "medication_core.py",
       "source_location": "L231",
       "id": "medication_core_dpapiprotector_transform",
-      "community": 3,
+      "community": 37,
       "norm_label": "._transform()"
     },
     {
@@ -270,7 +270,7 @@
       "source_file": "medication_core.py",
       "source_location": "L258",
       "id": "medication_core_dpapiprotector_protect",
-      "community": 3,
+      "community": 37,
       "norm_label": ".protect()"
     },
     {
@@ -279,7 +279,7 @@
       "source_file": "medication_core.py",
       "source_location": "L261",
       "id": "medication_core_dpapiprotector_unprotect",
-      "community": 3,
+      "community": 37,
       "norm_label": ".unprotect()"
     },
     {
@@ -355,10 +355,37 @@
       "norm_label": ".__init__()"
     },
     {
+      "label": ".load_sync_credentials()",
+      "file_type": "code",
+      "source_file": "medication_core.py",
+      "source_location": "L317",
+      "id": "medication_core_appstorage_load_sync_credentials",
+      "community": 3,
+      "norm_label": ".load_sync_credentials()"
+    },
+    {
+      "label": ".save_sync_credentials()",
+      "file_type": "code",
+      "source_file": "medication_core.py",
+      "source_location": "L326",
+      "id": "medication_core_appstorage_save_sync_credentials",
+      "community": 3,
+      "norm_label": ".save_sync_credentials()"
+    },
+    {
+      "label": ".delete_sync_credentials()",
+      "file_type": "code",
+      "source_file": "medication_core.py",
+      "source_location": "L329",
+      "id": "medication_core_appstorage_delete_sync_credentials",
+      "community": 3,
+      "norm_label": ".delete_sync_credentials()"
+    },
+    {
       "label": ".load_settings()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L316",
+      "source_location": "L335",
       "id": "medication_core_appstorage_load_settings",
       "community": 3,
       "norm_label": ".load_settings()"
@@ -367,7 +394,7 @@
       "label": ".save_settings()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L328",
+      "source_location": "L347",
       "id": "medication_core_appstorage_save_settings",
       "community": 3,
       "norm_label": ".save_settings()"
@@ -376,7 +403,7 @@
       "label": ".load_schedule()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L336",
+      "source_location": "L355",
       "id": "medication_core_appstorage_load_schedule",
       "community": 3,
       "norm_label": ".load_schedule()"
@@ -385,7 +412,7 @@
       "label": ".save_schedule()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L351",
+      "source_location": "L370",
       "id": "medication_core_appstorage_save_schedule",
       "community": 3,
       "norm_label": ".save_schedule()"
@@ -394,7 +421,7 @@
       "label": ".load_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L356",
+      "source_location": "L375",
       "id": "medication_core_appstorage_load_state",
       "community": 3,
       "norm_label": ".load_state()"
@@ -403,7 +430,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L356",
+      "source_location": "L375",
       "id": "medication_core_py_datetime",
       "community": 3,
       "norm_label": "datetime"
@@ -412,7 +439,7 @@
       "label": ".save_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L363",
+      "source_location": "L382",
       "id": "medication_core_appstorage_save_state",
       "community": 3,
       "norm_label": ".save_state()"
@@ -421,7 +448,7 @@
       "label": ".append_audit()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L366",
+      "source_location": "L385",
       "id": "medication_core_appstorage_append_audit",
       "community": 3,
       "norm_label": ".append_audit()"
@@ -430,7 +457,7 @@
       "label": ".export_taken_csv()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L378",
+      "source_location": "L397",
       "id": "medication_core_appstorage_export_taken_csv",
       "community": 3,
       "norm_label": ".export_taken_csv()"
@@ -439,7 +466,7 @@
       "label": "_safe_datetime()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L412",
+      "source_location": "L431",
       "id": "medication_core_safe_datetime",
       "community": 3,
       "norm_label": "_safe_datetime()"
@@ -448,7 +475,7 @@
       "label": "default_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L422",
+      "source_location": "L441",
       "id": "medication_core_default_state",
       "community": 3,
       "norm_label": "default_state()"
@@ -457,7 +484,7 @@
       "label": "normalize_state()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L434",
+      "source_location": "L453",
       "id": "medication_core_normalize_state",
       "community": 3,
       "norm_label": "normalize_state()"
@@ -466,7 +493,7 @@
       "label": "DueOccurrence",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L455",
+      "source_location": "L474",
       "id": "medication_core_dueoccurrence",
       "community": 3,
       "norm_label": "dueoccurrence"
@@ -475,7 +502,7 @@
       "label": ".overdue()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L465",
+      "source_location": "L484",
       "id": "medication_core_dueoccurrence_overdue",
       "community": 3,
       "norm_label": ".overdue()"
@@ -484,7 +511,7 @@
       "label": "ScheduleEngine",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L469",
+      "source_location": "L488",
       "id": "medication_core_scheduleengine",
       "community": 3,
       "norm_label": "scheduleengine"
@@ -493,7 +520,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L470",
+      "source_location": "L489",
       "id": "medication_core_scheduleengine_init",
       "community": 3,
       "norm_label": ".__init__()"
@@ -502,7 +529,7 @@
       "label": ".replace_schedule()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L475",
+      "source_location": "L494",
       "id": "medication_core_scheduleengine_replace_schedule",
       "community": 3,
       "norm_label": ".replace_schedule()"
@@ -511,7 +538,7 @@
       "label": ".collect_due()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L480",
+      "source_location": "L499",
       "id": "medication_core_scheduleengine_collect_due",
       "community": 3,
       "norm_label": ".collect_due()"
@@ -520,7 +547,7 @@
       "label": ".next_ready()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L509",
+      "source_location": "L528",
       "id": "medication_core_scheduleengine_next_ready",
       "community": 3,
       "norm_label": ".next_ready()"
@@ -529,7 +556,7 @@
       "label": ".resolve()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L521",
+      "source_location": "L540",
       "id": "medication_core_scheduleengine_resolve",
       "community": 3,
       "norm_label": ".resolve()"
@@ -538,7 +565,7 @@
       "label": ".mark_taken()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L544",
+      "source_location": "L563",
       "id": "medication_core_scheduleengine_mark_taken",
       "community": 3,
       "norm_label": ".mark_taken()"
@@ -547,7 +574,7 @@
       "label": ".snooze()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L551",
+      "source_location": "L570",
       "id": "medication_core_scheduleengine_snooze",
       "community": 3,
       "norm_label": ".snooze()"
@@ -556,7 +583,7 @@
       "label": ".next_scheduled()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L558",
+      "source_location": "L577",
       "id": "medication_core_scheduleengine_next_scheduled",
       "community": 3,
       "norm_label": ".next_scheduled()"
@@ -565,7 +592,7 @@
       "label": "._drop_invalid_pending()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L571",
+      "source_location": "L590",
       "id": "medication_core_scheduleengine_drop_invalid_pending",
       "community": 3,
       "norm_label": "._drop_invalid_pending()"
@@ -574,7 +601,7 @@
       "label": "._cleanup()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L578",
+      "source_location": "L597",
       "id": "medication_core_scheduleengine_cleanup",
       "community": 3,
       "norm_label": "._cleanup()"
@@ -583,7 +610,7 @@
       "label": "._localize()",
       "file_type": "code",
       "source_file": "medication_core.py",
-      "source_location": "L589",
+      "source_location": "L608",
       "id": "medication_core_scheduleengine_localize",
       "community": 3,
       "norm_label": "._localize()"
@@ -621,7 +648,7 @@
       "source_file": "medication_core.py",
       "source_location": "L200",
       "id": "medication_core_rationale_200",
-      "community": 3,
+      "community": 37,
       "norm_label": "encrypt application data for the current windows user via dpapi."
     },
     {
@@ -637,7 +664,7 @@
       "label": "enable_dpi_awareness()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L46",
+      "source_location": "L47",
       "id": "medication_reminder_enable_dpi_awareness",
       "community": 34,
       "norm_label": "enable_dpi_awareness()"
@@ -646,7 +673,7 @@
       "label": "resource_dir()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L67",
+      "source_location": "L68",
       "id": "medication_reminder_resource_dir",
       "community": 3,
       "norm_label": "resource_dir()"
@@ -655,7 +682,7 @@
       "label": "Path",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L67",
+      "source_location": "L68",
       "id": "medication_reminder_py_path",
       "community": 3,
       "norm_label": "path"
@@ -664,7 +691,7 @@
       "label": "startup_command()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L79",
+      "source_location": "L80",
       "id": "medication_reminder_startup_command",
       "community": 18,
       "norm_label": "startup_command()"
@@ -673,7 +700,7 @@
       "label": "register_startup()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L89",
+      "source_location": "L90",
       "id": "medication_reminder_register_startup",
       "community": 18,
       "norm_label": "register_startup()"
@@ -682,34 +709,34 @@
       "label": "SingleInstance",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L99",
+      "source_location": "L100",
       "id": "medication_reminder_singleinstance",
-      "community": 7,
+      "community": 3,
       "norm_label": "singleinstance"
     },
     {
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L102",
+      "source_location": "L103",
       "id": "medication_reminder_singleinstance_init",
-      "community": 7,
+      "community": 3,
       "norm_label": ".__init__()"
     },
     {
       "label": ".close()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L117",
+      "source_location": "L118",
       "id": "medication_reminder_singleinstance_close",
-      "community": 7,
+      "community": 3,
       "norm_label": ".close()"
     },
     {
       "label": "MedicationReminderApp",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L123",
+      "source_location": "L124",
       "id": "medication_reminder_medicationreminderapp",
       "community": 1,
       "norm_label": "medicationreminderapp"
@@ -718,7 +745,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L124",
+      "source_location": "L125",
       "id": "medication_reminder_medicationreminderapp_init",
       "community": 1,
       "norm_label": ".__init__()"
@@ -727,7 +754,7 @@
       "label": "._configure_theme()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L157",
+      "source_location": "L167",
       "id": "medication_reminder_medicationreminderapp_configure_theme",
       "community": 1,
       "norm_label": "._configure_theme()"
@@ -736,7 +763,7 @@
       "label": "._configured_timezone()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L194",
+      "source_location": "L204",
       "id": "medication_reminder_medicationreminderapp_configured_timezone",
       "community": 1,
       "norm_label": "._configured_timezone()"
@@ -745,7 +772,7 @@
       "label": ".now()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L199",
+      "source_location": "L209",
       "id": "medication_reminder_medicationreminderapp_now",
       "community": 1,
       "norm_label": ".now()"
@@ -754,7 +781,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L199",
+      "source_location": "L209",
       "id": "medication_reminder_py_datetime",
       "community": 3,
       "norm_label": "datetime"
@@ -763,7 +790,7 @@
       "label": ".build_main_window()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L202",
+      "source_location": "L212",
       "id": "medication_reminder_medicationreminderapp_build_main_window",
       "community": 1,
       "norm_label": ".build_main_window()"
@@ -772,7 +799,7 @@
       "label": ".refresh_schedule_table()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L260",
+      "source_location": "L270",
       "id": "medication_reminder_medicationreminderapp_refresh_schedule_table",
       "community": 1,
       "norm_label": ".refresh_schedule_table()"
@@ -781,7 +808,7 @@
       "label": ".update_next_due_text()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L269",
+      "source_location": "L279",
       "id": "medication_reminder_medicationreminderapp_update_next_due_text",
       "community": 1,
       "norm_label": ".update_next_due_text()"
@@ -790,7 +817,7 @@
       "label": "._selected_main_event_index()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L283",
+      "source_location": "L293",
       "id": "medication_reminder_medicationreminderapp_selected_main_event_index",
       "community": 1,
       "norm_label": "._selected_main_event_index()"
@@ -799,7 +826,7 @@
       "label": ".add_schedule_main()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L294",
+      "source_location": "L304",
       "id": "medication_reminder_medicationreminderapp_add_schedule_main",
       "community": 1,
       "norm_label": ".add_schedule_main()"
@@ -808,7 +835,7 @@
       "label": ".edit_selected_main()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L297",
+      "source_location": "L307",
       "id": "medication_reminder_medicationreminderapp_edit_selected_main",
       "community": 1,
       "norm_label": ".edit_selected_main()"
@@ -817,7 +844,7 @@
       "label": ".remove_selected_main()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L303",
+      "source_location": "L313",
       "id": "medication_reminder_medicationreminderapp_remove_selected_main",
       "community": 1,
       "norm_label": ".remove_selected_main()"
@@ -826,7 +853,7 @@
       "label": ".open_alert_settings()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L314",
+      "source_location": "L324",
       "id": "medication_reminder_medicationreminderapp_open_alert_settings",
       "community": 1,
       "norm_label": ".open_alert_settings()"
@@ -835,7 +862,7 @@
       "label": ".check_schedule()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L345",
+      "source_location": "L355",
       "id": "medication_reminder_medicationreminderapp_check_schedule",
       "community": 1,
       "norm_label": ".check_schedule()"
@@ -844,7 +871,7 @@
       "label": ".play_alert_sound()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L364",
+      "source_location": "L374",
       "id": "medication_reminder_medicationreminderapp_play_alert_sound",
       "community": 1,
       "norm_label": ".play_alert_sound()"
@@ -853,7 +880,7 @@
       "label": ".show_due_popup()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L405",
+      "source_location": "L415",
       "id": "medication_reminder_medicationreminderapp_show_due_popup",
       "community": 1,
       "norm_label": ".show_due_popup()"
@@ -862,7 +889,7 @@
       "label": "DueOccurrence",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L405",
+      "source_location": "L415",
       "id": "dueoccurrence",
       "community": 1,
       "norm_label": "dueoccurrence"
@@ -871,7 +898,7 @@
       "label": ".mark_taken()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L480",
+      "source_location": "L490",
       "id": "medication_reminder_medicationreminderapp_mark_taken",
       "community": 1,
       "norm_label": ".mark_taken()"
@@ -880,7 +907,7 @@
       "label": "Toplevel",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L480",
+      "source_location": "L490",
       "id": "toplevel",
       "community": 1,
       "norm_label": "toplevel"
@@ -889,7 +916,7 @@
       "label": ".snooze_event()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L498",
+      "source_location": "L508",
       "id": "medication_reminder_medicationreminderapp_snooze_event",
       "community": 1,
       "norm_label": ".snooze_event()"
@@ -898,7 +925,7 @@
       "label": "._close_popup()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L511",
+      "source_location": "L521",
       "id": "medication_reminder_medicationreminderapp_close_popup",
       "community": 1,
       "norm_label": "._close_popup()"
@@ -907,7 +934,7 @@
       "label": ".test_reminder()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L517",
+      "source_location": "L527",
       "id": "medication_reminder_medicationreminderapp_test_reminder",
       "community": 1,
       "norm_label": ".test_reminder()"
@@ -916,7 +943,7 @@
       "label": ".save_config()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L530",
+      "source_location": "L540",
       "id": "medication_reminder_medicationreminderapp_save_config",
       "community": 1,
       "norm_label": ".save_config()"
@@ -925,7 +952,7 @@
       "label": ".open_schedule_editor()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L544",
+      "source_location": "L562",
       "id": "medication_reminder_medicationreminderapp_open_schedule_editor",
       "community": 1,
       "norm_label": ".open_schedule_editor()"
@@ -934,61 +961,124 @@
       "label": ".edit_event_dialog()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L676",
+      "source_location": "L699",
       "id": "medication_reminder_medicationreminderapp_edit_event_dialog",
       "community": 1,
       "norm_label": ".edit_event_dialog()"
     },
     {
-      "label": "._pairing_payload()",
-      "file_type": "code",
-      "source_file": "medication_reminder.py",
-      "source_location": "L765",
-      "id": "medication_reminder_medicationreminderapp_pairing_payload",
-      "community": 1,
-      "norm_label": "._pairing_payload()"
-    },
-    {
-      "label": "._decode_pairing_payload()",
-      "file_type": "code",
-      "source_file": "medication_reminder.py",
-      "source_location": "L774",
-      "id": "medication_reminder_medicationreminderapp_decode_pairing_payload",
-      "community": 1,
-      "norm_label": "._decode_pairing_payload()"
-    },
-    {
-      "label": "Any",
-      "file_type": "code",
-      "source_file": "medication_reminder.py",
-      "source_location": "L774",
-      "id": "medication_reminder_py_any",
-      "community": 3,
-      "norm_label": "any"
-    },
-    {
       "label": ".pair_device()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L787",
+      "source_location": "L788",
       "id": "medication_reminder_medicationreminderapp_pair_device",
       "community": 1,
       "norm_label": ".pair_device()"
     },
     {
+      "label": "._pair_created()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L802",
+      "id": "medication_reminder_medicationreminderapp_pair_created",
+      "community": 1,
+      "norm_label": "._pair_created()"
+    },
+    {
       "label": ".show_pairing_qr()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L809",
+      "source_location": "L812",
       "id": "medication_reminder_medicationreminderapp_show_pairing_qr",
       "community": 1,
       "norm_label": ".show_pairing_qr()"
     },
     {
+      "label": "._set_sync_status()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L845",
+      "id": "medication_reminder_medicationreminderapp_set_sync_status",
+      "community": 1,
+      "norm_label": "._set_sync_status()"
+    },
+    {
+      "label": "._periodic_sync()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L856",
+      "id": "medication_reminder_medicationreminderapp_periodic_sync",
+      "community": 1,
+      "norm_label": "._periodic_sync()"
+    },
+    {
+      "label": "._start_sync()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L860",
+      "id": "medication_reminder_medicationreminderapp_start_sync",
+      "community": 1,
+      "norm_label": "._start_sync()"
+    },
+    {
+      "label": "._finish_sync()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L888",
+      "id": "medication_reminder_medicationreminderapp_finish_sync",
+      "community": 1,
+      "norm_label": "._finish_sync()"
+    },
+    {
+      "label": "._apply_remote_schedule()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L922",
+      "id": "medication_reminder_medicationreminderapp_apply_remote_schedule",
+      "community": 1,
+      "norm_label": "._apply_remote_schedule()"
+    },
+    {
+      "label": "RemoteSchedule",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L922",
+      "id": "remoteschedule",
+      "community": 3,
+      "norm_label": "remoteschedule"
+    },
+    {
+      "label": "._sync_failed()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L937",
+      "id": "medication_reminder_medicationreminderapp_sync_failed",
+      "community": 1,
+      "norm_label": "._sync_failed()"
+    },
+    {
+      "label": "SyncError",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L937",
+      "id": "syncerror",
+      "community": 3,
+      "norm_label": "syncerror"
+    },
+    {
+      "label": ".unpair_device()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L943",
+      "id": "medication_reminder_medicationreminderapp_unpair_device",
+      "community": 1,
+      "norm_label": ".unpair_device()"
+    },
+    {
       "label": ".export_taken_log()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L833",
+      "source_location": "L964",
       "id": "medication_reminder_medicationreminderapp_export_taken_log",
       "community": 1,
       "norm_label": ".export_taken_log()"
@@ -997,7 +1087,7 @@
       "label": "._safe_audit()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L854",
+      "source_location": "L985",
       "id": "medication_reminder_medicationreminderapp_safe_audit",
       "community": 1,
       "norm_label": "._safe_audit()"
@@ -1006,7 +1096,7 @@
       "label": "._warn_persistence()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L860",
+      "source_location": "L991",
       "id": "medication_reminder_medicationreminderapp_warn_persistence",
       "community": 1,
       "norm_label": "._warn_persistence()"
@@ -1015,7 +1105,7 @@
       "label": "Exception",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L860",
+      "source_location": "L991",
       "id": "medication_reminder_py_exception",
       "community": 3,
       "norm_label": "exception"
@@ -1024,7 +1114,7 @@
       "label": ".hide_to_tray()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L870",
+      "source_location": "L1001",
       "id": "medication_reminder_medicationreminderapp_hide_to_tray",
       "community": 1,
       "norm_label": ".hide_to_tray()"
@@ -1033,7 +1123,7 @@
       "label": ".show_window()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L873",
+      "source_location": "L1004",
       "id": "medication_reminder_medicationreminderapp_show_window",
       "community": 1,
       "norm_label": ".show_window()"
@@ -1042,7 +1132,7 @@
       "label": "._show_window_main_thread()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L876",
+      "source_location": "L1007",
       "id": "medication_reminder_medicationreminderapp_show_window_main_thread",
       "community": 1,
       "norm_label": "._show_window_main_thread()"
@@ -1051,7 +1141,7 @@
       "label": ".start_tray_icon()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L881",
+      "source_location": "L1012",
       "id": "medication_reminder_medicationreminderapp_start_tray_icon",
       "community": 1,
       "norm_label": ".start_tray_icon()"
@@ -1060,7 +1150,7 @@
       "label": ".quit_app()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L893",
+      "source_location": "L1024",
       "id": "medication_reminder_medicationreminderapp_quit_app",
       "community": 1,
       "norm_label": ".quit_app()"
@@ -1069,35 +1159,35 @@
       "label": ".run()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L904",
+      "source_location": "L1035",
       "id": "medication_reminder_medicationreminderapp_run",
-      "community": 7,
+      "community": 3,
       "norm_label": ".run()"
     },
     {
       "label": "show_startup_error()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L908",
+      "source_location": "L1039",
       "id": "medication_reminder_show_startup_error",
-      "community": 7,
+      "community": 3,
       "norm_label": "show_startup_error()"
     },
     {
       "label": "main()",
       "file_type": "code",
       "source_file": "medication_reminder.py",
-      "source_location": "L915",
+      "source_location": "L1046",
       "id": "medication_reminder_main",
-      "community": 7,
+      "community": 3,
       "norm_label": "main()"
     },
     {
       "label": "Ask Windows to render Tk at the monitor's native DPI.",
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
-      "source_location": "L47",
-      "id": "medication_reminder_rationale_47",
+      "source_location": "L48",
+      "id": "medication_reminder_rationale_48",
       "community": 34,
       "norm_label": "ask windows to render tk at the monitor's native dpi."
     },
@@ -1105,8 +1195,8 @@
       "label": "Return a quoted command that starts this app without a console window.",
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
-      "source_location": "L80",
-      "id": "medication_reminder_rationale_80",
+      "source_location": "L81",
+      "id": "medication_reminder_rationale_81",
       "community": 18,
       "norm_label": "return a quoted command that starts this app without a console window."
     },
@@ -1114,8 +1204,8 @@
       "label": "Register this user's app for logon startup; never requires elevation.",
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
-      "source_location": "L90",
-      "id": "medication_reminder_rationale_90",
+      "source_location": "L91",
+      "id": "medication_reminder_rationale_91",
       "community": 18,
       "norm_label": "register this user's app for logon startup; never requires elevation."
     },
@@ -1123,17 +1213,17 @@
       "label": "Prevent duplicate reminder processes using a per-user Windows mutex.",
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
-      "source_location": "L100",
-      "id": "medication_reminder_rationale_100",
-      "community": 7,
+      "source_location": "L101",
+      "id": "medication_reminder_rationale_101",
+      "community": 3,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex."
     },
     {
       "label": "Apply a bright, friendly palette while preserving native Tk controls.",
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
-      "source_location": "L158",
-      "id": "medication_reminder_rationale_158",
+      "source_location": "L168",
+      "id": "medication_reminder_rationale_168",
       "community": 1,
       "norm_label": "apply a bright, friendly palette while preserving native tk controls."
     },
@@ -1163,6 +1253,195 @@
       "id": "medication_schedule_events",
       "community": 8,
       "norm_label": "events"
+    },
+    {
+      "label": "sync_client.py",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L1",
+      "id": "sync_client",
+      "community": 3,
+      "norm_label": "sync_client.py"
+    },
+    {
+      "label": "SyncError",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L21",
+      "id": "sync_client_syncerror",
+      "community": 3,
+      "norm_label": "syncerror"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L22",
+      "id": "sync_client_syncerror_init",
+      "community": 7,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "_b64()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L27",
+      "id": "sync_client_b64",
+      "community": 7,
+      "norm_label": "_b64()"
+    },
+    {
+      "label": "_unb64()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L31",
+      "id": "sync_client_unb64",
+      "community": 7,
+      "norm_label": "_unb64()"
+    },
+    {
+      "label": "_random_id()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L35",
+      "id": "sync_client_random_id",
+      "community": 7,
+      "norm_label": "_random_id()"
+    },
+    {
+      "label": "RemoteSchedule",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L40",
+      "id": "sync_client_remoteschedule",
+      "community": 3,
+      "norm_label": "remoteschedule"
+    },
+    {
+      "label": "EncryptedSyncClient",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L47",
+      "id": "sync_client_encryptedsyncclient",
+      "community": 7,
+      "norm_label": "encryptedsyncclient"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L48",
+      "id": "sync_client_encryptedsyncclient_init",
+      "community": 7,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._request()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L52",
+      "id": "sync_client_encryptedsyncclient_request",
+      "community": 7,
+      "norm_label": "._request()"
+    },
+    {
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L52",
+      "id": "sync_client_py_any",
+      "community": 7,
+      "norm_label": "any"
+    },
+    {
+      "label": ".pairing_link()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L77",
+      "id": "sync_client_encryptedsyncclient_pairing_link",
+      "community": 7,
+      "norm_label": ".pairing_link()"
+    },
+    {
+      "label": "._encrypt()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L82",
+      "id": "sync_client_encryptedsyncclient_encrypt",
+      "community": 7,
+      "norm_label": "._encrypt()"
+    },
+    {
+      "label": "._decrypt()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L89",
+      "id": "sync_client_encryptedsyncclient_decrypt",
+      "community": 7,
+      "norm_label": "._decrypt()"
+    },
+    {
+      "label": ".create_pair()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L96",
+      "id": "sync_client_encryptedsyncclient_create_pair",
+      "community": 7,
+      "norm_label": ".create_pair()"
+    },
+    {
+      "label": ".fetch()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L102",
+      "id": "sync_client_encryptedsyncclient_fetch",
+      "community": 7,
+      "norm_label": ".fetch()"
+    },
+    {
+      "label": ".update()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L106",
+      "id": "sync_client_encryptedsyncclient_update",
+      "community": 7,
+      "norm_label": ".update()"
+    },
+    {
+      "label": ".revoke()",
+      "file_type": "code",
+      "source_file": "sync_client.py",
+      "source_location": "L111",
+      "id": "sync_client_encryptedsyncclient_revoke",
+      "community": 7,
+      "norm_label": ".revoke()"
+    },
+    {
+      "label": "e2e_sync.py",
+      "file_type": "code",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L1",
+      "id": "tests_e2e_sync",
+      "community": 3,
+      "norm_label": "e2e_sync.py"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L18",
+      "id": "tests_e2e_sync_main",
+      "community": 7,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Disposable production smoke test for the encrypted sync relay.",
+      "file_type": "rationale",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L1",
+      "id": "tests_e2e_sync_rationale_1",
+      "community": 3,
+      "norm_label": "disposable production smoke test for the encrypted sync relay."
     },
     {
       "label": "test_medication_core.py",
@@ -1242,17 +1521,26 @@
       "source_file": "tests/test_pairing.py",
       "source_location": "L9",
       "id": "tests_test_pairing_pairingtests",
-      "community": 3,
+      "community": 7,
       "norm_label": "pairingtests"
     },
     {
-      "label": ".test_compact_pairing_payload_round_trips_schedule()",
+      "label": ".test_encrypted_pairing_payload_round_trips_schedule()",
       "file_type": "code",
       "source_file": "tests/test_pairing.py",
       "source_location": "L10",
-      "id": "tests_test_pairing_pairingtests_test_compact_pairing_payload_round_trips_schedule",
-      "community": 3,
-      "norm_label": ".test_compact_pairing_payload_round_trips_schedule()"
+      "id": "tests_test_pairing_pairingtests_test_encrypted_pairing_payload_round_trips_schedule",
+      "community": 7,
+      "norm_label": ".test_encrypted_pairing_payload_round_trips_schedule()"
+    },
+    {
+      "label": ".test_pairing_link_uses_fragment_and_contains_no_schedule()",
+      "file_type": "code",
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L20",
+      "id": "tests_test_pairing_pairingtests_test_pairing_link_uses_fragment_and_contains_no_schedule",
+      "community": 7,
+      "norm_label": ".test_pairing_link_uses_fragment_and_contains_no_schedule()"
     },
     {
       "label": "LUT.py",
@@ -1269,7 +1557,7 @@
       "source_file": "vendor/qrcode/__init__.py",
       "source_location": "L1",
       "id": "qrcode_init",
-      "community": 39,
+      "community": 2,
       "norm_label": "__init__.py"
     },
     {
@@ -1278,7 +1566,7 @@
       "source_file": "vendor/qrcode/__init__.py",
       "source_location": "L13",
       "id": "qrcode_init_run_example",
-      "community": 39,
+      "community": 2,
       "norm_label": "run_example()"
     },
     {
@@ -1287,7 +1575,7 @@
       "source_file": "vendor/qrcode/__init__.py",
       "source_location": "L14",
       "id": "qrcode_init_rationale_14",
-      "community": 39,
+      "community": 2,
       "norm_label": "build an example qr code and display it.      there's an even easier way than th"
     },
     {
@@ -1494,7 +1782,7 @@
       "source_file": "vendor/qrcode/constants.py",
       "source_location": "L1",
       "id": "qrcode_constants",
-      "community": 39,
+      "community": 2,
       "norm_label": "constants.py"
     },
     {
@@ -1530,7 +1818,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L1",
       "id": "image_base",
-      "community": 37,
+      "community": 12,
       "norm_label": "base.py"
     },
     {
@@ -1656,7 +1944,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L110",
       "id": "image_base_baseimagewithdrawer",
-      "community": 38,
+      "community": 12,
       "norm_label": "baseimagewithdrawer"
     },
     {
@@ -1665,7 +1953,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L114",
       "id": "image_base_baseimagewithdrawer_get_default_module_drawer",
-      "community": 38,
+      "community": 12,
       "norm_label": ".get_default_module_drawer()"
     },
     {
@@ -1674,7 +1962,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L114",
       "id": "vendor_qrcode_image_base_py_qrmoduledrawer",
-      "community": 38,
+      "community": 12,
       "norm_label": "qrmoduledrawer"
     },
     {
@@ -1683,7 +1971,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L117",
       "id": "image_base_baseimagewithdrawer_get_default_eye_drawer",
-      "community": 38,
+      "community": 12,
       "norm_label": ".get_default_eye_drawer()"
     },
     {
@@ -1692,7 +1980,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L125",
       "id": "image_base_baseimagewithdrawer_init",
-      "community": 38,
+      "community": 12,
       "norm_label": ".__init__()"
     },
     {
@@ -1701,7 +1989,7 @@
       "source_file": "vendor/qrcode/image/base.py",
       "source_location": "L141",
       "id": "image_base_baseimagewithdrawer_get_drawer",
-      "community": 38,
+      "community": 12,
       "norm_label": ".get_drawer()"
     },
     {
@@ -1800,7 +2088,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L1",
       "id": "image_pil",
-      "community": 36,
+      "community": 2,
       "norm_label": "pil.py"
     },
     {
@@ -1809,7 +2097,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L5",
       "id": "image_pil_pilimage",
-      "community": 36,
+      "community": 2,
       "norm_label": "pilimage"
     },
     {
@@ -1818,7 +2106,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L12",
       "id": "image_pil_pilimage_new_image",
-      "community": 36,
+      "community": 2,
       "norm_label": ".new_image()"
     },
     {
@@ -1827,7 +2115,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L46",
       "id": "image_pil_pilimage_drawrect",
-      "community": 36,
+      "community": 2,
       "norm_label": ".drawrect()"
     },
     {
@@ -1836,7 +2124,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L50",
       "id": "image_pil_pilimage_save",
-      "community": 36,
+      "community": 2,
       "norm_label": ".save()"
     },
     {
@@ -1845,7 +2133,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L56",
       "id": "image_pil_pilimage_getattr",
-      "community": 36,
+      "community": 2,
       "norm_label": ".__getattr__()"
     },
     {
@@ -1854,7 +2142,7 @@
       "source_file": "vendor/qrcode/image/pil.py",
       "source_location": "L6",
       "id": "image_pil_rationale_6",
-      "community": 36,
+      "community": 2,
       "norm_label": "pil image builder, default format is png."
     },
     {
@@ -1863,7 +2151,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L1",
       "id": "image_pure",
-      "community": 35,
+      "community": 2,
       "norm_label": "pure.py"
     },
     {
@@ -1872,7 +2160,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L7",
       "id": "image_pure_pypngimage",
-      "community": 35,
+      "community": 2,
       "norm_label": "pypngimage"
     },
     {
@@ -1881,7 +2169,7 @@
       "source_file": "",
       "source_location": "",
       "id": "baseimage",
-      "community": 35,
+      "community": 2,
       "norm_label": "baseimage"
     },
     {
@@ -1890,7 +2178,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L16",
       "id": "image_pure_pypngimage_new_image",
-      "community": 35,
+      "community": 2,
       "norm_label": ".new_image()"
     },
     {
@@ -1899,7 +2187,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L22",
       "id": "image_pure_pypngimage_drawrect",
-      "community": 35,
+      "community": 2,
       "norm_label": ".drawrect()"
     },
     {
@@ -1908,7 +2196,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L27",
       "id": "image_pure_pypngimage_save",
-      "community": 35,
+      "community": 2,
       "norm_label": ".save()"
     },
     {
@@ -1917,7 +2205,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L32",
       "id": "image_pure_pypngimage_rows_iter",
-      "community": 35,
+      "community": 2,
       "norm_label": ".rows_iter()"
     },
     {
@@ -1926,7 +2214,7 @@
       "source_file": "vendor/qrcode/image/pure.py",
       "source_location": "L49",
       "id": "image_pure_pypngimage_border_rows_iter",
-      "community": 35,
+      "community": 2,
       "norm_label": ".border_rows_iter()"
     },
     {
@@ -2448,7 +2736,7 @@
       "source_file": "",
       "source_location": "",
       "id": "qrmoduledrawer",
-      "community": 10,
+      "community": 14,
       "norm_label": "qrmoduledrawer"
     },
     {
@@ -3195,7 +3483,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L1",
       "id": "qrcode_main",
-      "community": 37,
+      "community": 2,
       "norm_label": "main.py"
     },
     {
@@ -3204,7 +3492,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L22",
       "id": "qrcode_main_make",
-      "community": 37,
+      "community": 2,
       "norm_label": "make()"
     },
     {
@@ -3213,7 +3501,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L28",
       "id": "qrcode_main_check_box_size",
-      "community": 35,
+      "community": 2,
       "norm_label": "_check_box_size()"
     },
     {
@@ -3222,7 +3510,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L33",
       "id": "qrcode_main_check_border",
-      "community": 35,
+      "community": 2,
       "norm_label": "_check_border()"
     },
     {
@@ -3231,7 +3519,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L40",
       "id": "qrcode_main_check_mask_pattern",
-      "community": 37,
+      "community": 2,
       "norm_label": "_check_mask_pattern()"
     },
     {
@@ -3240,7 +3528,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L51",
       "id": "qrcode_main_copy_2d_array",
-      "community": 37,
+      "community": 2,
       "norm_label": "copy_2d_array()"
     },
     {
@@ -3249,7 +3537,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L55",
       "id": "qrcode_main_activewithneighbors",
-      "community": 36,
+      "community": 10,
       "norm_label": "activewithneighbors"
     },
     {
@@ -3258,7 +3546,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L66",
       "id": "qrcode_main_activewithneighbors_bool",
-      "community": 36,
+      "community": 10,
       "norm_label": ".__bool__()"
     },
     {
@@ -3276,7 +3564,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L78",
       "id": "qrcode_main_qrcode_init",
-      "community": 35,
+      "community": 2,
       "norm_label": ".__init__()"
     },
     {
@@ -3285,7 +3573,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L78",
       "id": "genericimage",
-      "community": 35,
+      "community": 2,
       "norm_label": "genericimage"
     },
     {
@@ -3303,7 +3591,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L115",
       "id": "qrcode_main_qrcode_mask_pattern",
-      "community": 37,
+      "community": 2,
       "norm_label": ".mask_pattern()"
     },
     {
@@ -3312,7 +3600,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L123",
       "id": "qrcode_main_qrcode_clear",
-      "community": 35,
+      "community": 2,
       "norm_label": ".clear()"
     },
     {
@@ -3321,7 +3609,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L132",
       "id": "qrcode_main_qrcode_add_data",
-      "community": 37,
+      "community": 2,
       "norm_label": ".add_data()"
     },
     {
@@ -3393,7 +3681,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L330",
       "id": "qrcode_main_qrcode_make_image",
-      "community": 35,
+      "community": 2,
       "norm_label": ".make_image()"
     },
     {
@@ -3402,7 +3690,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L335",
       "id": "genericimagelocal",
-      "community": 35,
+      "community": 2,
       "norm_label": "genericimagelocal"
     },
     {
@@ -3411,7 +3699,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L390",
       "id": "qrcode_main_qrcode_is_constrained",
-      "community": 36,
+      "community": 2,
       "norm_label": ".is_constrained()"
     },
     {
@@ -3474,7 +3762,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L536",
       "id": "qrcode_main_qrcode_active_with_neighbors",
-      "community": 36,
+      "community": 2,
       "norm_label": ".active_with_neighbors()"
     },
     {
@@ -3483,7 +3771,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L124",
       "id": "qrcode_main_rationale_124",
-      "community": 35,
+      "community": 2,
       "norm_label": "reset the internal data."
     },
     {
@@ -3492,7 +3780,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L133",
       "id": "qrcode_main_rationale_133",
-      "community": 37,
+      "community": 2,
       "norm_label": "add data to this qr code.          :param optimize: data will be split into mult"
     },
     {
@@ -3546,7 +3834,7 @@
       "source_file": "vendor/qrcode/main.py",
       "source_location": "L340",
       "id": "qrcode_main_rationale_340",
-      "community": 35,
+      "community": 2,
       "norm_label": "make an image from the qr code data.          if the data has not been compiled"
     },
     {
@@ -3618,7 +3906,7 @@
       "source_file": "vendor/qrcode/tests/test_example.py",
       "source_location": "L1",
       "id": "tests_test_example",
-      "community": 39,
+      "community": 2,
       "norm_label": "test_example.py"
     },
     {
@@ -3627,7 +3915,7 @@
       "source_file": "vendor/qrcode/tests/test_example.py",
       "source_location": "L11",
       "id": "tests_test_example_test_example",
-      "community": 39,
+      "community": 2,
       "norm_label": "test_example()"
     },
     {
@@ -4990,6 +5278,213 @@
       "norm_label": "assets"
     },
     {
+      "label": "sync.js",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L1",
+      "id": "web_sync",
+      "community": 35,
+      "norm_label": "sync.js"
+    },
+    {
+      "label": "b64()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L7",
+      "id": "web_sync_b64",
+      "community": 35,
+      "norm_label": "b64()"
+    },
+    {
+      "label": "unb64()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L8",
+      "id": "web_sync_unb64",
+      "community": 35,
+      "norm_label": "unb64()"
+    },
+    {
+      "label": "storedJson()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L10",
+      "id": "web_sync_storedjson",
+      "community": 35,
+      "norm_label": "storedjson()"
+    },
+    {
+      "label": "credentials()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L11",
+      "id": "web_sync_credentials",
+      "community": 35,
+      "norm_label": "credentials()"
+    },
+    {
+      "label": "saveCredentials()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L12",
+      "id": "web_sync_savecredentials",
+      "community": 35,
+      "norm_label": "savecredentials()"
+    },
+    {
+      "label": "stableId()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L13",
+      "id": "web_sync_stableid",
+      "community": 35,
+      "norm_label": "stableid()"
+    },
+    {
+      "label": "refreshStatus()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L14",
+      "id": "web_sync_refreshstatus",
+      "community": 35,
+      "norm_label": "refreshstatus()"
+    },
+    {
+      "label": "showError()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L15",
+      "id": "web_sync_showerror",
+      "community": 35,
+      "norm_label": "showerror()"
+    },
+    {
+      "label": "validateSchedule()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L16",
+      "id": "web_sync_validateschedule",
+      "community": 35,
+      "norm_label": "validateschedule()"
+    },
+    {
+      "label": "encryptSchedule()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L22",
+      "id": "web_sync_encryptschedule",
+      "community": 35,
+      "norm_label": "encryptschedule()"
+    },
+    {
+      "label": "decryptSchedule()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L23",
+      "id": "web_sync_decryptschedule",
+      "community": 35,
+      "norm_label": "decryptschedule()"
+    },
+    {
+      "label": "api()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L24",
+      "id": "web_sync_api",
+      "community": 35,
+      "norm_label": "api()"
+    },
+    {
+      "label": "pairingLink()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L26",
+      "id": "web_sync_pairinglink",
+      "community": 35,
+      "norm_label": "pairinglink()"
+    },
+    {
+      "label": "parseInvitation()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L27",
+      "id": "web_sync_parseinvitation",
+      "community": 35,
+      "norm_label": "parseinvitation()"
+    },
+    {
+      "label": "drawQr()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L29",
+      "id": "web_sync_drawqr",
+      "community": 35,
+      "norm_label": "drawqr()"
+    },
+    {
+      "label": "createPair()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "id": "web_sync_createpair",
+      "community": 35,
+      "norm_label": "createpair()"
+    },
+    {
+      "label": "showPairing()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L31",
+      "id": "web_sync_showpairing",
+      "community": 35,
+      "norm_label": "showpairing()"
+    },
+    {
+      "label": "copyText()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L32",
+      "id": "web_sync_copytext",
+      "community": 35,
+      "norm_label": "copytext()"
+    },
+    {
+      "label": "copyPairLink()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "id": "web_sync_copypairlink",
+      "community": 35,
+      "norm_label": "copypairlink()"
+    },
+    {
+      "label": "acceptPairing()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L34",
+      "id": "web_sync_acceptpairing",
+      "community": 35,
+      "norm_label": "acceptpairing()"
+    },
+    {
+      "label": "syncNow()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "id": "web_sync_syncnow",
+      "community": 35,
+      "norm_label": "syncnow()"
+    },
+    {
+      "label": "unpair()",
+      "file_type": "code",
+      "source_file": "web/sync.js",
+      "source_location": "L36",
+      "id": "web_sync_unpair",
+      "community": 35,
+      "norm_label": "unpair()"
+    },
+    {
       "label": "package.json",
       "file_type": "code",
       "source_file": "worker/package.json",
@@ -5112,25 +5607,124 @@
       "source_file": "worker/src/index.js",
       "source_location": "L1",
       "id": "src_index",
-      "community": 22,
+      "community": 36,
       "norm_label": "index.js"
+    },
+    {
+      "label": "ALLOWED_ORIGINS",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L5",
+      "id": "src_index_allowed_origins",
+      "community": 36,
+      "norm_label": "allowed_origins"
+    },
+    {
+      "label": "corsHeaders()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L9",
+      "id": "src_index_corsheaders",
+      "community": 36,
+      "norm_label": "corsheaders()"
+    },
+    {
+      "label": "json()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L14",
+      "id": "src_index_json",
+      "community": 36,
+      "norm_label": "json()"
+    },
+    {
+      "label": "readJson()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L19",
+      "id": "src_index_readjson",
+      "community": 36,
+      "norm_label": "readjson()"
+    },
+    {
+      "label": "tokenHash()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L27",
+      "id": "src_index_tokenhash",
+      "community": 36,
+      "norm_label": "tokenhash()"
+    },
+    {
+      "label": "validEncryptedBody()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L32",
+      "id": "src_index_validencryptedbody",
+      "community": 36,
+      "norm_label": "validencryptedbody()"
+    },
+    {
+      "label": "validPushEndpoint()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L36",
+      "id": "src_index_validpushendpoint",
+      "community": 36,
+      "norm_label": "validpushendpoint()"
+    },
+    {
+      "label": "authenticatedPair()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L47",
+      "id": "src_index_authenticatedpair",
+      "community": 36,
+      "norm_label": "authenticatedpair()"
+    },
+    {
+      "label": "enforceRateLimit()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L54",
+      "id": "src_index_enforceratelimit",
+      "community": 36,
+      "norm_label": "enforceratelimit()"
+    },
+    {
+      "label": "notifyPairedMobile()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L68",
+      "id": "src_index_notifypairedmobile",
+      "community": 36,
+      "norm_label": "notifypairedmobile()"
+    },
+    {
+      "label": "handleSync()",
+      "file_type": "code",
+      "source_file": "worker/src/index.js",
+      "source_location": "L84",
+      "id": "src_index_handlesync",
+      "community": 36,
+      "norm_label": "handlesync()"
     },
     {
       "label": "fetch()",
       "file_type": "code",
       "source_file": "worker/src/index.js",
-      "source_location": "L4",
+      "source_location": "L132",
       "id": "src_index_fetch",
-      "community": 22,
+      "community": 36,
       "norm_label": "fetch()"
     },
     {
       "label": "scheduled()",
       "file_type": "code",
       "source_file": "worker/src/index.js",
-      "source_location": "L17",
+      "source_location": "L168",
       "id": "src_index_scheduled",
-      "community": 22,
+      "community": 36,
       "norm_label": "scheduled()"
     },
     {
@@ -5182,7 +5776,7 @@
       "label": "Important clinical note",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L19",
+      "source_location": "L21",
       "id": "readme_important_clinical_note",
       "community": 0,
       "norm_label": "important clinical note"
@@ -5191,7 +5785,7 @@
       "label": "Quick start",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L25",
+      "source_location": "L27",
       "id": "readme_quick_start",
       "community": 0,
       "norm_label": "quick start"
@@ -5200,7 +5794,7 @@
       "label": "Build a single Windows EXE",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L38",
+      "source_location": "L40",
       "id": "readme_build_a_single_windows_exe",
       "community": 0,
       "norm_label": "build a single windows exe"
@@ -5209,7 +5803,7 @@
       "label": "Start automatically with Windows",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L51",
+      "source_location": "L53",
       "id": "readme_start_automatically_with_windows",
       "community": 0,
       "norm_label": "start automatically with windows"
@@ -5218,16 +5812,25 @@
       "label": "Editing the schedule",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L61",
+      "source_location": "L63",
       "id": "readme_editing_the_schedule",
       "community": 0,
       "norm_label": "editing the schedule"
     },
     {
+      "label": "Pairing a mobile device",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L71",
+      "id": "readme_pairing_a_mobile_device",
+      "community": 0,
+      "norm_label": "pairing a mobile device"
+    },
+    {
       "label": "Files",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L69",
+      "source_location": "L88",
       "id": "readme_files",
       "community": 0,
       "norm_label": "files"
@@ -5236,7 +5839,7 @@
       "label": "Testing",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L76",
+      "source_location": "L96",
       "id": "readme_testing",
       "community": 0,
       "norm_label": "testing"
@@ -5245,10 +5848,91 @@
       "label": "Local-first web app",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L88",
+      "source_location": "L108",
       "id": "readme_local_first_web_app",
       "community": 0,
       "norm_label": "local-first web app"
+    },
+    {
+      "label": "._pairing_payload()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L765",
+      "community": 1,
+      "norm_label": "._pairing_payload()",
+      "id": "medication_reminder_medicationreminderapp_pairing_payload"
+    },
+    {
+      "label": "._decode_pairing_payload()",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L774",
+      "community": 1,
+      "norm_label": "._decode_pairing_payload()",
+      "id": "medication_reminder_medicationreminderapp_decode_pairing_payload"
+    },
+    {
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "medication_reminder.py",
+      "source_location": "L774",
+      "community": 3,
+      "norm_label": "any",
+      "id": "medication_reminder_py_any"
+    },
+    {
+      "label": "Ask Windows to render Tk at the monitor's native DPI.",
+      "file_type": "rationale",
+      "source_file": "medication_reminder.py",
+      "source_location": "L47",
+      "community": 34,
+      "norm_label": "ask windows to render tk at the monitor's native dpi.",
+      "id": "medication_reminder_rationale_47"
+    },
+    {
+      "label": "Return a quoted command that starts this app without a console window.",
+      "file_type": "rationale",
+      "source_file": "medication_reminder.py",
+      "source_location": "L80",
+      "community": 18,
+      "norm_label": "return a quoted command that starts this app without a console window.",
+      "id": "medication_reminder_rationale_80"
+    },
+    {
+      "label": "Register this user's app for logon startup; never requires elevation.",
+      "file_type": "rationale",
+      "source_file": "medication_reminder.py",
+      "source_location": "L90",
+      "community": 18,
+      "norm_label": "register this user's app for logon startup; never requires elevation.",
+      "id": "medication_reminder_rationale_90"
+    },
+    {
+      "label": "Prevent duplicate reminder processes using a per-user Windows mutex.",
+      "file_type": "rationale",
+      "source_file": "medication_reminder.py",
+      "source_location": "L100",
+      "community": 3,
+      "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
+      "id": "medication_reminder_rationale_100"
+    },
+    {
+      "label": "Apply a bright, friendly palette while preserving native Tk controls.",
+      "file_type": "rationale",
+      "source_file": "medication_reminder.py",
+      "source_location": "L158",
+      "community": 1,
+      "norm_label": "apply a bright, friendly palette while preserving native tk controls.",
+      "id": "medication_reminder_rationale_158"
+    },
+    {
+      "label": ".test_compact_pairing_payload_round_trips_schedule()",
+      "file_type": "code",
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L10",
+      "community": 7,
+      "norm_label": ".test_compact_pairing_payload_round_trips_schedule()",
+      "id": "tests_test_pairing_pairingtests_test_compact_pairing_payload_round_trips_schedule"
     },
     {
       "label": "Ask Windows to render Tk at the monitor's native DPI.",
@@ -5282,7 +5966,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L99",
-      "community": 7,
+      "community": 3,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
       "id": "medication_reminder_rationale_99"
     },
@@ -5354,7 +6038,7 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L95",
-      "community": 7,
+      "community": 3,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
       "id": "medication_reminder_rationale_95"
     },
@@ -5384,24 +6068,6 @@
       "community": 18,
       "norm_label": "return a quoted command that starts this app without a console window.",
       "id": "medication_reminder_rationale_71"
-    },
-    {
-      "label": "Register this user's app for logon startup; never requires elevation.",
-      "file_type": "rationale",
-      "source_file": "medication_reminder.py",
-      "source_location": "L81",
-      "community": 18,
-      "norm_label": "register this user's app for logon startup; never requires elevation.",
-      "id": "medication_reminder_rationale_81"
-    },
-    {
-      "label": "Prevent duplicate reminder processes using a per-user Windows mutex.",
-      "file_type": "rationale",
-      "source_file": "medication_reminder.py",
-      "source_location": "L91",
-      "community": 7,
-      "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
-      "id": "medication_reminder_rationale_91"
     },
     {
       "label": "Apply a bright, friendly palette while preserving native Tk controls.",
@@ -5444,18 +6110,9 @@
       "file_type": "rationale",
       "source_file": "medication_reminder.py",
       "source_location": "L70",
-      "community": 7,
+      "community": 3,
       "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
       "id": "medication_reminder_rationale_70"
-    },
-    {
-      "label": "Prevent duplicate reminder processes using a per-user Windows mutex.",
-      "file_type": "rationale",
-      "source_file": "medication_reminder.py",
-      "source_location": "L48",
-      "community": 7,
-      "norm_label": "prevent duplicate reminder processes using a per-user windows mutex.",
-      "id": "medication_reminder_rationale_48"
     },
     {
       "label": "app_dir()",
@@ -5768,6 +6425,28 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "medication_core"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync",
+      "target": "medication_core"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_medication_core.py",
       "source_location": "L5",
       "weight": 1.0,
@@ -5950,6 +6629,26 @@
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "medication_reminder_singleinstance",
+      "target": "medication_core_configvalidationerror"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "medication_core_configvalidationerror"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
       "target": "medication_core_configvalidationerror"
     },
     {
@@ -6162,6 +6861,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "medication_core.py",
+      "source_location": "L333",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage_delete_sync_credentials",
+      "target": "medication_core_storageerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
       "source_location": "L381",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -6177,6 +6887,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_core_appstorage_load_settings",
+      "target": "medication_core_storageerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
+      "source_location": "L323",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage_load_sync_credentials",
       "target": "medication_core_storageerror"
     },
     {
@@ -6362,6 +7083,26 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "medication_core_storageerror"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
+      "target": "medication_core_storageerror"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
       "source_location": "L18",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -6377,6 +7118,16 @@
       "source_location": "L61",
       "weight": 1.0,
       "source": "medication_reminder_singleinstance_init",
+      "target": "runtimeerror"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_syncerror",
       "target": "runtimeerror"
     },
     {
@@ -6656,6 +7407,17 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "medication_core.py",
+      "source_location": "L317",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage_load_sync_credentials",
+      "target": "medication_core_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
       "source_location": "L351",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -6682,6 +7444,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_core_appstorage_save_state",
+      "target": "medication_core_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
+      "source_location": "L326",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage_save_sync_credentials",
       "target": "medication_core_py_any"
     },
     {
@@ -6896,6 +7669,61 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "medication_core_validate_schedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "sync_client.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "sync_client_encryptedsyncclient_decrypt",
+      "target": "medication_core_validate_schedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "sync_client.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "sync_client_encryptedsyncclient_encrypt",
+      "target": "medication_core_validate_schedule"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync",
+      "target": "medication_core_validate_schedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync_main",
+      "target": "medication_core_validate_schedule"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_medication_core.py",
       "source_location": "L5",
       "weight": 1.0,
@@ -6934,6 +7762,17 @@
       "source_location": "L11",
       "weight": 1.0,
       "source": "tests_test_pairing_pairingtests_test_compact_pairing_payload_round_trips_schedule",
+      "target": "medication_core_validate_schedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "tests_test_pairing_pairingtests_test_encrypted_pairing_payload_round_trips_schedule",
       "target": "medication_core_validate_schedule"
     },
     {
@@ -7381,6 +8220,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "medication_core.py",
+      "source_location": "L318",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage_load_sync_credentials",
+      "target": "medication_core_protectedjsonfile_exists"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
       "source_location": "L346",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -7429,6 +8279,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_core_appstorage_load_state",
+      "target": "medication_core_protectedjsonfile_load"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
+      "source_location": "L320",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage_load_sync_credentials",
       "target": "medication_core_protectedjsonfile_load"
     },
     {
@@ -7509,6 +8370,17 @@
       "target": "medication_core_protectedjsonfile_save"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
+      "source_location": "L327",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage_save_sync_credentials",
+      "target": "medication_core_protectedjsonfile_save"
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -7575,6 +8447,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_core.py",
+      "source_location": "L329",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage",
+      "target": "medication_core_appstorage_delete_sync_credentials"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
       "source_location": "L357",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -7625,6 +8507,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_core.py",
+      "source_location": "L317",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage",
+      "target": "medication_core_appstorage_load_sync_credentials"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
       "source_location": "L330",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -7650,6 +8542,16 @@
       "confidence_score": 1.0,
       "source": "medication_core_appstorage",
       "target": "medication_core_appstorage_save_state"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_core.py",
+      "source_location": "L326",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_core_appstorage",
+      "target": "medication_core_appstorage_save_sync_credentials"
     },
     {
       "relation": "imports",
@@ -7731,6 +8633,26 @@
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "medication_reminder_singleinstance",
+      "target": "medication_core_appstorage"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "medication_core_appstorage"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
       "target": "medication_core_appstorage"
     },
     {
@@ -8222,6 +9144,26 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "medication_core_dueoccurrence"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
+      "target": "medication_core_dueoccurrence"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
       "source_location": "L18",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -8438,6 +9380,26 @@
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "medication_reminder_singleinstance",
+      "target": "medication_core_scheduleengine"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "medication_core_scheduleengine"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L28",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
       "target": "medication_core_scheduleengine"
     },
     {
@@ -8762,6 +9724,50 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder",
+      "target": "sync_client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder",
+      "target": "sync_client_syncerror"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_pairing.py",
       "source_location": "L6",
       "weight": 1.0,
@@ -8821,6 +9827,16 @@
       "target": "medication_reminder_enable_dpi_awareness"
     },
     {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_rationale_48",
+      "target": "medication_reminder_enable_dpi_awareness"
+    },
+    {
       "relation": "references",
       "context": "return_type",
       "confidence": "EXTRACTED",
@@ -8841,6 +9857,36 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_export_taken_log",
       "target": "medication_reminder_py_path"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_path",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_path",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_path",
+      "target": "sync_client_syncerror"
     },
     {
       "relation": "calls",
@@ -8901,6 +9947,16 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_reminder_rationale_80",
+      "target": "medication_reminder_startup_command"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_rationale_81",
       "target": "medication_reminder_startup_command"
     },
     {
@@ -8976,6 +10032,16 @@
       "target": "medication_reminder_register_startup"
     },
     {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_rationale_91",
+      "target": "medication_reminder_register_startup"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -8994,6 +10060,16 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_reminder_rationale_100",
+      "target": "medication_reminder_singleinstance"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_rationale_101",
       "target": "medication_reminder_singleinstance"
     },
     {
@@ -9067,6 +10143,36 @@
       "target": "medication_reminder_singleinstance_init"
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_singleinstance",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_singleinstance",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_singleinstance",
+      "target": "sync_client_syncerror"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -9097,6 +10203,16 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
       "target": "medication_reminder_medicationreminderapp_add_schedule_main"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L920",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_apply_remote_schedule"
     },
     {
       "relation": "method",
@@ -9202,6 +10318,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L888",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_finish_sync"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L484",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -9272,6 +10398,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L802",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_pair_created"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L741",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -9287,6 +10423,16 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
       "target": "medication_reminder_medicationreminderapp_pairing_payload"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L856",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_periodic_sync"
     },
     {
       "relation": "method",
@@ -9372,6 +10518,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L845",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L247",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -9422,11 +10578,31 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L860",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_start_sync"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L495",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
       "target": "medication_reminder_medicationreminderapp_start_tray_icon"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L935",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_sync_failed"
     },
     {
       "relation": "method",
@@ -9447,6 +10623,16 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
       "target": "medication_reminder_medicationreminderapp_to_due_event"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L941",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "medication_reminder_medicationreminderapp_unpair_device"
     },
     {
       "relation": "method",
@@ -9477,6 +10663,36 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp",
       "target": "medication_reminder_medicationreminderapp_write_log"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_medicationreminderapp",
+      "target": "sync_client_syncerror"
     },
     {
       "relation": "imports",
@@ -9577,6 +10793,17 @@
       "target": "medication_reminder_medicationreminderapp_start_tray_icon"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "medication_reminder.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "medication_reminder_medicationreminderapp_init",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
@@ -9624,6 +10851,16 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_reminder_rationale_158",
+      "target": "medication_reminder_medicationreminderapp_configure_theme"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_rationale_168",
       "target": "medication_reminder_medicationreminderapp_configure_theme"
     },
     {
@@ -9737,6 +10974,36 @@
       "target": "medication_reminder_medicationreminderapp_now"
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_datetime",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_datetime",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_datetime",
+      "target": "sync_client_syncerror"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -9774,6 +11041,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L931",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_apply_remote_schedule",
+      "target": "medication_reminder_medicationreminderapp_refresh_schedule_table"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L759",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -9790,6 +11068,17 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_save_config",
       "target": "medication_reminder_medicationreminderapp_refresh_schedule_table"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L931",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_apply_remote_schedule",
+      "target": "medication_reminder_medicationreminderapp_update_next_due_text"
     },
     {
       "relation": "calls",
@@ -10056,6 +11345,36 @@
       "target": "medication_reminder_medicationreminderapp_show_due_popup"
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "dueoccurrence",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "dueoccurrence",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "dueoccurrence",
+      "target": "sync_client_syncerror"
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -10199,6 +11518,36 @@
       "target": "toplevel"
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "toplevel",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "toplevel",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "toplevel",
+      "target": "sync_client_syncerror"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -10236,11 +11585,121 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
+      "source_location": "L559",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_save_config",
+      "target": "medication_reminder_medicationreminderapp_start_sync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L558",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_save_config",
+      "target": "medication_reminder_medicationreminderapp_warn_persistence"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L592",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_open_schedule_editor",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L588",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_open_schedule_editor",
+      "target": "medication_reminder_medicationreminderapp_start_sync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L776",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_pair_device",
+      "target": "medication_reminder_medicationreminderapp_decode_pairing_payload"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
       "source_location": "L765",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_pair_device",
       "target": "medication_reminder_medicationreminderapp_pairing_payload"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L791",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_pair_device",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L814",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_show_pairing_qr",
+      "target": "medication_reminder_medicationreminderapp_pair_device"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L809",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_pair_created",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L810",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_pair_created",
+      "target": "medication_reminder_medicationreminderapp_show_pairing_qr"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L807",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_pair_created",
+      "target": "medication_reminder_medicationreminderapp_warn_persistence"
     },
     {
       "relation": "calls",
@@ -10254,26 +11713,218 @@
       "target": "medication_reminder_medicationreminderapp_pairing_payload"
     },
     {
-      "relation": "references",
-      "context": "generic_arg",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
-      "source_location": "L751",
+      "source_location": "L931",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "medication_reminder_medicationreminderapp_decode_pairing_payload",
-      "target": "medication_reminder_py_any"
+      "source": "medication_reminder_medicationreminderapp_apply_remote_schedule",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "medication_reminder.py",
-      "source_location": "L776",
+      "source_location": "L916",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "medication_reminder_medicationreminderapp_pair_device",
-      "target": "medication_reminder_medicationreminderapp_decode_pairing_payload"
+      "source": "medication_reminder_medicationreminderapp_finish_sync",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L868",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_start_sync",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L937",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_sync_failed",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L960",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_unpair_device",
+      "target": "medication_reminder_medicationreminderapp_set_sync_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L857",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_periodic_sync",
+      "target": "medication_reminder_medicationreminderapp_start_sync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L897",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_finish_sync",
+      "target": "medication_reminder_medicationreminderapp_start_sync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L899",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_finish_sync",
+      "target": "medication_reminder_medicationreminderapp_apply_remote_schedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L915",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_finish_sync",
+      "target": "medication_reminder_medicationreminderapp_warn_persistence"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L930",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_apply_remote_schedule",
+      "target": "medication_reminder_medicationreminderapp_safe_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L933",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_apply_remote_schedule",
+      "target": "medication_reminder_medicationreminderapp_warn_persistence"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L920",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_apply_remote_schedule",
+      "target": "remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "remoteschedule",
+      "target": "sync_client_syncerror"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L935",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_sync_failed",
+      "target": "syncerror"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "syncerror",
+      "target": "sync_client_syncerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L957",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_unpair_device",
+      "target": "medication_reminder_medicationreminderapp_warn_persistence"
     },
     {
       "relation": "calls",
@@ -10318,6 +11969,36 @@
       "confidence_score": 1.0,
       "source": "medication_reminder_medicationreminderapp_warn_persistence",
       "target": "medication_reminder_py_exception"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_exception",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_exception",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "medication_reminder_py_exception",
+      "target": "sync_client_syncerror"
     },
     {
       "relation": "calls",
@@ -10403,6 +12084,537 @@
       "confidence_score": 1.0,
       "source": "medication_schedule",
       "target": "medication_schedule_timezone"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "sync_client_b64"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "sync_client_random_id"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "sync_client_syncerror"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client",
+      "target": "sync_client_unb64"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync",
+      "target": "sync_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_pairing",
+      "target": "sync_client"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_decrypt",
+      "target": "sync_client_syncerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_request",
+      "target": "sync_client_syncerror"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_syncerror",
+      "target": "sync_client_syncerror_init"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync",
+      "target": "sync_client_syncerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_syncerror_init",
+      "target": "sync_client_encryptedsyncclient_init"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_encrypt",
+      "target": "sync_client_b64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_pairing_link",
+      "target": "sync_client_b64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_random_id",
+      "target": "sync_client_b64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_decrypt",
+      "target": "sync_client_unb64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_encrypt",
+      "target": "sync_client_unb64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_create_pair",
+      "target": "sync_client_random_id"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_fetch",
+      "target": "sync_client_remoteschedule"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_create_pair"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_decrypt"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_encrypt"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_fetch"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_pairing_link"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_request"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_revoke"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient",
+      "target": "sync_client_encryptedsyncclient_update"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync_main",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_pairing",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L6",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_pairing_pairingtests",
+      "target": "sync_client_encryptedsyncclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_create_pair",
+      "target": "sync_client_encryptedsyncclient_request"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_fetch",
+      "target": "sync_client_encryptedsyncclient_request"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_request",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_revoke",
+      "target": "sync_client_encryptedsyncclient_request"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_update",
+      "target": "sync_client_encryptedsyncclient_request"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_create_pair",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_decrypt",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_encrypt",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_fetch",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_pairing_link",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_revoke",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_update",
+      "target": "sync_client_py_any"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_create_pair",
+      "target": "sync_client_encryptedsyncclient_encrypt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_update",
+      "target": "sync_client_encryptedsyncclient_encrypt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "sync_client.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "sync_client_encryptedsyncclient_fetch",
+      "target": "sync_client_encryptedsyncclient_decrypt"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync",
+      "target": "tests_e2e_sync_main"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e_sync.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_e2e_sync_rationale_1",
+      "target": "tests_e2e_sync"
     },
     {
       "relation": "contains",
@@ -10527,6 +12739,26 @@
       "confidence_score": 1.0,
       "source": "tests_test_pairing_pairingtests",
       "target": "tests_test_pairing_pairingtests_test_compact_pairing_payload_round_trips_schedule"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_pairing_pairingtests",
+      "target": "tests_test_pairing_pairingtests_test_encrypted_pairing_payload_round_trips_schedule"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_pairing.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_pairing_pairingtests",
+      "target": "tests_test_pairing_pairingtests_test_pairing_link_uses_fragment_and_contains_no_schedule"
     },
     {
       "relation": "imports_from",
@@ -16205,9 +18437,9 @@
       "source_file": "web/app.js",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_clearprematuretaken",
-      "confidence_score": 1.0
+      "target": "web_app_clearprematuretaken"
     },
     {
       "relation": "contains",
@@ -16245,9 +18477,9 @@
       "source_file": "web/app.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app",
-      "target": "web_app_localdatekey",
-      "confidence_score": 1.0
+      "target": "web_app_localdatekey"
     },
     {
       "relation": "contains",
@@ -16507,9 +18739,9 @@
       "source_file": "web/app.js",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_clearprematuretaken",
-      "target": "web_app_localdatekey",
-      "confidence_score": 1.0
+      "target": "web_app_localdatekey"
     },
     {
       "relation": "calls",
@@ -16518,9 +18750,9 @@
       "source_file": "web/app.js",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_reminderstate",
-      "target": "web_app_localdatekey",
-      "confidence_score": 1.0
+      "target": "web_app_localdatekey"
     },
     {
       "relation": "calls",
@@ -16540,9 +18772,9 @@
       "source_file": "web/app.js",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_app_rendertoday",
-      "target": "web_app_clearprematuretaken",
-      "confidence_score": 1.0
+      "target": "web_app_clearprematuretaken"
     },
     {
       "relation": "calls",
@@ -16639,6 +18871,666 @@
       "confidence_score": 1.0,
       "source": "web_sw",
       "target": "web_sw_assets"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_acceptpairing"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_api"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_b64"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_copypairlink"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_copytext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_createpair"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_credentials"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_decryptschedule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_drawqr"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_encryptschedule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_pairinglink"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_parseinvitation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_refreshstatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_savecredentials"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_showerror"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_showpairing"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_stableid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_storedjson"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_syncnow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_unb64"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_unpair"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync",
+      "target": "web_sync_validateschedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_encryptschedule",
+      "target": "web_sync_b64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_pairinglink",
+      "target": "web_sync_b64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_decryptschedule",
+      "target": "web_sync_unb64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_parseinvitation",
+      "target": "web_sync_unb64"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_credentials",
+      "target": "web_sync_storedjson"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_copypairlink",
+      "target": "web_sync_credentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_createpair",
+      "target": "web_sync_credentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_showpairing",
+      "target": "web_sync_credentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_syncnow",
+      "target": "web_sync_credentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_unpair",
+      "target": "web_sync_credentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_acceptpairing",
+      "target": "web_sync_savecredentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_createpair",
+      "target": "web_sync_savecredentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_savecredentials",
+      "target": "web_sync_refreshstatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_syncnow",
+      "target": "web_sync_savecredentials"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_acceptpairing",
+      "target": "web_sync_stableid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_createpair",
+      "target": "web_sync_stableid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_acceptpairing",
+      "target": "web_sync_refreshstatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_copypairlink",
+      "target": "web_sync_refreshstatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_createpair",
+      "target": "web_sync_refreshstatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_syncnow",
+      "target": "web_sync_refreshstatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_unpair",
+      "target": "web_sync_refreshstatus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_copypairlink",
+      "target": "web_sync_showerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_showpairing",
+      "target": "web_sync_showerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_syncnow",
+      "target": "web_sync_showerror"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_decryptschedule",
+      "target": "web_sync_validateschedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_encryptschedule",
+      "target": "web_sync_validateschedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_createpair",
+      "target": "web_sync_encryptschedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_syncnow",
+      "target": "web_sync_encryptschedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_acceptpairing",
+      "target": "web_sync_decryptschedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_syncnow",
+      "target": "web_sync_decryptschedule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_acceptpairing",
+      "target": "web_sync_api"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_createpair",
+      "target": "web_sync_api"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_syncnow",
+      "target": "web_sync_api"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_unpair",
+      "target": "web_sync_api"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_copypairlink",
+      "target": "web_sync_pairinglink"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_showpairing",
+      "target": "web_sync_pairinglink"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_showpairing",
+      "target": "web_sync_drawqr"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_copypairlink",
+      "target": "web_sync_createpair"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_showpairing",
+      "target": "web_sync_createpair"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/sync.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_sync_copypairlink",
+      "target": "web_sync_copytext"
     },
     {
       "relation": "contains",
@@ -16764,6 +19656,46 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "worker/src/index.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_allowed_origins"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_authenticatedpair"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_corsheaders"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_enforceratelimit"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
       "source_location": "L4",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16774,11 +19706,268 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "worker/src/index.js",
+      "source_location": "L73",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_handlesync"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_json"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_notifypairedmobile"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_readjson"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
       "source_location": "L17",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_index",
       "target": "src_index_scheduled"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_tokenhash"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_validencryptedbody"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "src_index",
+      "target": "src_index_validpushendpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L129",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_fetch",
+      "target": "src_index_corsheaders"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_corsheaders"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_json",
+      "target": "src_index_corsheaders"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L131",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_fetch",
+      "target": "src_index_json"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L80",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_json"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "src_index_fetch",
+      "target": "src_index_readjson",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L83",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_readjson"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_authenticatedpair",
+      "target": "src_index_tokenhash"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_enforceratelimit",
+      "target": "src_index_tokenhash"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_tokenhash"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_validencryptedbody"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "src_index_fetch",
+      "target": "src_index_validpushendpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_authenticatedpair"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "src_index_fetch",
+      "target": "src_index_enforceratelimit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_enforceratelimit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L110",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_handlesync",
+      "target": "src_index_notifypairedmobile"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "worker/src/index.js",
+      "source_location": "L125",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index_fetch",
+      "target": "src_index_handlesync"
     },
     {
       "relation": "contains",
@@ -16864,6 +20053,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_medication_reminder_widget_for_windows",
+      "target": "readme_pairing_a_mobile_device"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
       "source_location": "L24",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16889,6 +20088,17 @@
       "confidence_score": 1.0,
       "source": "readme_medication_reminder_widget_for_windows",
       "target": "readme_testing"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "medication_reminder.py",
+      "source_location": "L751",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "medication_reminder_medicationreminderapp_decode_pairing_payload",
+      "target": "medication_reminder_py_any"
     },
     {
       "relation": "references",
@@ -16925,5 +20135,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "20c7d16aff64ff50ae8256355770ea8baa1266f6"
+  "built_at_commit": "1dde3b648c59feb34f5f2beaf8ee061772615c9a"
 }

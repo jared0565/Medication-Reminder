@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import ctypes
-import base64
 import io
-import json
 import math
 import os
+import secrets
 import struct
 import sys
 import threading
@@ -23,6 +22,8 @@ import pystray
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "vendor"))
 import qrcode
+
+from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError
 
 from medication_core import (
     AppStorage,
@@ -133,6 +134,14 @@ class MedicationReminderApp:
         self.storage = AppStorage()
         self.alert_settings = self.storage.load_settings()
         self.config_data = self.storage.load_schedule(SEED_CONFIG_PATH)
+        try:
+            self.sync_credentials = self.storage.load_sync_credentials()
+        except StorageError:
+            self.sync_credentials = None
+        self.sync_client = EncryptedSyncClient()
+        self.sync_in_progress = False
+        self.sync_generation = 0
+        self.sync_status_var: tk.StringVar | None = None
         initial_now = datetime.now().astimezone(self._configured_timezone())
         self.scheduler = ScheduleEngine(self.config_data, self.storage.load_state(initial_now))
 
@@ -153,6 +162,7 @@ class MedicationReminderApp:
         self.start_tray_icon()
         self._safe_audit("application_started")
         self.root.after(1000, self.check_schedule)
+        self.root.after(5000, self._periodic_sync)
 
     def _configure_theme(self) -> None:
         """Apply a bright, friendly palette while preserving native Tk controls."""
@@ -539,6 +549,14 @@ class MedicationReminderApp:
             return False
         self.refresh_schedule_table()
         self.update_next_due_text()
+        if self.sync_credentials:
+            self.sync_credentials["dirty"] = True
+            self.sync_generation += 1
+            try:
+                self.storage.save_sync_credentials(self.sync_credentials)
+            except StorageError as exc:
+                self._warn_persistence(exc)
+            self.root.after(100, lambda: self._start_sync(push_local=True))
         return True
 
     def open_schedule_editor(self) -> None:
@@ -564,9 +582,14 @@ class MedicationReminderApp:
         ttk.Button(timezone_bar, text="Apply timezone", command=apply_timezone).pack(side="left")
         pairing_bar = ttk.Frame(container)
         pairing_bar.pack(fill="x", pady=(0, 8))
-        ttk.Label(pairing_bar, text="Device pairing:", style="Meta.TLabel").pack(side="left", padx=(0, 10))
-        ttk.Button(pairing_bar, text="Pair device", command=self.pair_device).pack(side="left", padx=6)
+        ttk.Label(pairing_bar, text="Mobile sync:", style="Meta.TLabel").pack(side="left", padx=(0, 10))
+        ttk.Button(pairing_bar, text="Pair mobile", command=self.pair_device).pack(side="left", padx=6)
         ttk.Button(pairing_bar, text="Show QR", command=self.show_pairing_qr).pack(side="left", padx=6)
+        ttk.Button(pairing_bar, text="Sync now", command=lambda: self._start_sync(notify=True)).pack(side="left", padx=6)
+        ttk.Button(pairing_bar, text="Unpair", command=self.unpair_device).pack(side="left", padx=6)
+        self.sync_status_var = tk.StringVar()
+        ttk.Label(container, textvariable=self.sync_status_var, style="Meta.TLabel").pack(anchor="w", pady=(0, 8))
+        self._set_sync_status()
 
         columns = ("enabled", "time", "label", "medicines")
         tree = ttk.Treeview(container, columns=columns, show="headings", height=15)
@@ -762,54 +785,37 @@ class MedicationReminderApp:
 
         ttk.Button(form, text="Save changes", command=save).pack(anchor="e", pady=(12, 0))
 
-    def _pairing_payload(self) -> str:
-        compact = {
-            "v": 2,
-            "z": self.config_data["timezone"],
-            "e": [[event["id"], event["enabled"], event["time"], event["label"], event["medicines"], event.get("instructions", ""), event["days"], event.get("start_date"), event.get("end_date")] for event in self.config_data["events"]],
-        }
-        return base64.urlsafe_b64encode(json.dumps(compact, separators=(",", ":")).encode()).decode().rstrip("=")
-
-    @staticmethod
-    def _decode_pairing_payload(incoming: str) -> dict[str, Any]:
-        value = incoming.strip()
-        padded = value + "=" * ((4 - len(value) % 4) % 4)
-        data = json.loads(base64.urlsafe_b64decode(padded).decode())
-        if data.get("v") == 2 and isinstance(data.get("e"), list):
-            events = []
-            for item in data["e"]:
-                if not isinstance(item, list) or len(item) != 9:
-                    raise ValueError("Invalid compact schedule event")
-                events.append({"id": item[0], "enabled": bool(item[1]), "time": item[2], "label": item[3], "medicines": item[4], "instructions": item[5] or "", "days": item[6], "start_date": item[7], "end_date": item[8]})
-            return {"timezone": data.get("z", "Europe/London"), "events": events}
-        return data["schedule"]
-
     def pair_device(self) -> None:
-        payload = self._pairing_payload()
-        self.root.clipboard_clear()
-        self.root.clipboard_append(payload)
-        self.root.update()
-        action = messagebox.askyesno(APP_NAME, "A private pairing code was copied to the clipboard.\n\nYes: import a code from another device instead.\nNo: keep this device's code copied for pasting into the mobile app.")
-        if not action:
+        if self.sync_credentials and not messagebox.askyesno(APP_NAME, "Create a new pairing? The existing mobile link will stop syncing.", parent=self.root):
             return
-        incoming = simpledialog.askstring(APP_NAME, "Paste the pairing code to import:", parent=self.root)
-        if not incoming:
-            return
+        self._set_sync_status("Creating encrypted pairing…")
+        source_id = self.sync_credentials.get("sourceId") if self.sync_credentials else secrets.token_urlsafe(24)
+        schedule = deepcopy(self.config_data)
+        def worker() -> None:
+            try:
+                credentials = self.sync_client.create_pair(schedule, source_id)
+                self.root.after(0, lambda: self._pair_created(credentials))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, True))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _pair_created(self, credentials: dict) -> None:
+        self.sync_credentials = credentials
         try:
-            imported = validate_schedule(self._decode_pairing_payload(incoming))
-            self.storage.save_schedule(imported)
-            self.config_data = imported
-            self.scheduler.replace_schedule(imported)
-            self.refresh_schedule_table()
-            self.update_next_due_text()
-            messagebox.showinfo(APP_NAME, "Schedule imported successfully.")
-        except (ValueError, KeyError, UnicodeError, ConfigValidationError) as exc:
-            messagebox.showerror(APP_NAME, f"Invalid pairing code: {exc}")
+            self.storage.save_sync_credentials(credentials)
+        except StorageError as exc:
+            self._warn_persistence(exc)
+            return
+        self._set_sync_status("Encrypted pairing ready; waiting for the mobile scan.")
+        self.show_pairing_qr()
 
     def show_pairing_qr(self) -> None:
-        payload = self._pairing_payload()
+        if not self.sync_credentials:
+            self.pair_device()
+            return
+        payload = self.sync_client.pairing_link(self.sync_credentials)
         try:
-            code = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=4, border=4)
+            code = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=4, border=4)
             code.add_data(payload)
             code.make(fit=True)
             image = code.make_image(fill_color="#243044", back_color="white").convert("RGB")
@@ -819,16 +825,141 @@ class MedicationReminderApp:
             dialog.configure(bg="white")
             dialog.resizable(False, False)
             dialog.transient(self.root)
-            ttk.Label(dialog, text="Scan this QR code from the mobile app", style="Heading.TLabel").pack(padx=24, pady=(20, 10))
+            ttk.Label(dialog, text="Scan to open, install and pair the mobile app", style="Heading.TLabel").pack(padx=24, pady=(20, 10))
             image_label = tk.Label(dialog, image=photo, bg="white")
             image_label.image = photo
             image_label.pack(padx=24, pady=8)
-            ttk.Label(dialog, text="Schedules are transferred directly in the QR code.", style="Meta.TLabel").pack(pady=(4, 12))
-            ttk.Button(dialog, text="Close", command=dialog.destroy).pack(pady=(0, 20))
+            ttk.Label(dialog, text="The relay stores ciphertext only. One mobile device can claim this link.", style="Meta.TLabel").pack(pady=(4, 12))
+            actions = ttk.Frame(dialog)
+            actions.pack(pady=(0, 20))
+            def copy_link() -> None:
+                self.root.clipboard_clear(); self.root.clipboard_append(payload); self.root.update()
+                messagebox.showinfo(APP_NAME, "Private pairing link copied.", parent=dialog)
+            ttk.Button(actions, text="Copy link", command=copy_link).pack(side="left", padx=6)
+            ttk.Button(actions, text="Close", command=dialog.destroy).pack(side="left", padx=6)
             dialog.lift()
             dialog.focus_force()
         except (ValueError, OSError) as exc:
             messagebox.showerror(APP_NAME, f"Could not create the pairing QR code: {exc}", parent=self.root)
+
+    def _set_sync_status(self, message: str | None = None) -> None:
+        if not self.sync_status_var:
+            return
+        if message:
+            self.sync_status_var.set(message)
+        elif not self.sync_credentials:
+            self.sync_status_var.set("Not paired. Schedules remain private on this PC.")
+        else:
+            claimed = "mobile connected" if self.sync_credentials.get("claimed") else "waiting for mobile"
+            self.sync_status_var.set(f"Encrypted sync revision {self.sync_credentials.get('revision', 1)} • {claimed}")
+
+    def _periodic_sync(self) -> None:
+        self._start_sync()
+        self.root.after(60_000, self._periodic_sync)
+
+    def _start_sync(self, *, push_local: bool = False, notify: bool = False) -> None:
+        if not self.sync_credentials:
+            if notify:
+                messagebox.showinfo(APP_NAME, "Pair a mobile device first.", parent=self.root)
+            return
+        if self.sync_in_progress:
+            return
+        self.sync_in_progress = True
+        self._set_sync_status("Syncing encrypted schedule…")
+        credentials = deepcopy(self.sync_credentials)
+        schedule = deepcopy(self.config_data)
+        generation = self.sync_generation
+        def worker() -> None:
+            try:
+                remote = self.sync_client.fetch(credentials)
+                remote_changed = remote.revision != int(credentials.get("revision", 1)) and remote.updated_by != credentials["deviceId"]
+                if remote_changed:
+                    result = ("conflict" if credentials.get("dirty") else "remote", remote)
+                elif credentials.get("dirty") or push_local:
+                    revision = self.sync_client.update(schedule, credentials, remote.revision)
+                    result = ("updated", revision, remote.claimed)
+                else:
+                    result = ("current", remote.revision, remote.claimed)
+                self.root.after(0, lambda: self._finish_sync(result, generation, notify))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, notify))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_sync(self, result: tuple, generation: int, notify: bool) -> None:
+        self.sync_in_progress = False
+        kind = result[0]
+        if kind == "remote" and generation != self.sync_generation:
+            kind = "conflict"
+        if kind == "conflict":
+            remote: RemoteSchedule = result[1]
+            keep_local = messagebox.askyesno(APP_NAME, "Schedule changes were made on both devices.\n\nYes: keep this PC's version and overwrite mobile.\nNo: use the mobile version on this PC.", parent=self.root)
+            if keep_local:
+                if self.sync_credentials:
+                    self.sync_credentials["revision"] = remote.revision
+                    self._start_sync(push_local=True, notify=notify)
+                return
+            self._apply_remote_schedule(remote)
+            return
+        if kind == "remote":
+            self._apply_remote_schedule(result[1])
+            if notify:
+                messagebox.showinfo(APP_NAME, "The schedule was updated from the paired mobile device.", parent=self.root)
+            return
+        if not self.sync_credentials:
+            return
+        self.sync_credentials["revision"] = int(result[1])
+        self.sync_credentials["claimed"] = bool(result[2])
+        if kind == "updated" and generation == self.sync_generation:
+            self.sync_credentials["dirty"] = False
+        try:
+            self.storage.save_sync_credentials(self.sync_credentials)
+        except StorageError as exc:
+            self._warn_persistence(exc)
+        self._set_sync_status()
+        if notify:
+            messagebox.showinfo(APP_NAME, "Encrypted schedule sync is up to date.", parent=self.root)
+
+    def _apply_remote_schedule(self, remote: RemoteSchedule) -> None:
+        if not self.sync_credentials:
+            return
+        try:
+            validated = self.storage.save_schedule(remote.schedule)
+            self.config_data = validated
+            self.scheduler.replace_schedule(validated)
+            self.storage.save_state(self.scheduler.state)
+            self.sync_credentials.update({"revision": remote.revision, "claimed": remote.claimed, "dirty": False})
+            self.storage.save_sync_credentials(self.sync_credentials)
+            self._safe_audit("schedule_synced_from_mobile")
+            self.refresh_schedule_table(); self.update_next_due_text(); self._set_sync_status()
+        except (ConfigValidationError, StorageError) as exc:
+            self._warn_persistence(exc)
+
+    def _sync_failed(self, error: SyncError, notify: bool) -> None:
+        self.sync_in_progress = False
+        self._set_sync_status("Sync unavailable. Local reminders continue to work.")
+        if notify:
+            messagebox.showerror(APP_NAME, str(error), parent=self.root)
+
+    def unpair_device(self) -> None:
+        if not self.sync_credentials:
+            messagebox.showinfo(APP_NAME, "This widget is not paired.", parent=self.root)
+            return
+        if not messagebox.askyesno(APP_NAME, "Unpair both devices? The local schedule will be kept.", parent=self.root):
+            return
+        credentials = deepcopy(self.sync_credentials)
+        try:
+            self.sync_client.revoke(credentials)
+        except SyncError as exc:
+            if exc.status != 404:
+                messagebox.showerror(APP_NAME, str(exc), parent=self.root)
+                return
+        try:
+            self.storage.delete_sync_credentials()
+        except StorageError as exc:
+            self._warn_persistence(exc)
+            return
+        self.sync_credentials = None
+        self._set_sync_status("Unpaired. The local schedule was kept.")
 
     def export_taken_log(self) -> None:
         if not messagebox.askyesno(

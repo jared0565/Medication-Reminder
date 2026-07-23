@@ -14,6 +14,8 @@ Windows user's protected application data directory using Windows DPAPI.
 - Includes **Taken** and **Snooze 10 min** buttons
 - Keeps a protected, retained audit history and can export completed reminders to CSV
 - Allows reminders to be enabled, disabled, or edited
+- Adds, edits, and removes schedules and medication items
+- Supports one-to-one encrypted schedule sync with a paired mobile PWA
 - Includes a test-reminder button
 
 ## Important clinical note
@@ -66,9 +68,27 @@ Open the main window from the system tray and select **Edit schedule**.
 - Days can be `daily` or a comma-separated list such as `mon,tue,wed`
 - An optional end date can automatically stop temporary reminders
 
+## Pairing a mobile device
+
+Open **Manage schedules**, then select **Pair mobile**. Scan the QR code with the
+phone's normal camera or QR reader. The link opens the installable web app at
+`medication.bytesfx.com`, asks for consent, and imports the encrypted schedule.
+
+- One source (Windows widget or browser) accepts one paired mobile device.
+- Changes sync in both directions while the PWA is open or returns to the foreground.
+- Simultaneous edits prompt before either device overwrites the other.
+- **Unpair** revokes the relay record while preserving each device's local schedule.
+- Widget pairing credentials are protected with Windows DPAPI.
+
+The Cloudflare relay stores AES-GCM ciphertext, an IV, revision metadata, and hashed
+access tokens. It never receives the encryption key or readable medication details.
+The key is carried in the QR URL fragment, which browsers do not send to the web host,
+and the fragment is removed from mobile history after pairing.
+
 ## Files
 
 - `medication_reminder.py` — application
+- `sync_client.py` — encrypted sync protocol client
 - `medication_schedule.json` — editable schedule
 - `%LOCALAPPDATA%\\MedicationReminder` — protected schedule, state, and audit data
 - `medication_icon.ico` — tray/application icon
@@ -90,8 +110,8 @@ than one process from running for the current Windows user.
 An installable responsive web/PWA prototype is available in [`web/`](web/). It is
 static and dependency-free: open it through a local HTTPS/static server for full PWA
 installation behavior. It stores schedules and alert settings in browser local storage,
-supports schedule and medication CRUD, and includes a sound preview. Browser reminders
-are not as reliable as native Android alarms, so this version is intended for workflow
-validation before adding server sync or Play Store packaging. The PWA does not upload
-schedules, medications, or notification subscriptions; each browser/device owns its
-local data.
+supports schedule and medication CRUD, sound previews, encrypted device pairing, and
+Web Push reminders. Unpaired devices remain completely local. Paired devices upload
+only encrypted schedule blobs to the Worker. The separate push scheduler stores generic
+due-time metadata without medication names so it can wake a closed PWA. Browser reminders are still subject to
+the mobile operating system's notification permissions and power-management policies.

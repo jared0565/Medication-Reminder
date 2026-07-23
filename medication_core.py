@@ -312,6 +312,25 @@ class AppStorage:
         self.state_file = ProtectedJsonFile(self.data_dir / "state.dat", selected_protector)
         self.audit_file = ProtectedJsonFile(self.data_dir / "audit.dat", selected_protector)
         self.settings_file = ProtectedJsonFile(self.data_dir / "settings.dat", selected_protector)
+        self.sync_file = ProtectedJsonFile(self.data_dir / "sync.dat", selected_protector)
+
+    def load_sync_credentials(self) -> dict[str, Any] | None:
+        if not self.sync_file.exists():
+            return None
+        value = self.sync_file.load()
+        required = {"version", "role", "pairId", "token", "encryptionKey", "sourceId", "deviceId", "revision"}
+        if not isinstance(value, dict) or value.get("version") != 1 or not required.issubset(value):
+            raise StorageError("The protected pairing credentials have an invalid structure")
+        return value
+
+    def save_sync_credentials(self, credentials: dict[str, Any]) -> None:
+        self.sync_file.save(credentials)
+
+    def delete_sync_credentials(self) -> None:
+        try:
+            self.sync_file.path.unlink(missing_ok=True)
+        except OSError as exc:
+            raise StorageError("Could not remove protected pairing credentials") from exc
 
     def load_settings(self) -> dict[str, Any]:
         if not self.settings_file.exists():
