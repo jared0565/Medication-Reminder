@@ -5,6 +5,7 @@ import test from 'node:test';
 import worker, {
   claimLegacyPair,
   consumeInvitation,
+  deriveInvitationToken,
   deriveMobileToken,
   loadAccountPair,
   loadLegacyPair,
@@ -292,6 +293,21 @@ test('mobile credential derivation is deterministic, secret-backed, and domain s
   assert.notEqual(first, otherDevice);
 });
 
+test('invitation refresh derivation is deterministic and separately domain scoped', async () => {
+  const env = { MOBILE_CREDENTIAL_SECRET: 'T'.repeat(43) };
+  const value = {
+    pairId: 'pair_identifier_1234',
+    userId: '00000000-0000-4000-8000-000000000001',
+    previousInvitationTokenHash: 'a'.repeat(64),
+    refreshNonce: 'R'.repeat(43),
+  };
+  const first = await deriveInvitationToken(env, value);
+  assert.match(first, /^[A-Za-z0-9_-]{43}$/);
+  assert.equal(await deriveInvitationToken(env, value), first);
+  assert.notEqual(await deriveInvitationToken(env, { ...value, refreshNonce: 'S'.repeat(43) }), first);
+  assert.notEqual(await deriveInvitationToken(env, { ...value, userId: '00000000-0000-4000-8000-000000000002' }), first);
+});
+
 test('account pairing lookup binds both pair and tenant', async () => {
   const DB = fakeDb(({ bindings }) => bindings[1] === 'user_b' ? { pair_id: 'pair_b' } : null);
   const pair = await loadAccountPair({ DB }, 'pair_b', 'user_a');
@@ -577,7 +593,11 @@ test('exact legacy host bearer account sessions cannot authorize account-owned s
       method: 'PUT',
       body: { ...validEncryptedSchedule, baseRevision: 1 },
     },
-    { method: 'POST', suffix: '/invitations' },
+    {
+      method: 'POST',
+      suffix: '/invitations',
+      body: { previousInvitationToken: created.invitationToken, refreshNonce: 'R'.repeat(43) },
+    },
     { method: 'DELETE' },
   ]) {
     const response = await fixture.request(`/sync/pairs/${created.pairId}${request.suffix || ''}`, {
@@ -739,7 +759,7 @@ test('entitlement revocation pauses account and mobile sync without blocking own
     method: 'POST',
     session: fixture.sessions.a.sessionToken,
     csrf: true,
-    body: { previousInvitationToken: created.invitationToken },
+    body: { previousInvitationToken: created.invitationToken, refreshNonce: 'R'.repeat(43) },
   });
   assert.equal(inactiveInvitation.status, 403);
   assert.deepEqual(await inactiveInvitation.json(), { error: 'Cloud sync is not active for this pairing' });
@@ -1020,12 +1040,142 @@ test('invitation refresh compare-and-set allows only one concurrent winner', asy
     method: 'POST',
     session: fixture.sessions.a.sessionToken,
     csrf: true,
-    body: { previousInvitationToken: created.invitationToken },
+    body: { previousInvitationToken: created.invitationToken, refreshNonce: randomClaimNonce() },
   });
   const responses = await Promise.all([request(), request()]);
   assert.deepEqual(responses.map(response => response.status).sort(), [200, 409]);
   const winner = responses.find(response => response.status === 200);
   assert.match((await winner.json()).invitationToken, /^[A-Za-z0-9_-]{43}$/);
+});
+
+test('invitation refresh exact retry returns the committed token and stored expiry', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  const { body: created } = await fixture.createPair('a');
+  const body = {
+    previousInvitationToken: created.invitationToken,
+    refreshNonce: 'R'.repeat(43),
+  };
+  const request = () => fixture.request(`/api/sync/pairs/${created.pairId}/invitations`, {
+    method: 'POST',
+    session: fixture.sessions.a.sessionToken,
+    csrf: true,
+    body,
+  });
+  const first = await request();
+  const retry = await request();
+  assert.equal(first.status, 200);
+  assert.equal(retry.status, 200);
+  assert.deepEqual(await retry.json(), await first.json());
+});
+
+test('expired exact invitation refresh replay renews once and remains capability bound', async t => {
+  await t.test('concurrent exact retries converge on one renewed expiry', async t => {
+    const fixture = await workerFixture();
+    t.after(() => fixture.close());
+    const { body: created } = await fixture.createPair('a');
+    const body = {
+      previousInvitationToken: created.invitationToken,
+      refreshNonce: 'R'.repeat(43),
+    };
+    const request = () => fixture.request(`/api/sync/pairs/${created.pairId}/invitations`, {
+      method: 'POST',
+      session: fixture.sessions.a.sessionToken,
+      csrf: true,
+      body,
+    });
+    const first = await request();
+    const committed = await first.json();
+    fixture.database.prepare(
+      "UPDATE sync_pairs SET invitation_expires_at = '2000-01-01 00:00:00' WHERE pair_id = ?",
+    ).run(created.pairId);
+    const responses = await Promise.all([request(), request()]);
+    assert.deepEqual(responses.map(response => response.status), [200, 200]);
+    const replays = await Promise.all(responses.map(response => response.json()));
+    assert.equal(replays[0].invitationToken, committed.invitationToken);
+    assert.deepEqual(replays[1], replays[0]);
+    assert.ok(Date.parse(replays[0].invitationExpiresAt) > Date.now());
+    const stored = fixture.database.prepare(
+      'SELECT invitation_expires_at FROM sync_pairs WHERE pair_id = ?',
+    ).get(created.pairId);
+    assert.equal(new Date(`${stored.invitation_expires_at.replace(' ', 'T')}Z`).toISOString(), replays[0].invitationExpiresAt);
+  });
+
+  for (const scenario of ['inactive owner', 'claimed pair']) {
+    await t.test(scenario, async t => {
+      const fixture = await workerFixture();
+      t.after(() => fixture.close());
+      const { body: created } = await fixture.createPair('a');
+      const body = {
+        previousInvitationToken: created.invitationToken,
+        refreshNonce: 'R'.repeat(43),
+      };
+      const first = await fixture.request(`/api/sync/pairs/${created.pairId}/invitations`, {
+        method: 'POST',
+        session: fixture.sessions.a.sessionToken,
+        csrf: true,
+        body,
+      });
+      assert.equal(first.status, 200);
+      fixture.database.prepare(
+        "UPDATE sync_pairs SET invitation_expires_at = '2000-01-01 00:00:00' WHERE pair_id = ?",
+      ).run(created.pairId);
+      if (scenario === 'inactive owner') {
+        fixture.database.prepare(
+          "UPDATE user_entitlements SET state = 'revoked' WHERE user_id = ? AND feature_key = 'advanced'",
+        ).run(fixture.sessions.a.userId);
+      } else {
+        fixture.database.prepare(
+          "UPDATE sync_pairs SET mobile_device_id = 'claimed_mobile_1234' WHERE pair_id = ?",
+        ).run(created.pairId);
+      }
+      const replay = await fixture.request(`/api/sync/pairs/${created.pairId}/invitations`, {
+        method: 'POST',
+        session: fixture.sessions.a.sessionToken,
+        csrf: true,
+        body,
+      });
+      assert.equal(replay.status, scenario === 'inactive owner' ? 403 : 409);
+      assert.equal(
+        fixture.database.prepare(
+          'SELECT invitation_expires_at FROM sync_pairs WHERE pair_id = ?',
+        ).get(created.pairId).invitation_expires_at,
+        '2000-01-01 00:00:00',
+      );
+    });
+  }
+});
+
+test('invitation refresh validates nonce and secret before mutation', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  const { body: created } = await fixture.createPair('a');
+  const before = fixture.database.prepare(
+    'SELECT invitation_token_hash, invitation_expires_at FROM sync_pairs WHERE pair_id = ?',
+  ).get(created.pairId);
+
+  const malformed = await fixture.request(`/api/sync/pairs/${created.pairId}/invitations`, {
+    method: 'POST',
+    session: fixture.sessions.a.sessionToken,
+    csrf: true,
+    body: { previousInvitationToken: created.invitationToken, refreshNonce: 'short' },
+  });
+  assert.equal(malformed.status, 400);
+
+  delete fixture.env.MOBILE_CREDENTIAL_SECRET;
+  const unavailable = await fixture.request(`/api/sync/pairs/${created.pairId}/invitations`, {
+    method: 'POST',
+    session: fixture.sessions.a.sessionToken,
+    csrf: true,
+    body: { previousInvitationToken: created.invitationToken, refreshNonce: 'R'.repeat(43) },
+  });
+  assert.equal(unavailable.status, 503);
+  assert.deepEqual(
+    fixture.database.prepare(
+      'SELECT invitation_token_hash, invitation_expires_at FROM sync_pairs WHERE pair_id = ?',
+    ).get(created.pairId),
+    before,
+  );
 });
 
 test('account and scoped mobile updates derive updated_by from authenticated device identity', async t => {
@@ -1122,7 +1272,7 @@ test('invitation refresh is tenant-scoped and invalidates the previous invitatio
     method: 'POST',
     session: fixture.sessions.b.sessionToken,
     csrf: true,
-    body: { previousInvitationToken: created.invitationToken },
+    body: { previousInvitationToken: created.invitationToken, refreshNonce: 'R'.repeat(43) },
   });
   assert.equal(wrongTenant.status, 404);
 
@@ -1130,7 +1280,7 @@ test('invitation refresh is tenant-scoped and invalidates the previous invitatio
     method: 'POST',
     session: fixture.sessions.a.sessionToken,
     csrf: true,
-    body: { previousInvitationToken: created.invitationToken },
+    body: { previousInvitationToken: created.invitationToken, refreshNonce: 'R'.repeat(43) },
   });
   assert.equal(refreshedResponse.status, 200);
   const refreshed = await refreshedResponse.json();
@@ -1253,7 +1403,7 @@ test('pairing audit metadata never records application or credential secrets', a
     method: 'POST',
     session: fixture.sessions.a.sessionToken,
     csrf: true,
-    body: { previousInvitationToken: created.invitationToken },
+    body: { previousInvitationToken: created.invitationToken, refreshNonce: 'R'.repeat(43) },
   });
   const invitation = await invitationResponse.json();
   const claim = await fixture.request(`/api/sync/pairs/${created.pairId}/claim`, {

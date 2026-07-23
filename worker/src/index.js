@@ -15,6 +15,7 @@ const ALLOWED_ORIGINS = new Set(['https://medication.bytesfx.com', 'https://medi
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_REQUESTS = 120;
 const MOBILE_CREDENTIAL_DOMAIN = 'medication-reminder/mobile-credential/v1';
+const INVITATION_REFRESH_DOMAIN = 'medication-reminder/invitation-refresh/v1';
 const CSRF_PROTECTED_AUTH_ROUTES = new Set([
   'POST /auth/google',
   'PATCH /auth/me',
@@ -86,7 +87,7 @@ function cloudCapabilitySql(userIdExpression) {
 
 const PAIR_CLOUD_CAPABILITY_SQL = cloudCapabilitySql('sync_pairs.user_id');
 
-export async function deriveMobileToken(env, value) {
+async function deriveScopedToken(env, parts) {
   const secret = env.MOBILE_CREDENTIAL_SECRET;
   if (!MOBILE_TOKEN_PATTERN.test(secret || '')) throw new Error('mobile_credential_unavailable');
   let secretBytes;
@@ -103,13 +104,7 @@ export async function deriveMobileToken(env, value) {
     false,
     ['sign'],
   );
-  const message = [
-    MOBILE_CREDENTIAL_DOMAIN,
-    value.pairId,
-    value.invitationTokenHash,
-    value.mobileDeviceId,
-    value.claimNonce,
-  ].join('\0');
+  const message = parts.join('\0');
   const signature = await crypto.subtle.sign(
     'HMAC',
     key,
@@ -118,12 +113,39 @@ export async function deriveMobileToken(env, value) {
   return encodeBase64Url(new Uint8Array(signature));
 }
 
+export function deriveMobileToken(env, value) {
+  return deriveScopedToken(env, [
+    MOBILE_CREDENTIAL_DOMAIN,
+    value.pairId,
+    value.invitationTokenHash,
+    value.mobileDeviceId,
+    value.claimNonce,
+  ]);
+}
+
+export function deriveInvitationToken(env, value) {
+  return deriveScopedToken(env, [
+    INVITATION_REFRESH_DOMAIN,
+    value.pairId,
+    value.userId,
+    value.previousInvitationTokenHash,
+    value.refreshNonce,
+  ]);
+}
+
 function invitationExpiry(now = Date.now()) {
   const invitationExpiresAt = new Date(now + 15 * 60_000).toISOString();
   return {
     invitationExpiresAt,
     storedInvitationExpiresAt: invitationExpiresAt.replace('T', ' ').replace(/\.\d{3}Z$/, ''),
   };
+}
+
+function publicStoredExpiry(value) {
+  if (typeof value !== 'string') throw new Error('invalid_invitation_expiry');
+  const parsed = new Date(`${value.replace(' ', 'T')}Z`);
+  if (!Number.isFinite(parsed.getTime())) throw new Error('invalid_invitation_expiry');
+  return parsed.toISOString();
 }
 
 function bearerToken(request) {
@@ -457,6 +479,11 @@ async function handleSync(request, env, url, ctx) {
   }
 
   if (request.method === 'POST' && match[2] === 'invitations') {
+    const body = await readJson(request);
+    if (!MOBILE_TOKEN_PATTERN.test(body?.previousInvitationToken || '')
+      || !MOBILE_TOKEN_PATTERN.test(body?.refreshNonce || '')) {
+      return json(request, { error: 'Valid invitation refresh proof required' }, { status: 400 });
+    }
     const { account, pair } = await accountPair(request, env, pairId);
     if (!pair) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
     if (account.credentialKind === 'cookie' && !validCsrfRequest(request)) {
@@ -466,13 +493,45 @@ async function handleSync(request, env, url, ctx) {
       return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
     }
     if (pair.mobile_device_id) return json(request, { error: 'This pairing already has a mobile device.' }, { status: 409 });
-    const body = await readJson(request);
-    if (!MOBILE_TOKEN_PATTERN.test(body?.previousInvitationToken || '')) {
-      return json(request, { error: 'Current invitation credential required' }, { status: 400 });
-    }
     const previousInvitationTokenHash = await tokenHash(body.previousInvitationToken);
-    const invitationToken = randomId(32);
-    const { invitationExpiresAt, storedInvitationExpiresAt } = invitationExpiry();
+    const invitationToken = await deriveInvitationToken(env, {
+      pairId,
+      userId: account.user.user_id,
+      previousInvitationTokenHash,
+      refreshNonce: body.refreshNonce,
+    });
+    const invitationTokenHash = await tokenHash(invitationToken);
+    if (pair.invitation_token_hash === invitationTokenHash) {
+      const exactReplay = await env.DB.prepare(`UPDATE sync_pairs SET
+          invitation_expires_at = CASE
+            WHEN invitation_expires_at IS NULL OR invitation_expires_at <= CURRENT_TIMESTAMP
+              THEN datetime(CURRENT_TIMESTAMP, '+15 minutes')
+            ELSE invitation_expires_at
+          END,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE pair_id = ? AND user_id = ? AND invitation_token_hash = ?
+          AND invitation_consumed_at IS NULL
+          AND mobile_device_id IS NULL
+          AND ${PAIR_CLOUD_CAPABILITY_SQL}
+        RETURNING invitation_expires_at`)
+        .bind(pairId, account.user.user_id, invitationTokenHash)
+        .first();
+      if (!exactReplay) {
+        if (!(await activeCloudSyncForUser(env, account.user.user_id))) {
+          return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
+        }
+        return json(request, { error: 'Pairing invitation changed. Refresh and try again.' }, { status: 409 });
+      }
+      return json(request, {
+        pairId,
+        invitationToken,
+        invitationExpiresAt: publicStoredExpiry(exactReplay.invitation_expires_at),
+      });
+    }
+    if (pair.invitation_token_hash !== previousInvitationTokenHash) {
+      return json(request, { error: 'Pairing invitation changed. Refresh and try again.' }, { status: 409 });
+    }
+    const { storedInvitationExpiresAt } = invitationExpiry();
     const result = await env.DB.prepare(`UPDATE sync_pairs SET invitation_token_hash = ?,
       invitation_expires_at = ?, invitation_consumed_at = NULL, updated_at = CURRENT_TIMESTAMP
       WHERE pair_id = ? AND user_id = ? AND invitation_token_hash = ?
@@ -480,7 +539,7 @@ async function handleSync(request, env, url, ctx) {
         AND ${PAIR_CLOUD_CAPABILITY_SQL}
       RETURNING pair_id`)
       .bind(
-        await tokenHash(invitationToken),
+        invitationTokenHash,
         storedInvitationExpiresAt,
         pairId,
         account.user.user_id,
@@ -498,7 +557,11 @@ async function handleSync(request, env, url, ctx) {
       'sync_pair_invited',
       pairAuditMetadata(pairId, null, pair.revision, 'invited'),
     );
-    return json(request, { pairId, invitationToken, invitationExpiresAt });
+    return json(request, {
+      pairId,
+      invitationToken,
+      invitationExpiresAt: publicStoredExpiry(storedInvitationExpiresAt),
+    });
   }
 
   if (match[2]) return json(request, { error: 'Method not allowed' }, { status: 405 });

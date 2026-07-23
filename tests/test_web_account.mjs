@@ -553,11 +553,12 @@ test('account client contains no reusable session storage or token logging', () 
   assert.doesNotMatch(source, /client_secret/i);
 });
 
-test('Task 6 compatibility shim remains credential-free and non-deployable alone', async () => {
+test('account client exposes no JavaScript authorization-header compatibility shim', async () => {
   const app = accountHarness();
   await app.initialize();
-  assert.deepEqual({ ...app.window.MedicationAccount.authorizationHeaders() }, {});
-  assert.match(source, /do not deploy Task 5 standalone/);
+  assert.equal('authorizationHeaders' in app.window.MedicationAccount, false);
+  assert.equal('requireAdvanced' in app.window.MedicationAccount, false);
+  assert.doesNotMatch(source, /sessionToken|Authorization\s*:/);
 });
 
 test('sign-out dialog exposes keep, erase, and cancel without remote unpairing', () => {

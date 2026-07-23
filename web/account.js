@@ -419,11 +419,5 @@
     get advanced() { return Boolean(account?.features?.advanced); },
     initialized,
     signOut,
-    // Transitional only: Task 6 replaces this; do not deploy Task 5 standalone.
-    // It deliberately exposes no credential.
-    authorizationHeaders() { return {}; },
-    requireAdvanced() {
-      return window.MedicationAccess.requireCloud();
-    },
   };
 })();
