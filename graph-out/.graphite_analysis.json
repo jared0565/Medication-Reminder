@@ -52,9 +52,9 @@
       "id": "web_qrcode",
       "name": "qrcode.js",
       "kind": "file",
-      "degree": 47,
+      "degree": 48,
       "in_degree": 0,
-      "out_degree": 47
+      "out_degree": 48
     },
     {
       "id": "tests_test_worker_auth_prepare",
@@ -76,9 +76,9 @@
       "id": "worker_src_index_handlesync",
       "name": "handleSync",
       "kind": "function",
-      "degree": 44,
+      "degree": 45,
       "in_degree": 2,
-      "out_degree": 42
+      "out_degree": 43
     },
     {
       "id": "medication_reminder_medicationreminderapp",
@@ -228,6 +228,11 @@
       "kind": "function"
     },
     {
+      "id": "tests_test_web_sw_test_invalid_shell_network_responses_are_returned_but_never_cached_l154_c71",
+      "name": "test invalid shell network responses are returned but never cached",
+      "kind": "function"
+    },
+    {
       "id": "tests_test_web_sync_app_confirmations_some_l1414_c41",
       "name": "app.confirmations.some",
       "kind": "function"
@@ -256,11 +261,6 @@
       "id": "tests_test_web_sync_getrandomvalues_l125_c22",
       "name": "getRandomValues",
       "kind": "function"
-    },
-    {
-      "id": "tests_test_web_sync_importkey_l127_c18",
-      "name": "importKey",
-      "kind": "function"
     }
   ],
   "entry_points": [
@@ -281,9 +281,9 @@
     {
       "id": "web_qrcode",
       "name": "qrcode.js",
-      "out_degree": 47,
+      "out_degree": 48,
       "in_degree": 0,
-      "ratio": 47.0
+      "ratio": 48.0
     },
     {
       "id": "worker_src_index",
@@ -356,6 +356,13 @@
       "ratio": 10.0
     },
     {
+      "id": "tests_test_web_sw",
+      "name": "test_web_sw.mjs",
+      "out_degree": 10,
+      "in_degree": 0,
+      "ratio": 10.0
+    },
+    {
       "id": "medication_core",
       "name": "medication_core.py",
       "out_degree": 45,
@@ -396,13 +403,6 @@
       "out_degree": 6,
       "in_degree": 0,
       "ratio": 6.0
-    },
-    {
-      "id": "web_update",
-      "name": "update.js",
-      "out_degree": 3,
-      "in_degree": 0,
-      "ratio": 3.0
     }
   ],
   "surprising_connections": [
@@ -549,59 +549,43 @@
   ],
   "cycles": [
     [
+      "web_app_updatenotificationstatus",
+      "web_app",
+      "web_app_enablenotifications"
+    ],
+    [
+      "web_app_updatenotificationstatus",
+      "web_app"
+    ],
+    [
+      "web_app_markoccurrencetaken",
+      "web_app_rendertoday",
+      "web_app"
+    ],
+    [
+      "web_app_renderschedules",
+      "web_app",
+      "web_app_renderall"
+    ],
+    [
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_renderschedules",
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall"
+    ],
+    [
+      "web_app",
+      "web_app_addmedicineinput"
+    ],
+    [
+      "web_app",
       "web_app_checkduemodals",
       "web_app_enqueuedue",
-      "web_app_shownextduemodal",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_renderschedules",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_renderall",
-      "web_app_rendertoday",
-      "web_app",
-      "web_app_saveeditor"
-    ],
-    [
-      "web_app_addmedicineinput",
-      "web_app"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app",
-      "web_app_openeditor"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app",
-      "web_app_enablenotifications",
-      "web_app_updatenotificationstatus"
+      "web_app_shownextduemodal"
     ],
     [
       "web_app",
@@ -610,12 +594,25 @@
     ],
     [
       "web_app",
-      "web_app_markoccurrencetaken",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app",
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs"
+    ],
+    [
+      "web_app",
+      "web_app_renderall"
+    ],
+    [
+      "web_app",
+      "web_app_renderall",
       "web_app_rendertoday"
     ],
     [
       "web_app",
-      "web_app_openeditor"
+      "web_app_rendermedicineinputs"
     ],
     [
       "web_app",
@@ -623,10 +620,6 @@
     ],
     [
       "web_app",
-      "web_app_renderschedules"
-    ],
-    [
-      "web_app",
       "web_app_rendertoday"
     ],
     [
@@ -635,11 +628,18 @@
     ],
     [
       "web_app",
-      "web_app_shownextduemodal"
+      "web_app_saveeditor",
+      "web_app_renderall"
     ],
     [
       "web_app",
-      "web_app_updatenotificationstatus"
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_shownextduemodal"
     ]
   ],
   "top_files_by_links": [
@@ -670,7 +670,7 @@
     {
       "id": "web_qrcode",
       "name": "qrcode.js",
-      "degree": 47,
+      "degree": 48,
       "source_file": "web/qrcode.js"
     },
     {
@@ -740,6 +740,12 @@
       "source_file": "tests/test_pairing.py"
     },
     {
+      "id": "tests_test_web_sw",
+      "name": "test_web_sw.mjs",
+      "degree": 10,
+      "source_file": "tests/test_web_sw.mjs"
+    },
+    {
       "id": "tests_test_due_modal",
       "name": "test_due_modal.mjs",
       "degree": 8,
@@ -756,12 +762,6 @@
       "name": "test_worker_auth.mjs",
       "degree": 8,
       "source_file": "tests/test_worker_auth.mjs"
-    },
-    {
-      "id": "tests_test_web_update",
-      "name": "test_web_update.mjs",
-      "degree": 6,
-      "source_file": "tests/test_web_update.mjs"
     }
   ]
 }
