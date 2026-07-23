@@ -113,8 +113,8 @@
     {
       "rel_path": "tests/test_web_sync.mjs",
       "language": "javascript",
-      "size": 7810,
-      "hash": "37bd1fd2b6d64da925436d569d092031911d55e19b93da33e10fe728dbe1bec9"
+      "size": 10357,
+      "hash": "5a7a78d9bf5bbe25e73fa6b5e8db97cd1f4cb435d7083665907f9b418006058b"
     },
     {
       "rel_path": "tests/test_web_update.mjs",
@@ -156,7 +156,7 @@
       "rel_path": "web/index.html",
       "language": "html",
       "size": 7412,
-      "hash": "8d21be161214e14b606acfb62549977d3a6203f6161da4149eb963cbcf4b639c"
+      "hash": "17f9fbed18237ea6aeec491253ef767b413becb29c104f0a0e8e2770e9df78ca"
     },
     {
       "rel_path": "web/manifest.webmanifest",
@@ -180,13 +180,13 @@
       "rel_path": "web/sw.js",
       "language": "javascript",
       "size": 2387,
-      "hash": "7fae17411c918c2fe983fc4f4d30d87044ad1a6b35dac29d1da6e7f731128f16"
+      "hash": "4406f57c1147cd242ab0fedd76d406f9cd326e1410f403703592afa6d1fa2199"
     },
     {
       "rel_path": "web/sync.js",
       "language": "javascript",
-      "size": 20275,
-      "hash": "9b87b080954ee6e8f8a5b620826fb16c01194a08982041fcf7acf825e2adaba9"
+      "size": 21288,
+      "hash": "5c1c3912e4604838415fc1f3679a5ae4ff85e79d8363a070f9a7bbbccad58f4e"
     },
     {
       "rel_path": "web/update.js",
@@ -198,7 +198,7 @@
       "rel_path": "web/version.json",
       "language": "json",
       "size": 33,
-      "hash": "c5daff80fd04f28aa11be6e00c7c6fa636eeee799354bfe4488f1d555398e0e1"
+      "hash": "40e0d36ff2b26b90443ebbd7d1904b2060c65491ff4e674aa0fe6651c6bcddfb"
     },
     {
       "rel_path": "worker/migrations/0002_google_accounts.sql",

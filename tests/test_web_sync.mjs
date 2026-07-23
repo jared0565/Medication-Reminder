@@ -29,7 +29,7 @@ function dialog() {
   };
 }
 
-function installedMobileHarness({ paired = true } = {}) {
+function installedMobileHarness({ paired = true, mobile = true, standalone = true } = {}) {
   const storage = new Map();
   const pair = control(), copy = control(), sync = control(), unpair = control();
   const status = { textContent: '', classList: { add() {}, remove() {} } };
@@ -43,8 +43,8 @@ function installedMobileHarness({ paired = true } = {}) {
   ]);
   let serviceWorkerMessageHandler = null;
   const navigator = {
-    userAgent: 'Mozilla/5.0 (Linux; Android 15)',
-    userAgentData: { mobile: true },
+    userAgent: mobile ? 'Mozilla/5.0 (Linux; Android 15)' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    userAgentData: { mobile },
     mediaDevices: {
       async getUserMedia() {
         return { getTracks: () => [{ stop() {} }] };
@@ -56,7 +56,7 @@ function installedMobileHarness({ paired = true } = {}) {
       },
     },
   };
-  let clearCount = 0, fetchCount = 0, promptValue = '';
+  let clearCount = 0, fetchCount = 0, promptValue = '', importedSchedule = null;
   const window = {
     navigator,
     BarcodeDetector: class { async detect() { return []; } },
@@ -64,6 +64,7 @@ function installedMobileHarness({ paired = true } = {}) {
     getMedicationSchedule: () => ({ timezone: 'Europe/London', events: [] }),
     getMedicationPushEndpoint: async () => null,
     clearMedicationSchedule: () => { clearCount += 1; },
+    applySyncedSchedule: value => { importedSchedule = value; },
   };
   const context = {
     window,
@@ -89,7 +90,7 @@ function installedMobileHarness({ paired = true } = {}) {
     },
     location: { href: 'https://medication.bytesfx.com/', hash: '', pathname: '/', search: '' },
     history: { replaceState() {} },
-    matchMedia: () => ({ matches: true }),
+    matchMedia: () => ({ matches: standalone }),
     fetch: () => new Promise(() => {}),
     prompt: () => promptValue,
     confirm: () => true,
@@ -134,6 +135,7 @@ function installedMobileHarness({ paired = true } = {}) {
     revokeFromSource: () => serviceWorkerMessageHandler?.({ data: { type: 'PAIR_REVOKED' } }),
     clearCount: () => clearCount,
     fetchCount: () => fetchCount,
+    importedSchedule: () => importedSchedule,
   };
 }
 
@@ -222,4 +224,68 @@ test('a new visitor starts with an empty private schedule', () => {
   const initialization = readFileSync('web/app.js', 'utf8').split('const $=')[0];
   vm.runInNewContext(`${initialization};globalThis.loadedSchedule=schedule;`, context);
   assert.equal(context.loadedSchedule.events.length, 0);
+});
+
+test('desktop pairing links are routed to a non-claiming snapshot import', () => {
+  const source = readFileSync('web/sync.js', 'utf8');
+  const start = source.indexOf('async function importScheduleCopy');
+  const end = source.indexOf('async function acceptPairing', start);
+  const importer = source.slice(start, end);
+
+  assert.ok(start >= 0);
+  assert.match(importer, /decryptSchedule/);
+  assert.match(importer, /applySyncedSchedule/);
+  assert.doesNotMatch(importer, /\/claim/);
+  assert.doesNotMatch(importer, /saveCredentials/);
+  assert.match(source, /mobileDevice\?acceptPairing\(invitation\):importScheduleCopy\(invitation\)/);
+});
+
+test('desktop encrypted schedule import works end-to-end without storing pairing credentials', async () => {
+  const app = installedMobileHarness({ paired: false, mobile: false, standalone: false });
+  const schedule = {
+    version: 1,
+    timezone: 'Europe/London',
+    events: [{
+      id: 'morning',
+      enabled: true,
+      time: '07:00',
+      label: 'Morning medicines',
+      medicines: ['Medicine A', 'Medicine B'],
+      instructions: 'With water',
+      days: ['daily'],
+      start_date: null,
+      end_date: null,
+    }],
+  };
+  const key = webcrypto.getRandomValues(new Uint8Array(32));
+  const iv = webcrypto.getRandomValues(new Uint8Array(12));
+  const cryptoKey = await webcrypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt']);
+  const encrypted = new Uint8Array(await webcrypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    cryptoKey,
+    new TextEncoder().encode(JSON.stringify(schedule)),
+  ));
+  const encode = bytes => Buffer.from(bytes).toString('base64url');
+  let requestedUrl = '';
+  app.context.fetch = async url => {
+    requestedUrl = url;
+    return {
+      ok: true,
+      async json() {
+        return { revision: 7, iv: encode(iv), ciphertext: encode(encrypted) };
+      },
+    };
+  };
+
+  await app.context.window.MedicationSync.importScheduleCopy({
+    version: 1,
+    pairId: 'p'.repeat(32),
+    token: 't'.repeat(43),
+    encryptionKey: encode(key),
+  });
+
+  assert.equal(app.importedSchedule().events[0].label, 'Morning medicines');
+  assert.match(requestedUrl, /\/sync\/pairs\/p{32}$/);
+  assert.doesNotMatch(requestedUrl, /\/claim$/);
+  assert.equal(app.storage.has('medication-reminder-sync-v1'), false);
 });
