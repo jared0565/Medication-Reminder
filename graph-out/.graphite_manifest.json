@@ -1,6 +1,6 @@
 {
   "root": "Medication Reminder",
-  "file_count": 39,
+  "file_count": 40,
   "engine": {
     "cache_version": "v6",
     "schema_version": "1",
@@ -37,6 +37,12 @@
       "language": "markdown",
       "size": 19888,
       "hash": "751b77b224d1f2c6839e5316fb8c355d952dbcbcf4ba5c7372a1bad55903afb8"
+    },
+    {
+      "rel_path": "docs/superpowers/specs/2026-07-23-browser-account-boundary-design.md",
+      "language": "markdown",
+      "size": 10229,
+      "hash": "0dfefb7c56783210d6b5ca5629b5ba83d79245e9caf1a54d61ea6806c0951907"
     },
     {
       "rel_path": "install_dependencies.bat",

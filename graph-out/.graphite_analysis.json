@@ -178,6 +178,11 @@
       "kind": "file"
     },
     {
+      "id": "docs_superpowers_specs_2026_07_23_browser_account_boundary_design",
+      "name": "2026-07-23-browser-account-boundary-design.md",
+      "kind": "file"
+    },
+    {
       "id": "install_dependencies",
       "name": "install_dependencies.bat",
       "kind": "file"
@@ -254,11 +259,6 @@
     },
     {
       "id": "web_app_sort_l36_c226",
-      "name": "sort",
-      "kind": "function"
-    },
-    {
-      "id": "web_app_sort_l7_c65",
       "name": "sort",
       "kind": "function"
     }
@@ -542,8 +542,24 @@
   ],
   "cycles": [
     [
-      "web_app_enablenotifications",
-      "web_app_updatenotificationstatus",
+      "web_app_saveeditor",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_renderschedules",
+      "web_app"
+    ],
+    [
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_rendertoday",
       "web_app"
     ],
     [
@@ -558,65 +574,27 @@
       "web_app"
     ],
     [
-      "web_app_renderschedules",
-      "web_app",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_renderschedules",
+      "web_app_addmedicineinput",
       "web_app"
     ],
     [
-      "web_app_renderschedules",
-      "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
-      "web_app"
-    ],
-    [
-      "web_app_saveeditor",
-      "web_app_renderall",
+      "web_app_markoccurrencetaken",
       "web_app_rendertoday",
       "web_app"
     ],
     [
-      "web_app_rendertoday",
       "web_app",
-      "web_app_markoccurrencetaken"
+      "web_app_enablenotifications",
+      "web_app_updatenotificationstatus"
     ],
     [
-      "web_app_rendertoday",
-      "web_app",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_rendermedicineinputs",
       "web_app",
       "web_app_openeditor"
     ],
     [
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app"
-    ],
-    [
       "web_app",
-      "web_app_addmedicineinput"
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs"
     ],
     [
       "web_app",
@@ -624,7 +602,29 @@
     ],
     [
       "web_app",
+      "web_app_renderall",
+      "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_renderall",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_rendermedicineinputs"
+    ],
+    [
+      "web_app",
       "web_app_renderpairingqr"
+    ],
+    [
+      "web_app",
+      "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_rendertoday"
     ],
     [
       "web_app",
