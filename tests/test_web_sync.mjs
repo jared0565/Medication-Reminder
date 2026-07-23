@@ -380,9 +380,9 @@ test('a new visitor starts with an empty private schedule', () => {
 
 test('atomic synced schedule persistence keeps the old in-memory schedule on storage failure', () => {
   const source = readFileSync('web/app.js', 'utf8');
-  const match = source.match(/window\.applySyncedSchedule=incoming=>\{[\s\S]*?\};\nwindow\.clearMedicationSchedule/);
+  const match = source.match(/window\.applySyncedSchedule=incoming=>\{[\s\S]*?\};\r?\nwindow\.clearMedicationSchedule/);
   assert.ok(match);
-  const implementation = match[0].replace(/\nwindow\.clearMedicationSchedule$/, '');
+  const implementation = match[0].replace(/\r?\nwindow\.clearMedicationSchedule$/, '');
   const window = {};
   const context = {
     window,

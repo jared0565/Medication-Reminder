@@ -337,16 +337,16 @@ try {
     throw 'Pinned local Wrangler executable is missing after npm ci.'
   }
   $wranglerVersion = & $wrangler --version
-  if ($LASTEXITCODE -ne 0 -or $wranglerVersion.Trim() -ne '4.112.0') {
-    throw "Expected freshly installed Wrangler 4.112.0, found $($wranglerVersion.Trim())."
+  if ($LASTEXITCODE -ne 0 -or $wranglerVersion.Trim() -ne '4.114.0') {
+    throw "Expected freshly installed Wrangler 4.114.0, found $($wranglerVersion.Trim())."
   }
 
   $lock = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'worker\package-lock.json') | ConvertFrom-Json -AsHashtable
   $dependencyTreeJson = npm ls --all --json
   if ($LASTEXITCODE -ne 0) { throw 'Installed dependency tree does not agree with the lockfile.' }
   $dependencyTree = $dependencyTreeJson | ConvertFrom-Json
-  if ($lock.packages.''.devDependencies.wrangler -cne '4.112.0' -or
-      $lock.packages.'node_modules/wrangler'.version -cne '4.112.0' -or
+  if ($lock.packages.''.devDependencies.wrangler -cne '4.114.0' -or
+      $lock.packages.'node_modules/wrangler'.version -cne '4.114.0' -or
       $dependencyTree.dependencies.wrangler.version -cne $lock.packages.'node_modules/wrangler'.version -or
       $dependencyTree.dependencies.'web-push'.version -cne $lock.packages.'node_modules/web-push'.version) {
     throw 'Installed direct dependencies, manifest, and lockfile do not agree.'
@@ -359,68 +359,11 @@ try {
     throw 'Production dependency audit returned vulnerabilities; stop deployment.'
   }
 
-  function Assert-ApprovedDevToolAuditException {
-    param(
-      [Parameter(Mandatory)][object] $Audit,
-      [Parameter(Mandatory)][hashtable] $PackageLock
-    )
-    $findingNames = @($Audit.vulnerabilities.PSObject.Properties.Name | Sort-Object)
-    $expectedNames = @('miniflare', 'sharp', 'wrangler')
-    $sharpAdvisories = @($Audit.vulnerabilities.sharp.via | Where-Object {
-      $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
-    })
-    $fixMetadata = @(
-      $Audit.vulnerabilities.sharp.fixAvailable
-      $Audit.vulnerabilities.miniflare.fixAvailable
-      $Audit.vulnerabilities.wrangler.fixAvailable
-    )
-    $allNoFix = @($fixMetadata | Where-Object { $_ -ne $false }).Count -eq 0
-    $allKnownForcedDowngrade = @($fixMetadata | Where-Object {
-      $_ -isnot [pscustomobject] -or
-      $_.name -cne 'wrangler' -or
-      $_.version -cne '4.15.2' -or
-      $_.isSemVerMajor -ne $true
-    }).Count -eq 0
-    $checks = [ordered]@{
-      exactFindingNames = @(Compare-Object -CaseSensitive $expectedNames $findingNames).Count -eq 0
-      totalCount = $Audit.metadata.vulnerabilities.total -eq 3
-      highCount = $Audit.metadata.vulnerabilities.high -eq 3
-      infoCount = $Audit.metadata.vulnerabilities.info -eq 0
-      lowCount = $Audit.metadata.vulnerabilities.low -eq 0
-      moderateCount = $Audit.metadata.vulnerabilities.moderate -eq 0
-      criticalCount = $Audit.metadata.vulnerabilities.critical -eq 0
-      sharpViaCount = @($Audit.vulnerabilities.sharp.via).Count -eq 1
-      sharpAdvisoryCount = $sharpAdvisories.Count -eq 1
-      sharpAdvisorySource = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].source -eq 1124066
-      sharpAdvisoryRange = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].range -eq '<0.35.0'
-      miniflareVia = @($Audit.vulnerabilities.miniflare.via).Count -eq 1 -and $Audit.vulnerabilities.miniflare.via[0] -eq 'sharp'
-      wranglerVia = @($Audit.vulnerabilities.wrangler.via).Count -eq 1 -and $Audit.vulnerabilities.wrangler.via[0] -eq 'miniflare'
-      approvedFixMetadata = $allNoFix -or $allKnownForcedDowngrade
-      wranglerVersion = $PackageLock.packages.'node_modules/wrangler'.version -eq '4.112.0'
-      wranglerDevOnly = $PackageLock.packages.'node_modules/wrangler'.dev -eq $true
-      miniflareVersion = $PackageLock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0'
-      miniflareDevOnly = $PackageLock.packages.'node_modules/miniflare'.dev -eq $true
-      sharpDependency = $PackageLock.packages.'node_modules/miniflare'.dependencies.sharp -eq '0.34.5'
-      sharpVersion = $PackageLock.packages.'node_modules/sharp'.version -eq '0.34.5'
-      sharpDevOnly = $PackageLock.packages.'node_modules/sharp'.dev -eq $true
-    }
-    $failedChecks = @(
-      $checks.GetEnumerator() |
-        Where-Object { -not [bool]$_.Value } |
-        ForEach-Object { $_.Key }
-    )
-    if ($failedChecks.Count -ne 0) {
-      throw "Full dependency audit differs from the approved dev-tool exception. Failed checks: $($failedChecks -join ', ')."
-    }
-  }
-
   $devAuditJson = npm audit --json
-  $devAuditExit = $LASTEXITCODE
-  if ($devAuditExit -notin @(0, 1)) { throw 'Full dependency audit could not complete.' }
+  if ($LASTEXITCODE -ne 0) { throw 'Full dependency audit failed; stop deployment.' }
   $devAudit = $devAuditJson | ConvertFrom-Json
-  if ($devAuditExit -eq 1) {
-    Assert-ApprovedDevToolAuditException -Audit $devAudit -PackageLock $lock
-    Write-Warning 'Known dev-tool audit exception matched exactly; production dependency audit is clean.'
+  if ($devAudit.metadata.vulnerabilities.total -ne 0) {
+    throw 'Full dependency audit returned vulnerabilities; stop deployment.'
   }
 } finally {
   Pop-Location
@@ -489,7 +432,7 @@ deployment must stop if any legacy account-owned bearer row has
 
 ### Capture rollback targets and backup before mutation
 
-Pinned Wrangler 4.112.0 supports JSON output for `deployments list`,
+Pinned Wrangler 4.114.0 supports JSON output for `deployments list`,
 `versions list`, and `pages deployment list`, but this runbook does not assume an
 untested JSON field layout. Capture and validate the inventories and D1 backup
 before creating the final operator attestation:
@@ -1232,7 +1175,7 @@ push-subscription values during verification.
 ### Rollback
 
 If Worker verification fails, use the captured version ID—not “the previous” mutable
-position. Pinned Wrangler 4.112.0 accepts the version ID, an audit message, and
+position. Pinned Wrangler 4.114.0 accepts the version ID, an audit message, and
 `--yes`; `--yes`, rather than the message, suppresses the confirmation prompt:
 
 ```powershell
@@ -1337,8 +1280,8 @@ if (-not (Test-Path -LiteralPath $wrangler -PathType Leaf)) {
 }
 $wranglerVersion = & $wrangler --version
 if ($LASTEXITCODE -ne 0) { throw 'Pinned local Wrangler version check failed.' }
-if ($wranglerVersion.Trim() -ne '4.112.0') {
-  throw "Expected pinned Wrangler 4.112.0, found $($wranglerVersion.Trim())."
+if ($wranglerVersion.Trim() -ne '4.114.0') {
+  throw "Expected pinned Wrangler 4.114.0, found $($wranglerVersion.Trim())."
 }
 
 Push-Location (Join-Path $repoRoot 'worker')
@@ -1347,8 +1290,8 @@ try {
   $dependencyTreeJson = npm ls --all --json
   if ($LASTEXITCODE -ne 0) { throw 'Installed dependency tree does not agree with the lockfile.' }
   $dependencyTree = $dependencyTreeJson | ConvertFrom-Json
-  if ($lock.packages.''.devDependencies.wrangler -cne '4.112.0' -or
-      $lock.packages.'node_modules/wrangler'.version -cne '4.112.0' -or
+  if ($lock.packages.''.devDependencies.wrangler -cne '4.114.0' -or
+      $lock.packages.'node_modules/wrangler'.version -cne '4.114.0' -or
       $dependencyTree.dependencies.wrangler.version -cne $lock.packages.'node_modules/wrangler'.version -or
       $dependencyTree.dependencies.'web-push'.version -cne $lock.packages.'node_modules/web-push'.version) {
     throw 'Installed direct dependencies, manifest, and lockfile do not agree.'
@@ -1361,68 +1304,11 @@ try {
     throw 'Production dependency audit returned vulnerabilities.'
   }
 
-  function Assert-ApprovedDevToolAuditException {
-    param(
-      [Parameter(Mandatory)][object] $Audit,
-      [Parameter(Mandatory)][hashtable] $PackageLock
-    )
-    $findingNames = @($Audit.vulnerabilities.PSObject.Properties.Name | Sort-Object)
-    $expectedNames = @('miniflare', 'sharp', 'wrangler')
-    $sharpAdvisories = @($Audit.vulnerabilities.sharp.via | Where-Object {
-      $_.url -eq 'https://github.com/advisories/GHSA-f88m-g3jw-g9cj'
-    })
-    $fixMetadata = @(
-      $Audit.vulnerabilities.sharp.fixAvailable
-      $Audit.vulnerabilities.miniflare.fixAvailable
-      $Audit.vulnerabilities.wrangler.fixAvailable
-    )
-    $allNoFix = @($fixMetadata | Where-Object { $_ -ne $false }).Count -eq 0
-    $allKnownForcedDowngrade = @($fixMetadata | Where-Object {
-      $_ -isnot [pscustomobject] -or
-      $_.name -cne 'wrangler' -or
-      $_.version -cne '4.15.2' -or
-      $_.isSemVerMajor -ne $true
-    }).Count -eq 0
-    $checks = [ordered]@{
-      exactFindingNames = @(Compare-Object -CaseSensitive $expectedNames $findingNames).Count -eq 0
-      totalCount = $Audit.metadata.vulnerabilities.total -eq 3
-      highCount = $Audit.metadata.vulnerabilities.high -eq 3
-      infoCount = $Audit.metadata.vulnerabilities.info -eq 0
-      lowCount = $Audit.metadata.vulnerabilities.low -eq 0
-      moderateCount = $Audit.metadata.vulnerabilities.moderate -eq 0
-      criticalCount = $Audit.metadata.vulnerabilities.critical -eq 0
-      sharpViaCount = @($Audit.vulnerabilities.sharp.via).Count -eq 1
-      sharpAdvisoryCount = $sharpAdvisories.Count -eq 1
-      sharpAdvisorySource = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].source -eq 1124066
-      sharpAdvisoryRange = $sharpAdvisories.Count -eq 1 -and $sharpAdvisories[0].range -eq '<0.35.0'
-      miniflareVia = @($Audit.vulnerabilities.miniflare.via).Count -eq 1 -and $Audit.vulnerabilities.miniflare.via[0] -eq 'sharp'
-      wranglerVia = @($Audit.vulnerabilities.wrangler.via).Count -eq 1 -and $Audit.vulnerabilities.wrangler.via[0] -eq 'miniflare'
-      approvedFixMetadata = $allNoFix -or $allKnownForcedDowngrade
-      wranglerVersion = $PackageLock.packages.'node_modules/wrangler'.version -eq '4.112.0'
-      wranglerDevOnly = $PackageLock.packages.'node_modules/wrangler'.dev -eq $true
-      miniflareVersion = $PackageLock.packages.'node_modules/wrangler'.dependencies.miniflare -eq '4.20260714.0'
-      miniflareDevOnly = $PackageLock.packages.'node_modules/miniflare'.dev -eq $true
-      sharpDependency = $PackageLock.packages.'node_modules/miniflare'.dependencies.sharp -eq '0.34.5'
-      sharpVersion = $PackageLock.packages.'node_modules/sharp'.version -eq '0.34.5'
-      sharpDevOnly = $PackageLock.packages.'node_modules/sharp'.dev -eq $true
-    }
-    $failedChecks = @(
-      $checks.GetEnumerator() |
-        Where-Object { -not [bool]$_.Value } |
-        ForEach-Object { $_.Key }
-    )
-    if ($failedChecks.Count -ne 0) {
-      throw "Full dependency audit differs from the approved dev-tool exception. Failed checks: $($failedChecks -join ', ')."
-    }
-  }
-
   $devAuditJson = npm audit --json
-  $devAuditExit = $LASTEXITCODE
-  if ($devAuditExit -notin @(0, 1)) { throw 'Full dependency audit could not complete.' }
+  if ($LASTEXITCODE -ne 0) { throw 'Full dependency audit failed.' }
   $devAudit = $devAuditJson | ConvertFrom-Json
-  if ($devAuditExit -eq 1) {
-    Assert-ApprovedDevToolAuditException -Audit $devAudit -PackageLock $lock
-    Write-Warning 'Known dev-tool audit exception matched exactly; production dependency audit is clean.'
+  if ($devAudit.metadata.vulnerabilities.total -ne 0) {
+    throw 'Full dependency audit returned vulnerabilities.'
   }
 } finally {
   Pop-Location
@@ -1462,7 +1348,7 @@ for both direct packages, `web-push` and `wrangler`, then unconditionally runs
 `npm ci` against `worker/package-lock.json`. This removes and recreates the installed
 dependency tree from the lockfile so stale or modified `node_modules` content cannot
 be trusted. It does not add or select packages. Wrangler is pinned and tested at
-exactly `4.112.0`; all production commands invoke that freshly installed local
+exactly `4.114.0`; all production commands invoke that freshly installed local
 executable, so they cannot trigger an implicit package download. `npm run build`
 also resolves the pinned local CLI and performs a dry run without deploying.
 
@@ -1472,36 +1358,9 @@ Treat a Wrangler upgrade as a deliberate dependency change: validate the exact
 test suite and Worker dry-run build, and commit the version change. Do not introduce
 or upgrade any package without the required validation for its exact package name.
 
-### Temporary development-tool audit exception
-
-As checked on **2026-07-23**, `npm audit` reports
-`GHSA-f88m-g3jw-g9cj` through this dev-only chain:
-
-```text
-wrangler@4.112.0 -> miniflare@4.20260714.0 -> sharp@0.34.5
-```
-
-The advisory covers inherited libvips vulnerabilities in Sharp versions below
-0.35.0. Depending on the npm registry response path, `fixAvailable` is either `false`
-or an identical forced semver-major downgrade to Wrangler 4.15.2 for all three
-nodes. That downgrade is not an approved remediation: the then-current Wrangler
-4.113.0 still pinned Miniflare to Sharp 0.34.5. The release gate accepts only those
-two exact metadata shapes and rejects any other advertised fix. Wrangler,
-Miniflare, and Sharp are marked `dev: true` in the lockfile and inspection of the
-Worker dry-run bundle confirms they are not bundled into the deployed Worker
-runtime.
-
-This is a constrained development-tool exception, not a production-runtime
-exception. Run Wrangler and Miniflare only on trusted repository inputs in restricted
-developer or CI environments, and do not use this toolchain to process untrusted
-images. Keep `npm audit --omit=dev` as a zero-vulnerability deployment gate. The full
-audit may proceed only when it matches the exact advisory, versions, dependency path,
-and dev-only flags checked above; any other finding stops the release for review.
-
-Track the upstream Wrangler/Miniflare chain and remove this exception immediately
-when Wrangler ships a supported fixed dependency. Before upgrading, revalidate the
-`wrangler` package, update the exact pin, inspect the lockfile, then rerun the complete
-suite and Worker dry-run.
+Both the production-only and complete dependency audits must report zero
+vulnerabilities. Wrangler 4.114.0 resolved the prior dev-only Sharp advisory by
+updating Miniflare to a release that uses Sharp 0.35.2; no audit exception remains.
 
 ## Windows owner tool
 
