@@ -100,10 +100,10 @@
 ### Community 47 (web, functions)
 - size: 3 (files: 0, functions: 2, classes: 0)
 - members: `web_sw_fetch`, `web_sw_self_addeventlistener_fetch_l6_c31`, `web_sw_then_l6_c551`
-### Community 24 (tests, functions)
+### Community 24 (tests)
 - size: 2 (files: 0, functions: 1, classes: 0)
 - members: `tests_test_web_sync_revokefromsource_l134_c23`, `tests_test_web_sync_serviceworkermessagehandler`
-### Community 59 (web, functions)
+### Community 59 (web)
 - size: 2 (files: 0, functions: 1, classes: 0)
 - members: `web_sync_resolve`, `web_sync_settimeout_l46_c1058`
 ### Community 1 (files)

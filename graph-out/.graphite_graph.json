@@ -1615,21 +1615,21 @@
       "community": 23
     },
     {
-      "id": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l185_c68",
+      "id": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l186_c68",
       "kind": "function",
       "name": "test an explicitly unpaired mobile stays empty after app reload",
       "source_file": "tests/test_web_sync.mjs",
-      "source_location": "L185",
+      "source_location": "L186",
       "anonymous": true,
       "label": "test an explicitly unpaired mobile stays empty after app reload",
       "community": 15
     },
     {
-      "id": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l177_c77",
+      "id": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l178_c77",
       "kind": "function",
       "name": "test an installed mobile with no active pairing clears legacy local data",
       "source_file": "tests/test_web_sync.mjs",
-      "source_location": "L177",
+      "source_location": "L178",
       "anonymous": true,
       "label": "test an installed mobile with no active pairing clears legacy local data",
       "community": 15
@@ -1645,11 +1645,11 @@
       "community": 15
     },
     {
-      "id": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l167_c72",
+      "id": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l168_c72",
       "kind": "function",
       "name": "test source-side revocation immediately forgets the mobile schedule",
       "source_file": "tests/test_web_sync.mjs",
-      "source_location": "L167",
+      "source_location": "L168",
       "anonymous": true,
       "label": "test source-side revocation immediately forgets the mobile schedule",
       "community": 15
@@ -13899,22 +13899,22 @@
       "source_location": "L134"
     },
     {
-      "source": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l185_c68",
+      "source": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l186_c68",
       "target": "tests_test_web_sync_readfilesync",
       "relation": "calls",
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L203"
+      "source_location": "L204"
     },
     {
-      "source": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l177_c77",
+      "source": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l178_c77",
       "target": "tests_test_web_sync_installedmobileharness",
       "relation": "calls",
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L178"
+      "source_location": "L179"
     },
     {
       "source": "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l140_c80",
@@ -13923,7 +13923,7 @@
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L147"
+      "source_location": "L148"
     },
     {
       "source": "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l140_c80",
@@ -13935,13 +13935,13 @@
       "source_location": "L141"
     },
     {
-      "source": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l167_c72",
+      "source": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l168_c72",
       "target": "tests_test_web_sync_installedmobileharness",
       "relation": "calls",
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L168"
+      "source_location": "L169"
     },
     {
       "source": "tests_test_web_sync_toggle",

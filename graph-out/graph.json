@@ -1615,21 +1615,21 @@
       "community": 23
     },
     {
-      "id": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l185_c68",
+      "id": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l186_c68",
       "kind": "function",
       "name": "test an explicitly unpaired mobile stays empty after app reload",
       "source_file": "tests/test_web_sync.mjs",
-      "source_location": "L185",
+      "source_location": "L186",
       "anonymous": true,
       "label": "test an explicitly unpaired mobile stays empty after app reload",
       "community": 15
     },
     {
-      "id": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l177_c77",
+      "id": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l178_c77",
       "kind": "function",
       "name": "test an installed mobile with no active pairing clears legacy local data",
       "source_file": "tests/test_web_sync.mjs",
-      "source_location": "L177",
+      "source_location": "L178",
       "anonymous": true,
       "label": "test an installed mobile with no active pairing clears legacy local data",
       "community": 15
@@ -1645,11 +1645,11 @@
       "community": 15
     },
     {
-      "id": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l167_c72",
+      "id": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l168_c72",
       "kind": "function",
       "name": "test source-side revocation immediately forgets the mobile schedule",
       "source_file": "tests/test_web_sync.mjs",
-      "source_location": "L167",
+      "source_location": "L168",
       "anonymous": true,
       "label": "test source-side revocation immediately forgets the mobile schedule",
       "community": 15
@@ -13899,22 +13899,22 @@
       "source_location": "L134"
     },
     {
-      "source": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l185_c68",
+      "source": "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l186_c68",
       "target": "tests_test_web_sync_readfilesync",
       "relation": "calls",
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L203"
+      "source_location": "L204"
     },
     {
-      "source": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l177_c77",
+      "source": "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l178_c77",
       "target": "tests_test_web_sync_installedmobileharness",
       "relation": "calls",
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L178"
+      "source_location": "L179"
     },
     {
       "source": "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l140_c80",
@@ -13923,7 +13923,7 @@
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L147"
+      "source_location": "L148"
     },
     {
       "source": "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l140_c80",
@@ -13935,13 +13935,13 @@
       "source_location": "L141"
     },
     {
-      "source": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l167_c72",
+      "source": "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l168_c72",
       "target": "tests_test_web_sync_installedmobileharness",
       "relation": "calls",
       "source_file": "tests/test_web_sync.mjs",
       "confidence": "LOCAL_CALL",
       "weight": 1.0,
-      "source_location": "L168"
+      "source_location": "L169"
     },
     {
       "source": "tests_test_web_sync_toggle",
@@ -18136,10 +18136,10 @@
         "tests_test_web_sync_readfilesync",
         "tests_test_web_sync_remove",
         "tests_test_web_sync_test",
-        "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l185_c68",
-        "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l177_c77",
+        "tests_test_web_sync_test_an_explicitly_unpaired_mobile_stays_empty_after_app_reload_l186_c68",
+        "tests_test_web_sync_test_an_installed_mobile_with_no_active_pairing_clears_legacy_local_data_l178_c77",
         "tests_test_web_sync_test_installed_mobile_exposes_only_pairing_sync_controls_and_safely_unpairs_l140_c80",
-        "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l167_c72",
+        "tests_test_web_sync_test_source_side_revocation_immediately_forgets_the_mobile_schedule_l168_c72",
         "tests_test_web_sync_toggle",
         "web_app_b_onclick_l14_c56",
         "web_sw_self_addeventlistener_push_l7_c30"
@@ -18339,8 +18339,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "tests",
-        "functions"
+        "tests"
       ]
     },
     {
@@ -18354,8 +18353,7 @@
       "function_count": 1,
       "class_count": 0,
       "labels": [
-        "web",
-        "functions"
+        "web"
       ]
     },
     {
@@ -19497,32 +19495,16 @@
     ],
     "cycles": [
       [
-        "web_app_updatenotificationstatus",
-        "web_app",
-        "web_app_enablenotifications"
+        "medication_core_protectedjsonfile",
+        "medication_core_init"
       ],
       [
-        "web_app_updatenotificationstatus",
+        "medication_core_dpapiprotector",
+        "medication_core_init"
+      ],
+      [
+        "web_app_addmedicineinput",
         "web_app"
-      ],
-      [
-        "web_app_renderpairingqr",
-        "web_app"
-      ],
-      [
-        "web_app_rendertoday",
-        "web_app",
-        "web_app_renderall"
-      ],
-      [
-        "web_app_rendertoday",
-        "web_app"
-      ],
-      [
-        "web_app_rendertoday",
-        "web_app",
-        "web_app_saveeditor",
-        "web_app_renderall"
       ],
       [
         "web_app_openeditor",
@@ -19534,48 +19516,64 @@
         "web_app"
       ],
       [
-        "web_app_saveeditor",
+        "web_app_rendermedicineinputs",
         "web_app"
       ],
       [
+        "web_app_rendertoday",
+        "web_app",
+        "web_app_renderall"
+      ],
+      [
+        "web_app_rendertoday",
+        "web_app"
+      ],
+      [
+        "web_app_rendertoday",
+        "web_app",
         "web_app_saveeditor",
+        "web_app_renderall"
+      ],
+      [
         "web_app_renderall",
         "web_app"
       ],
       [
-        "web_app_saveeditor",
+        "web_app_renderall",
+        "web_app",
+        "web_app_saveeditor"
+      ],
+      [
         "web_app_renderall",
         "web_app_renderschedules",
         "web_app"
       ],
       [
-        "web_app",
-        "web_app_addmedicineinput"
-      ],
-      [
-        "web_app",
-        "web_app_renderall"
-      ],
-      [
-        "web_app",
         "web_app_renderall",
-        "web_app_renderschedules"
+        "web_app_renderschedules",
+        "web_app",
+        "web_app_saveeditor"
+      ],
+      [
+        "web_app_enablenotifications",
+        "web_app_updatenotificationstatus",
+        "web_app"
+      ],
+      [
+        "web_app_updatenotificationstatus",
+        "web_app"
+      ],
+      [
+        "web_app_saveeditor",
+        "web_app"
+      ],
+      [
+        "web_app_renderpairingqr",
+        "web_app"
       ],
       [
         "web_app",
-        "web_app_rendermedicineinputs"
-      ],
-      [
-        "web_app",
         "web_app_renderschedules"
-      ],
-      [
-        "medication_core_init",
-        "medication_core_dpapiprotector"
-      ],
-      [
-        "medication_core_init",
-        "medication_core_protectedjsonfile"
       ]
     ],
     "top_files_by_links": [

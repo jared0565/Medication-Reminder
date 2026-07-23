@@ -101,8 +101,8 @@
     {
       "rel_path": "tests/test_web_sync.mjs",
       "language": "javascript",
-      "size": 7204,
-      "hash": "4ae09054cb04cfa00c9da6d16a8c832ba565ff3f00f2f47cc1de59d194a9bc30"
+      "size": 7253,
+      "hash": "c786e9733dae7817b7491918558c3902fea13cc8fc8f174f5bb2449a1129a6de"
     },
     {
       "rel_path": "web/_headers",
@@ -120,7 +120,7 @@
       "rel_path": "web/index.html",
       "language": "html",
       "size": 5544,
-      "hash": "a624b5aa80ec0909a71de497973f853e04d2ca467fc7596782d53dae4f5e077f"
+      "hash": "e82c6f6c17070d29568e1667cfe0eb1a353d58c39ccacd2330095bfccccae90c"
     },
     {
       "rel_path": "web/manifest.webmanifest",
@@ -144,13 +144,13 @@
       "rel_path": "web/sw.js",
       "language": "javascript",
       "size": 2163,
-      "hash": "11aad55e56b34d2dc8f0fe7cea4bfe2a7916c22ad4363cdaffec041dacf9a175"
+      "hash": "f33cbb7d8a2146ab88ab226d360ddf849d72d482d1237d80b254cac6f4840514"
     },
     {
       "rel_path": "web/sync.js",
       "language": "javascript",
-      "size": 20087,
-      "hash": "2e4f42f06537fe65b31da0e85a5be8b17c3ac2fc61f4d6f8f89fff487a37b124"
+      "size": 20170,
+      "hash": "50116aaf793c011476c67e58057260fe8c5900136d4983f4e44e4e8a40c93bcb"
     },
     {
       "rel_path": "worker/package-lock.json",

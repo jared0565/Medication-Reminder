@@ -129,7 +129,7 @@ function installedMobileHarness({ paired = true } = {}) {
     return { ok: true, async json() { return { ok: true }; } };
   };
   return {
-    pair, copy, sync, unpair, dialogs, storage, context,
+    pair, copy, sync, unpair, status, dialogs, storage, context,
     setPrompt: value => { promptValue = value; },
     revokeFromSource: () => serviceWorkerMessageHandler?.({ data: { type: 'PAIR_REVOKED' } }),
     clearCount: () => clearCount,
@@ -144,6 +144,7 @@ test('installed mobile exposes only pairing sync controls and safely unpairs', a
   assert.equal(app.sync.hidden, false);
   assert.equal(app.unpair.hidden, false);
   assert.equal(app.unpair.textContent, 'Unpair');
+  assert.equal(app.status.hidden, true);
   assert.equal(app.context.document.body.classList.contains('installed-mobile'), true);
 
   app.setPrompt('CANCEL');
