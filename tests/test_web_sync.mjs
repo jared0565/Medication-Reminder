@@ -63,7 +63,14 @@ function installedMobileHarness() {
     window,
     navigator,
     document: {
-      body: { append(node) { dialogs.push(node); } },
+      body: {
+        append(node) { dialogs.push(node); },
+        classList: {
+          values: new Set(),
+          toggle(name, enabled) { enabled ? this.values.add(name) : this.values.delete(name); },
+          contains(name) { return this.values.has(name); },
+        },
+      },
       visibilityState: 'hidden',
       querySelector(selector) { return elements.get(selector) || control(); },
       createElement() { return dialog(); },
@@ -130,6 +137,7 @@ test('installed mobile exposes only pairing sync controls and safely unpairs', a
   assert.equal(app.sync.hidden, false);
   assert.equal(app.unpair.hidden, false);
   assert.equal(app.unpair.textContent, 'Unpair');
+  assert.equal(app.context.document.body.classList.contains('installed-mobile'), true);
 
   app.setPrompt('CANCEL');
   await app.unpair.onclick();
