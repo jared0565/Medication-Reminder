@@ -727,7 +727,7 @@ function Assert-ReleaseAttestation {
     throw 'Release attestation must be an explicitly named file directly under F:\tmp.'
   }
   try {
-    $record = Get-Content -Raw -LiteralPath $resolvedRecord | ConvertFrom-Json
+    $record = Get-Content -Raw -LiteralPath $resolvedRecord | ConvertFrom-Json -DateKind String
     $recordCaptureStartedAt = [datetimeoffset]$record.captureStartedAtUtc
     $recordWorkerDeploymentsCapturedAt = [datetimeoffset]$record.worker.deploymentsCapturedAtUtc
     $recordWorkerVersionsCapturedAt = [datetimeoffset]$record.worker.versionsCapturedAtUtc
@@ -797,7 +797,7 @@ function Assert-ReleaseAttestation {
       throw "Release inventory hash drift detected: $resolvedInventory"
     }
     try {
-      $inventoryRecord = Get-Content -Raw -LiteralPath $resolvedInventory | ConvertFrom-Json
+      $inventoryRecord = Get-Content -Raw -LiteralPath $resolvedInventory | ConvertFrom-Json -DateKind String
     } catch {
       throw "Release inventory is not valid JSON: $resolvedInventory"
     }
