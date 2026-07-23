@@ -41,12 +41,18 @@ function installedMobileHarness() {
     ['#importSchedule', sync],
     ['#unpairDevice', unpair],
   ]);
+  let serviceWorkerMessageHandler = null;
   const navigator = {
     userAgent: 'Mozilla/5.0 (Linux; Android 15)',
     userAgentData: { mobile: true },
     mediaDevices: {
       async getUserMedia() {
         return { getTracks: () => [{ stop() {} }] };
+      },
+    },
+    serviceWorker: {
+      addEventListener(name, handler) {
+        if (name === 'message') serviceWorkerMessageHandler = handler;
       },
     },
   };
@@ -125,6 +131,7 @@ function installedMobileHarness() {
   return {
     pair, copy, sync, unpair, dialogs, storage, context,
     setPrompt: value => { promptValue = value; },
+    revokeFromSource: () => serviceWorkerMessageHandler?.({ data: { type: 'PAIR_REVOKED' } }),
     clearCount: () => clearCount,
     fetchCount: () => fetchCount,
   };
@@ -149,9 +156,44 @@ test('installed mobile exposes only pairing sync controls and safely unpairs', a
   assert.equal(app.fetchCount(), 1);
   assert.equal(app.clearCount(), 1);
   assert.equal(app.storage.has('medication-reminder-sync-v1'), false);
+  assert.equal(app.storage.get('medication-reminder-mobile-unpaired-v1'), '1');
   assert.equal(app.sync.hidden, true);
   assert.equal(app.unpair.textContent, 'Pair Schedule');
 
   await app.unpair.onclick();
   assert.equal(app.dialogs[1].open, true);
+});
+
+test('source-side revocation immediately forgets the mobile schedule', () => {
+  const app = installedMobileHarness();
+  app.revokeFromSource();
+  assert.equal(app.clearCount(), 1);
+  assert.equal(app.storage.has('medication-reminder-sync-v1'), false);
+  assert.equal(app.storage.get('medication-reminder-mobile-unpaired-v1'), '1');
+  assert.equal(app.sync.hidden, true);
+  assert.equal(app.unpair.textContent, 'Pair Schedule');
+});
+
+test('an explicitly unpaired mobile stays empty after app reload', () => {
+  const storage = new Map([
+    ['medication-reminder-mobile-unpaired-v1', '1'],
+    ['medication-reminder-schedule-v1', JSON.stringify({
+      timezone: 'Europe/London',
+      events: [{ id: 'stale', time: '08:00', label: 'Stale schedule' }],
+    })],
+  ]);
+  const context = {
+    localStorage: {
+      getItem: key => storage.has(key) ? storage.get(key) : null,
+      setItem: (key, value) => storage.set(key, value),
+    },
+    Intl,
+    JSON,
+    console,
+    structuredClone,
+  };
+  const initialization = readFileSync('web/app.js', 'utf8').split('const $=')[0];
+  vm.runInNewContext(`${initialization};globalThis.loadedSchedule=schedule;`, context);
+  assert.equal(context.loadedSchedule.events.length, 0);
+  assert.equal(JSON.parse(storage.get('medication-reminder-schedule-v1')).events.length, 0);
 });

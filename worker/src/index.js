@@ -65,7 +65,7 @@ async function enforceRateLimit(request, env) {
   return true;
 }
 
-async function notifyPairedMobile(env, endpoint) {
+async function notifyPairedMobile(env, endpoint, notification = {}) {
   if (!endpoint) return;
   const subscription = await env.DB.prepare('SELECT endpoint, p256dh, auth FROM push_subscriptions WHERE endpoint = ?').bind(endpoint).first();
   if (!subscription) return;
@@ -73,7 +73,7 @@ async function notifyPairedMobile(env, endpoint) {
   try {
     await webpush.sendNotification(
       { endpoint: subscription.endpoint, keys: { p256dh: subscription.p256dh, auth: subscription.auth } },
-      JSON.stringify({ title: 'Schedule updated', body: 'Open Medication Reminder to securely sync the latest changes.', tag: 'medication-sync-update', url: '/' }),
+      JSON.stringify({ title: 'Schedule updated', body: 'Open Medication Reminder to securely sync the latest changes.', tag: 'medication-sync-update', url: '/', ...notification }),
     );
   } catch (error) {
     if (error?.statusCode === 404 || error?.statusCode === 410) await env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint = ?').bind(endpoint).run();
@@ -123,6 +123,7 @@ async function handleSync(request, env, url, ctx) {
   }
   if (request.method === 'DELETE' && !match[2]) {
     await env.DB.prepare('DELETE FROM sync_pairs WHERE pair_id = ?').bind(pair.pair_id).run();
+    if (pair.mobile_push_endpoint) ctx.waitUntil(notifyPairedMobile(env, pair.mobile_push_endpoint, { title: 'Mobile schedule unpaired', body: 'This pairing ended. Open Medication Reminder to remove the old schedule.', tag: 'medication-pair-revoked', type: 'pair-revoked', url: '/' }));
     return json(request, { ok: true });
   }
   return json(request, { error: 'Method not allowed' }, { status: 405 });

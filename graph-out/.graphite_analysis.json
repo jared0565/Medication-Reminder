@@ -25,6 +25,14 @@
       "out_degree": 45
     },
     {
+      "id": "web_app",
+      "name": "app.js",
+      "kind": "file",
+      "degree": 44,
+      "in_degree": 17,
+      "out_degree": 27
+    },
+    {
       "id": "medication_reminder_medicationreminderapp",
       "name": "MedicationReminderApp",
       "kind": "class",
@@ -33,20 +41,12 @@
       "out_degree": 41
     },
     {
-      "id": "web_app",
-      "name": "app.js",
-      "kind": "file",
-      "degree": 43,
-      "in_degree": 17,
-      "out_degree": 26
-    },
-    {
       "id": "web_sync",
       "name": "sync.js",
       "kind": "file",
-      "degree": 26,
+      "degree": 27,
       "in_degree": 0,
-      "out_degree": 26
+      "out_degree": 27
     },
     {
       "id": "medication_reminder_init",
@@ -65,20 +65,20 @@
       "out_degree": 20
     },
     {
+      "id": "web_sync_syncnow",
+      "name": "syncNow",
+      "kind": "function",
+      "degree": 21,
+      "in_degree": 8,
+      "out_degree": 13
+    },
+    {
       "id": "medication_reminder_save",
       "name": "save",
       "kind": "function",
       "degree": 20,
       "in_degree": 1,
       "out_degree": 19
-    },
-    {
-      "id": "web_sync_syncnow",
-      "name": "syncNow",
-      "kind": "function",
-      "degree": 20,
-      "in_degree": 8,
-      "out_degree": 12
     },
     {
       "id": "medication_core_validate_schedule",
@@ -97,20 +97,20 @@
       "out_degree": 18
     },
     {
+      "id": "tests_test_web_sync_installedmobileharness",
+      "name": "installedMobileHarness",
+      "kind": "function",
+      "degree": 19,
+      "in_degree": 3,
+      "out_degree": 16
+    },
+    {
       "id": "medication_reminder_edit_event_dialog",
       "name": "edit_event_dialog",
       "kind": "function",
       "degree": 18,
       "in_degree": 1,
       "out_degree": 17
-    },
-    {
-      "id": "tests_test_web_sync_installedmobileharness",
-      "name": "installedMobileHarness",
-      "kind": "function",
-      "degree": 18,
-      "in_degree": 2,
-      "out_degree": 16
     },
     {
       "id": "tests_e2e_sync",
@@ -173,6 +173,11 @@
       "kind": "file"
     },
     {
+      "id": "docs_graphite_query_interface_recommendation",
+      "name": "GRAPHITE_QUERY_INTERFACE_RECOMMENDATION.md",
+      "kind": "file"
+    },
+    {
       "id": "install_dependencies",
       "name": "install_dependencies.bat",
       "kind": "file"
@@ -201,6 +206,11 @@
       "id": "run_medication_reminder",
       "name": "run_medication_reminder.bat",
       "kind": "file"
+    },
+    {
+      "id": "web_app_emptyschedule_l2_c398",
+      "name": "emptySchedule",
+      "kind": "function"
     },
     {
       "id": "web_app_esc_l3_c48",
@@ -233,7 +243,7 @@
       "kind": "function"
     },
     {
-      "id": "web_app_readstoredjson_l2_c112",
+      "id": "web_app_readstoredjson_l2_c165",
       "name": "readStoredJson",
       "kind": "function"
     },
@@ -250,16 +260,6 @@
     {
       "id": "web_app_sort_l7_c223",
       "name": "sort",
-      "kind": "function"
-    },
-    {
-      "id": "web_app_sort_l8_c65",
-      "name": "sort",
-      "kind": "function"
-    },
-    {
-      "id": "web_app_timenow_l3_c540",
-      "name": "timeNow",
       "kind": "function"
     }
   ],
@@ -281,9 +281,9 @@
     {
       "id": "web_sync",
       "name": "sync.js",
-      "out_degree": 26,
+      "out_degree": 27,
       "in_degree": 0,
-      "ratio": 26.0
+      "ratio": 27.0
     },
     {
       "id": "tests_e2e_sync",
@@ -337,9 +337,9 @@
     {
       "id": "web_app",
       "name": "app.js",
-      "out_degree": 26,
+      "out_degree": 27,
       "in_degree": 17,
-      "ratio": 1.5294117647058822
+      "ratio": 1.588235294117647
     }
   ],
   "surprising_connections": [
@@ -490,45 +490,26 @@
       "medication_core_init"
     ],
     [
-      "medication_core_init",
-      "medication_core_dpapiprotector"
+      "medication_core_dpapiprotector",
+      "medication_core_init"
     ],
     [
-      "web_app_rendertoday",
       "web_app",
-      "web_app_renderall"
+      "web_app_addmedicineinput"
     ],
     [
-      "web_app_rendertoday",
-      "web_app"
-    ],
-    [
-      "web_app_rendertoday",
       "web_app",
-      "web_app_saveeditor",
-      "web_app_renderall"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app"
-    ],
-    [
-      "web_app_openeditor",
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_rendermedicineinputs",
-      "web_app"
-    ],
-    [
-      "web_app_addmedicineinput",
-      "web_app"
-    ],
-    [
       "web_app_enablenotifications",
-      "web_app_updatenotificationstatus",
-      "web_app"
+      "web_app_updatenotificationstatus"
+    ],
+    [
+      "web_app",
+      "web_app_openeditor"
+    ],
+    [
+      "web_app",
+      "web_app_openeditor",
+      "web_app_rendermedicineinputs"
     ],
     [
       "web_app",
@@ -541,11 +522,24 @@
     ],
     [
       "web_app",
+      "web_app_renderall",
+      "web_app_rendertoday"
+    ],
+    [
+      "web_app",
+      "web_app_rendermedicineinputs"
+    ],
+    [
+      "web_app",
       "web_app_renderpairingqr"
     ],
     [
       "web_app",
       "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_rendertoday"
     ],
     [
       "web_app",
@@ -561,6 +555,12 @@
       "web_app_saveeditor",
       "web_app_renderall",
       "web_app_renderschedules"
+    ],
+    [
+      "web_app",
+      "web_app_saveeditor",
+      "web_app_renderall",
+      "web_app_rendertoday"
     ],
     [
       "web_app",
@@ -589,13 +589,13 @@
     {
       "id": "web_app",
       "name": "app.js",
-      "degree": 43,
+      "degree": 44,
       "source_file": "web/app.js"
     },
     {
       "id": "web_sync",
       "name": "sync.js",
-      "degree": 26,
+      "degree": 27,
       "source_file": "web/sync.js"
     },
     {
@@ -647,6 +647,12 @@
       "source_file": "build_windows_exe.bat"
     },
     {
+      "id": "docs_graphite_query_interface_recommendation",
+      "name": "GRAPHITE_QUERY_INTERFACE_RECOMMENDATION.md",
+      "degree": 0,
+      "source_file": "docs/GRAPHITE_QUERY_INTERFACE_RECOMMENDATION.md"
+    },
+    {
       "id": "install_dependencies",
       "name": "install_dependencies.bat",
       "degree": 0,
@@ -681,12 +687,6 @@
       "name": "run_medication_reminder.bat",
       "degree": 0,
       "source_file": "run_medication_reminder.bat"
-    },
-    {
-      "id": "web_headers",
-      "name": "_headers",
-      "degree": 0,
-      "source_file": "web/_headers"
     }
   ]
 }

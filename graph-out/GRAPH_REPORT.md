@@ -1,17 +1,17 @@
 # Graphite Report: `Medication Reminder`
 
 ## Summary
-- **Files scanned:** 28
-- **Total nodes:** 745
-- **Total edges:** 1250
-- **Communities detected:** 60
+- **Files scanned:** 29
+- **Total nodes:** 755
+- **Total edges:** 1262
+- **Communities detected:** 64
 
 ## Top Files by Connectivity
 - `medication_reminder.py` — degree 52
 - `medication_core.py` — degree 50
 - `qrcode.js` — degree 45
-- `app.js` — degree 43
-- `sync.js` — degree 26
+- `app.js` — degree 44
+- `sync.js` — degree 27
 - `sync_client.py` — degree 23
 - `e2e_sync.py` — degree 16
 - `index.js` — degree 13
@@ -22,18 +22,18 @@
 - `medication_reminder.py` (file) — in 0 / out 52
 - `medication_core.py` (file) — in 5 / out 45
 - `qrcode.js` (file) — in 0 / out 45
+- `app.js` (file) — in 17 / out 27
 - `MedicationReminderApp` (class) — in 2 / out 41
-- `app.js` (file) — in 17 / out 26
-- `sync.js` (file) — in 0 / out 26
+- `sync.js` (file) — in 0 / out 27
 - `__init__` (function) — in 2 / out 22
 - `sync_client.py` (file) — in 3 / out 20
+- `syncNow` (function) — in 8 / out 13
 - `save` (function) — in 1 / out 19
-- `syncNow` (function) — in 8 / out 12
 
 ## Entry Points
 - `medication_reminder.py` — out 52 / in 0 (ratio 52.0)
 - `qrcode.js` — out 45 / in 0 (ratio 45.0)
-- `sync.js` — out 26 / in 0 (ratio 26.0)
+- `sync.js` — out 27 / in 0 (ratio 27.0)
 - `e2e_sync.py` — out 16 / in 0 (ratio 16.0)
 - `index.js` — out 13 / in 0 (ratio 13.0)
 - `test_medication_core.py` — out 11 / in 0 (ratio 11.0)
@@ -55,63 +55,63 @@
 - `medication_core` -> `medication_core_safe_datetime` (contains)
 
 ## Communities
-### Community 12 (mixed)
-- size: 119 (files: 0, functions: 43, classes: 1)
+### Community 7 (mixed)
+- size: 114 (files: 0, functions: 42, classes: 1)
 - members: `medication_reminder_add_schedule`, `medication_reminder_add_schedule_main`, `medication_reminder_after`, `medication_reminder_append_audit`, `medication_reminder_apply_remote_schedule`, `medication_reminder_apply_timezone`, `medication_reminder_buttons`, `medication_reminder_bytearray`, `medication_reminder_check_schedule`, `medication_reminder_clipboard_append`, `medication_reminder_clipboard_clear`, `medication_reminder_close_popup`, `medication_reminder_collect_due`, `medication_reminder_configured_timezone`, `medication_reminder_container` ...
-### Community 5 (mixed)
-- size: 115 (files: 0, functions: 42, classes: 9)
+### Community 6 (mixed)
+- size: 113 (files: 0, functions: 41, classes: 8)
 - members: `medication_core_append_audit`, `medication_core_appstorage`, `medication_core_astimezone`, `medication_core_atomic_write_bytes`, `medication_core_candidates`, `medication_core_cleanup`, `medication_core_collect_due`, `medication_core_configure_functions`, `medication_core_configvalidationerror`, `medication_core_cryptprotectdata`, `medication_core_cryptunprotectdata`, `medication_core_csv`, `medication_core_ctypes`, `medication_core_data`, `medication_core_datablob` ...
-### Community 0 (mixed)
-- size: 85 (files: 6, functions: 6, classes: 1)
+### Community 14 (mixed)
+- size: 88 (files: 6, functions: 7, classes: 2)
 - members: `aesgcm`, `any`, `appstorage`, `base64`, `configvalidationerror`, `copy`, `cryptography_hazmat_primitives_ciphers_aead`, `csv`, `ctypes`, `dataclass`, `dataclasses`, `date`, `datetime`, `deepcopy`, `dueoccurrence` ...
+### Community 25 (functions)
+- size: 85 (files: 1, functions: 60, classes: 0)
+- members: `tests_test_web_sync_getusermedia`, `tests_test_web_sync_showmodal`, `tests_test_web_sync_stop`, `web_app`, `web_app_active`, `web_app_addeventlistener_click_l28_c42`, `web_app_addmedicine_onclick_l14_c361`, `web_app_addmedicineinput`, `web_app_addschedule_onclick_l14_c318`, `web_app_alert`, `web_app_anon_l39_c765`, `web_app_atob`, `web_app_await`, `web_app_btoa`, `web_app_catch_l39_c1469` ...
+### Community 16 (mixed)
+- size: 71 (files: 2, functions: 22, classes: 0)
+- members: `node_assert_strict`, `node_crypto`, `node_fs`, `node_test`, `node_vm`, `tests_test_web_sync`, `tests_test_web_sync_add`, `tests_test_web_sync_addeventlistener`, `tests_test_web_sync_alert`, `tests_test_web_sync_append`, `tests_test_web_sync_cancelanimationframe`, `tests_test_web_sync_contains`, `tests_test_web_sync_control`, `tests_test_web_sync_createelement`, `tests_test_web_sync_dialog` ...
 ### Community 24 (functions)
-- size: 79 (files: 1, functions: 55, classes: 0)
-- members: `tests_test_web_sync_showmodal`, `web_app`, `web_app_active`, `web_app_addeventlistener_click_l28_c42`, `web_app_addmedicine_onclick_l14_c361`, `web_app_addmedicineinput`, `web_app_addschedule_onclick_l14_c318`, `web_app_alert`, `web_app_anon_l39_c765`, `web_app_atob`, `web_app_await`, `web_app_btoa`, `web_app_catch_l39_c1469`, `web_app_checkbutton_onclick_l39_c602`, `web_app_checkforegroundnotifications` ...
-### Community 23 (functions)
-- size: 66 (files: 1, functions: 49, classes: 0)
-- members: `tests_test_web_sync_close`, `tests_test_web_sync_detect`, `tests_test_web_sync_fillrect`, `tests_test_web_sync_queryselector`, `tests_test_web_sync_replacestate`, `web_app_settimeout_l12_c939`, `web_sw_self_addeventlistener_notificationclick_l8_c43`, `web_sync`, `web_sync_acceptpairing`, `web_sync_alert`, `web_sync_anon_l1_c2`, `web_sync_anon_l45_c1038`, `web_sync_anon_l45_c921`, `web_sync_api`, `web_sync_atob` ...
-### Community 13 (mixed)
+- size: 67 (files: 1, functions: 50, classes: 0)
+- members: `tests_test_web_sync_close`, `tests_test_web_sync_detect`, `tests_test_web_sync_queryselector`, `tests_test_web_sync_replacestate`, `web_app_settimeout_l12_c939`, `web_sw_self_addeventlistener_notificationclick_l8_c43`, `web_sync`, `web_sync_acceptpairing`, `web_sync_alert`, `web_sync_anon_l1_c2`, `web_sync_anon_l46_c1038`, `web_sync_anon_l46_c921`, `web_sync_api`, `web_sync_atob`, `web_sync_auth` ...
+### Community 8 (mixed)
 - size: 58 (files: 0, functions: 12, classes: 0)
 - members: `medication_reminder_actions`, `medication_reminder_add_medicine`, `medication_reminder_alert_buttons`, `medication_reminder_bind`, `medication_reminder_build_main_window`, `medication_reminder_button_bar`, `medication_reminder_code`, `medication_reminder_column`, `medication_reminder_configure`, `medication_reminder_configure_theme`, `medication_reminder_convert`, `medication_reminder_date_row`, `medication_reminder_days_var`, `medication_reminder_dialog`, `medication_reminder_edit_event_dialog` ...
-### Community 43 (web)
-- size: 43 (files: 1, functions: 2, classes: 0)
-- members: `web_qrcode`, `web_qrcode_base64decodeinputstream`, `web_qrcode_base64encodeoutputstream`, `web_qrcode_bitoutputstream`, `web_qrcode_bytearrayoutputstream`, `web_qrcode_chattonum`, `web_qrcode_createbytes`, `web_qrcode_createdata`, `web_qrcode_createdataurl`, `web_qrcode_createhalfascii`, `web_qrcode_decode`, `web_qrcode_define`, `web_qrcode_encode`, `web_qrcode_escapexml`, `web_qrcode_factory` ...
-### Community 19 (mixed)
+### Community 20 (mixed)
 - size: 32 (files: 0, functions: 12, classes: 3)
 - members: `runtimeerror`, `sync_client_aesgcm`, `sync_client_api_url`, `sync_client_b64`, `sync_client_base64`, `sync_client_create_pair`, `sync_client_decode`, `sync_client_decrypt`, `sync_client_encode`, `sync_client_encrypt`, `sync_client_encryptedsyncclient`, `sync_client_exc`, `sync_client_fetch`, `sync_client_init`, `sync_client_json` ...
-### Community 15 (functions)
-- size: 30 (files: 1, functions: 22, classes: 0)
-- members: `node_assert_strict`, `node_crypto`, `node_fs`, `node_test`, `node_vm`, `tests_test_web_sync`, `tests_test_web_sync_add`, `tests_test_web_sync_addeventlistener`, `tests_test_web_sync_alert`, `tests_test_web_sync_append`, `tests_test_web_sync_cancelanimationframe`, `tests_test_web_sync_contains`, `tests_test_web_sync_control`, `tests_test_web_sync_createelement`, `tests_test_web_sync_dialog` ...
-### Community 10 (mixed)
+### Community 12 (mixed)
 - size: 20 (files: 0, functions: 2, classes: 0)
 - members: `medication_reminder_appstorage`, `medication_reminder_astimezone`, `medication_reminder_ctypes`, `medication_reminder_enable_dpi_awareness`, `medication_reminder_encryptedsyncclient`, `medication_reminder_geometry`, `medication_reminder_init`, `medication_reminder_kernel32`, `medication_reminder_load_schedule`, `medication_reminder_load_settings`, `medication_reminder_load_state`, `medication_reminder_load_sync_credentials`, `medication_reminder_minsize`, `medication_reminder_oserror`, `medication_reminder_protocol` ...
-### Community 20 (tests)
+### Community 21 (tests)
 - size: 14 (files: 0, functions: 1, classes: 0)
 - members: `tests_e2e_sync_assertionerror`, `tests_e2e_sync_client`, `tests_e2e_sync_decode`, `tests_e2e_sync_encryptedsyncclient`, `tests_e2e_sync_endswith`, `tests_e2e_sync_exc`, `tests_e2e_sync_get`, `tests_e2e_sync_json`, `tests_e2e_sync_main`, `tests_e2e_sync_path`, `tests_e2e_sync_read_text`, `tests_e2e_sync_secrets`, `tests_e2e_sync_urlopen`, `tests_e2e_sync_validate_schedule`
-### Community 42 (worker/src, functions)
+### Community 45 (worker/src, functions)
 - size: 14 (files: 1, functions: 12, classes: 0)
 - members: `web_push`, `worker_src_index`, `worker_src_index_authenticatedpair`, `worker_src_index_corsheaders`, `worker_src_index_enforceratelimit`, `worker_src_index_fetch`, `worker_src_index_handlesync`, `worker_src_index_json`, `worker_src_index_notifypairedmobile`, `worker_src_index_readjson`, `worker_src_index_scheduled`, `worker_src_index_tokenhash`, `worker_src_index_validencryptedbody`, `worker_src_index_validpushendpoint`
-### Community 21 (tests)
+### Community 22 (tests)
 - size: 12 (files: 0, functions: 5, classes: 1)
 - members: `tests_test_medication_core_datetime`, `tests_test_medication_core_engine`, `tests_test_medication_core_isoformat`, `tests_test_medication_core_schedule`, `tests_test_medication_core_scheduleengine`, `tests_test_medication_core_scheduleenginetests`, `tests_test_medication_core_self`, `tests_test_medication_core_test_catches_up_after_sleep_or_restart`, `tests_test_medication_core_test_invalid_schedule_is_rejected`, `tests_test_medication_core_test_mark_taken_removes_pending_and_records_completion`, `tests_test_medication_core_test_snooze_suppresses_until_expiry`, `tests_test_medication_core_validate_schedule`
-### Community 22 (tests)
+### Community 23 (tests)
 - size: 9 (files: 0, functions: 2, classes: 1)
 - members: `tests_test_pairing_encryptedsyncclient`, `tests_test_pairing_json`, `tests_test_pairing_pairingtests`, `tests_test_pairing_path`, `tests_test_pairing_read_text`, `tests_test_pairing_self`, `tests_test_pairing_test_encrypted_pairing_payload_round_trips_schedule`, `tests_test_pairing_test_pairing_link_uses_fragment_and_contains_no_schedule`, `tests_test_pairing_validate_schedule`
-### Community 46 (web, functions)
+### Community 13 (mixed)
+- size: 4 (files: 0, functions: 1, classes: 0)
+- members: `medication_reminder_deiconify`, `medication_reminder_focus_force`, `medication_reminder_lift`, `medication_reminder_show_window_main_thread`
+### Community 48 (web, functions)
 - size: 3 (files: 0, functions: 2, classes: 0)
 - members: `web_sw_fetch`, `web_sw_self_addeventlistener_fetch_l6_c31`, `web_sw_then_l6_c551`
-### Community 57 (web)
+### Community 26 (tests, functions)
 - size: 2 (files: 0, functions: 1, classes: 0)
-- members: `web_sync_resolve`, `web_sync_settimeout_l45_c1058`
+- members: `tests_test_web_sync_revokefromsource_l134_c23`, `tests_test_web_sync_serviceworkermessagehandler`
+### Community 60 (web, functions)
+- size: 2 (files: 0, functions: 1, classes: 0)
+- members: `web_sync_resolve`, `web_sync_settimeout_l46_c1058`
+### Community 0 (worker, files)
+- size: 1 (files: 1, functions: 0, classes: 0)
+- members: `worker_package_lock`
 ### Community 1 (files)
 - size: 1 (files: 1, functions: 0, classes: 0)
 - members: `agents`
 ### Community 2 (files)
 - size: 1 (files: 1, functions: 0, classes: 0)
 - members: `build_windows_exe`
-### Community 3 (files)
-- size: 1 (files: 1, functions: 0, classes: 0)
-- members: `install_dependencies`
-### Community 4 (files)
-- size: 1 (files: 1, functions: 0, classes: 0)
-- members: `license`
