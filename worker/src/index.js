@@ -616,13 +616,20 @@ async function handleSync(request, env, url, ctx) {
   let authorizationKind = '';
   const credential = parseSessionCredential(request);
   if (credential?.kind === 'cookie') {
-    const accountResult = await accountPair(request, env, pairId);
-    account = accountResult.account;
-    pair = accountResult.pair;
+    account = await authenticateSession(request, env, { touch: false });
     if (account) {
-      if (bearerToken(request) || !pair) {
-        return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
-      }
+      // A cookie session must not also carry a bearer token (confused-deputy guard).
+      if (bearerToken(request)) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+      pair = await loadAccountPair(env, pairId, account.user.user_id);
+      if (!pair) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
+      authorizationKind = 'account';
+    }
+  } else {
+    // Owner device credential (Bearer mdk_...) authorizes the same account rows.
+    account = await authenticateDeviceCredential(request, env);
+    if (account) {
+      pair = await loadAccountPair(env, pairId, account.user.user_id);
+      if (!pair) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
       authorizationKind = 'account';
     }
   }

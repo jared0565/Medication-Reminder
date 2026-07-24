@@ -1757,6 +1757,14 @@ test('device authorization grant issues an account-scoped credential the widget 
   const stored = fixture.database.prepare('SELECT user_id FROM sync_pairs WHERE pair_id = ?').get(pairBody.pairId);
   assert.equal(stored.user_id, fixture.sessions.a.userId, 'pair is owned by the approving account');
 
+  // 5b. The credential can also read and update its own pair (no cookie/CSRF).
+  const read = await fixture.request(`/api/sync/pairs/${pairBody.pairId}`, { method: 'GET', bearer: issued.credential });
+  assert.equal(read.status, 200);
+  assert.equal((await read.json()).revision, 1);
+  const put = await fixture.request(`/api/sync/pairs/${pairBody.pairId}`, { method: 'PUT', bearer: issued.credential, body: { baseRevision: 1, ...validEncryptedSchedule } });
+  assert.equal(put.status, 200);
+  assert.equal((await put.json()).revision, 2);
+
   // 6. The device code is single-use: a post-claim poll no longer works.
   const replay = await fixture.request('/api/auth/device/poll', { method: 'POST', body: { deviceCode } });
   assert.equal(replay.status, 400);
