@@ -1712,3 +1712,76 @@ test('0004 migration rescopes source_id uniqueness while preserving existing row
     database.close();
   }
 });
+
+test('device authorization grant issues an account-scoped credential the widget can pair with', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+
+  // 1. The widget starts the flow with no credentials of its own.
+  const start = await fixture.request('/api/auth/device/start', { method: 'POST', body: { deviceName: 'Owner PC' } });
+  assert.equal(start.status, 200);
+  const { deviceCode, userCode, verificationUri } = await start.json();
+  assert.match(deviceCode, /^mdc_[A-Za-z0-9_-]{43}$/);
+  assert.match(userCode, /^[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$/);
+  assert.equal(verificationUri, `${appOrigin}/link`);
+
+  // 2. Polling before approval is pending; an immediate re-poll is told to slow down.
+  const pending = await fixture.request('/api/auth/device/poll', { method: 'POST', body: { deviceCode } });
+  assert.equal(pending.status, 202);
+  assert.equal((await pending.json()).status, 'pending');
+  const tooSoon = await fixture.request('/api/auth/device/poll', { method: 'POST', body: { deviceCode } });
+  assert.equal(tooSoon.status, 429);
+
+  // 3. A free (unentitled) account cannot approve, and approval requires CSRF.
+  const freeApprove = await fixture.request('/api/auth/device/approve', { method: 'POST', session: fixture.sessions.free.sessionToken, csrf: true, body: { userCode } });
+  assert.equal(freeApprove.status, 403);
+  const noCsrf = await fixture.request('/api/auth/device/approve', { method: 'POST', session: fixture.sessions.a.sessionToken, body: { userCode } });
+  assert.equal(noCsrf.status, 403);
+
+  // The entitled owner approves (lowercased + unspaced code still normalizes).
+  const approve = await fixture.request('/api/auth/device/approve', { method: 'POST', session: fixture.sessions.a.sessionToken, csrf: true, body: { userCode: userCode.replace('-', '').toLowerCase() } });
+  assert.equal(approve.status, 200);
+
+  // 4. The next poll returns the long-lived credential exactly once.
+  const complete = await fixture.request('/api/auth/device/poll', { method: 'POST', body: { deviceCode } });
+  assert.equal(complete.status, 200);
+  const issued = await complete.json();
+  assert.equal(issued.status, 'complete');
+  assert.match(issued.credential, /^mdk_[A-Za-z0-9_-]{43}$/);
+  assert.equal(issued.features.cloudSync, true);
+
+  // 5. The widget creates an ACCOUNT-scoped pair with the credential — no cookie, no CSRF.
+  const pair = await fixture.request('/api/sync/pairs', { method: 'POST', bearer: issued.credential, body: { sourceId: 'owner_widget_source_1234', ...validEncryptedSchedule } });
+  assert.equal(pair.status, 201);
+  const pairBody = await pair.json();
+  const stored = fixture.database.prepare('SELECT user_id FROM sync_pairs WHERE pair_id = ?').get(pairBody.pairId);
+  assert.equal(stored.user_id, fixture.sessions.a.userId, 'pair is owned by the approving account');
+
+  // 6. The device code is single-use: a post-claim poll no longer works.
+  const replay = await fixture.request('/api/auth/device/poll', { method: 'POST', body: { deviceCode } });
+  assert.equal(replay.status, 400);
+
+  // 7. The credential is tenant-scoped: it can never read another user's pair.
+  const otherPair = fixture.database.prepare('SELECT pair_id FROM sync_pairs WHERE user_id = ?').get(fixture.sessions.b.userId);
+  if (otherPair) {
+    const cross = await fixture.request(`/api/sync/pairs/${otherPair.pair_id}`, { method: 'GET', bearer: issued.credential });
+    assert.equal(cross.status, 404);
+  }
+
+  // 8. Revocation makes the credential stop authorizing immediately.
+  const revoke = await fixture.request('/api/auth/device/revoke', { method: 'POST', bearer: issued.credential });
+  assert.equal(revoke.status, 200);
+  const afterRevoke = await fixture.request('/api/sync/pairs', { method: 'POST', bearer: issued.credential, body: { sourceId: 'owner_widget_source_5678', ...validEncryptedSchedule } });
+  assert.equal(afterRevoke.status, 401, 'a revoked credential no longer authorizes');
+});
+
+test('an unapproved device code cannot be brute-forced through poll or approve', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  // A random device code that was never issued is rejected, not leaked as pending.
+  const forged = await fixture.request('/api/auth/device/poll', { method: 'POST', body: { deviceCode: `mdc_${'A'.repeat(43)}` } });
+  assert.equal(forged.status, 400);
+  // A guessed user code with no matching pending row cannot be approved.
+  const approve = await fixture.request('/api/auth/device/approve', { method: 'POST', session: fixture.sessions.a.sessionToken, csrf: true, body: { userCode: 'ZZZZ-ZZZZ' } });
+  assert.equal(approve.status, 404);
+});

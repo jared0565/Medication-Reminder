@@ -1,6 +1,7 @@
 import webpush from 'web-push';
 import {
   authenticateSession,
+  authenticateDeviceCredential,
   hasCloudSync,
   handleAuthRequest,
   parseSessionCredential,
@@ -20,6 +21,7 @@ const CSRF_PROTECTED_AUTH_ROUTES = new Set([
   'POST /auth/google',
   'PATCH /auth/me',
   'DELETE /auth/session',
+  'POST /auth/device/approve',
 ]);
 
 export function normalizePathname(pathname) {
@@ -307,14 +309,20 @@ function claimedPairResponse(pair, mobileToken) {
   };
 }
 
-async function cookieAccount(request, env, includeEntitlements = true) {
+async function authorizedAccount(request, env, includeEntitlements = true) {
   const credential = parseSessionCredential(request);
-  if (credential?.kind !== 'cookie') return null;
-  return authenticateSession(request, env, { touch: false, includeEntitlements });
+  // A browser session is cookie-only (legacy mrs_ bearer is rejected on /api).
+  if (credential?.kind === 'cookie') {
+    return authenticateSession(request, env, { touch: false, includeEntitlements });
+  }
+  // Otherwise accept an owner device credential (Bearer mdk_...). It resolves to
+  // the same account shape but carries credentialKind 'device', so the CSRF
+  // checks — all gated on credentialKind === 'cookie' — never apply to it.
+  return authenticateDeviceCredential(request, env, { touch: true, includeEntitlements });
 }
 
 async function accountPair(request, env, pairId) {
-  const account = await cookieAccount(request, env);
+  const account = await authorizedAccount(request, env);
   if (!account) return { account, pair: null };
   return { account, pair: await loadAccountPair(env, pairId, account.user.user_id) };
 }
@@ -393,9 +401,9 @@ async function handleSync(request, env, url, ctx) {
   if (!(await enforceRateLimit(request, env))) return json(request, { error: 'Too many sync requests. Try again shortly.' }, { status: 429, headers: { 'Retry-After': '60' } });
 
   if (request.method === 'POST' && url.pathname === '/sync/pairs') {
-    const account = await cookieAccount(request, env);
+    const account = await authorizedAccount(request, env);
     if (!account) return json(request, { error: 'Sign-in required.' }, { status: 401 });
-    if (!validCsrfRequest(request)) {
+    if (account.credentialKind === 'cookie' && !validCsrfRequest(request)) {
       return json(request, { error: 'Invalid browser request' }, { status: 403 });
     }
     if (!hasCloudSync(account)) return json(request, { error: 'Cloud synchronization is not enabled for this account.' }, { status: 403 });
@@ -440,7 +448,7 @@ async function handleSync(request, env, url, ctx) {
 
   const pairId = match[1];
   if (request.method === 'POST' && match[2] === 'claim') {
-    if (await cookieAccount(request, env, false)) {
+    if (await authorizedAccount(request, env, false)) {
       return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
     }
     const body = await readJson(request);
