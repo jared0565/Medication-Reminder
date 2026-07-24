@@ -31,6 +31,15 @@
 /account.js
   Cache-Control: public, max-age=0, must-revalidate
 
+/device-link.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/link
+  Cache-Control: no-cache, must-revalidate
+
+/link.html
+  Cache-Control: no-cache, must-revalidate
+
 /sync.js
   Cache-Control: public, max-age=0, must-revalidate
 
