@@ -11,6 +11,8 @@ function updateHarness({
   raceOnUpdate = false,
 } = {}) {
   let servedVersion = remoteVersion;
+  let approveUpdate = approve;
+  const alerts = [];
   const worker = {
     state: 'installed',
     messages: [],
@@ -65,8 +67,8 @@ function updateHarness({
       status: 200,
       async json() { return { version: servedVersion }; },
     }),
-    confirm: () => { confirmations += 1; return approve; },
-    alert() {},
+    confirm: () => { confirmations += 1; return approveUpdate; },
+    alert(message) { alerts.push(message); },
     console,
     Date,
     setInterval: () => 1,
@@ -83,7 +85,9 @@ function updateHarness({
     documentListeners,
     confirmations: () => confirmations,
     reloads: () => reloads,
+    alerts: () => alerts,
     setRemoteVersion(value) { servedVersion = value; },
+    setApprove(value) { approveUpdate = value; },
   };
 }
 
@@ -116,6 +120,41 @@ test('startup reports no update when Cloudflare version matches the installed ap
   await flush();
   assert.equal(app.registration.updates, 0);
   assert.equal(app.confirmations(), 0);
+  assert.equal(app.worker.messages.length, 0);
+});
+
+test('a manual check re-offers a previously declined update and can then activate it', async () => {
+  const app = updateHarness({ approve: false });
+  await flush();
+  await flush();
+  assert.equal(app.confirmations(), 1);
+  assert.equal(app.worker.messages.length, 0);
+
+  // Background focus checks must NOT re-prompt the declined version.
+  app.windowListeners.focus();
+  await flush();
+  await flush();
+  assert.equal(app.confirmations(), 1);
+  assert.equal(app.worker.messages.length, 0);
+
+  // A manual "Check for updates" re-offers the same declined update.
+  app.setApprove(true);
+  await app.checkButton.onclick();
+  await flush();
+  assert.equal(app.confirmations(), 2);
+  assert.equal(app.worker.messages.length, 1);
+  assert.equal(app.worker.messages[0].type, 'SKIP_WAITING');
+});
+
+test('a manual check declined again reports postponement feedback', async () => {
+  const app = updateHarness({ approve: false });
+  await flush();
+  await flush();
+  assert.equal(app.alerts().length, 0);
+  await app.checkButton.onclick();
+  await flush();
+  assert.equal(app.confirmations(), 2);
+  assert.match(app.alerts().at(-1), /postponed|later/i);
   assert.equal(app.worker.messages.length, 0);
 });
 

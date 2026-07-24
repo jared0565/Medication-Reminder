@@ -434,6 +434,7 @@ test('Pages headers keep API and release responses private with a narrow CSP', (
   assert.match(csp, /script-src 'self' https:\/\/accounts\.google\.com\/gsi\/client/);
   assert.match(csp, /img-src 'self' data: https:\/\/lh3\.googleusercontent\.com/);
   assert.doesNotMatch(csp, /workers\.dev|\*/);
+  assert.match(headers, /Strict-Transport-Security: max-age=31536000; includeSubDomains/);
 });
 
 test('Pages cache rules are explicit and non-conflicting for every application path', () => {

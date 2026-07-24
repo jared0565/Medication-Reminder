@@ -9,6 +9,17 @@ const MAX_CREDENTIAL_LENGTH = 8192;
 const MAX_NAME_LENGTH = 120;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
+// Device Authorization Grant (RFC 8628) for the owner Windows widget.
+const DEVICE_CODE_PREFIX = 'mdc_';
+const DEVICE_CRED_PREFIX = 'mdk_';
+const DEVICE_CODE_PATTERN = /^mdc_[A-Za-z0-9_-]{43}$/;
+const DEVICE_CRED_PATTERN = /^mdk_[A-Za-z0-9_-]{43}$/;
+const DEVICE_CODE_TTL_SECONDS = 15 * 60;
+const DEVICE_POLL_INTERVAL_SECONDS = 5;
+const DEVICE_TYPES = new Set(['browser', 'pwa', 'windows', 'unknown']);
+// Crockford base32 minus ambiguous I, L, O, U — safe to read aloud / retype.
+const USER_CODE_ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+
 let jwksCache = { expiresAt: 0, keys: [] };
 
 function decodeBase64Url(value) {
@@ -38,6 +49,56 @@ async function sha256(value) {
 
 function randomToken(byteLength = 32) {
   return encodeBase64Url(crypto.getRandomValues(new Uint8Array(byteLength)));
+}
+
+function generateUserCode() {
+  const bytes = crypto.getRandomValues(new Uint8Array(8));
+  let code = '';
+  for (let i = 0; i < 8; i += 1) code += USER_CODE_ALPHABET[bytes[i] % USER_CODE_ALPHABET.length];
+  return `${code.slice(0, 4)}-${code.slice(4)}`;
+}
+
+// SQLite CURRENT_TIMESTAMP is space-separated ('YYYY-MM-DD HH:MM:SS'); a raw
+// toISOString() ('...T...Z') would sort lexicographically wrong against it (the
+// 'T' > ' '), so short-lived expiries must be stored in the same format to be
+// comparable — mirrors invitationExpiry() in index.js.
+function sqliteTimestamp(ms) {
+  return new Date(ms).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '');
+}
+
+function normalizeUserCode(value) {
+  if (typeof value !== 'string') return '';
+  const stripped = value.toUpperCase().replace(/[^0-9A-Z]/g, '');
+  if (stripped.length !== 8 || [...stripped].some(character => !USER_CODE_ALPHABET.includes(character))) return '';
+  return `${stripped.slice(0, 4)}-${stripped.slice(4)}`;
+}
+
+function deviceCredentialBearer(request) {
+  const match = (request.headers.get('Authorization') || '').match(/^Bearer (mdk_[A-Za-z0-9_-]{43})$/);
+  return match?.[1] || null;
+}
+
+// Resolve an account from a device credential (Authorization: Bearer mdk_...).
+// Returns the same shape as authenticateSession so pair routes can treat a
+// widget device identically to a signed-in browser, but never as a cookie
+// (so CSRF stays browser-only) and only for the credential's owning account.
+export async function authenticateDeviceCredential(request, env, { touch = true, includeEntitlements = true } = {}) {
+  const token = deviceCredentialBearer(request);
+  if (!token) return null;
+  const credentialHash = await sha256(token);
+  const user = await env.DB.prepare(`SELECT u.user_id, u.email_normalized, u.display_name, u.picture_url,
+      u.intended_start_date, u.intended_end_date, u.status
+    FROM device_credentials c JOIN app_users u ON u.user_id = c.user_id
+    WHERE c.credential_hash = ? AND c.revoked_at IS NULL
+      AND (c.expires_at IS NULL OR c.expires_at > CURRENT_TIMESTAMP) AND u.status = 'active'`).bind(credentialHash).first();
+  if (!user) return null;
+  if (touch) await env.DB.prepare('UPDATE device_credentials SET last_seen_at = CURRENT_TIMESTAMP WHERE credential_hash = ?').bind(credentialHash).run();
+  return {
+    user,
+    credentialKind: 'device',
+    deviceCredentialHash: credentialHash,
+    entitlements: includeEntitlements ? await activeEntitlements(env, user.user_id) : new Set(),
+  };
 }
 
 export function sessionCookie(token, maxAge = SESSION_TTL_SECONDS) {
@@ -273,6 +334,108 @@ export async function handleAuthRequest(request, env, url, helpers) {
     return json(request, accountView(user, entitlements), {
       headers: { 'Set-Cookie': sessionCookie(token) },
     });
+  }
+  // Device Authorization Grant. The widget calls /start then polls /poll; the
+  // signed-in browser approves the user code via /approve. Approval is what
+  // proves account ownership, so an unauthenticated device can never self-issue.
+  if (request.method === 'POST' && url.pathname === '/auth/device/start') {
+    if (!(await enforceRateLimit(request, env, 'device', 30))) return json(request, { error: 'Too many device pairing attempts. Try again shortly.' }, { status: 429 });
+    const body = await readJson(request);
+    const deviceType = DEVICE_TYPES.has(body?.deviceType) ? body.deviceType : 'windows';
+    const deviceName = typeof body?.deviceName === 'string' ? (body.deviceName.trim().slice(0, 80) || null) : null;
+    const deviceCode = `${DEVICE_CODE_PREFIX}${randomToken()}`;
+    const expiresAt = sqliteTimestamp(Date.now() + DEVICE_CODE_TTL_SECONDS * 1000);
+    let userCode = '';
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      userCode = generateUserCode();
+      try {
+        await env.DB.prepare(`INSERT INTO device_authorizations
+          (device_code_hash, user_code, device_type, device_name, expires_at, interval_seconds)
+          VALUES (?, ?, ?, ?, ?, ?)`)
+          .bind(await sha256(deviceCode), userCode, deviceType, deviceName, expiresAt, DEVICE_POLL_INTERVAL_SECONDS).run();
+        break;
+      } catch (error) {
+        if (attempt === 5) throw error; // exhausted user_code collisions (practically impossible)
+      }
+    }
+    return json(request, {
+      deviceCode,
+      userCode,
+      verificationUri: `${APP_ORIGIN}/link`,
+      verificationUriComplete: `${APP_ORIGIN}/link?code=${encodeURIComponent(userCode)}`,
+      expiresIn: DEVICE_CODE_TTL_SECONDS,
+      interval: DEVICE_POLL_INTERVAL_SECONDS,
+    });
+  }
+  if (request.method === 'POST' && url.pathname === '/auth/device/approve') {
+    const account = await authenticateSession(request, env);
+    if (!account) return json(request, { error: 'Sign-in required.' }, { status: 401 });
+    if (!hasCloudSync(account)) return json(request, { error: 'Cloud synchronization is not enabled for this account.' }, { status: 403 });
+    const body = await readJson(request);
+    const userCode = normalizeUserCode(body?.userCode);
+    if (!userCode) return json(request, { error: 'Enter the code shown on your device.' }, { status: 400 });
+    const result = await env.DB.prepare(`UPDATE device_authorizations SET status = 'approved', user_id = ?
+      WHERE user_code = ? AND status = 'pending' AND expires_at > CURRENT_TIMESTAMP`)
+      .bind(account.user.user_id, userCode).run();
+    if (!result.meta.changes) return json(request, { error: 'That device code is invalid, already used, or expired.' }, { status: 404 });
+    await recordAudit(env, account.user.user_id, 'device_authorization_approved');
+    return json(request, { ok: true });
+  }
+  if (request.method === 'POST' && url.pathname === '/auth/device/poll') {
+    if (!(await enforceRateLimit(request, env, 'device_poll', 120))) return json(request, { status: 'slow_down', error: 'slow_down' }, { status: 429 });
+    const body = await readJson(request);
+    const deviceCode = typeof body?.deviceCode === 'string' ? body.deviceCode : '';
+    if (!DEVICE_CODE_PATTERN.test(deviceCode)) return json(request, { status: 'invalid', error: 'invalid_device_code' }, { status: 400 });
+    const codeHash = await sha256(deviceCode);
+    const row = await env.DB.prepare(`SELECT user_id, status, device_type, device_name, interval_seconds,
+        (expires_at <= CURRENT_TIMESTAMP) AS expired,
+        (last_polled_at IS NOT NULL AND (julianday('now') - julianday(last_polled_at)) * 86400 < interval_seconds) AS too_soon
+      FROM device_authorizations WHERE device_code_hash = ?`).bind(codeHash).first();
+    if (!row) return json(request, { status: 'invalid', error: 'invalid_device_code' }, { status: 400 });
+    if (Number(row.expired)) {
+      await env.DB.prepare('DELETE FROM device_authorizations WHERE device_code_hash = ?').bind(codeHash).run();
+      return json(request, { status: 'expired', error: 'expired_token' }, { status: 400 });
+    }
+    if (row.status === 'denied' || row.status === 'claimed') {
+      await env.DB.prepare('DELETE FROM device_authorizations WHERE device_code_hash = ?').bind(codeHash).run();
+      const denied = row.status === 'denied';
+      return json(request, { status: denied ? 'denied' : 'expired', error: denied ? 'access_denied' : 'expired_token' }, { status: 400 });
+    }
+    if (row.status === 'pending') {
+      // Rate the *waiting* poll, but never delay completing an approved request.
+      if (Number(row.too_soon)) return json(request, { status: 'slow_down', error: 'slow_down' }, { status: 429 });
+      await env.DB.prepare('UPDATE device_authorizations SET last_polled_at = CURRENT_TIMESTAMP WHERE device_code_hash = ?').bind(codeHash).run();
+      return json(request, { status: 'pending' }, { status: 202 });
+    }
+    // status === 'approved': issue exactly one credential, then retire the request.
+    const claim = await env.DB.prepare(`UPDATE device_authorizations SET status = 'claimed' WHERE device_code_hash = ? AND status = 'approved'`).bind(codeHash).run();
+    if (!claim.meta.changes) return json(request, { status: 'pending' }, { status: 202 });
+    const credential = `${DEVICE_CRED_PREFIX}${randomToken()}`;
+    await env.DB.prepare(`INSERT INTO device_credentials (credential_hash, user_id, device_type, display_name)
+      VALUES (?, ?, ?, ?)`).bind(await sha256(credential), row.user_id, row.device_type || 'windows', row.device_name || null).run();
+    await recordAudit(env, row.user_id, 'device_credential_issued', { deviceType: row.device_type || 'windows' });
+    const user = await env.DB.prepare(`SELECT user_id, email_normalized, display_name, picture_url,
+      intended_start_date, intended_end_date FROM app_users WHERE user_id = ?`).bind(row.user_id).first();
+    const entitlements = await activeEntitlements(env, row.user_id);
+    return json(request, { status: 'complete', credential, credentialType: 'device', ...accountView(user, entitlements) });
+  }
+  if (request.method === 'POST' && url.pathname === '/auth/device/revoke') {
+    // Widget self-revoke by presenting its own credential; browser revokes all
+    // of the account's device credentials (CSRF-guarded like other cookie mutations).
+    const device = await authenticateDeviceCredential(request, env, { touch: false, includeEntitlements: false });
+    if (device) {
+      await env.DB.prepare('UPDATE device_credentials SET revoked_at = CURRENT_TIMESTAMP WHERE credential_hash = ? AND revoked_at IS NULL').bind(device.deviceCredentialHash).run();
+      await recordAudit(env, device.user.user_id, 'device_credential_revoked', { by: 'device' });
+      return json(request, { ok: true });
+    }
+    if (parseSessionCredential(request)?.kind === 'cookie' && !validCsrfRequest(request)) {
+      return json(request, { error: 'Invalid browser request' }, { status: 403 });
+    }
+    const account = await authenticateSession(request, env, { touch: false, includeEntitlements: false });
+    if (!account) return json(request, { error: 'Sign-in required.' }, { status: 401 });
+    const result = await env.DB.prepare('UPDATE device_credentials SET revoked_at = CURRENT_TIMESTAMP WHERE user_id = ? AND revoked_at IS NULL').bind(account.user.user_id).run();
+    await recordAudit(env, account.user.user_id, 'device_credential_revoked', { by: 'account', count: Number(result.meta?.changes || 0) });
+    return json(request, { ok: true, revoked: Number(result.meta?.changes || 0) });
   }
   if (!['/auth/me', '/auth/session'].includes(url.pathname)) return null;
   // The reusable bearer session is a temporary v1 widget compatibility

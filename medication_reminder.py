@@ -133,15 +133,20 @@ class MedicationReminderApp:
 
         self.storage = AppStorage()
         self.alert_settings = self.storage.load_settings()
-        self.config_data = self.storage.load_schedule(SEED_CONFIG_PATH)
+        self.config_data = self._load_schedule_or_reset()
         try:
             self.sync_credentials = self.storage.load_sync_credentials()
         except StorageError:
             self.sync_credentials = None
+        # The account device credential rides inside the account pair once linked,
+        # so it survives restarts and is reused when re-pairing a new mobile.
+        self.account_credential = self.sync_credentials.get("deviceCredential") if self.sync_credentials else None
         self.sync_client = EncryptedSyncClient()
         self.sync_in_progress = False
+        self.conflict_pending = False
         self.sync_generation = 0
         self.sync_status_var: tk.StringVar | None = None
+        self._next_due_after_id: str | None = None
         initial_now = datetime.now().astimezone(self._configured_timezone())
         self.scheduler = ScheduleEngine(self.config_data, self.storage.load_state(initial_now))
 
@@ -205,6 +210,28 @@ class MedicationReminderApp:
         from zoneinfo import ZoneInfo
 
         return ZoneInfo(self.config_data["timezone"])
+
+    def _load_schedule_or_reset(self) -> dict:
+        """Load the saved schedule, offering a re-seed if it cannot be read.
+
+        Unlike state/settings/audit (which recover silently to defaults), a
+        decryptable schedule is never discarded without asking: a corrupt one
+        prompts the user before quarantining and re-seeding the bundled default.
+        """
+        try:
+            return self.storage.load_schedule(SEED_CONFIG_PATH)
+        except (StorageError, ConfigValidationError) as exc:
+            reset = messagebox.askyesno(
+                APP_NAME,
+                "The saved medication schedule could not be read:\n\n"
+                f"{exc}\n\n"
+                "Reset it to the bundled default schedule? Your reminder history "
+                "is kept. Choosing No will close the application so the file can "
+                "be recovered manually.",
+            )
+            if not reset:
+                raise
+            return self.storage.reset_schedule(SEED_CONFIG_PATH)
 
     def now(self) -> datetime:
         return datetime.now(self.scheduler.timezone)
@@ -272,31 +299,46 @@ class MedicationReminderApp:
             self.tree.delete(row)
         for event in sorted(self.config_data["events"], key=lambda item: item["time"]):
             if event["enabled"]:
+                # Carry the event id as the row iid so Edit/Remove resolve the exact
+                # event even when two rows share the same time and label.
                 self.tree.insert(
-                    "", "end", values=(event["time"], event["label"], "; ".join(event["medicines"]))
+                    "", "end", iid=event["id"],
+                    values=(event["time"], event["label"], "; ".join(event["medicines"])),
                 )
 
     def update_next_due_text(self) -> None:
-        pending_count = len(self.scheduler.state["pending"])
-        next_item = self.scheduler.next_scheduled(self.now())
-        pending_text = f" • {pending_count} pending" if pending_count else ""
-        if next_item:
-            when, label = next_item
-            self.status_var.set(
-                f"Running{pending_text} • Next: {label} at {when.strftime('%a %d %b, %H:%M %Z')}"
-            )
-        else:
-            self.status_var.set(f"Running{pending_text} • No active reminders found")
-        if self.running:
-            self.root.after(30_000, self.update_next_due_text)
+        # Cancel any previously scheduled refresh before arming a new one, so the
+        # direct calls from event handlers do not each spawn an immortal chain.
+        if self._next_due_after_id is not None:
+            try:
+                self.root.after_cancel(self._next_due_after_id)
+            except (tk.TclError, ValueError):
+                pass
+            self._next_due_after_id = None
+        try:
+            pending_count = len(self.scheduler.state["pending"])
+            next_item = self.scheduler.next_scheduled(self.now())
+            pending_text = f" • {pending_count} pending" if pending_count else ""
+            if next_item:
+                when, label = next_item
+                self.status_var.set(
+                    f"Running{pending_text} • Next: {label} at {when.strftime('%a %d %b, %H:%M %Z')}"
+                )
+            else:
+                self.status_var.set(f"Running{pending_text} • No active reminders found")
+        except Exception as exc:
+            self._report_background_error(exc)
+        finally:
+            if self.running:
+                self._next_due_after_id = self.root.after(30_000, self.update_next_due_text)
 
     def _selected_main_event_index(self) -> int | None:
         selected = self.tree.selection()
         if not selected:
             messagebox.showinfo(APP_NAME, "Select a schedule row first.")
             return None
-        values = self.tree.item(selected[0], "values")
-        event_index = next((index for index, event in enumerate(self.config_data["events"]) if event["time"] == values[0] and event["label"] == values[1]), None)
+        event_id = selected[0]  # the row iid is the event id
+        event_index = next((index for index, event in enumerate(self.config_data["events"]) if event["id"] == event_id), None)
         if event_index is None:
             messagebox.showerror(APP_NAME, "The selected schedule is no longer available.")
         return event_index
@@ -355,21 +397,32 @@ class MedicationReminderApp:
     def check_schedule(self) -> None:
         if not self.running:
             return
-        now = self.now()
         try:
-            added = self.scheduler.collect_due(now)
-            self.storage.save_state(self.scheduler.state)
-            if added:
-                self._safe_audit("reminders_queued", count=added)
-        except StorageError as exc:
-            self._warn_persistence(exc)
+            now = self.now()
+            try:
+                added = self.scheduler.collect_due(now)
+                self.storage.save_state(self.scheduler.state)
+                if added:
+                    self._safe_audit("reminders_queued", count=added)
+                notice = self.scheduler.pending_skip_notice
+                if notice:
+                    self.scheduler.pending_skip_notice = None
+                    self._safe_audit("missed_doses_skipped", **notice)
+            except StorageError as exc:
+                self._warn_persistence(exc)
 
-        popup_open = self.active_popup is not None and self.active_popup.winfo_exists()
-        if not popup_open:
-            due = self.scheduler.next_ready(now)
-            if due:
-                self.show_due_popup(due)
-        self.root.after(CHECK_INTERVAL_SECONDS * 1000, self.check_schedule)
+            popup_open = self.active_popup is not None and self.active_popup.winfo_exists()
+            if not popup_open:
+                due = self.scheduler.next_ready(now)
+                if due:
+                    self.show_due_popup(due)
+        except Exception as exc:
+            # A failure here (e.g. a TclError from show_due_popup) must never stop
+            # the reminder loop; surface it and keep the timer armed below.
+            self._report_background_error(exc)
+        finally:
+            if self.running:
+                self.root.after(CHECK_INTERVAL_SECONDS * 1000, self.check_schedule)
 
     def play_alert_sound(self) -> None:
         settings = dict(self.alert_settings)
@@ -518,7 +571,13 @@ class MedicationReminderApp:
 
     def snooze_event(self, occurrence: DueOccurrence, popup: tk.Toplevel) -> None:
         now = self.now()
-        until = self.scheduler.snooze(occurrence.key, now, DEFAULT_SNOOZE_MINUTES)
+        try:
+            until = self.scheduler.snooze(occurrence.key, now, DEFAULT_SNOOZE_MINUTES)
+        except ValueError:
+            # A sync invalidated this occurrence while its popup was open; there is
+            # nothing left to snooze, so just close the otherwise-unclosable popup.
+            self._close_popup(popup)
+            return
         try:
             self.storage.save_state(self.scheduler.state)
             self.storage.append_audit(
@@ -598,6 +657,7 @@ class MedicationReminderApp:
         pairing_bar = ttk.Frame(container)
         pairing_bar.pack(fill="x", pady=(0, 8))
         ttk.Label(pairing_bar, text="Mobile sync:", style="Meta.TLabel").pack(side="left", padx=(0, 10))
+        ttk.Button(pairing_bar, text="Link account", command=self.link_account_device).pack(side="left", padx=6)
         ttk.Button(pairing_bar, text="Pair mobile", command=self.pair_device).pack(side="left", padx=6)
         ttk.Button(pairing_bar, text="Show QR", command=self.show_pairing_qr).pack(side="left", padx=6)
         ttk.Button(pairing_bar, text="Sync now", command=lambda: self._start_sync(notify=True)).pack(side="left", padx=6)
@@ -806,21 +866,141 @@ class MedicationReminderApp:
         self._set_sync_status("Creating encrypted pairing…")
         source_id = self.sync_credentials.get("sourceId") if self.sync_credentials else secrets.token_urlsafe(24)
         schedule = deepcopy(self.config_data)
+        old_credentials = deepcopy(self.sync_credentials) if self.sync_credentials else None
         def worker() -> None:
             try:
-                credentials = self.sync_client.create_pair(schedule, source_id)
+                credentials = self._perform_repair(schedule, source_id, old_credentials)
                 self.root.after(0, lambda: self._pair_created(credentials))
             except SyncError as exc:
                 self.root.after(0, lambda error=exc: self._sync_failed(error, True))
+            except Exception as exc:
+                wrapped = SyncError(f"Pairing failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, True))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _perform_repair(self, schedule: dict, source_id: str, old_credentials: dict | None) -> dict:
+        """Best-effort revoke the previous server pair, then mint a fresh one.
+
+        Re-pairing must revoke the old pair so a previously paired phone can no
+        longer sync a stale schedule. A failed revoke (e.g. it is already gone)
+        must not block creating the new pairing. When the widget is linked to an
+        account, the new pair is account-scoped; otherwise it uses the legacy
+        owner path.
+        """
+        device_credential = old_credentials.get("deviceCredential") if old_credentials else None
+        if old_credentials:
+            try:
+                self.sync_client.revoke(old_credentials)
+            except SyncError:
+                pass
+        device_credential = device_credential or getattr(self, "account_credential", None)
+        if device_credential:
+            return self.sync_client.create_account_pair(schedule, source_id, device_credential)
+        return self.sync_client.create_pair(schedule, source_id)
+
+    def _device_link_label(self) -> str:
+        try:
+            node = platform.node() or "Windows"
+        except Exception:
+            node = "Windows"
+        return f"{node} widget"
+
+    def _run_device_link(self, on_code, should_cancel, sleep_fn=time.sleep) -> str:
+        """Drive the OAuth device-authorization loop and return the credential.
+
+        Headless and side-effect free so it can be unit tested. `on_code` is
+        invoked once with the start payload (user code + verification URL) for
+        display; `should_cancel()` aborts the wait. Raises SyncError on denial,
+        expiry, or cancellation.
+        """
+        start = self.sync_client.start_device_authorization(self._device_link_label())
+        on_code(start)
+        device_code = start["deviceCode"]
+        interval = max(1, int(start.get("interval", 5) or 5))
+        while not should_cancel():
+            result = self.sync_client.poll_device_authorization(device_code)
+            status = result.get("status")
+            if status == "complete":
+                return result["credential"]
+            if status in ("denied", "expired", "invalid"):
+                raise SyncError(f"Device linking was not completed ({status}).")
+            if status == "slow_down":
+                interval += 5
+            sleep_fn(interval)
+        raise SyncError("Device linking was cancelled.")
+
+    def link_account_device(self) -> None:
+        """Link this widget to the owner's account via the browser, then create
+        an account-scoped pair it can sync."""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Link this device")
+        dialog.transient(self.root)
+        dialog.resizable(False, False)
+        cancelled = {"value": False}
+        dialog.protocol("WM_DELETE_WINDOW", lambda: (cancelled.__setitem__("value", True), dialog.destroy()))
+        status = tk.StringVar(value="Requesting a device code…")
+        ttk.Label(dialog, textvariable=status, justify="left", wraplength=360).pack(padx=16, pady=16)
+        ttk.Button(dialog, text="Cancel", command=lambda: (cancelled.__setitem__("value", True), dialog.destroy())).pack(pady=(0, 12))
+
+        def show_code(start: dict) -> None:
+            code = start.get("userCode", "")
+            uri = start.get("verificationUri", APP_URL)
+            self.root.after(0, lambda: status.set(
+                f"1. Open {uri} in a browser where you are signed in.\n"
+                f"2. Enter this code to approve:\n\n        {code}\n\n"
+                "Waiting for approval…"))
+
+        def worker() -> None:
+            try:
+                credential = self._run_device_link(show_code, lambda: cancelled["value"])
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._finish_device_link(dialog, None, error))
+                return
+            except Exception as exc:  # noqa: BLE001 - surface, never crash the loop
+                wrapped = SyncError(f"Device linking failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._finish_device_link(dialog, None, error))
+                return
+            self.root.after(0, lambda: self._finish_device_link(dialog, credential, None))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_device_link(self, dialog: tk.Toplevel, credential: str | None, error: SyncError | None) -> None:
+        try:
+            dialog.destroy()
+        except tk.TclError:
+            pass
+        if error is not None or not credential:
+            if error is not None:
+                messagebox.showerror(APP_NAME, str(error), parent=self.root)
+            return
+        self.account_credential = credential
+        # Create the first account-scoped pair immediately so the widget can sync.
+        self._set_sync_status("Creating your account-linked pairing…")
+        source_id = self.sync_credentials.get("sourceId") if self.sync_credentials else secrets.token_urlsafe(24)
+        schedule = deepcopy(self.config_data)
+        old_credentials = deepcopy(self.sync_credentials) if self.sync_credentials else None
+
+        def worker() -> None:
+            try:
+                credentials = self._perform_repair(schedule, source_id, old_credentials)
+                self.root.after(0, lambda: self._pair_created(credentials))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, True))
+            except Exception as exc:  # noqa: BLE001
+                wrapped = SyncError(f"Pairing failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, True))
+
         threading.Thread(target=worker, daemon=True).start()
 
     def _pair_created(self, credentials: dict) -> None:
-        self.sync_credentials = credentials
         try:
             self.storage.save_sync_credentials(credentials)
         except StorageError as exc:
+            # Persist before adopting the pairing in memory, so a failed save does
+            # not leave an in-memory-only pairing pointing at an orphaned remote pair.
             self._warn_persistence(exc)
             return
+        self.sync_credentials = credentials
         self._set_sync_status("Encrypted pairing ready; waiting for the mobile scan.")
         self.show_pairing_qr()
 
@@ -844,18 +1024,38 @@ class MedicationReminderApp:
             image_label = tk.Label(dialog, image=photo, bg="white")
             image_label.image = photo
             image_label.pack(padx=24, pady=8)
-            ttk.Label(dialog, text="The relay stores ciphertext only. One mobile device can claim this link.", style="Meta.TLabel").pack(pady=(4, 12))
+            ttk.Label(dialog, text="The relay stores ciphertext only. One mobile device can claim this link.", style="Meta.TLabel").pack(pady=(4, 4))
+            ttk.Label(dialog, text="Scanning the QR code is the safest way to pair. Copy the link only if you cannot scan.", style="Meta.TLabel").pack(pady=(0, 12))
             actions = ttk.Frame(dialog)
             actions.pack(pady=(0, 20))
             def copy_link() -> None:
+                if not messagebox.askyesno(
+                    APP_NAME,
+                    "The pairing link contains the secret encryption key. Windows Clipboard "
+                    "History and Cloud Clipboard may store and sync it to your other devices.\n\n"
+                    "Scanning the QR code is safer. Copy the link to the clipboard anyway?",
+                    parent=dialog,
+                ):
+                    return
                 self.root.clipboard_clear(); self.root.clipboard_append(payload); self.root.update()
-                messagebox.showinfo(APP_NAME, "Private pairing link copied.", parent=dialog)
-            ttk.Button(actions, text="Copy link", command=copy_link).pack(side="left", padx=6)
+                messagebox.showinfo(APP_NAME, "Pairing link copied. It will be cleared from the clipboard in 60 seconds.", parent=dialog)
+                self.root.after(60_000, lambda: self._clear_clipboard_if_matches(payload))
+            ttk.Button(actions, text="Copy link (less safe)", command=copy_link).pack(side="left", padx=6)
             ttk.Button(actions, text="Close", command=dialog.destroy).pack(side="left", padx=6)
             dialog.lift()
             dialog.focus_force()
         except (ValueError, OSError) as exc:
             messagebox.showerror(APP_NAME, f"Could not create the pairing QR code: {exc}", parent=self.root)
+
+    def _clear_clipboard_if_matches(self, value: str) -> None:
+        """Clear the clipboard if it still holds the copied pairing link."""
+        try:
+            if self.root.clipboard_get() == value:
+                self.root.clipboard_clear()
+                self.root.update()
+        except tk.TclError:
+            # Clipboard empty, non-text, or already replaced: nothing to clear.
+            pass
 
     def _set_sync_status(self, message: str | None = None) -> None:
         if not self.sync_status_var:
@@ -869,15 +1069,20 @@ class MedicationReminderApp:
             self.sync_status_var.set(f"Encrypted sync revision {self.sync_credentials.get('revision', 1)} • {claimed}")
 
     def _periodic_sync(self) -> None:
-        self._start_sync()
-        self.root.after(60_000, self._periodic_sync)
+        try:
+            self._start_sync()
+        except Exception as exc:
+            self._report_background_error(exc)
+        finally:
+            if self.running:
+                self.root.after(60_000, self._periodic_sync)
 
     def _start_sync(self, *, push_local: bool = False, notify: bool = False) -> None:
         if not self.sync_credentials:
             if notify:
                 messagebox.showinfo(APP_NAME, "Pair a mobile device first.", parent=self.root)
             return
-        if self.sync_in_progress:
+        if self.sync_in_progress or self.conflict_pending:
             return
         self.sync_in_progress = True
         self._set_sync_status("Syncing encrypted schedule…")
@@ -898,6 +1103,12 @@ class MedicationReminderApp:
                 self.root.after(0, lambda: self._finish_sync(result, generation, notify))
             except SyncError as exc:
                 self.root.after(0, lambda error=exc: self._sync_failed(error, notify))
+            except Exception as exc:
+                # A malformed response (KeyError/TypeError/ValueError while parsing)
+                # must not kill this thread before the flag is reset, or every later
+                # _start_sync returns early and sync stays dead until restart.
+                wrapped = SyncError(f"The sync service returned an unexpected error: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, notify))
         threading.Thread(target=worker, daemon=True).start()
 
     def _finish_sync(self, result: tuple, generation: int, notify: bool) -> None:
@@ -906,14 +1117,7 @@ class MedicationReminderApp:
         if kind == "remote" and generation != self.sync_generation:
             kind = "conflict"
         if kind == "conflict":
-            remote: RemoteSchedule = result[1]
-            keep_local = messagebox.askyesno(APP_NAME, "Schedule changes were made on both devices.\n\nYes: keep this PC's version and overwrite mobile.\nNo: use the mobile version on this PC.", parent=self.root)
-            if keep_local:
-                if self.sync_credentials:
-                    self.sync_credentials["revision"] = remote.revision
-                    self._start_sync(push_local=True, notify=notify)
-                return
-            self._apply_remote_schedule(remote)
+            self._resolve_conflict(result[1], notify)
             return
         if kind == "remote":
             self._apply_remote_schedule(result[1])
@@ -933,6 +1137,54 @@ class MedicationReminderApp:
         self._set_sync_status()
         if notify:
             messagebox.showinfo(APP_NAME, "Encrypted schedule sync is up to date.", parent=self.root)
+
+    def _resolve_conflict(self, remote: RemoteSchedule, notify: bool) -> None:
+        # Hold conflict_pending across the modal so the 60s periodic sync (which
+        # fires during the dialog) returns early instead of stacking more dialogs
+        # that act on a stale revision.
+        if self.conflict_pending:
+            return
+        self.conflict_pending = True
+        try:
+            keep_local = messagebox.askyesno(
+                APP_NAME,
+                "Schedule changes were made on both devices.\n\n"
+                "Yes: keep this PC's version and overwrite mobile.\n"
+                "No: use the mobile version on this PC.",
+                parent=self.root,
+            )
+        finally:
+            self.conflict_pending = False
+        if not self.sync_credentials:
+            return
+        if keep_local:
+            # Push this PC's version; _start_sync re-fetches first, so the update
+            # is based on the current server revision.
+            self.sync_credentials["revision"] = remote.revision
+            self._start_sync(push_local=True, notify=notify)
+            return
+        # Use mobile: re-fetch the current remote before applying, so we never
+        # overwrite the local schedule with a revision that has gone stale while
+        # the conflict dialog was open.
+        self.sync_in_progress = True
+        self._set_sync_status("Applying the mobile schedule…")
+        credentials = deepcopy(self.sync_credentials)
+        def worker() -> None:
+            try:
+                fresh = self.sync_client.fetch(credentials)
+                self.root.after(0, lambda: self._finish_conflict_remote(fresh, notify))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, notify))
+            except Exception as exc:
+                wrapped = SyncError(f"The sync service returned an unexpected error: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, notify))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_conflict_remote(self, remote: RemoteSchedule, notify: bool) -> None:
+        self.sync_in_progress = False
+        self._apply_remote_schedule(remote)
+        if notify:
+            messagebox.showinfo(APP_NAME, "The schedule was updated from the paired mobile device.", parent=self.root)
 
     def _apply_remote_schedule(self, remote: RemoteSchedule) -> None:
         if not self.sync_credentials:
@@ -962,12 +1214,26 @@ class MedicationReminderApp:
         if not messagebox.askyesno(APP_NAME, "Unpair both devices? The local schedule will be kept.", parent=self.root):
             return
         credentials = deepcopy(self.sync_credentials)
-        try:
-            self.sync_client.revoke(credentials)
-        except SyncError as exc:
-            if exc.status != 404:
-                messagebox.showerror(APP_NAME, str(exc), parent=self.root)
-                return
+        self._set_sync_status("Unpairing…")
+        def worker() -> None:
+            # The network revoke can block for the full request timeout; run it off
+            # the Tk thread so the UI stays responsive.
+            error: SyncError | None = None
+            try:
+                self.sync_client.revoke(credentials)
+            except SyncError as exc:
+                if exc.status != 404:
+                    error = exc
+            except Exception as exc:
+                error = SyncError(f"Unpair failed: {exc}")
+            self.root.after(0, lambda captured=error: self._finish_unpair(captured))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_unpair(self, error: SyncError | None) -> None:
+        if error is not None:
+            self._set_sync_status()
+            messagebox.showerror(APP_NAME, str(error), parent=self.root)
+            return
         try:
             self.storage.delete_sync_credentials()
         except StorageError as exc:
@@ -1002,6 +1268,13 @@ class MedicationReminderApp:
             self.storage.append_audit(action, self.now(), **details)
         except StorageError as exc:
             self._warn_persistence(exc)
+
+    def _report_background_error(self, exc: Exception) -> None:
+        """Surface an unexpected background-task error without stopping the loop."""
+        try:
+            self.status_var.set(f"Warning • a background task failed: {exc}")
+        except Exception:
+            pass
 
     def _warn_persistence(self, exc: Exception) -> None:
         self.status_var.set("Warning • protected data could not be saved")

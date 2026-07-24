@@ -13,14 +13,21 @@
   const offeredWorkers = new WeakSet();
 
   function offerUpdate(worker, version = latestVersion, force = false) {
-    if (!worker || prompting || offeredWorkers.has(worker)
-      || (!force && declinedVersion === version)) return false;
+    if (!worker || prompting) return false;
+    const alreadyOffered = offeredWorkers.has(worker);
+    const declined = declinedVersion === version;
+    // Background checks never re-prompt a worker we've handled or a version already declined.
+    if (!force && (alreadyOffered || declined)) return false;
+    // A manual check re-offers a previously declined update, but must not double-prompt a
+    // worker that was already offered and accepted this session.
+    if (force && alreadyOffered && !declined) return false;
     offeredWorkers.add(worker);
     prompting = true;
     const accepted = confirm(`Medication Reminder ${version} is available.\n\nUpdate now?`);
     prompting = false;
     if (!accepted) {
       declinedVersion = version;
+      if (force) alert('Update postponed. You can apply it any time from “Check for updates”.');
       return false;
     }
     declinedVersion = '';
@@ -52,6 +59,7 @@
       }
       await registration.update();
       if (registration.waiting) return offerUpdate(registration.waiting, latestVersion, manual);
+      if (manual) alert(`Medication Reminder ${latestVersion} is being prepared. Please try “Check for updates” again in a moment.`);
       return true;
     } catch (error) {
       console.warn('Application update check failed', error);

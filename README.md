@@ -121,6 +121,11 @@ GET    /api/auth/me
 PATCH  /api/auth/me
 DELETE /api/auth/session
 
+POST   /api/auth/device/start
+POST   /api/auth/device/approve
+POST   /api/auth/device/poll
+POST   /api/auth/device/revoke
+
 POST   /api/sync/pairs
 GET    /api/sync/pairs/:pairId
 PUT    /api/sync/pairs/:pairId
@@ -137,6 +142,27 @@ Browser account requests send the session cookie with `credentials: same-origin`
 mutations also send the CSRF marker. Mobile sync sends
 `Authorization: Bearer <mobile credential>` plus
 `X-Medication-Device: <device id>` and omits browser credentials.
+
+### Authenticated device pairing (widget)
+
+The Windows widget authenticates to an account with a self-hosted OAuth 2.0
+Device Authorization Grant (RFC 8628), so it creates account-scoped pairs
+without the retired anonymous path and without embedding browser cookies:
+
+1. The widget calls `POST /auth/device/start` and shows the returned 8-character
+   `userCode` plus the verification URL (`/link`).
+2. The signed-in, cloud-sync-entitled owner opens `/link` in a browser and
+   approves the code via `POST /auth/device/approve` (cookie + CSRF).
+3. The widget polls `POST /auth/device/poll` (RFC-style `pending` / `slow_down`
+   before approval) and, once approved, receives a long-lived **device
+   credential** (`mdk_…`, stored hashed) exactly once.
+4. The widget then uses `Authorization: Bearer mdk_…` for account pair
+   create/read/update/delete — the same rows a cookie session would authorize,
+   still tenant-scoped by `user_id`, with CSRF staying browser-only. Device
+   credentials cannot manage the account itself and are revocable via
+   `POST /auth/device/revoke` (widget self-revoke, or account-wide from the
+   browser). Codes and credentials live in `device_authorizations` /
+   `device_credentials` (migration `0005`).
 
 An invitation expires after 15 minutes, is bound to its account-owned source record,
 and can be consumed once. The installed mobile creates a `claimNonce`; the Worker
@@ -161,8 +187,10 @@ unpair confirmation.
 
 The Windows widget remains owner/developer-only. It stores schedule, reminder state,
 audit history, and pairing material in the current Windows user's protected
-application data using Windows DPAPI. Existing one-to-one encrypted widget pairings
-remain on the compatibility path; public users must not be directed to this client.
+application data using Windows DPAPI. It links to an account through the device
+authorization grant above ("Link account"), after which it creates account-scoped
+pairs. Existing one-to-one encrypted widget pairings that pre-date accounts remain
+on the legacy compatibility path; public users must not be directed to this client.
 
 The exact legacy host is:
 

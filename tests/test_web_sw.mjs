@@ -74,6 +74,7 @@ function serviceWorkerHarness({ fetchImpl, putImpl } = {}) {
     async focus() {},
     async navigate(url) { navigations.push(url); },
   };
+  const notifications = [];
   const self = {
     location: { origin: ORIGIN },
     clients: {
@@ -83,7 +84,11 @@ function serviceWorkerHarness({ fetchImpl, putImpl } = {}) {
     },
     addEventListener(name, handler) { handlers.set(name, handler); },
     skipWaiting() {},
-    registration: { async showNotification() {} },
+    registration: {
+      async showNotification(title, options) {
+        notifications.push({ title, options });
+      },
+    },
   };
   const context = {
     URL,
@@ -116,13 +121,24 @@ function serviceWorkerHarness({ fetchImpl, putImpl } = {}) {
     };
   }
 
+  async function dispatchPush(payload) {
+    const waitPromises = [];
+    handlers.get('push')({
+      data: { json() { return payload; } },
+      waitUntil(value) { waitPromises.push(Promise.resolve(value)); },
+    });
+    await Promise.all(waitPromises);
+  }
+
   return {
     cacheEntries,
     deletes,
     dispatchFetch,
+    dispatchPush,
     handlers,
     matches,
     navigations,
+    notifications,
     puts,
   };
 }
@@ -189,6 +205,40 @@ test('offline notification navigation retains dueAt in the browser and falls bac
   await event.wait();
   assert.deepEqual(app.matches, [SHELL_KEY]);
   assert.equal(app.matches.some(key => key.includes('dueAt')), false);
+});
+
+test('push notification urls are constrained to the app origin', async t => {
+  await t.test('cross-origin payload url falls back to the canonical shell', async () => {
+    const app = serviceWorkerHarness();
+    await app.dispatchPush({ title: 'Reminder', url: 'https://evil.example/steal' });
+    assert.equal(app.notifications.length, 1);
+    assert.equal(app.notifications[0].options.data.url, '/');
+
+    app.handlers.get('notificationclick')({
+      notification: { data: app.notifications[0].options.data, close() {} },
+      waitUntil() {},
+    });
+    await flush();
+    assert.equal(app.navigations.some(url => url.includes('evil.example')), false);
+  });
+
+  await t.test('javascript scheme payload url falls back to the canonical shell', async () => {
+    const app = serviceWorkerHarness();
+    await app.dispatchPush({ title: 'Reminder', url: 'javascript:alert(1)' });
+    assert.equal(app.notifications[0].options.data.url, '/');
+  });
+
+  await t.test('same-origin dueAt deep link is preserved as a path', async () => {
+    const app = serviceWorkerHarness();
+    await app.dispatchPush({ title: 'Reminder', tag: 'medication-1784803200000' });
+    assert.equal(app.notifications[0].options.data.url, '/?dueAt=1784803200000');
+  });
+
+  await t.test('protocol-relative cross-origin url falls back to the canonical shell', async () => {
+    const app = serviceWorkerHarness();
+    await app.dispatchPush({ title: 'Reminder', url: '//evil.example/steal' });
+    assert.equal(app.notifications[0].options.data.url, '/');
+  });
 });
 
 test('activation removes only stale Medication Reminder cache generations', async () => {
