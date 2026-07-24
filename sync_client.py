@@ -24,6 +24,21 @@ class SyncError(RuntimeError):
         self.status = status
 
 
+class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Refuse HTTP redirects so the Bearer token is never re-sent cross-origin.
+
+    The default opener transparently follows 3xx responses and replays the
+    Authorization header to the redirect target, which could leak the pairing
+    token to another host. Turning redirects into errors keeps the credential
+    on the single expected origin.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
+        raise urllib.error.HTTPError(
+            req.full_url, code, f"Refusing to follow redirect to {newurl}", headers, fp
+        )
+
+
 def _b64(data: bytes) -> str:
     return base64.urlsafe_b64encode(data).decode("ascii").rstrip("=")
 
@@ -48,6 +63,9 @@ class EncryptedSyncClient:
     def __init__(self, api_url: str = SYNC_API, timeout: float = 10.0) -> None:
         self.api_url = api_url.rstrip("/")
         self.timeout = timeout
+        # A private opener that refuses redirects, so the Authorization header
+        # cannot be replayed to a different host on a 3xx response.
+        self._opener = urllib.request.build_opener(_NoRedirectHandler())
 
     def _request(self, path: str, *, method: str = "GET", token: str | None = None, body: dict[str, Any] | None = None) -> dict[str, Any]:
         headers = {"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "MedicationReminderWidget/1"}
@@ -56,7 +74,7 @@ class EncryptedSyncClient:
         encoded = json.dumps(body, separators=(",", ":")).encode("utf-8") if body is not None else None
         request = urllib.request.Request(f"{self.api_url}{path}", data=encoded, headers=headers, method=method)
         try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            with self._opener.open(request, timeout=self.timeout) as response:
                 raw = response.read(MAX_RESPONSE_BYTES + 1)
                 if len(raw) > MAX_RESPONSE_BYTES:
                     raise SyncError("The sync service returned an oversized response")
@@ -99,14 +117,35 @@ class EncryptedSyncClient:
         self._request("/sync/pairs", method="POST", body={"pairId": credentials["pairId"], "sourceId": source_id, "token": credentials["token"], "updatedBy": source_id, **encrypted})
         return credentials
 
+    @staticmethod
+    def _revision(payload: Any, key: str = "revision") -> int:
+        """Coerce a response revision to int, raising SyncError on a bad shape.
+
+        Guards against a malformed relay response (missing/non-dict/non-numeric)
+        killing the caller's worker thread with a raw KeyError/TypeError/ValueError.
+        """
+        if not isinstance(payload, dict):
+            raise SyncError("The sync service returned an invalid response")
+        try:
+            return int(payload[key])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise SyncError("The sync service returned an invalid response") from exc
+
     def fetch(self, credentials: dict[str, Any]) -> RemoteSchedule:
         payload = self._request(f"/sync/pairs/{credentials['pairId']}", token=credentials["token"])
-        return RemoteSchedule(self._decrypt(payload, credentials["encryptionKey"]), int(payload["revision"]), str(payload["updatedBy"]), bool(payload.get("claimed")))
+        if not isinstance(payload, dict) or "updatedBy" not in payload:
+            raise SyncError("The sync service returned an invalid response")
+        return RemoteSchedule(
+            self._decrypt(payload, credentials["encryptionKey"]),
+            self._revision(payload),
+            str(payload["updatedBy"]),
+            bool(payload.get("claimed")),
+        )
 
     def update(self, schedule: dict[str, Any], credentials: dict[str, Any], base_revision: int) -> int:
         encrypted = self._encrypt(schedule, credentials["encryptionKey"])
         payload = self._request(f"/sync/pairs/{credentials['pairId']}", method="PUT", token=credentials["token"], body={"baseRevision": base_revision, "updatedBy": credentials["deviceId"], **encrypted})
-        return int(payload["revision"])
+        return self._revision(payload)
 
     def revoke(self, credentials: dict[str, Any]) -> None:
         self._request(f"/sync/pairs/{credentials['pairId']}", method="DELETE", token=credentials["token"])

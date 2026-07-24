@@ -8,7 +8,7 @@ import re
 import tempfile
 from copy import deepcopy
 from dataclasses import dataclass
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 from typing import Any, Protocol
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -172,6 +172,22 @@ def occurrence_key(target_date: date, event: dict[str, Any]) -> str:
     return f"{target_date.isoformat()}|{event['id']}|{event['time']}"
 
 
+_CSV_INJECTION_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+
+
+def sanitize_csv_cell(value: Any) -> str:
+    """Neutralize spreadsheet formula injection in exported cells.
+
+    Labels and medication names can arrive from a paired phone via sync, so a
+    cell beginning with an Excel formula trigger (= + - @) or a tab/CR is
+    prefixed with a single quote to force spreadsheets to treat it as text.
+    """
+    text = "" if value is None else str(value)
+    if text[:1] in _CSV_INJECTION_PREFIXES:
+        return "'" + text
+    return text
+
+
 def atomic_write_bytes(path: Path, data: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temp_path: Path | None = None
@@ -314,6 +330,34 @@ class AppStorage:
         self.settings_file = ProtectedJsonFile(self.data_dir / "settings.dat", selected_protector)
         self.sync_file = ProtectedJsonFile(self.data_dir / "sync.dat", selected_protector)
 
+    def _quarantine(self, protected_file: ProtectedJsonFile, now: datetime | None = None) -> Path | None:
+        """Rename a corrupt/undecryptable protected file aside so startup can recover.
+
+        Returns the new path if the file was preserved, else None. Never raises:
+        recovery to defaults must not be blocked by a filesystem hiccup.
+        """
+        if not protected_file.exists():
+            return None
+        stamp = (now or datetime.now()).strftime("%Y%m%d-%H%M%S")
+        target = protected_file.path.with_name(f"{protected_file.path.name}.corrupt-{stamp}")
+        try:
+            os.replace(protected_file.path, target)
+            return target
+        except OSError:
+            try:
+                protected_file.path.unlink(missing_ok=True)
+            except OSError:
+                pass
+            return None
+
+    @staticmethod
+    def _coerce_volume(value: Any) -> int:
+        try:
+            volume = int(value)
+        except (TypeError, ValueError):
+            volume = 70
+        return max(0, min(100, volume))
+
     def load_sync_credentials(self) -> dict[str, Any] | None:
         if not self.sync_file.exists():
             return None
@@ -333,23 +377,31 @@ class AppStorage:
             raise StorageError("Could not remove protected pairing credentials") from exc
 
     def load_settings(self) -> dict[str, Any]:
+        defaults = {"volume": 70, "sound": "chime"}
         if not self.settings_file.exists():
-            return {"volume": 70, "sound": "chime"}
-        value = self.settings_file.load()
+            return dict(defaults)
+        try:
+            value = self.settings_file.load()
+        except StorageError:
+            # Undecryptable/corrupt settings must not brick startup: quarantine
+            # the file and fall back to safe defaults.
+            self._quarantine(self.settings_file)
+            return dict(defaults)
         if not isinstance(value, dict):
-            raise StorageError("The protected alert settings have an invalid structure")
+            self._quarantine(self.settings_file)
+            return dict(defaults)
         legacy = {"SystemExclamation": "chime", "SystemAsterisk": "bright", "SystemHand": "urgent", "SystemQuestion": "warm", "SystemInformation": "quiet"}
         sound = legacy.get(str(value.get("sound", "chime")), str(value.get("sound", "chime")))
         if sound not in {"chime", "bright", "warm", "urgent", "quiet"}:
             sound = "chime"
-        return {"volume": max(0, min(100, int(value.get("volume", 70)))), "sound": sound}
+        return {"volume": self._coerce_volume(value.get("volume", 70)), "sound": sound}
 
     def save_settings(self, settings: dict[str, Any]) -> None:
         sound = str(settings.get("sound", "chime"))
         sound = {"SystemExclamation": "chime", "SystemAsterisk": "bright", "SystemHand": "urgent", "SystemQuestion": "warm", "SystemInformation": "quiet"}.get(sound, sound)
         if sound not in {"chime", "bright", "warm", "urgent", "quiet"}:
             sound = "chime"
-        normalized = {"volume": max(0, min(100, int(settings.get("volume", 70)))), "sound": sound}
+        normalized = {"volume": self._coerce_volume(settings.get("volume", 70)), "sound": sound}
         self.settings_file.save(normalized)
 
     def load_schedule(self, seed_path: Path) -> dict[str, Any]:
@@ -372,20 +424,47 @@ class AppStorage:
         self.schedule_file.save(validated)
         return validated
 
+    def reset_schedule(self, seed_path: Path) -> dict[str, Any]:
+        """Quarantine an unreadable schedule and re-seed from the bundled default.
+
+        The schedule is the one protected file that is never discarded silently;
+        callers invoke this only after prompting the user, then re-seed here.
+        """
+        self._quarantine(self.schedule_file)
+        return self.load_schedule(seed_path)
+
     def load_state(self, now: datetime) -> dict[str, Any]:
         if not self.state_file.exists():
             state = default_state(now)
             self.state_file.save(state)
             return state
-        return normalize_state(self.state_file.load(), now)
+        try:
+            return normalize_state(self.state_file.load(), now)
+        except StorageError:
+            # A corrupt/undecryptable or unsupported-version state file must not
+            # brick startup: quarantine it and continue with a clean default.
+            self._quarantine(self.state_file, now)
+            state = default_state(now)
+            try:
+                self.state_file.save(state)
+            except StorageError:
+                pass
+            return state
 
     def save_state(self, state: dict[str, Any]) -> None:
         self.state_file.save(state)
 
     def append_audit(self, action: str, now: datetime, **details: Any) -> None:
-        records = self.audit_file.load() if self.audit_file.exists() else []
+        try:
+            records = self.audit_file.load() if self.audit_file.exists() else []
+        except StorageError:
+            # A corrupt audit log should not stop new activity from being logged:
+            # quarantine it and start a fresh log rather than raising.
+            self._quarantine(self.audit_file, now)
+            records = []
         if not isinstance(records, list):
-            raise StorageError("The protected audit log has an invalid structure")
+            self._quarantine(self.audit_file, now)
+            records = []
         cutoff = now - AUDIT_RETENTION
         retained = [
             record for record in records
@@ -395,7 +474,13 @@ class AppStorage:
         self.audit_file.save(retained[-MAX_AUDIT_RECORDS:])
 
     def export_taken_csv(self, destination: Path) -> int:
-        records = self.audit_file.load() if self.audit_file.exists() else []
+        try:
+            records = self.audit_file.load() if self.audit_file.exists() else []
+        except StorageError:
+            self._quarantine(self.audit_file)
+            records = []
+        if not isinstance(records, list):
+            records = []
         taken = [record for record in records if isinstance(record, dict) and record.get("action") == "medication_taken"]
         destination = destination.resolve()
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -409,10 +494,16 @@ class AppStorage:
                 writer = csv.writer(f)
                 writer.writerow(["timestamp", "status", "event_id", "label", "scheduled_time", "items"])
                 for record in taken:
+                    items = record.get("items", [])
+                    if not isinstance(items, list):
+                        items = []
                     writer.writerow([
-                        record.get("timestamp", ""), "TAKEN", record.get("event_id", ""),
-                        record.get("label", ""), record.get("scheduled_time", ""),
-                        " | ".join(record.get("items", [])),
+                        sanitize_csv_cell(record.get("timestamp", "")),
+                        sanitize_csv_cell("TAKEN"),
+                        sanitize_csv_cell(record.get("event_id", "")),
+                        sanitize_csv_cell(record.get("label", "")),
+                        sanitize_csv_cell(record.get("scheduled_time", "")),
+                        sanitize_csv_cell(" | ".join(str(item) for item in items)),
                     ])
                 f.flush()
                 os.fsync(f.fileno())
@@ -490,6 +581,20 @@ class ScheduleEngine:
         self.schedule = validate_schedule(schedule)
         self.timezone = ZoneInfo(self.schedule["timezone"])
         self.state = deepcopy(state)
+        # Set when collect_due clamps a long gap to MAX_CATCH_UP; the UI reads it
+        # after each check and records that doses in the skipped window were dropped.
+        self.pending_skip_notice: dict[str, str] | None = None
+
+    def _wall_time(self, target_date: date, event_time: time) -> datetime:
+        """Resolve a scheduled wall time to a real instant, DST-safe.
+
+        zoneinfo assigns an offset even to wall times that do not exist during a
+        spring-forward gap; round-tripping through UTC yields the real instant
+        (shifting a nonexistent time past the gap) and collapses an ambiguous
+        fall-back time deterministically onto its first (fold=0) occurrence.
+        """
+        aware = datetime.combine(target_date, event_time).replace(tzinfo=self.timezone)
+        return aware.astimezone(timezone.utc).astimezone(self.timezone)
 
     def replace_schedule(self, schedule: dict[str, Any]) -> None:
         self.schedule = validate_schedule(schedule)
@@ -498,11 +603,20 @@ class ScheduleEngine:
 
     def collect_due(self, now: datetime) -> int:
         now = self._localize(now)
+        self.pending_skip_notice = None
         last_check = _safe_datetime(self.state.get("last_check_at"), now).astimezone(self.timezone)
         if last_check > now:
             last_check = now
         if now - last_check > MAX_CATCH_UP:
-            last_check = now - MAX_CATCH_UP
+            # Doses older than the catch-up window are intentionally not queued,
+            # but the gap must not be invisible (e.g. a weekend the PC was off):
+            # record the skipped window so the UI can log it.
+            clamped = now - MAX_CATCH_UP
+            self.pending_skip_notice = {
+                "skipped_from": last_check.isoformat(),
+                "skipped_until": clamped.isoformat(),
+            }
+            last_check = clamped
 
         known = set(self.state["pending"]) | set(self.state["completed"])
         added = 0
@@ -512,7 +626,7 @@ class ScheduleEngine:
                 if not event_active(event, day_cursor):
                     continue
                 event_time = parse_time(event["time"])
-                scheduled_at = datetime.combine(day_cursor, event_time, tzinfo=self.timezone)
+                scheduled_at = self._wall_time(day_cursor, event_time)
                 key = occurrence_key(day_cursor, event)
                 if last_check < scheduled_at <= now and key not in known:
                     self.state["pending"].append(key)
@@ -549,7 +663,7 @@ class ScheduleEngine:
         )
         if not event or not event_active(event, target_date):
             return None
-        scheduled_at = datetime.combine(target_date, parse_time(time_text), tzinfo=self.timezone)
+        scheduled_at = self._wall_time(target_date, parse_time(time_text))
         return DueOccurrence(
             key=key,
             event_id=event_id,
@@ -582,7 +696,7 @@ class ScheduleEngine:
             for event in self.schedule["events"]:
                 if not event_active(event, target_date):
                     continue
-                candidate = datetime.combine(target_date, parse_time(event["time"]), tzinfo=self.timezone)
+                candidate = self._wall_time(target_date, parse_time(event["time"]))
                 if candidate >= now:
                     candidates.append((candidate, event["label"]))
         return min(candidates, key=lambda item: item[0]) if candidates else None
