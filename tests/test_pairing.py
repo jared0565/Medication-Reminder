@@ -243,5 +243,170 @@ class BackgroundLoopTests(unittest.TestCase):
         self.assertIn("background task failed", app.status_var.value)
 
 
+class _FakeResponse:
+    def __init__(self, status: int, body: dict) -> None:
+        self.status = status
+        self._raw = json.dumps(body).encode("utf-8")
+
+    def read(self, _n: int = -1) -> bytes:
+        return self._raw
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_a):
+        return False
+
+
+class _FakeOpener:
+    """Stands in for the urllib opener: returns 2xx responses, raises HTTPError
+    (carrying a JSON body) for 4xx/429 so poll-state parsing is exercised."""
+
+    def __init__(self, responses):
+        self._responses = list(responses)
+        self.requests = []
+
+    def open(self, request, timeout=None):  # noqa: ANN001
+        import io
+
+        self.requests.append(request)
+        status, body = self._responses.pop(0)
+        raw = json.dumps(body).encode("utf-8")
+        if 200 <= status < 300:
+            return _FakeResponse(status, body)
+        raise urllib.error.HTTPError(request.full_url, status, "error", {}, io.BytesIO(raw))
+
+
+class DeviceAuthorizationTests(unittest.TestCase):
+    """Authenticated device pairing: acquire a credential, then use it for
+    account-scoped pairs without ever leaking the schedule or E2E key."""
+
+    def _client(self, responses):
+        client = EncryptedSyncClient(api_url="https://api.test")
+        client._opener = _FakeOpener(responses)
+        return client
+
+    def test_start_requests_windows_device_and_returns_codes(self):
+        client = self._client([(200, {
+            "deviceCode": "mdc_" + "A" * 43, "userCode": "ABCD-EFGH",
+            "verificationUri": "https://medication.bytesfx.com/link", "interval": 5, "expiresIn": 900,
+        })])
+        result = client.start_device_authorization("My PC")
+        self.assertTrue(result["deviceCode"].startswith("mdc_"))
+        self.assertEqual(result["userCode"], "ABCD-EFGH")
+        sent = json.loads(client._opener.requests[0].data)
+        self.assertEqual(sent["deviceType"], "windows")
+        self.assertEqual(sent["deviceName"], "My PC")
+
+    def test_poll_maps_each_state(self):
+        self.assertEqual(self._client([(202, {"status": "pending"})]).poll_device_authorization("mdc_x")["status"], "pending")
+        self.assertEqual(self._client([(429, {"status": "slow_down"})]).poll_device_authorization("mdc_x")["status"], "slow_down")
+        self.assertEqual(self._client([(400, {"status": "expired"})]).poll_device_authorization("mdc_x")["status"], "expired")
+        cred = "mdk_" + "B" * 43
+        done = self._client([(200, {"status": "complete", "credential": cred, "features": {"cloudSync": True}})]).poll_device_authorization("mdc_x")
+        self.assertEqual(done["status"], "complete")
+        self.assertEqual(done["credential"], cred)
+
+    def test_poll_rejects_bad_credential_prefix(self):
+        with self.assertRaises(SyncError):
+            self._client([(200, {"status": "complete", "credential": "not-a-credential"})]).poll_device_authorization("mdc_x")
+
+    def test_create_account_pair_authenticates_and_conceals_secrets(self):
+        cred = "mdk_" + "C" * 43
+        client = self._client([(201, {
+            "pairId": "pair_abcdef_123456789", "invitationToken": "i" * 40,
+            "invitationExpiresAt": "2026-07-24 10:15:00", "revision": 1,
+        })])
+        creds = client.create_account_pair(_sample_schedule(), "source_widget_123456", cred)
+        self.assertEqual(creds["role"], "account")
+        self.assertEqual(creds["deviceCredential"], cred)
+        self.assertEqual(creds["pairId"], "pair_abcdef_123456789")
+        self.assertEqual(creds["revision"], 1)
+        request = client._opener.requests[0]
+        self.assertEqual(request.get_header("Authorization"), f"Bearer {cred}")
+        raw = request.data.decode()
+        self.assertIn("ciphertext", raw)
+        self.assertNotIn("Morning", raw)  # schedule stays encrypted
+        self.assertNotIn(creds["encryptionKey"], raw)  # E2E key never leaves the device
+
+    def test_account_fetch_decrypts_with_pair_key(self):
+        cred = "mdk_" + "D" * 43
+        client = self._client([(201, {"pairId": "pair_abcdef_123456789", "invitationToken": "i" * 40, "invitationExpiresAt": "2026-07-24 10:15:00", "revision": 1})])
+        creds = client.create_account_pair(_sample_schedule(), "source_widget_123456", cred)
+        encrypted = EncryptedSyncClient._encrypt(_sample_schedule(), creds["encryptionKey"])
+        client._opener = _FakeOpener([(200, {**encrypted, "revision": 3, "updatedBy": "source", "claimed": True})])
+        remote = client.fetch_account(creds)
+        self.assertEqual(remote.revision, 3)
+        self.assertTrue(remote.claimed)
+        self.assertEqual(remote.schedule, _sample_schedule())
+
+
+class DeviceLinkControllerTests(unittest.TestCase):
+    """The headless device-link loop drives poll states and yields the credential."""
+
+    def _app(self, poll_results):
+        app = object.__new__(MedicationReminderApp)
+
+        class FakeClient:
+            def __init__(self):
+                self.polls = 0
+
+            def start_device_authorization(self, label):
+                return {"deviceCode": "mdc_x", "userCode": "ABCD-EFGH", "verificationUri": "https://x/link", "interval": 5}
+
+            def poll_device_authorization(self, code):
+                result = poll_results[min(self.polls, len(poll_results) - 1)]
+                self.polls += 1
+                return result
+
+        app.sync_client = FakeClient()
+        return app
+
+    def test_link_returns_credential_after_pending_and_slow_down(self):
+        cred = "mdk_" + "Z" * 43
+        app = self._app([{"status": "pending"}, {"status": "slow_down"}, {"status": "complete", "credential": cred}])
+        codes = []
+        result = app._run_device_link(codes.append, lambda: False, sleep_fn=lambda _s: None)
+        self.assertEqual(result, cred)
+        self.assertEqual(codes[0]["userCode"], "ABCD-EFGH")
+
+    def test_link_raises_on_denied(self):
+        app = self._app([{"status": "denied"}])
+        with self.assertRaises(SyncError):
+            app._run_device_link(lambda _s: None, lambda: False, sleep_fn=lambda _s: None)
+
+    def test_link_raises_on_cancel(self):
+        app = self._app([{"status": "pending"}])
+        with self.assertRaises(SyncError):
+            app._run_device_link(lambda _s: None, lambda: True, sleep_fn=lambda _s: None)
+
+
+class AccountRepairTests(unittest.TestCase):
+    """A linked widget re-pairs in account mode; an unlinked one stays legacy."""
+
+    def test_repair_uses_account_pair_when_credential_present(self):
+        app = object.__new__(MedicationReminderApp)
+        app.account_credential = "mdk_" + "Q" * 43
+        calls = {}
+
+        class FakeClient:
+            def revoke(self, credentials):
+                calls["revoke"] = credentials
+
+            def create_account_pair(self, schedule, source_id, credential):
+                calls["account"] = (source_id, credential)
+                return {"pairId": "acct", "role": "account", "deviceCredential": credential}
+
+            def create_pair(self, schedule, source_id):
+                calls["legacy"] = source_id
+                return {"pairId": "legacy"}
+
+        app.sync_client = FakeClient()
+        result = app._perform_repair({}, "src-9", None)
+        self.assertEqual(result["pairId"], "acct")
+        self.assertEqual(calls["account"], ("src-9", app.account_credential))
+        self.assertNotIn("legacy", calls)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -138,6 +138,9 @@ class MedicationReminderApp:
             self.sync_credentials = self.storage.load_sync_credentials()
         except StorageError:
             self.sync_credentials = None
+        # The account device credential rides inside the account pair once linked,
+        # so it survives restarts and is reused when re-pairing a new mobile.
+        self.account_credential = self.sync_credentials.get("deviceCredential") if self.sync_credentials else None
         self.sync_client = EncryptedSyncClient()
         self.sync_in_progress = False
         self.conflict_pending = False
@@ -654,6 +657,7 @@ class MedicationReminderApp:
         pairing_bar = ttk.Frame(container)
         pairing_bar.pack(fill="x", pady=(0, 8))
         ttk.Label(pairing_bar, text="Mobile sync:", style="Meta.TLabel").pack(side="left", padx=(0, 10))
+        ttk.Button(pairing_bar, text="Link account", command=self.link_account_device).pack(side="left", padx=6)
         ttk.Button(pairing_bar, text="Pair mobile", command=self.pair_device).pack(side="left", padx=6)
         ttk.Button(pairing_bar, text="Show QR", command=self.show_pairing_qr).pack(side="left", padx=6)
         ttk.Button(pairing_bar, text="Sync now", command=lambda: self._start_sync(notify=True)).pack(side="left", padx=6)
@@ -879,14 +883,114 @@ class MedicationReminderApp:
 
         Re-pairing must revoke the old pair so a previously paired phone can no
         longer sync a stale schedule. A failed revoke (e.g. it is already gone)
-        must not block creating the new pairing.
+        must not block creating the new pairing. When the widget is linked to an
+        account, the new pair is account-scoped; otherwise it uses the legacy
+        owner path.
         """
+        device_credential = old_credentials.get("deviceCredential") if old_credentials else None
         if old_credentials:
             try:
                 self.sync_client.revoke(old_credentials)
             except SyncError:
                 pass
+        device_credential = device_credential or getattr(self, "account_credential", None)
+        if device_credential:
+            return self.sync_client.create_account_pair(schedule, source_id, device_credential)
         return self.sync_client.create_pair(schedule, source_id)
+
+    def _device_link_label(self) -> str:
+        try:
+            node = platform.node() or "Windows"
+        except Exception:
+            node = "Windows"
+        return f"{node} widget"
+
+    def _run_device_link(self, on_code, should_cancel, sleep_fn=time.sleep) -> str:
+        """Drive the OAuth device-authorization loop and return the credential.
+
+        Headless and side-effect free so it can be unit tested. `on_code` is
+        invoked once with the start payload (user code + verification URL) for
+        display; `should_cancel()` aborts the wait. Raises SyncError on denial,
+        expiry, or cancellation.
+        """
+        start = self.sync_client.start_device_authorization(self._device_link_label())
+        on_code(start)
+        device_code = start["deviceCode"]
+        interval = max(1, int(start.get("interval", 5) or 5))
+        while not should_cancel():
+            result = self.sync_client.poll_device_authorization(device_code)
+            status = result.get("status")
+            if status == "complete":
+                return result["credential"]
+            if status in ("denied", "expired", "invalid"):
+                raise SyncError(f"Device linking was not completed ({status}).")
+            if status == "slow_down":
+                interval += 5
+            sleep_fn(interval)
+        raise SyncError("Device linking was cancelled.")
+
+    def link_account_device(self) -> None:
+        """Link this widget to the owner's account via the browser, then create
+        an account-scoped pair it can sync."""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Link this device")
+        dialog.transient(self.root)
+        dialog.resizable(False, False)
+        cancelled = {"value": False}
+        dialog.protocol("WM_DELETE_WINDOW", lambda: (cancelled.__setitem__("value", True), dialog.destroy()))
+        status = tk.StringVar(value="Requesting a device code…")
+        ttk.Label(dialog, textvariable=status, justify="left", wraplength=360).pack(padx=16, pady=16)
+        ttk.Button(dialog, text="Cancel", command=lambda: (cancelled.__setitem__("value", True), dialog.destroy())).pack(pady=(0, 12))
+
+        def show_code(start: dict) -> None:
+            code = start.get("userCode", "")
+            uri = start.get("verificationUri", APP_URL)
+            self.root.after(0, lambda: status.set(
+                f"1. Open {uri} in a browser where you are signed in.\n"
+                f"2. Enter this code to approve:\n\n        {code}\n\n"
+                "Waiting for approval…"))
+
+        def worker() -> None:
+            try:
+                credential = self._run_device_link(show_code, lambda: cancelled["value"])
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._finish_device_link(dialog, None, error))
+                return
+            except Exception as exc:  # noqa: BLE001 - surface, never crash the loop
+                wrapped = SyncError(f"Device linking failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._finish_device_link(dialog, None, error))
+                return
+            self.root.after(0, lambda: self._finish_device_link(dialog, credential, None))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_device_link(self, dialog: tk.Toplevel, credential: str | None, error: SyncError | None) -> None:
+        try:
+            dialog.destroy()
+        except tk.TclError:
+            pass
+        if error is not None or not credential:
+            if error is not None:
+                messagebox.showerror(APP_NAME, str(error), parent=self.root)
+            return
+        self.account_credential = credential
+        # Create the first account-scoped pair immediately so the widget can sync.
+        self._set_sync_status("Creating your account-linked pairing…")
+        source_id = self.sync_credentials.get("sourceId") if self.sync_credentials else secrets.token_urlsafe(24)
+        schedule = deepcopy(self.config_data)
+        old_credentials = deepcopy(self.sync_credentials) if self.sync_credentials else None
+
+        def worker() -> None:
+            try:
+                credentials = self._perform_repair(schedule, source_id, old_credentials)
+                self.root.after(0, lambda: self._pair_created(credentials))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, True))
+            except Exception as exc:  # noqa: BLE001
+                wrapped = SyncError(f"Pairing failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, True))
+
+        threading.Thread(target=worker, daemon=True).start()
 
     def _pair_created(self, credentials: dict) -> None:
         try:
