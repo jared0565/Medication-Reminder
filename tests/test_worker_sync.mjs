@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { DatabaseSync } from 'node:sqlite';
 import test from 'node:test';
 import worker, {
@@ -14,8 +15,14 @@ import worker, {
 import { hasCloudSync } from '../worker/src/auth.js';
 
 const migrationUrl = new URL('../worker/migrations/0003_scoped_pairing_credentials.sql', import.meta.url);
+const migration0004Url = new URL('../worker/migrations/0004_scoped_source_id.sql', import.meta.url);
 const packageUrl = new URL('../worker/package.json', import.meta.url);
 const schemaUrl = new URL('../worker/schema.sql', import.meta.url);
+
+// web-push lives in worker/node_modules; anchor the require at the worker entry
+// so tests mock the exact module singleton that src/index.js imports.
+const requireFromWorker = createRequire(new URL('../worker/src/index.js', import.meta.url));
+const webpush = requireFromWorker('web-push');
 
 const additiveColumns = [
   'invitation_token_hash',
@@ -448,6 +455,9 @@ async function workerFixture() {
     DB: sqliteD1(database),
     LEGACY_V1_HOST: 'legacy.example.test',
     MOBILE_CREDENTIAL_SECRET: 'T'.repeat(43),
+    VAPID_SUBJECT: 'mailto:reminders@example.test',
+    VAPID_PUBLIC_KEY: 'test-vapid-public-key',
+    VAPID_PRIVATE_KEY: 'test-vapid-private-key',
   };
   const ctx = { waitUntil() {} };
   return {
@@ -1462,5 +1472,243 @@ test('pairing audit metadata never records application or credential secrets', a
     'https://push.example.test/audit-secret',
   ]) {
     assert.equal(serialized.includes(secret), false, `audit metadata leaked ${secret}`);
+  }
+});
+
+test('cron prunes delivered reminders per send and retains only transient failures', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  const now = Date.now();
+  const r1 = { dueAt: now - 3000, tag: 'medication-r1' };
+  const r2 = { dueAt: now - 2000, tag: 'medication-r2' };
+  const r3 = { dueAt: now - 1000, tag: 'medication-r3' };
+  const endpoint = 'https://push.example.test/batch-subscription';
+  fixture.database.prepare(
+    'INSERT INTO push_subscriptions (endpoint, p256dh, auth, reminders) VALUES (?, ?, ?, ?)',
+  ).run(endpoint, 'p256dh-key', 'auth-key', JSON.stringify([r1, r2, r3]));
+
+  t.mock.method(webpush, 'setVapidDetails', () => {});
+  t.mock.method(webpush, 'sendNotification', async (_subscription, payloadJson) => {
+    const payload = JSON.parse(payloadJson);
+    if (payload.dueAt === r2.dueAt) {
+      const error = new Error('server error');
+      error.statusCode = 500;
+      throw error;
+    }
+    return { statusCode: 201 };
+  });
+
+  await worker.scheduled({}, fixture.env);
+
+  // First tick: all three attempted; #1 and #3 delivered+pruned, only #2 retained.
+  assert.equal(webpush.sendNotification.mock.callCount(), 3);
+  const afterFirst = JSON.parse(
+    fixture.database.prepare('SELECT reminders FROM push_subscriptions WHERE endpoint = ?').get(endpoint).reminders,
+  );
+  assert.deepEqual(afterFirst.map(item => item.dueAt), [r2.dueAt]);
+
+  // Second tick: only the retained #2 is re-attempted; #1/#3 are never re-sent.
+  await worker.scheduled({}, fixture.env);
+  const dueAtOfCalls = webpush.sendNotification.mock.calls.map(call => JSON.parse(call.arguments[1]).dueAt);
+  assert.equal(dueAtOfCalls.filter(dueAt => dueAt === r1.dueAt).length, 1);
+  assert.equal(dueAtOfCalls.filter(dueAt => dueAt === r3.dueAt).length, 1);
+  assert.equal(dueAtOfCalls.filter(dueAt => dueAt === r2.dueAt).length, 2);
+  const afterSecond = JSON.parse(
+    fixture.database.prepare('SELECT reminders FROM push_subscriptions WHERE endpoint = ?').get(endpoint).reminders,
+  );
+  assert.deepEqual(afterSecond.map(item => item.dueAt), [r2.dueAt]);
+});
+
+test('cron deletes a subscription when a send reports the endpoint is gone', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  const now = Date.now();
+  const endpoint = 'https://push.example.test/gone-subscription';
+  fixture.database.prepare(
+    'INSERT INTO push_subscriptions (endpoint, p256dh, auth, reminders) VALUES (?, ?, ?, ?)',
+  ).run(endpoint, 'p', 'a', JSON.stringify([{ dueAt: now - 1000, tag: 'gone' }]));
+  t.mock.method(webpush, 'setVapidDetails', () => {});
+  t.mock.method(webpush, 'sendNotification', async () => {
+    const error = new Error('gone');
+    error.statusCode = 410;
+    throw error;
+  });
+
+  await worker.scheduled({}, fixture.env);
+  assert.equal(
+    fixture.database.prepare('SELECT endpoint FROM push_subscriptions WHERE endpoint = ?').get(endpoint),
+    undefined,
+  );
+});
+
+test('cron garbage-collects only stale push subscriptions with no pending reminders', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  t.mock.method(webpush, 'setVapidDetails', () => {});
+  t.mock.method(webpush, 'sendNotification', async () => ({ statusCode: 201 }));
+  const future = Date.now() + 3 * 86_400_000;
+
+  fixture.database.prepare(
+    "INSERT INTO push_subscriptions (endpoint, p256dh, auth, reminders, created_at) VALUES (?, ?, ?, '[]', '2000-01-01 00:00:00')",
+  ).run('https://push.example.test/stale-empty', 'p', 'a');
+  // Stale timestamp but still has a pending reminder -> must be kept (exercises the guard).
+  fixture.database.prepare(
+    "INSERT INTO push_subscriptions (endpoint, p256dh, auth, reminders, created_at) VALUES (?, ?, ?, ?, '2000-01-01 00:00:00')",
+  ).run('https://push.example.test/stale-pending', 'p', 'a', JSON.stringify([{ dueAt: future, tag: 'future' }]));
+  // Empty but recent -> kept.
+  fixture.database.prepare(
+    "INSERT INTO push_subscriptions (endpoint, p256dh, auth, reminders) VALUES (?, ?, ?, '[]')",
+  ).run('https://push.example.test/fresh-empty', 'p', 'a');
+
+  await worker.scheduled({}, fixture.env);
+
+  const survivors = fixture.database
+    .prepare('SELECT endpoint FROM push_subscriptions ORDER BY endpoint')
+    .all()
+    .map(row => row.endpoint);
+  assert.deepEqual(survivors, [
+    'https://push.example.test/fresh-empty',
+    'https://push.example.test/stale-pending',
+  ]);
+});
+
+test('cron prunes audit events older than the retention window', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  t.mock.method(webpush, 'setVapidDetails', () => {});
+  t.mock.method(webpush, 'sendNotification', async () => ({ statusCode: 201 }));
+  fixture.database.prepare(
+    "INSERT INTO account_audit_events (event_id, user_id, event_type, created_at) VALUES ('old-audit', NULL, 'test_event', '2000-01-01 00:00:00')",
+  ).run();
+  fixture.database.prepare(
+    "INSERT INTO account_audit_events (event_id, user_id, event_type) VALUES ('recent-audit', NULL, 'test_event')",
+  ).run();
+
+  await worker.scheduled({}, fixture.env);
+
+  const remaining = fixture.database
+    .prepare('SELECT event_id FROM account_audit_events ORDER BY event_id')
+    .all()
+    .map(row => row.event_id);
+  assert.deepEqual(remaining, ['recent-audit']);
+});
+
+test('oversized request bodies are rejected before buffering, without Content-Length', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  const ctx = { waitUntil() {} };
+
+  // A ReadableStream body carries no Content-Length header (chunked), which is
+  // exactly the bypass being defended against. The stream is far over the cap.
+  const oversized = new ReadableStream({
+    start(controller) {
+      controller.enqueue(new Uint8Array(200 * 1024).fill(0x61));
+      controller.close();
+    },
+  });
+  const oversizedRequest = new Request('https://medication.bytesfx.com/api/subscriptions', {
+    method: 'POST',
+    headers: { Origin: appOrigin },
+    body: oversized,
+    duplex: 'half',
+  });
+  assert.equal(oversizedRequest.headers.get('Content-Length'), null);
+  const rejected = await worker.fetch(oversizedRequest, fixture.env, ctx);
+  assert.equal(rejected.status, 413);
+
+  // A normal small body still parses correctly through the streaming reader.
+  const accepted = await worker.fetch(new Request('https://medication.bytesfx.com/api/subscriptions', {
+    method: 'POST',
+    headers: { Origin: appOrigin, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ endpoint: 'https://push.example.test/ok', keys: { p256dh: 'p', auth: 'a' } }),
+  }), fixture.env, ctx);
+  assert.equal(accepted.status, 200);
+});
+
+test('two accounts may reuse the same client-supplied source_id', async t => {
+  const fixture = await workerFixture();
+  t.after(() => fixture.close());
+  const sharedSource = 'shared_source_id_1234';
+
+  const first = await fixture.createPair('a', { sourceId: sharedSource });
+  assert.equal(first.response.status, 201);
+  const second = await fixture.createPair('b', { sourceId: sharedSource });
+  assert.equal(second.response.status, 201);
+
+  const owners = fixture.database
+    .prepare('SELECT user_id FROM sync_pairs WHERE source_id = ? ORDER BY user_id')
+    .all(sharedSource)
+    .map(row => row.user_id);
+  assert.deepEqual(owners, ['user_a', 'user_b']);
+});
+
+test('0004 migration rescopes source_id uniqueness while preserving existing rows', async () => {
+  const migration = await readFile(migration0004Url, 'utf8');
+  const database = new DatabaseSync(':memory:');
+  const insert = (pairId, sourceId, userId) => database.prepare(
+    `INSERT INTO sync_pairs (pair_id, source_id, user_id, token_hash, ciphertext, iv, updated_by)
+     VALUES (?, ?, ?, 'hash', 'cipher', 'iv', 'device')`,
+  ).run(pairId, sourceId, userId);
+  try {
+    // Legacy table shape: the GLOBAL UNIQUE(source_id) that 0004 replaces,
+    // backed by an implicit autoindex that cannot be dropped in place.
+    database.exec(`CREATE TABLE sync_pairs (
+      pair_id TEXT PRIMARY KEY,
+      source_id TEXT NOT NULL UNIQUE,
+      user_id TEXT,
+      token_hash TEXT NOT NULL,
+      invitation_token_hash TEXT,
+      invitation_expires_at TEXT,
+      invitation_consumed_at TEXT,
+      mobile_token_hash TEXT,
+      mobile_device_id TEXT,
+      mobile_claimed_at TEXT,
+      mobile_push_endpoint TEXT,
+      ciphertext TEXT NOT NULL,
+      iv TEXT NOT NULL,
+      revision INTEGER NOT NULL DEFAULT 1 CHECK (revision > 0),
+      updated_by TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE sync_rate_limits (
+      bucket_key TEXT PRIMARY KEY,
+      window_start INTEGER NOT NULL,
+      request_count INTEGER NOT NULL
+    );`);
+
+    // (4) Pre-migration: the global unique blocks cross-tenant reuse of a source_id.
+    insert('pair_1', 'shared_source', 'user_a');
+    assert.throws(() => insert('pair_2', 'shared_source', 'user_b'), /UNIQUE/);
+
+    database.exec(migration);
+
+    // (3) The pre-existing row survived the rebuild.
+    assert.deepEqual(
+      { ...database.prepare("SELECT source_id, user_id FROM sync_pairs WHERE pair_id = 'pair_1'").get() },
+      { source_id: 'shared_source', user_id: 'user_a' },
+    );
+
+    // (1) Two different users may now reuse the same source_id.
+    insert('pair_2', 'shared_source', 'user_b');
+    assert.deepEqual(
+      database.prepare("SELECT user_id FROM sync_pairs WHERE source_id = 'shared_source' ORDER BY user_id")
+        .all().map(row => row.user_id),
+      ['user_a', 'user_b'],
+    );
+
+    // (2) The composite unique still rejects a duplicate (user_id, source_id).
+    assert.throws(() => insert('pair_3', 'shared_source', 'user_a'), /UNIQUE/);
+
+    assert.ok(
+      database.prepare("SELECT name FROM sqlite_master WHERE type = 'index' AND name = 'idx_sync_pairs_user_source'").get(),
+      'composite unique index must exist after migration',
+    );
+    assert.ok(
+      database.prepare("SELECT name FROM sqlite_master WHERE type = 'index' AND name = 'idx_sync_rate_limits_window'").get(),
+      'rate-limit window index must exist after migration',
+    );
+  } finally {
+    database.close();
   }
 });

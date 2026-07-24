@@ -12,5 +12,6 @@
     "LEGACY_V1_HOST": "medication-reminder-push.bmorris0565.workers.dev"
   },
   "triggers": { "crons": ["* * * * *"] },
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
   "d1_databases": [{ "binding": "DB", "database_name": "medication-reminder-push", "database_id": "2841c919-502b-4528-b872-db144d789ada" }]
 }

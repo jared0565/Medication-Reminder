@@ -37,11 +37,40 @@ function json(request, value, init = {}) {
   return new Response(JSON.stringify(value), { ...init, headers });
 }
 
+async function readBoundedBody(request) {
+  // Never buffer the whole body before enforcing the cap: a chunked request
+  // (or one that simply omits Content-Length) would otherwise stream past
+  // MAX_SYNC_BODY_BYTES unbounded. Read the stream and abort the moment the
+  // cap is crossed.
+  const body = request.body;
+  if (!body) return '';
+  const reader = body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value || value.byteLength === 0) continue;
+      total += value.byteLength;
+      if (total > MAX_SYNC_BODY_BYTES) throw new Response('Payload too large', { status: 413 });
+      chunks.push(value);
+    }
+  } finally {
+    try { await reader.cancel(); } catch { /* stream already settled */ }
+  }
+  if (!chunks.length) return '';
+  if (chunks.length === 1) return new TextDecoder().decode(chunks[0]);
+  const merged = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { merged.set(chunk, offset); offset += chunk.byteLength; }
+  return new TextDecoder().decode(merged);
+}
+
 async function readJson(request) {
-  const length = Number(request.headers.get('Content-Length') || 0);
-  if (length > MAX_SYNC_BODY_BYTES) throw new Response('Payload too large', { status: 413 });
-  const text = await request.text();
-  if (text.length > MAX_SYNC_BODY_BYTES) throw new Response('Payload too large', { status: 413 });
+  const declaredLength = Number(request.headers.get('Content-Length') || 0);
+  if (declaredLength > MAX_SYNC_BODY_BYTES) throw new Response('Payload too large', { status: 413 });
+  const text = await readBoundedBody(request);
   try { return JSON.parse(text); } catch { throw new Response('Invalid JSON', { status: 400 }); }
 }
 
@@ -69,7 +98,15 @@ function decodeBase64Url(value) {
   );
 }
 
+const CLOUD_CAPABILITY_EXPRESSIONS = new Set(['sync_pairs.user_id', '?']);
+
 function cloudCapabilitySql(userIdExpression) {
+  if (!CLOUD_CAPABILITY_EXPRESSIONS.has(userIdExpression)) {
+    // Defensive guard: this SQL is string-interpolated, so only vetted
+    // constant expressions may reach it. A future caller cannot smuggle
+    // user input into the query.
+    throw new Error('unsupported_capability_expression');
+  }
   return `EXISTS (
     SELECT 1
     FROM app_users capability_user
@@ -750,37 +787,44 @@ export default {
         const response = await handleSync(request, env, url, ctx);
         if (response) return response;
       }
+      if (request.method === 'OPTIONS' && ['/subscriptions', '/vapid-public-key'].includes(url.pathname)) {
+        const origin = request.headers.get('Origin');
+        if (!origin || !ALLOWED_ORIGINS.has(origin)) return new Response(null, { status: 403 });
+        return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Max-Age': '86400' } });
+      }
+      if (request.method === 'GET' && url.pathname === '/health') return json(request, { ok: true, service: 'medication-reminder-push' });
+      if (request.method === 'GET' && url.pathname === '/vapid-public-key') return json(request, { publicKey: env.VAPID_PUBLIC_KEY });
+      if (request.method === 'POST' && url.pathname === '/subscriptions') {
+        const origin = request.headers.get('Origin');
+        if (origin && !ALLOWED_ORIGINS.has(origin)) return json(request, { error: 'Origin not allowed' }, { status: 403 });
+        if (!(await enforceRateLimit(request, env))) return json(request, { error: 'Too many requests. Try again shortly.' }, { status: 429, headers: { 'Retry-After': '60' } });
+        const body = await readJson(request);
+        const endpointValid = validPushEndpoint(body?.endpoint);
+        const keysValid = typeof body?.keys?.p256dh === 'string' && body.keys.p256dh.length <= 512 && typeof body?.keys?.auth === 'string' && body.keys.auth.length <= 512;
+        if (!endpointValid || !keysValid) return json(request, { error: 'Invalid push subscription' }, { status: 400 });
+        const now = Date.now(), latest = now + 10 * 86_400_000;
+        const reminders = (Array.isArray(body.reminders) ? body.reminders : []).slice(0, 32).filter(item => Number.isFinite(Number(item?.dueAt)) && Number(item.dueAt) > now - 60_000 && Number(item.dueAt) <= latest).map(item => ({ dueAt: Number(item.dueAt), title: 'Medication reminder due', body: 'Open Medication Reminder to view the scheduled medicines.', tag: `medication-${Number(item.dueAt)}` }));
+        const timezone = typeof body.timezone === 'string' && body.timezone.length <= 100 ? body.timezone : 'UTC';
+        await env.DB.prepare('INSERT OR REPLACE INTO push_subscriptions (endpoint, p256dh, auth, timezone, reminders) VALUES (?, ?, ?, ?, ?)').bind(body.endpoint, body.keys.p256dh, body.keys.auth, timezone, JSON.stringify(reminders)).run();
+        return json(request, { ok: true });
+      }
+      return json(request, { error: 'Not found' }, { status: 404 });
     } catch (error) {
       if (error instanceof Response) return new Response(error.body, { status: error.status, headers: { ...corsHeaders(request), 'Cache-Control': 'no-store' } });
       console.error('request_failed', { path: url.pathname, error: String(error) });
       return json(request, { error: 'Service temporarily unavailable' }, { status: 503 });
     }
-    if (request.method === 'OPTIONS' && ['/subscriptions', '/vapid-public-key'].includes(url.pathname)) {
-      const origin = request.headers.get('Origin');
-      if (!origin || !ALLOWED_ORIGINS.has(origin)) return new Response(null, { status: 403 });
-      return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Max-Age': '86400' } });
-    }
-    if (request.method === 'GET' && url.pathname === '/health') return json(request, { ok: true, service: 'medication-reminder-push' });
-    if (request.method === 'GET' && url.pathname === '/vapid-public-key') return json(request, { publicKey: env.VAPID_PUBLIC_KEY });
-    if (request.method === 'POST' && url.pathname === '/subscriptions') {
-      const origin = request.headers.get('Origin');
-      if (origin && !ALLOWED_ORIGINS.has(origin)) return json(request, { error: 'Origin not allowed' }, { status: 403 });
-      if (!(await enforceRateLimit(request, env))) return json(request, { error: 'Too many requests. Try again shortly.' }, { status: 429, headers: { 'Retry-After': '60' } });
-      let body;
-      try { body = await readJson(request); } catch (error) { if (error instanceof Response) return new Response(error.body, { status: error.status, headers: { ...corsHeaders(request), 'Cache-Control': 'no-store' } }); throw error; }
-      const endpointValid = validPushEndpoint(body?.endpoint);
-      const keysValid = typeof body?.keys?.p256dh === 'string' && body.keys.p256dh.length <= 512 && typeof body?.keys?.auth === 'string' && body.keys.auth.length <= 512;
-      if (!endpointValid || !keysValid) return json(request, { error: 'Invalid push subscription' }, { status: 400 });
-      const now = Date.now(), latest = now + 10 * 86_400_000;
-      const reminders = (Array.isArray(body.reminders) ? body.reminders : []).slice(0, 32).filter(item => Number.isFinite(Number(item?.dueAt)) && Number(item.dueAt) > now - 60_000 && Number(item.dueAt) <= latest).map(item => ({ dueAt: Number(item.dueAt), title: 'Medication reminder due', body: 'Open Medication Reminder to view the scheduled medicines.', tag: `medication-${Number(item.dueAt)}` }));
-      const timezone = typeof body.timezone === 'string' && body.timezone.length <= 100 ? body.timezone : 'UTC';
-      await env.DB.prepare('INSERT OR REPLACE INTO push_subscriptions (endpoint, p256dh, auth, timezone, reminders) VALUES (?, ?, ?, ?, ?)').bind(body.endpoint, body.keys.p256dh, body.keys.auth, timezone, JSON.stringify(reminders)).run();
-      return json(request, { ok: true });
-    }
-    return json(request, { error: 'Not found' }, { status: 404 });
   },
   async scheduled(_event, env) {
     await env.DB.prepare('DELETE FROM sync_rate_limits WHERE window_start < ?').bind(Date.now() - 86_400_000).run();
+    // Bound audit-log growth (retain 180 days).
+    await env.DB.prepare("DELETE FROM account_audit_events WHERE created_at < datetime('now', '-180 days')").run();
+    // Garbage-collect stale push subscriptions that have no pending reminders
+    // left to deliver and have been idle past the retention threshold. Rows
+    // with pending reminders are never collected, so nothing due is dropped.
+    await env.DB.prepare(
+      "DELETE FROM push_subscriptions WHERE reminders = '[]' AND COALESCE(last_sent_at, created_at) < datetime('now', '-30 days')",
+    ).run();
     const rows = await env.DB.prepare('SELECT endpoint, p256dh, auth, reminders FROM push_subscriptions').all();
     const now = Date.now();
     for (const row of rows.results || []) {
@@ -789,12 +833,42 @@ export default {
       if (!due.length) continue;
       try {
         webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY);
-        for (const item of due) await webpush.sendNotification({ endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } }, JSON.stringify({ title: item.title || 'Medication due', body: item.body || 'A scheduled reminder is due.', tag: item.tag || `medication-${item.dueAt}`, dueAt: Number(item.dueAt), url: `/?dueAt=${Number(item.dueAt)}` }));
-        const remaining = reminders.filter(item => Number(item.dueAt) > now);
-        await env.DB.prepare('UPDATE push_subscriptions SET reminders = ?, last_sent_at = CURRENT_TIMESTAMP WHERE endpoint = ?').bind(JSON.stringify(remaining), row.endpoint).run();
       } catch (error) {
-        if (error?.statusCode === 404 || error?.statusCode === 410) await env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint = ?').bind(row.endpoint).run();
+        console.error('vapid_config_failed', { error: String(error) });
+        break;
       }
+      // Keep future reminders untouched, and prune each due reminder only once
+      // it is either delivered or fails permanently (404/410). A transient
+      // failure (e.g. 500) retains just that reminder for the next tick so
+      // already-delivered reminders in the same batch are never re-sent.
+      const retained = reminders.filter(item => Number(item.dueAt) > now);
+      const failed = [];
+      let subscriptionGone = false;
+      let delivered = false;
+      for (const item of due) {
+        try {
+          await webpush.sendNotification(
+            { endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } },
+            JSON.stringify({ title: item.title || 'Medication due', body: item.body || 'A scheduled reminder is due.', tag: item.tag || `medication-${item.dueAt}`, dueAt: Number(item.dueAt), url: `/?dueAt=${Number(item.dueAt)}` }),
+          );
+          delivered = true;
+        } catch (error) {
+          if (error?.statusCode === 404 || error?.statusCode === 410) { subscriptionGone = true; break; }
+          console.error('push_notification_failed', { status: error?.statusCode || 0 });
+          failed.push(item);
+        }
+      }
+      if (subscriptionGone) {
+        await env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint = ?').bind(row.endpoint).run();
+        continue;
+      }
+      const remaining = failed.length ? [...retained, ...failed] : retained;
+      // Only advance last_sent_at when a send actually succeeded, so a purely
+      // failing subscription can eventually age out once its reminders clear.
+      const update = delivered
+        ? env.DB.prepare('UPDATE push_subscriptions SET reminders = ?, last_sent_at = CURRENT_TIMESTAMP WHERE endpoint = ?')
+        : env.DB.prepare('UPDATE push_subscriptions SET reminders = ? WHERE endpoint = ?');
+      await update.bind(JSON.stringify(remaining), row.endpoint).run();
     }
   },
 };

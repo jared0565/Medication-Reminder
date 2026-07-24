@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS push_subscriptions (
 
 CREATE TABLE IF NOT EXISTS sync_pairs (
   pair_id TEXT PRIMARY KEY,
-  source_id TEXT NOT NULL UNIQUE,
+  source_id TEXT NOT NULL,
   user_id TEXT,
   token_hash TEXT NOT NULL,
   invitation_token_hash TEXT,
@@ -29,6 +29,9 @@ CREATE TABLE IF NOT EXISTS sync_pairs (
 );
 
 CREATE INDEX IF NOT EXISTS idx_sync_pairs_source_id ON sync_pairs(source_id);
+-- source_id is client-supplied, so uniqueness is scoped per tenant rather than
+-- global to prevent cross-tenant squatting / denial of service.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_sync_pairs_user_source ON sync_pairs(user_id, source_id);
 CREATE INDEX IF NOT EXISTS idx_sync_pairs_user_id ON sync_pairs(user_id);
 CREATE INDEX IF NOT EXISTS idx_sync_pairs_user_id_pair
   ON sync_pairs(user_id, pair_id);
@@ -44,6 +47,8 @@ CREATE TABLE IF NOT EXISTS sync_rate_limits (
   window_start INTEGER NOT NULL,
   request_count INTEGER NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS idx_sync_rate_limits_window ON sync_rate_limits(window_start);
 
 CREATE TABLE IF NOT EXISTS app_users (
   user_id TEXT PRIMARY KEY,
