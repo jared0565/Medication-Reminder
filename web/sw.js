@@ -92,6 +92,18 @@ self.addEventListener('fetch', event => {
   );
 });
 
+function sameOriginPath(candidate, fallback = '/') {
+  if (typeof candidate !== 'string' || !candidate) return fallback;
+  let resolved;
+  try {
+    resolved = new URL(candidate, self.location.origin);
+  } catch {
+    return fallback;
+  }
+  if (resolved.origin !== self.location.origin) return fallback;
+  return `${resolved.pathname}${resolved.search}${resolved.hash}` || fallback;
+}
+
 self.addEventListener('push', event => {
   let data = {
     title: 'Medication Reminder',
@@ -102,7 +114,7 @@ self.addEventListener('push', event => {
   } catch {}
   const tagTime = String(data.tag || '').match(/^medication-(\d+)$/)?.[1];
   const dueAt = Number(data.dueAt || tagTime) || 0;
-  const url = data.url || (dueAt ? `/?dueAt=${dueAt}` : '/');
+  const url = sameOriginPath(data.url || (dueAt ? `/?dueAt=${dueAt}` : '/'));
   const notification = self.registration.showNotification(data.title, {
     body: data.body,
     tag: data.tag || 'medication-reminder',
@@ -117,7 +129,7 @@ self.addEventListener('push', event => {
 
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-  const url = event.notification.data?.url || '/';
+  const url = sameOriginPath(event.notification.data?.url || '/');
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
       const existing = list.find(client => new URL(client.url).origin === self.location.origin);

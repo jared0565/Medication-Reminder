@@ -79,6 +79,13 @@ function installedMobileHarness({
   };
   let clearCount = 0, fetchCount = 0, promptValue = '', importedSchedule = null;
   const requests = [], alerts = [], confirmations = [], windowListeners = new Map();
+  const scheduledTimers = [];
+  const recordingSetTimeout = (handler, delay, ...args) => {
+    scheduledTimers.push({ delay });
+    const handle = setTimeout(handler, delay, ...args);
+    handle?.unref?.();
+    return handle;
+  };
   let harnessReady = false;
   let consumedInvitation = false;
   let failedStorageKey = storageFailureKey;
@@ -182,12 +189,13 @@ function installedMobileHarness({
     btoa,
     atob,
     encodeURIComponent,
-    setTimeout,
+    setTimeout: recordingSetTimeout,
     clearTimeout,
     setInterval: () => 1,
     requestAnimationFrame: () => 1,
     cancelAnimationFrame() {},
     structuredClone,
+    Math,
     BarcodeDetector: window.BarcodeDetector,
     qrcode: () => ({
       addData() {},
@@ -220,6 +228,7 @@ function installedMobileHarness({
     requests,
     alerts,
     confirmations,
+    scheduledTimers,
     pendingInvitationConsumed: () => consumedInvitation,
     failStorageFor: key => { failedStorageKey = key; },
     failScheduleApply: value => { applyShouldFail = value; },
@@ -299,7 +308,7 @@ test('installed mobile exposes only pairing sync controls and safely unpairs', a
   assert.equal(app.sync.hidden, false);
   assert.equal(app.unpair.hidden, false);
   assert.equal(app.unpair.textContent, 'Unpair');
-  assert.equal(app.status.hidden, true);
+  assert.equal(app.status.hidden, false);
   assert.equal(app.context.document.body.classList.contains('installed-mobile'), true);
 
   app.setPrompt('CANCEL');
@@ -318,6 +327,32 @@ test('installed mobile exposes only pairing sync controls and safely unpairs', a
 
   await app.unpair.onclick();
   assert.equal(app.dialogs[1].open, true);
+});
+
+test('installed mobile keeps a visible status surface for persistent sync failures', async () => {
+  const scoped = {
+    version: 2,
+    role: 'mobile',
+    pairId: 'p'.repeat(32),
+    mobileToken: 'm'.repeat(43),
+    encryptionKey: 'a'.repeat(43),
+    deviceId: 'd'.repeat(32),
+    revision: 2,
+    claimed: true,
+    dirty: false,
+  };
+  const app = installedMobileHarness({
+    storedCredentials: scoped,
+    fetchHandler: async () => ({
+      ok: false,
+      status: 403,
+      async json() { return { error: 'Cloud sync is not active for this pairing' }; },
+    }),
+  });
+  assert.equal(app.status.hidden, false);
+  await app.context.window.MedicationSync.syncNow({ silent: true });
+  assert.equal(app.status.hidden, false);
+  assert.match(app.status.textContent, /paused|not active/i);
 });
 
 test('an unauthenticated service-worker message cannot erase an offline mobile schedule', () => {
@@ -400,12 +435,144 @@ test('atomic synced schedule persistence keeps the old in-memory schedule on sto
     let schedule={version:1,timezone:'Europe/London',events:[{id:'old'}]};
     const key='medication-reminder-schedule-v1',unpairedKey='unpaired';
     function renderAll(){}
+    function validateScheduleShape(value){return value}
     async function syncPushSubscription(){}
     ${implementation}
     try { window.applySyncedSchedule({version:1,timezone:'Europe/London',events:[{id:'new'}]}); } catch {}
     globalThis.result=schedule;
   `, context);
   assert.equal(context.result.events[0].id, 'old');
+});
+
+function runAppBoot(storage) {
+  const context = {
+    localStorage: {
+      getItem: key => storage.has(key) ? storage.get(key) : null,
+      setItem: (key, value) => storage.set(key, value),
+    },
+    Intl,
+    JSON,
+    console,
+    structuredClone,
+  };
+  const initialization = readFileSync('web/app.js', 'utf8').split('const $=')[0];
+  vm.runInNewContext(
+    `${initialization};`
+    + 'globalThis.loadedSchedule=schedule;'
+    + 'globalThis.loadedWarning=scheduleLoadWarning;'
+    + 'globalThis.normalizeDays=normalizeDays;'
+    + 'globalThis.validateEventShape=validateEventShape;'
+    + 'globalThis.validateScheduleShape=validateScheduleShape;',
+    context,
+  );
+  return context;
+}
+
+test('a corrupt stored schedule falls back to an empty schedule with a visible warning', () => {
+  for (const corrupt of [
+    JSON.stringify({ timezone: 'Europe/London', events: [{ id: 'x', time: 'not-a-time', label: '', medicines: [], days: ['whoknows'] }] }),
+    JSON.stringify('just a string'),
+    JSON.stringify({ timezone: 'Europe/London', events: 'not-an-array' }),
+    JSON.stringify({ timezone: 'Europe/London', events: [{ id: 'y', time: '08:00', label: 'L', medicines: ['A'], days: ['funday'] }] }),
+  ]) {
+    const storage = new Map([['medication-reminder-schedule-v1', corrupt]]);
+    const context = runAppBoot(storage);
+    assert.equal(context.loadedSchedule.events.length, 0);
+    assert.match(context.loadedWarning, /reset|could not/i);
+  }
+});
+
+test('a valid stored schedule loads unchanged and normalizes legacy day names at boot', () => {
+  const stored = {
+    timezone: 'Europe/London',
+    events: [{ id: 'm', enabled: true, time: '08:00', label: 'Morning', medicines: ['A'], instructions: '', days: ['monday'], start_date: null, end_date: null }],
+  };
+  const storage = new Map([['medication-reminder-schedule-v1', JSON.stringify(stored)]]);
+  const context = runAppBoot(storage);
+  assert.equal(context.loadedWarning, '');
+  assert.equal(context.loadedSchedule.events.length, 1);
+  assert.equal(context.loadedSchedule.events[0].label, 'Morning');
+  assert.deepEqual([...context.loadedSchedule.events[0].days], ['mon']);
+});
+
+test('the shared schedule validator rejects malformed imports and the sync import path guards on it', () => {
+  const context = runAppBoot(new Map());
+  assert.equal(context.validateScheduleShape(null), null);
+  assert.equal(context.validateScheduleShape({ timezone: 'Europe/London', events: [{ id: 'x' }] }), null);
+  assert.equal(context.validateScheduleShape({ timezone: 'Europe/London', events: 'nope' }), null);
+  const ok = context.validateScheduleShape({
+    timezone: 'Europe/London',
+    events: [{ id: 'm', time: '08:00', label: 'Morning', medicines: ['A'], days: ['monday'] }],
+  });
+  assert.ok(ok);
+  assert.deepEqual([...ok.events[0].days], ['mon']);
+  const appSource = readFileSync('web/app.js', 'utf8');
+  assert.match(appSource, /window\.applySyncedSchedule=incoming=>\{if\(!validateScheduleShape\(incoming\)\)/);
+});
+
+test('saveEditor normalizes day tokens and enforces the sync validator caps', () => {
+  const context = runAppBoot(new Map());
+  assert.deepEqual([...context.normalizeDays('monday, Tue , WED')], ['mon', 'tue', 'wed']);
+  assert.deepEqual([...context.normalizeDays('daily')], ['daily']);
+  assert.deepEqual([...context.normalizeDays(['sun', 'sunday'])], ['sun']);
+  assert.equal(context.normalizeDays('someday'), null);
+  assert.equal(context.normalizeDays(''), null);
+
+  const many = Array.from({ length: 33 }, (_, index) => `Medicine ${index}`);
+  assert.equal(context.validateEventShape({ id: 'e', time: '08:00', label: 'L', medicines: many, days: ['daily'] }), null);
+  assert.ok(context.validateEventShape({ id: 'e', time: '08:00', label: 'L', medicines: many.slice(0, 32), days: ['daily'] }));
+
+  const src = readFileSync('web/app.js', 'utf8');
+  const saveEditor = src.match(/function saveEditor\(\)\{[^\n]*return true\}/)[0];
+  assert.match(saveEditor, /medicines\.length>32/);
+  assert.match(saveEditor, /schedule\.events\.length>=64/);
+  assert.match(saveEditor, /normalizeDays\(\$\('#eventDays'\)\.value\)/);
+  assert.match(saveEditor, /validateEventShape\(/);
+});
+
+test('active() and the notification dedup key use the local calendar day, not UTC', () => {
+  const src = readFileSync('web/app.js', 'utf8');
+  const localDateKey = src.match(/const localDateKey=[^\n]*/)[0];
+  const active = src.match(/function active\(e,d=new Date\(\)\)\{[^\n]*\}/)[0];
+  const context = { Date, String };
+  vm.runInNewContext(
+    `${localDateKey}\n${active}\nglobalThis.active=active;globalThis.localDateKey=localDateKey;`,
+    context,
+  );
+  // A user east of UTC just before midnight: local day is the 15th, UTC day is still the 14th.
+  const fakeDate = {
+    getDay: () => 1,
+    getFullYear: () => 2026,
+    getMonth: () => 0,
+    getDate: () => 15,
+    toISOString: () => '2026-01-14T23:30:00.000Z',
+  };
+  assert.equal(context.localDateKey(fakeDate), '2026-01-15');
+  const event = { enabled: true, days: ['mon'], start_date: '2026-01-15', end_date: null };
+  // Local day (15th) is on/after the start date; the old UTC comparison (14th) would exclude it.
+  assert.equal(context.active(event, fakeDate), true);
+  assert.match(src, /const now=new Date\(\),today=localDateKey\(now\)/);
+  assert.match(src, /const iso=localDateKey\(d\)/);
+});
+
+test('the dead plaintext pairing path is removed while the encrypted flow stays intact', () => {
+  const src = readFileSync('web/app.js', 'utf8');
+  assert.doesNotMatch(src, /decodePairingPayload/);
+  assert.doesNotMatch(src, /renderPairingQr/);
+  assert.doesNotMatch(src, /const pairFromUrl=new URLSearchParams/);
+  assert.doesNotMatch(src, /id="scanQr"/);
+  assert.doesNotMatch(src, /schedule=data\.schedule/);
+  const sync = readFileSync('web/sync.js', 'utf8');
+  assert.match(sync, /pairButton\.onclick = showPairing/);
+  assert.match(sync, /copyButton\.onclick = copyPairLink/);
+  assert.match(sync, /syncButton\.onclick = \(\) => void syncNow\(\)/);
+});
+
+test('the push subscription is refreshed on open, visibility regain, and a daily timer', () => {
+  const src = readFileSync('web/app.js', 'utf8');
+  assert.match(src, /window\.addEventListener\('focus',\(\)=>void syncPushSubscription\(\)\)/);
+  assert.match(src, /document\.addEventListener\('visibilitychange',\(\)=>\{if\(document\.visibilityState==='visible'\)void syncPushSubscription\(\)\}\)/);
+  assert.match(src, /setInterval\(\(\)=>\{if\(document\.visibilityState==='visible'\)void syncPushSubscription\(\)\},86400000\)/);
 });
 
 test('desktop pairing links are routed to a non-claiming snapshot import', () => {
@@ -570,7 +737,7 @@ test('account source requests use same-origin cookies and CSRF without bearer au
   assert.equal('token' in saved, false);
 });
 
-test('version-2 pairing links contain only invitation material and reject expired invitations', async () => {
+test('version-2 pairing links carry only invitation material and treat client expiry as advisory', async () => {
   const future = new Date(Date.now() + 600_000).toISOString();
   const source = {
     version: 2,
@@ -597,9 +764,16 @@ test('version-2 pairing links contain only invitation material and reject expire
   assert.deepEqual(Object.keys(decoded).sort(), [
     'encryptionKey', 'invitationExpiresAt', 'invitationToken', 'pairId', 'version',
   ]);
-  const expired = { ...decoded, invitationExpiresAt: new Date(Date.now() - 1000).toISOString() };
-  const expiredLink = `https://medication.bytesfx.com/#pair=${Buffer.from(JSON.stringify(expired)).toString('base64url')}`;
-  assert.throws(() => app.context.window.MedicationSync.parseInvitation(expiredLink), /invalid|expired/i);
+  // A merely-past expiry (e.g. a skewed local clock) is advisory: the link still parses
+  // and the server's claim response drives the authoritative verdict.
+  const clientExpired = { ...decoded, invitationExpiresAt: new Date(Date.now() - 1000).toISOString() };
+  const clientExpiredLink = `https://medication.bytesfx.com/#pair=${Buffer.from(JSON.stringify(clientExpired)).toString('base64url')}`;
+  const parsed = app.context.window.MedicationSync.parseInvitation(clientExpiredLink);
+  assert.equal(parsed.invitationToken, clientExpired.invitationToken);
+  // A structurally invalid expiry is still rejected outright.
+  const malformed = { ...decoded, invitationExpiresAt: 'not-a-real-timestamp' };
+  const malformedLink = `https://medication.bytesfx.com/#pair=${Buffer.from(JSON.stringify(malformed)).toString('base64url')}`;
+  assert.throws(() => app.context.window.MedicationSync.parseInvitation(malformedLink), /invalid|expired/i);
 });
 
 test('mobile claim sends a stable nonce and stores only the returned scoped credential', async () => {
@@ -940,6 +1114,238 @@ test('inactive cloud 403 pauses sync without erasing schedule or credentials', a
   assert.equal(app.clearCount(), 0);
   assert.equal(app.storage.has('medication-reminder-sync-v1'), true);
   assert.match(app.status.textContent, /paused|not active/i);
+});
+
+test('retryable sync failures back off exponentially and reset after a success', async () => {
+  const scoped = {
+    version: 2,
+    role: 'mobile',
+    pairId: 'p'.repeat(32),
+    mobileToken: 'm'.repeat(43),
+    encryptionKey: 'a'.repeat(43),
+    deviceId: 'd'.repeat(32),
+    revision: 2,
+    claimed: true,
+    dirty: true,
+  };
+  let failing = true;
+  const app = installedMobileHarness({
+    paired: false,
+    fetchHandler: async (_url, options) => {
+      if (failing) return { ok: false, status: 503, async json() { return { error: 'unavailable' }; } };
+      if (options.method === 'PUT') return { ok: true, status: 200, async json() { return { revision: 999 }; } };
+      return {
+        ok: true,
+        status: 200,
+        async json() {
+          return await encryptedRemote(scoped.encryptionKey, {
+            revision: 2,
+            updatedBy: scoped.deviceId,
+            claimed: true,
+          });
+        },
+      };
+    },
+  });
+  app.storage.set('medication-reminder-sync-v1', JSON.stringify(scoped));
+  app.dispatchStorage('medication-reminder-sync-v1');
+  app.scheduledTimers.length = 0;
+
+  await app.context.window.MedicationSync.syncNow();
+  await app.context.window.MedicationSync.syncNow();
+  await app.context.window.MedicationSync.syncNow();
+  const growth = app.scheduledTimers.map(timer => timer.delay);
+  assert.equal(growth.length, 3);
+  assert.ok(growth[0] >= 1000, `first delay ${growth[0]} should be at least the base`);
+  assert.ok(growth[1] > growth[0], 'second failure should wait longer than the first');
+  assert.ok(growth[2] > growth[1], 'third failure should wait longer than the second');
+  assert.ok(growth[2] <= 300_000, 'backoff is capped at five minutes');
+
+  failing = false;
+  await app.context.window.MedicationSync.syncNow();
+  assert.equal(JSON.parse(app.storage.get('medication-reminder-sync-v1')).dirty, false);
+
+  failing = true;
+  app.dispatchScheduleChange();
+  app.scheduledTimers.length = 0;
+  await app.context.window.MedicationSync.syncNow();
+  const afterReset = app.scheduledTimers.map(timer => timer.delay).filter(delay => delay >= 1000).at(-1);
+  assert.ok(afterReset < 2000, `after a success the backoff resets to the base window (${afterReset})`);
+});
+
+test('non-retryable sync failures do not schedule a background retry', async t => {
+  const scoped = {
+    version: 2,
+    role: 'mobile',
+    pairId: 'p'.repeat(32),
+    mobileToken: 'm'.repeat(43),
+    encryptionKey: 'a'.repeat(43),
+    deviceId: 'd'.repeat(32),
+    revision: 2,
+    claimed: true,
+    dirty: true,
+  };
+
+  await t.test('403 entitlement failure stops the retry loop', async () => {
+    const app = installedMobileHarness({
+      paired: false,
+      fetchHandler: async () => ({
+        ok: false,
+        status: 403,
+        async json() { return { error: 'Cloud sync is not active for this pairing' }; },
+      }),
+    });
+    app.storage.set('medication-reminder-sync-v1', JSON.stringify(scoped));
+    app.dispatchStorage('medication-reminder-sync-v1');
+    app.scheduledTimers.length = 0;
+    await app.context.window.MedicationSync.syncNow({ silent: true });
+    assert.deepEqual(app.scheduledTimers, []);
+    assert.match(app.status.textContent, /paused|not active/i);
+  });
+
+  await t.test('a locally invalid schedule stops the retry loop', async () => {
+    const app = installedMobileHarness({
+      paired: false,
+      fetchHandler: async (_url, options) => {
+        if (options.method === 'PUT') return { ok: true, status: 200, async json() { return { revision: 3 }; } };
+        return {
+          ok: true,
+          status: 200,
+          async json() {
+            return await encryptedRemote(scoped.encryptionKey, {
+              revision: 2,
+              updatedBy: scoped.deviceId,
+              claimed: true,
+            });
+          },
+        };
+      },
+    });
+    app.context.window.getMedicationSchedule = () => ({
+      timezone: 'Europe/London',
+      events: [{ id: 'bad', time: '99:99', label: '', medicines: [], days: [] }],
+    });
+    app.storage.set('medication-reminder-sync-v1', JSON.stringify(scoped));
+    app.dispatchStorage('medication-reminder-sync-v1');
+    app.scheduledTimers.length = 0;
+    await app.context.window.MedicationSync.syncNow({ silent: true });
+    assert.deepEqual(app.scheduledTimers, []);
+    assert.match(app.status.textContent, /failed|invalid/i);
+  });
+});
+
+test('a stable device id storage failure surfaces a storage-specific message', async () => {
+  const created = {
+    pairId: 'p'.repeat(32),
+    invitationToken: 'i'.repeat(43),
+    invitationExpiresAt: new Date(Date.now() + 600_000).toISOString(),
+    revision: 1,
+  };
+  const app = installedMobileHarness({
+    paired: false,
+    mobile: false,
+    standalone: false,
+    storageFailureKey: 'medication-reminder-source-id-v1',
+    fetchHandler: async () => ({ ok: true, status: 201, async json() { return created; } }),
+  });
+  await assert.rejects(
+    app.context.window.MedicationSync.createPair(),
+    /identifier|storage|permission/i,
+  );
+  assert.equal(app.fetchCount(), 0);
+  assert.equal(app.storage.has('medication-reminder-sync-v1'), false);
+});
+
+test('a source pairing deleted on the server stops looping and offers to discard the stale handle', async t => {
+  const verified404 = async () => ({
+    ok: false,
+    status: 404,
+    async json() { return { error: 'Pairing not found or credentials invalid' }; },
+  });
+
+  await t.test('silent sync stops retrying and keeps the local schedule and handle', async () => {
+    const source = sourceCredentials({ claimed: true, invitationToken: undefined, invitationExpiresAt: undefined });
+    delete source.invitationToken;
+    delete source.invitationExpiresAt;
+    const app = installedMobileHarness({
+      paired: false,
+      mobile: false,
+      standalone: false,
+      fetchHandler: verified404,
+    });
+    app.storage.set('medication-reminder-sync-v1', JSON.stringify(source));
+    app.dispatchStorage('medication-reminder-sync-v1');
+    app.scheduledTimers.length = 0;
+    await app.context.window.MedicationSync.syncNow({ silent: true });
+    assert.deepEqual(app.scheduledTimers, []);
+    assert.equal(app.storage.has('medication-reminder-sync-v1'), true);
+    assert.match(app.status.textContent, /no longer exists|stopped/i);
+  });
+
+  await t.test('an interactive sync prompts to discard the stale pairing but keeps the schedule', async () => {
+    const source = sourceCredentials({ claimed: true });
+    delete source.invitationToken;
+    delete source.invitationExpiresAt;
+    const app = installedMobileHarness({
+      paired: false,
+      mobile: false,
+      standalone: false,
+      confirmHandler: () => true,
+      fetchHandler: verified404,
+    });
+    app.storage.set('medication-reminder-sync-v1', JSON.stringify(source));
+    app.dispatchStorage('medication-reminder-sync-v1');
+    await app.context.window.MedicationSync.syncNow();
+    assert.equal(app.confirmations.some(message => /deleted on the server|discard/i.test(message)), true);
+    assert.equal(app.storage.has('medication-reminder-sync-v1'), false);
+    assert.equal(app.clearCount(), 0);
+  });
+});
+
+test('a silent sync conflict is never auto-resolved and preserves both sides until chosen', async () => {
+  const scoped = {
+    version: 2,
+    role: 'mobile',
+    pairId: 'p'.repeat(32),
+    mobileToken: 'm'.repeat(43),
+    encryptionKey: 'a'.repeat(43),
+    deviceId: 'd'.repeat(32),
+    revision: 2,
+    claimed: true,
+    dirty: true,
+  };
+  const remote = await encryptedRemote(scoped.encryptionKey, {
+    revision: 5,
+    updatedBy: 'another_device_000000000000',
+    claimed: true,
+  });
+  const app = installedMobileHarness({
+    paired: false,
+    fetchHandler: async (_url, options) => options.method === 'PUT'
+      ? { ok: true, status: 200, async json() { return { revision: 6 }; } }
+      : { ok: true, status: 200, async json() { return remote; } },
+  });
+  app.storage.set('medication-reminder-sync-v1', JSON.stringify(scoped));
+  app.dispatchStorage('medication-reminder-sync-v1');
+
+  await app.context.window.MedicationSync.syncNow({ silent: true });
+  // No confirm() from a background sync, no discard of either side.
+  assert.equal(app.confirmations.some(message => /both devices|overwrite/i.test(message)), false);
+  assert.equal(app.importedSchedule(), null);
+  assert.equal(app.requests.some(request => request.options.method === 'PUT'), false);
+  assert.equal(app.context.window.MedicationSync.hasPendingConflict(), true);
+  const preserved = JSON.parse(app.storage.get('medication-reminder-sync-v1'));
+  assert.equal(preserved.dirty, true);
+  assert.equal(preserved.revision, 2);
+  assert.equal(app.dialogs[2].open, true);
+
+  // The user chooses the remote version; only now is the local side replaced.
+  await app.context.window.MedicationSync.resolveConflict('remote');
+  assert.notEqual(app.importedSchedule(), null);
+  const resolved = JSON.parse(app.storage.get('medication-reminder-sync-v1'));
+  assert.equal(resolved.revision, 5);
+  assert.equal(resolved.dirty, false);
+  assert.equal(app.context.window.MedicationSync.hasPendingConflict(), false);
 });
 
 test('scoped mobile sync binds bearer to the exact device and clears only on verified 404', async () => {
@@ -1391,7 +1797,7 @@ test('offline source edits stay dirty and resume only for the original owner', a
     await waitForPut(app);
   });
 
-  await t.test('remote revision change enters conflict resolution before upload', async () => {
+  await t.test('remote revision change surfaces a non-destructive conflict before any upload', async () => {
     const source = sourceCredentials();
     const remote = await encryptedRemote(source.encryptionKey, {
       revision: 2,
@@ -1410,10 +1816,21 @@ test('offline source edits stay dirty and resume only for the original owner', a
     app.transitionAccess('local');
     app.dispatchScheduleChange();
     app.transitionAccess('account', ownerId);
-    await waitForPut(app);
-    assert.equal(app.confirmations.some(message => /both devices|overwrite/i.test(message)), true);
+    await app.flush();
+    await app.flush();
+    // A background sync must neither block on confirm() nor discard either side.
+    assert.equal(app.confirmations.some(message => /both devices|overwrite/i.test(message)), false);
+    assert.equal(app.requests.some(request => request.options.method === 'PUT'), false);
+    assert.equal(app.context.window.MedicationSync.hasPendingConflict(), true);
+    const preserved = JSON.parse(app.storage.get('medication-reminder-sync-v1'));
+    assert.equal(preserved.dirty, true);
+    assert.equal(preserved.revision, 1);
+    // The user explicitly keeps this device; only then does it upload over the remote base.
+    await app.context.window.MedicationSync.resolveConflict('keep');
     const put = app.requests.find(request => request.options.method === 'PUT');
+    assert.ok(put);
     assert.equal(JSON.parse(put.options.body).baseRevision, 2);
+    assert.equal(app.context.window.MedicationSync.hasPendingConflict(), false);
   });
 
   await t.test('wrong-account edit never syncs until the original owner returns', async () => {

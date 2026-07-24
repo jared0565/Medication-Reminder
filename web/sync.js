@@ -25,8 +25,12 @@
     || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   const installedMobile = installedStandalone && mobileDevice;
 
+  const SYNC_RETRY_BASE_MS = 1000;
+  const SYNC_RETRY_CAP_MS = 300_000;
+
   let pushTimer = 0;
   let syncInProgress = false;
+  let syncFailures = 0;
   let changeGeneration = 0;
   let authorityGeneration = 0;
   let accessDecisionGeneration = 0;
@@ -203,7 +207,12 @@
     let value = localStorage.getItem(key);
     if (!ID_PATTERN.test(value || '')) {
       value = randomId();
-      localStorage.setItem(key, value);
+      try {
+        localStorage.setItem(key, value);
+        if (localStorage.getItem(key) !== value) throw Error();
+      } catch {
+        throw Error('This device could not save a stable device identifier. Check browser storage permissions and try again.');
+      }
     }
     return value;
   }
@@ -219,7 +228,9 @@
 
   function refreshControls(value = credentials()) {
     document.body.classList.toggle('installed-mobile', installedMobile);
-    if (status) status.hidden = installedMobile;
+    // Keep a compact status/error surface on installed mobile so persistent failures
+    // (revoked token, 403, decryption failure, sync conflicts) stay visible there.
+    if (status) status.hidden = false;
     if (installedMobile) {
       pairButton.hidden = true;
       copyButton.hidden = true;
@@ -491,8 +502,10 @@
         return value;
       }
       if (value.version === 2 && TOKEN_PATTERN.test(value.invitationToken || '')
-        && validFutureExpiry(value.invitationExpiresAt)
+        && validExpiryTimestamp(value.invitationExpiresAt)
         && !Object.hasOwn(value, 'token')) {
+        // Client-side expiry is advisory only: a skewed local clock must not reject a
+        // structurally valid invitation. The server's claim response is authoritative.
         return value;
       }
       throw Error();
@@ -508,6 +521,12 @@
   const scannerDialog = document.createElement('dialog');
   scannerDialog.innerHTML = '<form method="dialog" class="dialog-card"><div class="dialog-heading"><div><p class="eyebrow">PAIR SCHEDULE</p><h2>Scan pairing QR</h2></div><button class="close-button" aria-label="Close">×</button></div><video id="secureQrCamera" class="qr-reader-video" autoplay playsinline muted></video><p id="secureQrStatus" class="pairing-note">Point the camera at the QR code displayed by the browser or Windows widget.</p><div class="dialog-actions"><button type="button" id="pasteSecurePairLink" class="secondary-button">Paste link</button><button class="primary-button">Cancel</button></div></form>';
   document.body.append(scannerDialog);
+
+  const conflictDialog = document.createElement('dialog');
+  conflictDialog.innerHTML = '<form method="dialog" class="dialog-card"><div class="dialog-heading"><div><p class="eyebrow">SYNC CONFLICT</p><h2>Changes on both devices</h2></div></div><p class="pairing-note">This device and the other device both changed the schedule since the last sync. Choose which version to keep. Nothing is discarded until you choose.</p><div class="dialog-actions"><button type="button" id="conflictTakeRemote" class="secondary-button">Use the other device</button><button type="button" id="conflictKeepLocal" class="primary-button">Keep this device</button></div></form>';
+  document.body.append(conflictDialog);
+  let pendingConflict = null;
+  let resolvingConflict = false;
 
   let scannerStream = null;
   let scannerFrame = 0;
@@ -1145,7 +1164,37 @@
     }
   }
 
-  async function syncNow({ pushLocal = false, silent = false } = {}) {
+  function syncRetryDelay(failures) {
+    const steps = Math.min(Math.max(failures, 1) - 1, 12);
+    const base = Math.min(SYNC_RETRY_CAP_MS, SYNC_RETRY_BASE_MS * 2 ** steps);
+    const jitter = Math.floor(Math.random() * base * 0.5);
+    return Math.min(SYNC_RETRY_CAP_MS, base + jitter);
+  }
+
+  function presentConflict(value, remote) {
+    // Never discard either side from a background sync. Surface a persistent,
+    // non-destructive prompt and let the user pick which version wins.
+    pendingConflict = { pairId: value.pairId, remoteRevision: remote.revision };
+    showError('Schedule changes were made on both devices. Choose which version to keep in Sync — nothing is discarded until you decide.');
+    if (!conflictDialog.open) conflictDialog.showModal();
+  }
+
+  function clearConflict() {
+    pendingConflict = null;
+    if (conflictDialog.open) conflictDialog.close();
+  }
+
+  async function resolveConflict(choice) {
+    if (!pendingConflict || resolvingConflict || (choice !== 'keep' && choice !== 'remote')) return;
+    resolvingConflict = true;
+    try {
+      await syncNow({ pushLocal: choice === 'keep', silent: false, conflictChoice: choice });
+    } finally {
+      resolvingConflict = false;
+    }
+  }
+
+  async function syncNow({ pushLocal = false, silent = false, conflictChoice = null } = {}) {
     const value = credentials();
     if (!installedMobile && !value && !sourceAllowed(null, { silent })) return;
     if (!value || syncInProgress) {
@@ -1162,6 +1211,7 @@
       staleOperation();
       return false;
     };
+    let syncOutcome = 'success';
     syncInProgress = true;
     refreshStatus(value, 'Syncing encrypted schedule…');
     try {
@@ -1183,7 +1233,17 @@
       if (changeGeneration !== generation) value.dirty = true;
       const remoteChanged = remote.revision !== value.revision && remote.updatedBy !== value.deviceId;
       if (remoteChanged && value.dirty) {
-        const overwrite = confirm('Schedule changes were made on both devices.\n\nOK: keep this device’s version and overwrite the other device.\nCancel: use the other device’s version here.');
+        let overwrite;
+        if (conflictChoice === 'keep') overwrite = true;
+        else if (conflictChoice === 'remote') overwrite = false;
+        else if (silent) {
+          // Background syncs must not block on confirm() or silently discard a side.
+          presentConflict(value, remote);
+          syncOutcome = 'stop';
+          return;
+        } else {
+          overwrite = confirm('Schedule changes were made on both devices.\n\nOK: keep this device’s version and overwrite the other device.\nCancel: use the other device’s version here.');
+        }
         if (!overwrite) {
           const imported = await decryptSchedule(remote, value.encryptionKey);
           if (!requireCurrentOperation()) return;
@@ -1196,9 +1256,11 @@
             requireSourceOperation(operation);
             localStorage.removeItem(PENDING_REFRESH_KEY);
           }
+          clearConflict();
           return;
         }
         value.revision = remote.revision;
+        clearConflict();
       } else if (remoteChanged || (!value.dirty && remote.revision > value.revision)) {
         const imported = await decryptSchedule(remote, value.encryptionKey);
         if (!requireCurrentOperation()) return;
@@ -1214,7 +1276,13 @@
         return;
       }
       if (value.dirty || pushLocal) {
-        const encrypted = await encryptSchedule(window.getMedicationSchedule(), value.encryptionKey);
+        let encrypted;
+        try {
+          encrypted = await encryptSchedule(window.getMedicationSchedule(), value.encryptionKey);
+        } catch (cause) {
+          cause.localValidation = true;
+          throw cause;
+        }
         if (!requireCurrentOperation()) return;
         const updated = await api(`/sync/pairs/${encodeURIComponent(value.pairId)}`, {
           method: 'PUT',
@@ -1238,11 +1306,14 @@
       }
     } catch (error) {
       if (error.status === 403) {
+        // Entitlement/paused failures are not resolved by retrying: stop the loop.
+        syncOutcome = 'stop';
         showError('Cloud sync is paused for this pairing. Your offline schedule and pairing were kept.');
         if (!silent) alert('Cloud sync is not active right now. Your offline schedule was kept.');
         return;
       }
       if (error.verifiedRevocation && value.version === 2 && value.role === 'mobile') {
+        syncOutcome = 'stop';
         if (!ownsAuthority(operation)) {
           staleOperation();
           return;
@@ -1251,13 +1322,49 @@
         if (!silent) alert('This pairing was revoked. Pair the devices again to resume sync.');
         return;
       }
+      if (error.verifiedRevocation && value.role === 'source') {
+        // The pair was deleted server-side. Stop looping generic errors and offer to
+        // discard the stale local pairing handle (the local schedule is always kept).
+        syncOutcome = 'stop';
+        if (!ownsSourceOperation(operation)) {
+          staleOperation();
+          return;
+        }
+        showError('This pairing no longer exists on the server. Sync is stopped; your local schedule was kept.');
+        if (!silent
+          && confirm('This pairing was deleted on the server and can no longer sync.\n\nDiscard the stale pairing on this device? Your local schedule will be kept.')) {
+          if (!ownsSourceOperation(operation)) {
+            staleOperation();
+            return;
+          }
+          removeCredentials();
+          localStorage.removeItem(PENDING_REFRESH_KEY);
+          refreshStatus(null, 'Stale pairing discarded. Your local schedule was kept.');
+        }
+        return;
+      }
+      if (error.localValidation) {
+        // A locally invalid schedule cannot be fixed by retrying: wait for the next edit.
+        syncOutcome = 'stop';
+        showError(`Sync failed: ${error.message}`);
+        if (!silent) alert(`Sync failed: ${error.message}`);
+        return;
+      }
+      // Network, server (429/5xx), and other transient failures back off and retry.
+      syncOutcome = 'retry';
       showError(`Sync failed: ${error.message}`);
       if (!silent) alert(`Sync failed: ${error.message}`);
     } finally {
       syncInProgress = false;
-      if (credentials()?.dirty) {
+      if (syncOutcome === 'success') {
+        syncFailures = 0;
+        // A run that completed cleanly means any earlier conflict is now resolved.
+        if (pendingConflict) clearConflict();
+      } else if (syncOutcome === 'retry') syncFailures += 1;
+      if (syncOutcome !== 'stop' && credentials()?.dirty) {
         clearTimeout(pushTimer);
-        pushTimer = setTimeout(() => void syncNow({ pushLocal: true, silent: true }), 1000);
+        const delay = syncOutcome === 'retry' ? syncRetryDelay(syncFailures) : SYNC_RETRY_BASE_MS;
+        pushTimer = setTimeout(() => void syncNow({ pushLocal: true, silent: true }), delay);
       }
     }
   }
@@ -1331,6 +1438,8 @@
   syncButton.onclick = () => void syncNow();
   unpairButton.onclick = unpair;
   dialog.querySelector('#copySecurePairLink').onclick = () => void copyPairLink();
+  conflictDialog.querySelector('#conflictKeepLocal').onclick = () => void resolveConflict('keep');
+  conflictDialog.querySelector('#conflictTakeRemote').onclick = () => void resolveConflict('remote');
 
   refreshStatus();
   document.addEventListener('visibilitychange', () => {
@@ -1430,6 +1539,8 @@
     unpair,
     importScheduleCopy,
     retryPendingClaim,
+    resolveConflict,
+    hasPendingConflict: () => Boolean(pendingConflict),
     pairingLink,
     parseInvitation,
   };
