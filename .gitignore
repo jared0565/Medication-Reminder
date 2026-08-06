@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+.venv/
+build/
+build_latest/
+build_latest2/
+dist/
+dist_latest/
+dist_latest2/
+*.spec
+MedicationReminder_*.exe
+graphify-out/
+graph-out/
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/
+web/.cache/
+worker/node_modules/
+.wrangler/
+.cache/
+.graphite/
+.worktrees/
+
+# Packaged widget builds bundle the seed schedule. One such zip carried a real
+# medication regimen into git history; keep them out so it cannot recur.
+Medication_Reminder_Widget_*.zip
+*.zip

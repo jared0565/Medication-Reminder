@@ -1,0 +1,901 @@
+from __future__ import annotations
+
+import csv
+import ctypes
+import json
+import os
+import re
+import tempfile
+from copy import deepcopy
+from dataclasses import dataclass
+from datetime import date, datetime, time, timedelta, timezone
+from pathlib import Path
+from typing import Any, Protocol
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
+
+APP_DATA_FOLDER = "MedicationReminder"
+MAX_CONFIG_BYTES = 1_000_000
+MAX_PROTECTED_BYTES = 20_000_000
+MAX_CATCH_UP = timedelta(hours=24)
+COMPLETED_RETENTION = timedelta(days=14)
+AUDIT_RETENTION = timedelta(days=730)
+MAX_AUDIT_RECORDS = 20_000
+VALID_DAYS = {"mon", "tue", "wed", "thu", "fri", "sat", "sun"}
+EVENT_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$")
+
+
+class ConfigValidationError(ValueError):
+    """Raised when the medication schedule does not satisfy its contract."""
+
+
+class StorageError(RuntimeError):
+    """Raised when protected application data cannot be read or written."""
+
+
+class Protector(Protocol):
+    def protect(self, data: bytes) -> bytes: ...
+
+    def unprotect(self, data: bytes) -> bytes: ...
+
+
+def parse_iso_date(value: str, field_name: str) -> date:
+    try:
+        return date.fromisoformat(value)
+    except (TypeError, ValueError) as exc:
+        raise ConfigValidationError(f"{field_name} must use YYYY-MM-DD format") from exc
+
+
+def parse_time(value: str, field_name: str = "time") -> time:
+    if not isinstance(value, str) or not re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", value):
+        raise ConfigValidationError(f"{field_name} must use 24-hour HH:MM format")
+    return time.fromisoformat(value)
+
+
+def _require_text(value: Any, field_name: str, max_length: int, *, allow_empty: bool = False) -> str:
+    if not isinstance(value, str):
+        raise ConfigValidationError(f"{field_name} must be text")
+    normalized = value.strip()
+    if not allow_empty and not normalized:
+        raise ConfigValidationError(f"{field_name} cannot be empty")
+    if len(normalized) > max_length:
+        raise ConfigValidationError(f"{field_name} cannot exceed {max_length} characters")
+    return normalized
+
+
+def validate_schedule(data: Any) -> dict[str, Any]:
+    """Validate and normalize untrusted schedule data at the file/UI boundary."""
+    if not isinstance(data, dict):
+        raise ConfigValidationError("The schedule root must be a JSON object")
+
+    timezone_name = _require_text(data.get("timezone"), "timezone", 100)
+    try:
+        ZoneInfo(timezone_name)
+    except ZoneInfoNotFoundError as exc:
+        raise ConfigValidationError(f"Unknown timezone: {timezone_name}") from exc
+
+    raw_events = data.get("events")
+    if not isinstance(raw_events, list):
+        raise ConfigValidationError("events must be a JSON array")
+    if len(raw_events) > 500:
+        raise ConfigValidationError("events cannot contain more than 500 reminders")
+
+    normalized_events: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for index, raw_event in enumerate(raw_events):
+        prefix = f"events[{index}]"
+        if not isinstance(raw_event, dict):
+            raise ConfigValidationError(f"{prefix} must be an object")
+
+        event_id = _require_text(raw_event.get("id"), f"{prefix}.id", 100)
+        if not EVENT_ID_PATTERN.fullmatch(event_id):
+            raise ConfigValidationError(
+                f"{prefix}.id may contain only letters, numbers, dots, underscores, and hyphens"
+            )
+        if event_id in seen_ids:
+            raise ConfigValidationError(f"Duplicate event id: {event_id}")
+        seen_ids.add(event_id)
+
+        enabled = raw_event.get("enabled", True)
+        if not isinstance(enabled, bool):
+            raise ConfigValidationError(f"{prefix}.enabled must be true or false")
+
+        time_text = raw_event.get("time")
+        parse_time(time_text, f"{prefix}.time")
+        label = _require_text(raw_event.get("label"), f"{prefix}.label", 200)
+        instructions = _require_text(
+            raw_event.get("instructions", ""), f"{prefix}.instructions", 2_000, allow_empty=True
+        )
+
+        medicines = raw_event.get("medicines")
+        if not isinstance(medicines, list) or not medicines:
+            raise ConfigValidationError(f"{prefix}.medicines must contain at least one item")
+        if len(medicines) > 100:
+            raise ConfigValidationError(f"{prefix}.medicines cannot contain more than 100 items")
+        normalized_medicines = [
+            _require_text(item, f"{prefix}.medicines[{item_index}]", 500)
+            for item_index, item in enumerate(medicines)
+        ]
+
+        days = raw_event.get("days", ["daily"])
+        if not isinstance(days, list) or not days:
+            raise ConfigValidationError(f"{prefix}.days must contain daily or weekday names")
+        normalized_days = []
+        for day_value in days:
+            normalized_day = _require_text(day_value, f"{prefix}.days", 10).lower()
+            if normalized_day != "daily" and normalized_day not in VALID_DAYS:
+                raise ConfigValidationError(f"{prefix}.days contains an invalid weekday: {normalized_day}")
+            if normalized_day not in normalized_days:
+                normalized_days.append(normalized_day)
+        if "daily" in normalized_days and len(normalized_days) > 1:
+            raise ConfigValidationError(f"{prefix}.days cannot combine daily with named weekdays")
+
+        start_date = raw_event.get("start_date")
+        end_date = raw_event.get("end_date")
+        parsed_start = parse_iso_date(start_date, f"{prefix}.start_date") if start_date else None
+        parsed_end = parse_iso_date(end_date, f"{prefix}.end_date") if end_date else None
+        if parsed_start and parsed_end and parsed_end < parsed_start:
+            raise ConfigValidationError(f"{prefix}.end_date cannot be before start_date")
+
+        normalized_events.append(
+            {
+                "id": event_id,
+                "enabled": enabled,
+                "time": time_text,
+                "label": label,
+                "medicines": normalized_medicines,
+                "instructions": instructions,
+                "days": normalized_days,
+                "start_date": parsed_start.isoformat() if parsed_start else None,
+                "end_date": parsed_end.isoformat() if parsed_end else None,
+            }
+        )
+
+    return {"timezone": timezone_name, "events": normalized_events}
+
+
+MAX_DOSE_ENTRIES = 2_000
+
+
+def _validate_dose_map(raw: Any) -> dict[str, dict[str, Any]]:
+    """Validate the dose half of a sync payload at the decrypt boundary.
+
+    The container is strict (a wrong *shape* is a corrupt or hostile payload and
+    must not be accepted), but an individual unusable entry is skipped rather
+    than fatal: one malformed dose must degrade the record, not make the whole
+    payload undecryptable and take sync down with it.
+    """
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        raise ConfigValidationError("doses must be a JSON object")
+    if len(raw) > MAX_DOSE_ENTRIES:
+        raise ConfigValidationError(f"doses cannot contain more than {MAX_DOSE_ENTRIES} entries")
+
+    entries: dict[str, dict[str, Any]] = {}
+    for key, value in raw.items():
+        migrated_key = migrate_occurrence_key(key)
+        if not migrated_key or not isinstance(value, dict):
+            continue
+        updated_at = value.get("updated_at")
+        if not isinstance(updated_at, str) or not updated_at:
+            continue
+        taken_at = value.get("taken_at")
+        if taken_at is not None and not isinstance(taken_at, str):
+            continue
+        entries[migrated_key] = {"taken_at": taken_at or None, "updated_at": updated_at}
+    return entries
+
+
+def validate_sync_payload(data: Any) -> dict[str, Any]:
+    """Validate a synced payload: the schedule plus per-occurrence dose state.
+
+    A payload written before dose state existed is a bare schedule object, so it
+    is accepted and reported as carrying no doses. The schedule half is handed to
+    validate_schedule unchanged — this wrapper must never become a looser gate on
+    it, because the same call guards the decrypt path against a hostile payload.
+    """
+    if isinstance(data, dict) and isinstance(data.get("schedule"), dict):
+        return {
+            "version": 2,
+            "schedule": validate_schedule(data["schedule"]),
+            "doses": _validate_dose_map(data.get("doses")),
+        }
+    return {"version": 2, "schedule": validate_schedule(data), "doses": {}}
+
+
+def merge_dose_maps(local: dict[str, Any], remote: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Union two dose maps per occurrence — never whole-map last-writer-wins.
+
+    Two devices marking *different* doses must both survive, so the merge is per
+    key. For one occurrence the later `updated_at` wins, which is what lets an
+    undo propagate instead of being resurrected by the other device. An exact tie
+    keeps the recorded take: we cannot tell which came last, and re-alarming a
+    dose the user believes they took risks a double dose.
+    """
+    merged: dict[str, dict[str, Any]] = {}
+    fallback = datetime.min.replace(tzinfo=timezone.utc)
+    for key in set(local) | set(remote):
+        candidates = [entry for entry in (local.get(key), remote.get(key)) if isinstance(entry, dict)]
+        if not candidates:
+            continue
+        merged[key] = max(
+            candidates,
+            key=lambda entry: (
+                _safe_datetime(entry.get("updated_at"), fallback),
+                entry.get("taken_at") is not None,
+            ),
+        )
+    return merged
+
+
+def prune_dose_map(doses: dict[str, Any], now: datetime, retention: timedelta = COMPLETED_RETENTION) -> dict[str, dict[str, Any]]:
+    """Drop dose records older than the retention window and cap the total.
+
+    Keeps the synced payload bounded; mirrors ScheduleEngine._cleanup so local
+    state and the synced map retire records on the same schedule.
+    """
+    cutoff = now - retention
+    kept = {
+        key: entry for key, entry in doses.items()
+        if isinstance(entry, dict) and _safe_datetime(entry.get("updated_at"), now) >= cutoff
+    }
+    if len(kept) <= MAX_DOSE_ENTRIES:
+        return kept
+    newest = sorted(kept.items(), key=lambda item: _safe_datetime(item[1].get("updated_at"), now), reverse=True)
+    return dict(newest[:MAX_DOSE_ENTRIES])
+
+
+def event_active(event: dict[str, Any], target_date: date) -> bool:
+    if not event["enabled"]:
+        return False
+    weekday = target_date.strftime("%a").lower()[:3]
+    allowed_days = event["days"]
+    if "daily" not in allowed_days and weekday not in allowed_days:
+        return False
+    if event["start_date"] and target_date < date.fromisoformat(event["start_date"]):
+        return False
+    if event["end_date"] and target_date > date.fromisoformat(event["end_date"]):
+        return False
+    return True
+
+
+def occurrence_key(target_date: date, event: dict[str, Any]) -> str:
+    """Identify one dose as (day, event) — deliberately *not* including its time.
+
+    The scheduled time is always recoverable from the schedule, so it carries no
+    information here, and putting it in the identity is what made a schedule edit
+    destructive: retiming an event on another device changed the key, which
+    silently dropped queued reminders and re-queued doses already taken.
+    """
+    return f"{target_date.isoformat()}|{event['id']}"
+
+
+def migrate_occurrence_key(key: Any) -> str | None:
+    """Coerce a stored occurrence key to the current `date|event_id` form.
+
+    State written before the time was removed from the identity carries a
+    trailing `|HH:MM`. Dropping it keeps taken and snoozed doses attached to
+    their occurrence across the upgrade, instead of orphaning them so the next
+    check re-alarms a dose the user already took. Event ids cannot contain `|`
+    (EVENT_ID_PATTERN), so the split is unambiguous.
+    """
+    if not isinstance(key, str):
+        return None
+    parts = key.split("|")
+    if len(parts) == 3:  # legacy date|event_id|HH:MM
+        parts = parts[:2]
+    if len(parts) != 2 or not all(parts):
+        return None
+    return "|".join(parts)
+
+
+_CSV_INJECTION_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+
+
+def sanitize_csv_cell(value: Any) -> str:
+    """Neutralize spreadsheet formula injection in exported cells.
+
+    Labels and medication names can arrive from a paired phone via sync, so a
+    cell beginning with an Excel formula trigger (= + - @) or a tab/CR is
+    prefixed with a single quote to force spreadsheets to treat it as text.
+    """
+    text = "" if value is None else str(value)
+    if text[:1] in _CSV_INJECTION_PREFIXES:
+        return "'" + text
+    return text
+
+
+def atomic_write_bytes(path: Path, data: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="wb", dir=path.parent, prefix=f".{path.name}.", delete=False) as f:
+            temp_path = Path(f.name)
+            f.write(data)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temp_path, path)
+    except OSError as exc:
+        raise StorageError(f"Could not safely write {path.name}") from exc
+    finally:
+        if temp_path and temp_path.exists():
+            try:
+                temp_path.unlink()
+            except OSError:
+                pass
+
+
+class _DataBlob(ctypes.Structure):
+    _fields_ = [("cbData", ctypes.c_ulong), ("pbData", ctypes.POINTER(ctypes.c_ubyte))]
+
+
+class DpapiProtector:
+    """Encrypt application data for the current Windows user via DPAPI."""
+
+    _DESCRIPTION = "Medication Reminder protected data"
+    _CRYPTPROTECT_UI_FORBIDDEN = 0x01
+
+    def __init__(self) -> None:
+        if os.name != "nt":
+            raise StorageError("Protected storage requires Windows DPAPI")
+        self._crypt32 = ctypes.WinDLL("crypt32", use_last_error=True)
+        self._kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        self._configure_functions()
+
+    def _configure_functions(self) -> None:
+        self._crypt32.CryptProtectData.argtypes = [
+            ctypes.POINTER(_DataBlob), ctypes.c_wchar_p, ctypes.POINTER(_DataBlob), ctypes.c_void_p,
+            ctypes.c_void_p, ctypes.c_ulong, ctypes.POINTER(_DataBlob),
+        ]
+        self._crypt32.CryptProtectData.restype = ctypes.c_bool
+        self._crypt32.CryptUnprotectData.argtypes = [
+            ctypes.POINTER(_DataBlob), ctypes.POINTER(ctypes.c_wchar_p), ctypes.POINTER(_DataBlob),
+            ctypes.c_void_p, ctypes.c_void_p, ctypes.c_ulong, ctypes.POINTER(_DataBlob),
+        ]
+        self._crypt32.CryptUnprotectData.restype = ctypes.c_bool
+        self._kernel32.LocalFree.argtypes = [ctypes.c_void_p]
+        self._kernel32.LocalFree.restype = ctypes.c_void_p
+
+    @staticmethod
+    def _input_blob(data: bytes) -> tuple[_DataBlob, Any]:
+        buffer = (ctypes.c_ubyte * len(data)).from_buffer_copy(data)
+        return _DataBlob(len(data), ctypes.cast(buffer, ctypes.POINTER(ctypes.c_ubyte))), buffer
+
+    def _transform(self, data: bytes, *, encrypt: bool) -> bytes:
+        if not data:
+            raise StorageError("Refusing to protect or unprotect empty data")
+        input_blob, input_buffer = self._input_blob(data)
+        output_blob = _DataBlob()
+        del input_buffer  # the blob retains the allocation for the duration of this call
+        if encrypt:
+            success = self._crypt32.CryptProtectData(
+                ctypes.byref(input_blob), self._DESCRIPTION, None, None, None,
+                self._CRYPTPROTECT_UI_FORBIDDEN, ctypes.byref(output_blob),
+            )
+        else:
+            description = ctypes.c_wchar_p()
+            success = self._crypt32.CryptUnprotectData(
+                ctypes.byref(input_blob), ctypes.byref(description), None, None, None,
+                self._CRYPTPROTECT_UI_FORBIDDEN, ctypes.byref(output_blob),
+            )
+            if description:
+                self._kernel32.LocalFree(description)
+        if not success:
+            error_code = ctypes.get_last_error()
+            raise StorageError(f"Windows could not {'encrypt' if encrypt else 'decrypt'} application data ({error_code})")
+        try:
+            return ctypes.string_at(output_blob.pbData, output_blob.cbData)
+        finally:
+            self._kernel32.LocalFree(output_blob.pbData)
+
+    def protect(self, data: bytes) -> bytes:
+        return self._transform(data, encrypt=True)
+
+    def unprotect(self, data: bytes) -> bytes:
+        return self._transform(data, encrypt=False)
+
+
+class ProtectedJsonFile:
+    def __init__(self, path: Path, protector: Protector) -> None:
+        self.path = path
+        self.protector = protector
+
+    def exists(self) -> bool:
+        return self.path.is_file()
+
+    def load(self) -> Any:
+        try:
+            if self.path.stat().st_size > MAX_PROTECTED_BYTES:
+                raise StorageError(f"{self.path.name} exceeds the safe size limit")
+            protected = self.path.read_bytes()
+            plain = self.protector.unprotect(protected)
+            return json.loads(plain.decode("utf-8"))
+        except StorageError:
+            raise
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            raise StorageError(f"Could not read protected file {self.path.name}") from exc
+
+    def save(self, value: Any) -> None:
+        try:
+            plain = json.dumps(value, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+            protected = self.protector.protect(plain)
+            atomic_write_bytes(self.path, protected)
+        except StorageError:
+            raise
+        except (TypeError, ValueError) as exc:
+            raise StorageError(f"Could not serialize {self.path.name}") from exc
+
+
+def default_data_dir() -> Path:
+    override = os.environ.get("MEDICATION_REMINDER_DATA_DIR")
+    if override:
+        return Path(override).expanduser().resolve()
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    if not local_app_data:
+        raise StorageError("LOCALAPPDATA is unavailable; cannot create protected user storage")
+    return Path(local_app_data) / APP_DATA_FOLDER
+
+
+class AppStorage:
+    def __init__(self, data_dir: Path | None = None, protector: Protector | None = None) -> None:
+        self.data_dir = (data_dir or default_data_dir()).resolve()
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        selected_protector = protector or DpapiProtector()
+        self.schedule_file = ProtectedJsonFile(self.data_dir / "schedule.dat", selected_protector)
+        self.state_file = ProtectedJsonFile(self.data_dir / "state.dat", selected_protector)
+        self.audit_file = ProtectedJsonFile(self.data_dir / "audit.dat", selected_protector)
+        self.settings_file = ProtectedJsonFile(self.data_dir / "settings.dat", selected_protector)
+        self.sync_file = ProtectedJsonFile(self.data_dir / "sync.dat", selected_protector)
+
+    def _quarantine(self, protected_file: ProtectedJsonFile, now: datetime | None = None) -> Path | None:
+        """Rename a corrupt/undecryptable protected file aside so startup can recover.
+
+        Returns the new path if the file was preserved, else None. Never raises:
+        recovery to defaults must not be blocked by a filesystem hiccup.
+        """
+        if not protected_file.exists():
+            return None
+        stamp = (now or datetime.now()).strftime("%Y%m%d-%H%M%S")
+        target = protected_file.path.with_name(f"{protected_file.path.name}.corrupt-{stamp}")
+        try:
+            os.replace(protected_file.path, target)
+            return target
+        except OSError:
+            try:
+                protected_file.path.unlink(missing_ok=True)
+            except OSError:
+                pass
+            return None
+
+    @staticmethod
+    def _coerce_volume(value: Any) -> int:
+        try:
+            volume = int(value)
+        except (TypeError, ValueError):
+            volume = 70
+        return max(0, min(100, volume))
+
+    def load_sync_credentials(self) -> dict[str, Any] | None:
+        if not self.sync_file.exists():
+            return None
+        value = self.sync_file.load()
+        required = {"version", "role", "pairId", "token", "encryptionKey", "sourceId", "deviceId", "revision"}
+        if not isinstance(value, dict) or value.get("version") != 1 or not required.issubset(value):
+            raise StorageError("The protected pairing credentials have an invalid structure")
+        return value
+
+    def save_sync_credentials(self, credentials: dict[str, Any]) -> None:
+        self.sync_file.save(credentials)
+
+    def delete_sync_credentials(self) -> None:
+        try:
+            self.sync_file.path.unlink(missing_ok=True)
+        except OSError as exc:
+            raise StorageError("Could not remove protected pairing credentials") from exc
+
+    def load_settings(self) -> dict[str, Any]:
+        defaults = {"volume": 70, "sound": "chime"}
+        if not self.settings_file.exists():
+            return dict(defaults)
+        try:
+            value = self.settings_file.load()
+        except StorageError:
+            # Undecryptable/corrupt settings must not brick startup: quarantine
+            # the file and fall back to safe defaults.
+            self._quarantine(self.settings_file)
+            return dict(defaults)
+        if not isinstance(value, dict):
+            self._quarantine(self.settings_file)
+            return dict(defaults)
+        legacy = {"SystemExclamation": "chime", "SystemAsterisk": "bright", "SystemHand": "urgent", "SystemQuestion": "warm", "SystemInformation": "quiet"}
+        sound = legacy.get(str(value.get("sound", "chime")), str(value.get("sound", "chime")))
+        if sound not in {"chime", "bright", "warm", "urgent", "quiet"}:
+            sound = "chime"
+        return {"volume": self._coerce_volume(value.get("volume", 70)), "sound": sound}
+
+    def save_settings(self, settings: dict[str, Any]) -> None:
+        sound = str(settings.get("sound", "chime"))
+        sound = {"SystemExclamation": "chime", "SystemAsterisk": "bright", "SystemHand": "urgent", "SystemQuestion": "warm", "SystemInformation": "quiet"}.get(sound, sound)
+        if sound not in {"chime", "bright", "warm", "urgent", "quiet"}:
+            sound = "chime"
+        normalized = {"volume": self._coerce_volume(settings.get("volume", 70)), "sound": sound}
+        self.settings_file.save(normalized)
+
+    def load_schedule(self, seed_path: Path) -> dict[str, Any]:
+        if self.schedule_file.exists():
+            return validate_schedule(self.schedule_file.load())
+        try:
+            if seed_path.stat().st_size > MAX_CONFIG_BYTES:
+                raise ConfigValidationError("The seed schedule exceeds the safe size limit")
+            seed = json.loads(seed_path.read_text(encoding="utf-8"))
+        except ConfigValidationError:
+            raise
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            raise ConfigValidationError("Could not read the bundled medication schedule") from exc
+        validated = validate_schedule(seed)
+        self.schedule_file.save(validated)
+        return validated
+
+    def save_schedule(self, schedule: Any) -> dict[str, Any]:
+        validated = validate_schedule(schedule)
+        self.schedule_file.save(validated)
+        return validated
+
+    def reset_schedule(self, seed_path: Path) -> dict[str, Any]:
+        """Quarantine an unreadable schedule and re-seed from the bundled default.
+
+        The schedule is the one protected file that is never discarded silently;
+        callers invoke this only after prompting the user, then re-seed here.
+        """
+        self._quarantine(self.schedule_file)
+        return self.load_schedule(seed_path)
+
+    def load_state(self, now: datetime) -> dict[str, Any]:
+        if not self.state_file.exists():
+            state = default_state(now)
+            self.state_file.save(state)
+            return state
+        try:
+            return normalize_state(self.state_file.load(), now)
+        except StorageError:
+            # A corrupt/undecryptable or unsupported-version state file must not
+            # brick startup: quarantine it and continue with a clean default.
+            self._quarantine(self.state_file, now)
+            state = default_state(now)
+            try:
+                self.state_file.save(state)
+            except StorageError:
+                pass
+            return state
+
+    def save_state(self, state: dict[str, Any]) -> None:
+        self.state_file.save(state)
+
+    def append_audit(self, action: str, now: datetime, **details: Any) -> None:
+        try:
+            records = self.audit_file.load() if self.audit_file.exists() else []
+        except StorageError:
+            # A corrupt audit log should not stop new activity from being logged:
+            # quarantine it and start a fresh log rather than raising.
+            self._quarantine(self.audit_file, now)
+            records = []
+        if not isinstance(records, list):
+            self._quarantine(self.audit_file, now)
+            records = []
+        cutoff = now - AUDIT_RETENTION
+        retained = [
+            record for record in records
+            if isinstance(record, dict) and _safe_datetime(record.get("timestamp"), now) >= cutoff
+        ]
+        retained.append({"timestamp": now.isoformat(timespec="seconds"), "action": action, **details})
+        self.audit_file.save(retained[-MAX_AUDIT_RECORDS:])
+
+    def export_taken_csv(self, destination: Path) -> int:
+        try:
+            records = self.audit_file.load() if self.audit_file.exists() else []
+        except StorageError:
+            self._quarantine(self.audit_file)
+            records = []
+        if not isinstance(records, list):
+            records = []
+        taken = [record for record in records if isinstance(record, dict) and record.get("action") == "medication_taken"]
+        destination = destination.resolve()
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        temp_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", newline="", dir=destination.parent,
+                prefix=f".{destination.name}.", delete=False,
+            ) as f:
+                temp_path = Path(f.name)
+                writer = csv.writer(f)
+                writer.writerow(["timestamp", "status", "event_id", "label", "scheduled_time", "items"])
+                for record in taken:
+                    items = record.get("items", [])
+                    if not isinstance(items, list):
+                        items = []
+                    writer.writerow([
+                        sanitize_csv_cell(record.get("timestamp", "")),
+                        sanitize_csv_cell("TAKEN"),
+                        sanitize_csv_cell(record.get("event_id", "")),
+                        sanitize_csv_cell(record.get("label", "")),
+                        sanitize_csv_cell(record.get("scheduled_time", "")),
+                        sanitize_csv_cell(" | ".join(str(item) for item in items)),
+                    ])
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(temp_path, destination)
+        except OSError as exc:
+            raise StorageError("Could not export the medication log") from exc
+        finally:
+            if temp_path and temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except OSError:
+                    pass
+        return len(taken)
+
+
+def _safe_datetime(value: Any, fallback: datetime) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(value)
+        if parsed.tzinfo is None:
+            return fallback
+        return parsed.astimezone(fallback.tzinfo)
+    except (TypeError, ValueError):
+        return fallback
+
+
+def default_state(now: datetime) -> dict[str, Any]:
+    if now.tzinfo is None:
+        raise ValueError("Scheduler timestamps must be timezone-aware")
+    return {
+        "version": 1,
+        "last_check_at": now.isoformat(),
+        "pending": [],
+        "completed": {},
+        "snoozed_until": {},
+        # The syncable dose record. `completed` is its local projection: doses
+        # holds undo tombstones too, so a dose undone on another device is not
+        # resurrected by this one on the next push.
+        "doses": {},
+    }
+
+
+def normalize_state(raw: Any, now: datetime) -> dict[str, Any]:
+    if not isinstance(raw, dict) or raw.get("version") != 1:
+        raise StorageError("The protected scheduler state has an unsupported format")
+    state = default_state(now)
+    state["last_check_at"] = _safe_datetime(raw.get("last_check_at"), now).isoformat()
+    # Keys are migrated on load, so a state file written by an older build keeps
+    # its taken/snoozed doses instead of orphaning them under the legacy format.
+    if isinstance(raw.get("pending"), list):
+        migrated = (migrate_occurrence_key(key) for key in raw["pending"])
+        # dict.fromkeys dedupes: two legacy keys for one retimed event collapse.
+        state["pending"] = list(dict.fromkeys(key for key in migrated if key))
+    # An event retimed under the old format could leave two legacy keys for one
+    # dose. They collapse onto a single occurrence here, so the tie-break is
+    # explicit rather than "whichever was iterated last": keep the first time the
+    # dose was actually taken (_cleanup retires `completed` against that stamp),
+    # and the longest snooze, so a collision never under-suppresses an alarm.
+    for field, prefer_earliest in (("completed", True), ("snoozed_until", False)):
+        if not isinstance(raw.get(field), dict):
+            continue
+        entries: dict[str, str] = {}
+        for key, value in raw[field].items():
+            migrated_key = migrate_occurrence_key(key)
+            if not migrated_key or not isinstance(value, str):
+                continue
+            incumbent = entries.get(migrated_key)
+            if incumbent is None:
+                entries[migrated_key] = value
+                continue
+            candidate_at = _safe_datetime(value, now)
+            incumbent_at = _safe_datetime(incumbent, now)
+            wins = candidate_at < incumbent_at if prefer_earliest else candidate_at > incumbent_at
+            if wins:
+                entries[migrated_key] = value
+        state[field] = entries
+
+    state["doses"] = _validate_dose_map(raw.get("doses"))
+    # A state file written before dose sync existed has history only in
+    # `completed`; seed the map from it so an upgrade publishes what this device
+    # already knows instead of appearing to have taken nothing.
+    for key, taken_at in state["completed"].items():
+        state["doses"].setdefault(key, {"taken_at": taken_at, "updated_at": taken_at})
+    return state
+
+
+@dataclass(frozen=True)
+class DueOccurrence:
+    key: str
+    event_id: str
+    label: str
+    time_text: str
+    medicines: list[str]
+    instructions: str
+    scheduled_at: datetime
+
+    @property
+    def overdue(self) -> bool:
+        return False  # UI determines this relative to its current clock.
+
+
+class ScheduleEngine:
+    def __init__(self, schedule: dict[str, Any], state: dict[str, Any]) -> None:
+        self.schedule = validate_schedule(schedule)
+        self.timezone = ZoneInfo(self.schedule["timezone"])
+        self.state = deepcopy(state)
+        # Set when collect_due clamps a long gap to MAX_CATCH_UP; the UI reads it
+        # after each check and records that doses in the skipped window were dropped.
+        self.pending_skip_notice: dict[str, str] | None = None
+
+    def _wall_time(self, target_date: date, event_time: time) -> datetime:
+        """Resolve a scheduled wall time to a real instant, DST-safe.
+
+        zoneinfo assigns an offset even to wall times that do not exist during a
+        spring-forward gap; round-tripping through UTC yields the real instant
+        (shifting a nonexistent time past the gap) and collapses an ambiguous
+        fall-back time deterministically onto its first (fold=0) occurrence.
+        """
+        aware = datetime.combine(target_date, event_time).replace(tzinfo=self.timezone)
+        return aware.astimezone(timezone.utc).astimezone(self.timezone)
+
+    def replace_schedule(self, schedule: dict[str, Any]) -> None:
+        self.schedule = validate_schedule(schedule)
+        self.timezone = ZoneInfo(self.schedule["timezone"])
+        self._drop_invalid_pending()
+
+    def collect_due(self, now: datetime) -> int:
+        now = self._localize(now)
+        self.pending_skip_notice = None
+        last_check = _safe_datetime(self.state.get("last_check_at"), now).astimezone(self.timezone)
+        if last_check > now:
+            last_check = now
+        if now - last_check > MAX_CATCH_UP:
+            # Doses older than the catch-up window are intentionally not queued,
+            # but the gap must not be invisible (e.g. a weekend the PC was off):
+            # record the skipped window so the UI can log it.
+            clamped = now - MAX_CATCH_UP
+            self.pending_skip_notice = {
+                "skipped_from": last_check.isoformat(),
+                "skipped_until": clamped.isoformat(),
+            }
+            last_check = clamped
+
+        known = set(self.state["pending"]) | set(self.state["completed"])
+        added = 0
+        day_cursor = last_check.date()
+        while day_cursor <= now.date():
+            for event in self.schedule["events"]:
+                if not event_active(event, day_cursor):
+                    continue
+                event_time = parse_time(event["time"])
+                scheduled_at = self._wall_time(day_cursor, event_time)
+                key = occurrence_key(day_cursor, event)
+                if last_check < scheduled_at <= now and key not in known:
+                    self.state["pending"].append(key)
+                    known.add(key)
+                    added += 1
+            day_cursor += timedelta(days=1)
+
+        self.state["pending"] = sorted(set(self.state["pending"]))
+        self.state["last_check_at"] = now.isoformat()
+        self._cleanup(now)
+        return added
+
+    def next_ready(self, now: datetime) -> DueOccurrence | None:
+        now = self._localize(now)
+        self._drop_invalid_pending()
+        for key in list(self.state["pending"]):
+            snooze_text = self.state["snoozed_until"].get(key)
+            if snooze_text and _safe_datetime(snooze_text, now).astimezone(self.timezone) > now:
+                continue
+            occurrence = self.resolve(key)
+            if occurrence:
+                return occurrence
+        return None
+
+    def resolve(self, key: str) -> DueOccurrence | None:
+        try:
+            date_text, event_id = key.split("|", 1)
+            target_date = date.fromisoformat(date_text)
+        except ValueError:
+            return None
+        # Matched on id alone: an event retimed on another device is still the
+        # same dose, and the occurrence simply reports its current time.
+        event = next(
+            (candidate for candidate in self.schedule["events"] if candidate["id"] == event_id),
+            None,
+        )
+        if not event or not event_active(event, target_date):
+            return None
+        time_text = event["time"]
+        scheduled_at = self._wall_time(target_date, parse_time(time_text))
+        return DueOccurrence(
+            key=key,
+            event_id=event_id,
+            label=event["label"],
+            time_text=time_text,
+            medicines=list(event["medicines"]),
+            instructions=event["instructions"],
+            scheduled_at=scheduled_at,
+        )
+
+    def mark_taken(self, key: str, now: datetime) -> None:
+        now = self._localize(now)
+        self.state["pending"] = [pending for pending in self.state["pending"] if pending != key]
+        self.state["snoozed_until"].pop(key, None)
+        stamp = now.isoformat()
+        self.state["completed"][key] = stamp
+        self.state.setdefault("doses", {})[key] = {"taken_at": stamp, "updated_at": stamp}
+        self._cleanup(now)
+
+    def dose_map(self, now: datetime) -> dict[str, dict[str, Any]]:
+        """The dose record to publish, retention-pruned."""
+        return prune_dose_map(self.state.get("doses", {}), self._localize(now))
+
+    def apply_remote_doses(self, remote_doses: dict[str, Any], now: datetime) -> None:
+        """Fold another device's dose record into this one.
+
+        Per occurrence, not whole-map, so a dose marked here and a different dose
+        marked there both survive. `completed` is then reprojected from the merged
+        map, and any reminder still queued for a dose taken elsewhere is retired.
+        """
+        now = self._localize(now)
+        merged = prune_dose_map(
+            merge_dose_maps(self.state.get("doses", {}), _validate_dose_map(remote_doses)), now
+        )
+        self.state["doses"] = merged
+        self.state["completed"] = {
+            key: str(entry["taken_at"]) for key, entry in merged.items() if entry.get("taken_at")
+        }
+        taken = set(self.state["completed"])
+        self.state["pending"] = [key for key in self.state["pending"] if key not in taken]
+        self._cleanup(now)
+
+    def snooze(self, key: str, now: datetime, minutes: int) -> datetime:
+        if key not in self.state["pending"]:
+            raise ValueError("Only a pending reminder can be snoozed")
+        until = self._localize(now) + timedelta(minutes=minutes)
+        self.state["snoozed_until"][key] = until.isoformat()
+        return until
+
+    def next_scheduled(self, now: datetime, days: int = 8) -> tuple[datetime, str] | None:
+        now = self._localize(now)
+        candidates: list[tuple[datetime, str]] = []
+        for offset in range(days):
+            target_date = now.date() + timedelta(days=offset)
+            for event in self.schedule["events"]:
+                if not event_active(event, target_date):
+                    continue
+                candidate = self._wall_time(target_date, parse_time(event["time"]))
+                if candidate >= now:
+                    candidates.append((candidate, event["label"]))
+        return min(candidates, key=lambda item: item[0]) if candidates else None
+
+    def _drop_invalid_pending(self) -> None:
+        valid = [key for key in self.state["pending"] if self.resolve(key) is not None]
+        removed = set(self.state["pending"]) - set(valid)
+        self.state["pending"] = valid
+        for key in removed:
+            self.state["snoozed_until"].pop(key, None)
+
+    def _cleanup(self, now: datetime) -> None:
+        completed_cutoff = now - COMPLETED_RETENTION
+        self.state["completed"] = {
+            key: value for key, value in self.state["completed"].items()
+            if _safe_datetime(value, now).astimezone(self.timezone) >= completed_cutoff
+        }
+        pending_keys = set(self.state["pending"])
+        self.state["snoozed_until"] = {
+            key: value for key, value in self.state["snoozed_until"].items() if key in pending_keys
+        }
+        if self.state.get("doses"):
+            self.state["doses"] = prune_dose_map(self.state["doses"], now)
+
+    def _localize(self, value: datetime) -> datetime:
+        if value.tzinfo is None:
+            raise ValueError("Scheduler timestamps must be timezone-aware")
+        return value.astimezone(self.timezone)

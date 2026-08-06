@@ -1,0 +1,1447 @@
+from __future__ import annotations
+
+import ctypes
+import io
+import math
+import os
+import secrets
+import struct
+import sys
+import threading
+import time
+import wave
+import winsound
+from copy import deepcopy
+from datetime import datetime
+from pathlib import Path
+import tkinter as tk
+from tkinter import filedialog, messagebox, simpledialog, ttk
+
+from PIL import Image, ImageTk
+import pystray
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "vendor"))
+import qrcode
+
+from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError
+
+from medication_core import (
+    AppStorage,
+    ConfigValidationError,
+    DueOccurrence,
+    ScheduleEngine,
+    StorageError,
+    merge_dose_maps,
+    parse_time,
+    validate_schedule,
+)
+
+
+APP_NAME = "Medication Reminder"
+CHECK_INTERVAL_SECONDS = 15
+# How often the widget reconciles with the relay. The web app pushes dose changes,
+# but the widget has no inbound channel, so this interval is its whole latency.
+PERIODIC_SYNC_SECONDS = 30
+DEFAULT_SNOOZE_MINUTES = 10
+ERROR_ALREADY_EXISTS = 183
+STARTUP_REGISTRY_PATH = r"Software\Microsoft\Windows\CurrentVersion\Run"
+STARTUP_VALUE_NAME = "MedicationReminder"
+
+
+def enable_dpi_awareness() -> None:
+    """Ask Windows to render Tk at the monitor's native DPI."""
+    if os.name != "nt":
+        return
+    try:
+        user32 = ctypes.WinDLL("user32", use_last_error=True)
+        set_context = user32.SetProcessDpiAwarenessContext
+        set_context.argtypes = [ctypes.c_void_p]
+        set_context.restype = ctypes.c_bool
+        # DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+        if set_context(ctypes.c_void_p(-4)):
+            return
+    except (AttributeError, OSError, OverflowError):
+        pass
+    try:
+        shcore = ctypes.WinDLL("shcore", use_last_error=True)
+        shcore.SetProcessDpiAwareness(2)  # PROCESS_PER_MONITOR_DPI_AWARE
+    except (AttributeError, OSError, OverflowError):
+        pass
+
+
+def resource_dir() -> Path:
+    bundle_dir = getattr(sys, "_MEIPASS", None)
+    if getattr(sys, "frozen", False) and bundle_dir:
+        return Path(bundle_dir).resolve()
+    return Path(__file__).resolve().parent
+
+
+RESOURCE_DIR = resource_dir()
+SEED_CONFIG_PATH = RESOURCE_DIR / "medication_schedule.json"
+ICON_PATH = RESOURCE_DIR / "medication_icon.ico"
+
+
+def startup_command() -> str:
+    """Return a quoted command that starts this app without a console window."""
+    if getattr(sys, "frozen", False):
+        executable = Path(sys.executable).resolve()
+        return f'"{executable}"'
+    python_executable = Path(sys.executable).with_name("pythonw.exe")
+    executable = python_executable if python_executable.is_file() else Path(sys.executable)
+    return f'"{executable.resolve()}" "{Path(__file__).resolve()}"'
+
+
+def register_startup() -> None:
+    """Register this user's app for logon startup; never requires elevation."""
+    if os.name != "nt":
+        return
+    import winreg
+
+    with winreg.CreateKey(winreg.HKEY_CURRENT_USER, STARTUP_REGISTRY_PATH) as key:
+        winreg.SetValueEx(key, STARTUP_VALUE_NAME, 0, winreg.REG_SZ, startup_command())
+
+
+class SingleInstance:
+    """Prevent duplicate reminder processes using a per-user Windows mutex."""
+
+    def __init__(self) -> None:
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel32.CreateMutexW.argtypes = [ctypes.c_void_p, ctypes.c_bool, ctypes.c_wchar_p]
+        kernel32.CreateMutexW.restype = ctypes.c_void_p
+        kernel32.CloseHandle.argtypes = [ctypes.c_void_p]
+        kernel32.CloseHandle.restype = ctypes.c_bool
+        handle = kernel32.CreateMutexW(None, False, "Local\\MedicationReminder-7E5D8F09")
+        if not handle:
+            raise OSError(ctypes.get_last_error(), "Could not create the application mutex")
+        if ctypes.get_last_error() == ERROR_ALREADY_EXISTS:
+            kernel32.CloseHandle(handle)
+            raise RuntimeError("Medication Reminder is already running")
+        self._kernel32 = kernel32
+        self._handle = handle
+
+    def close(self) -> None:
+        if self._handle:
+            self._kernel32.CloseHandle(self._handle)
+            self._handle = None
+
+
+class MedicationReminderApp:
+    def __init__(self) -> None:
+        enable_dpi_awareness()
+        self.root = tk.Tk()
+        self._configure_theme()
+        self.root.title(APP_NAME)
+        self.root.geometry("680x540")
+        self.root.minsize(600, 460)
+        self.root.protocol("WM_DELETE_WINDOW", self.hide_to_tray)
+
+        self.storage = AppStorage()
+        self.alert_settings = self.storage.load_settings()
+        self.config_data = self._load_schedule_or_reset()
+        try:
+            self.sync_credentials = self.storage.load_sync_credentials()
+        except StorageError:
+            self.sync_credentials = None
+        # The account device credential rides inside the account pair once linked,
+        # so it survives restarts and is reused when re-pairing a new mobile.
+        self.account_credential = self.sync_credentials.get("deviceCredential") if self.sync_credentials else None
+        self.sync_client = EncryptedSyncClient()
+        self.sync_in_progress = False
+        self.conflict_pending = False
+        self.sync_generation = 0
+        # Separate from sync_generation: a dose mark must keep an in-flight sync from
+        # clearing `dirty`, but must NOT escalate a clean remote update to a conflict.
+        self.dose_generation = 0
+        # True while the only pending change is a dose mark, so the relay can be
+        # told to skip its "Schedule updated" push to the phone.
+        self.dose_only_push = False
+        self.sync_status_var: tk.StringVar | None = None
+        self._next_due_after_id: str | None = None
+        initial_now = datetime.now().astimezone(self._configured_timezone())
+        self.scheduler = ScheduleEngine(self.config_data, self.storage.load_state(initial_now))
+
+        self.active_popup: tk.Toplevel | None = None
+        self.tray_icon: pystray.Icon | None = None
+        self.running = True
+        self.persistence_warning_shown = False
+        self.startup_enabled = False
+        try:
+            register_startup()
+            self.startup_enabled = True
+        except OSError:
+            # Startup registration is a convenience; the app remains usable if
+            # Windows policy blocks this per-user registry write.
+            pass
+
+        self.build_main_window()
+        self.start_tray_icon()
+        self._safe_audit("application_started")
+        self.root.after(1000, self.check_schedule)
+        self.root.after(5000, self._periodic_sync)
+
+    def _configure_theme(self) -> None:
+        """Apply a bright, friendly palette while preserving native Tk controls."""
+        palette = {
+            "bg": "#FFF8F2",
+            "surface": "#FFFFFF",
+            "ink": "#243044",
+            "muted": "#68758A",
+            "teal": "#138A8A",
+            "teal_dark": "#0B6266",
+            "coral": "#F4776B",
+            "coral_dark": "#D85B54",
+            "line": "#DCE7E7",
+            "selection": "#D7F0EE",
+        }
+        self.root.configure(bg=palette["bg"])
+        style = ttk.Style(self.root)
+        try:
+            style.theme_use("clam")
+        except tk.TclError:
+            pass
+        style.configure("App.TFrame", background=palette["bg"])
+        style.configure("Card.TFrame", background=palette["surface"], relief="solid", borderwidth=1)
+        style.configure("TFrame", background=palette["surface"])
+        style.configure("TLabel", background=palette["surface"], foreground=palette["ink"])
+        style.configure("Title.TLabel", background=palette["bg"], foreground=palette["ink"], font=("Segoe UI", 21, "bold"))
+        style.configure("Subtitle.TLabel", background=palette["bg"], foreground=palette["muted"], font=("Segoe UI", 10))
+        style.configure("Meta.TLabel", background=palette["bg"], foreground=palette["teal_dark"], font=("Segoe UI", 9, "bold"))
+        style.configure("Status.TLabel", background=palette["bg"], foreground=palette["teal_dark"], font=("Segoe UI", 10, "bold"))
+        style.configure("Accent.TButton", background=palette["coral"], foreground="white", borderwidth=0, padding=(13, 8), font=("Segoe UI", 10, "bold"))
+        style.map("Accent.TButton", background=[("active", palette["coral_dark"]), ("pressed", palette["coral_dark"])])
+        style.configure("Teal.TButton", background=palette["teal"], foreground="white", borderwidth=0, padding=(13, 8), font=("Segoe UI", 10, "bold"))
+        style.map("Teal.TButton", background=[("active", palette["teal_dark"]), ("pressed", palette["teal_dark"])])
+        style.configure("Treeview", background=palette["surface"], fieldbackground=palette["surface"], foreground=palette["ink"], rowheight=34, bordercolor=palette["line"], lightcolor=palette["line"], darkcolor=palette["line"], font=("Segoe UI", 10))
+        style.configure("Treeview.Heading", background=palette["teal"], foreground="white", relief="flat", padding=(8, 8), font=("Segoe UI", 10, "bold"))
+        style.map("Treeview.Heading", background=[("active", palette["teal"]), ("pressed", palette["teal"])], foreground=[("active", "white"), ("pressed", "white")])
+        style.map("Treeview", background=[("selected", palette["selection"])], foreground=[("selected", palette["ink"])])
+
+    def _configured_timezone(self):
+        from zoneinfo import ZoneInfo
+
+        return ZoneInfo(self.config_data["timezone"])
+
+    def _load_schedule_or_reset(self) -> dict:
+        """Load the saved schedule, offering a re-seed if it cannot be read.
+
+        Unlike state/settings/audit (which recover silently to defaults), a
+        decryptable schedule is never discarded without asking: a corrupt one
+        prompts the user before quarantining and re-seeding the bundled default.
+        """
+        try:
+            return self.storage.load_schedule(SEED_CONFIG_PATH)
+        except (StorageError, ConfigValidationError) as exc:
+            reset = messagebox.askyesno(
+                APP_NAME,
+                "The saved medication schedule could not be read:\n\n"
+                f"{exc}\n\n"
+                "Reset it to the bundled default schedule? Your reminder history "
+                "is kept. Choosing No will close the application so the file can "
+                "be recovered manually.",
+            )
+            if not reset:
+                raise
+            return self.storage.reset_schedule(SEED_CONFIG_PATH)
+
+    def now(self) -> datetime:
+        return datetime.now(self.scheduler.timezone)
+
+    def build_main_window(self) -> None:
+        outer = ttk.Frame(self.root, padding=22, style="App.TFrame")
+        outer.pack(fill="both", expand=True)
+
+        ttk.Label(outer, text="Medication Reminder  ✦", style="Title.TLabel").pack(anchor="w")
+        ttk.Label(
+            outer,
+            text="The application can stay minimized in the Windows system tray. "
+                 "A reminder window and sound appear when medication is due.",
+            wraplength=630,
+            style="Subtitle.TLabel",
+        ).pack(anchor="w", pady=(5, 8))
+        ttk.Label(
+            outer,
+            text=("Starts automatically with Windows for this user." if self.startup_enabled
+                  else "Automatic Windows startup could not be registered."),
+            style="Meta.TLabel",
+        ).pack(anchor="w", pady=(0, 3))
+        ttk.Label(
+            outer,
+            text=f"Schedule timezone: {self.config_data['timezone']}",
+            style="Meta.TLabel",
+        ).pack(anchor="w", pady=(0, 12))
+
+        self.status_var = tk.StringVar(value="Starting…")
+        ttk.Label(outer, textvariable=self.status_var, style="Status.TLabel").pack(
+            anchor="w", pady=(0, 8)
+        )
+
+        button_bar = ttk.Frame(outer)
+        button_bar.pack(fill="x", pady=(2, 12))
+        ttk.Button(button_bar, text="Test reminder", style="Accent.TButton", command=self.test_reminder).pack(side="left")
+        ttk.Button(button_bar, text="Alert settings", style="Accent.TButton", command=self.open_alert_settings).pack(side="left", padx=8)
+        ttk.Button(button_bar, text="Export taken log", style="Teal.TButton", command=self.export_taken_log).pack(side="left")
+        ttk.Button(button_bar, text="Minimize to tray", style="Teal.TButton", command=self.hide_to_tray).pack(side="right")
+
+        schedule_bar = ttk.Frame(outer)
+        schedule_bar.pack(fill="x", pady=(0, 8))
+        ttk.Label(schedule_bar, text="Schedules:", style="Meta.TLabel").pack(side="left", padx=(0, 8))
+        ttk.Button(schedule_bar, text="+ Add", style="Accent.TButton", command=self.add_schedule_main).pack(side="left", padx=(0, 6))
+        ttk.Button(schedule_bar, text="Edit", style="Teal.TButton", command=self.edit_selected_main).pack(side="left", padx=6)
+        ttk.Button(schedule_bar, text="Remove", command=self.remove_selected_main).pack(side="left", padx=6)
+        ttk.Button(schedule_bar, text="Manage schedules", command=self.open_schedule_editor).pack(side="right")
+
+        columns = ("time", "label", "medicines")
+        self.tree = ttk.Treeview(outer, columns=columns, show="headings", height=9)
+        self.tree.heading("time", text="Time")
+        self.tree.heading("label", text="Reminder")
+        self.tree.heading("medicines", text="Medication / nutrition")
+        self.tree.column("time", width=80, anchor="center")
+        self.tree.column("label", width=165)
+        self.tree.column("medicines", width=360)
+        self.tree.pack(fill="both", expand=True)
+        self.tree.bind("<Double-1>", lambda _event: self.edit_selected_main())
+
+        self.refresh_schedule_table()
+        self.update_next_due_text()
+
+    def refresh_schedule_table(self) -> None:
+        for row in self.tree.get_children():
+            self.tree.delete(row)
+        for event in sorted(self.config_data["events"], key=lambda item: item["time"]):
+            if event["enabled"]:
+                # Carry the event id as the row iid so Edit/Remove resolve the exact
+                # event even when two rows share the same time and label.
+                self.tree.insert(
+                    "", "end", iid=event["id"],
+                    values=(event["time"], event["label"], "; ".join(event["medicines"])),
+                )
+
+    def update_next_due_text(self) -> None:
+        # Cancel any previously scheduled refresh before arming a new one, so the
+        # direct calls from event handlers do not each spawn an immortal chain.
+        if self._next_due_after_id is not None:
+            try:
+                self.root.after_cancel(self._next_due_after_id)
+            except (tk.TclError, ValueError):
+                pass
+            self._next_due_after_id = None
+        try:
+            pending_count = len(self.scheduler.state["pending"])
+            next_item = self.scheduler.next_scheduled(self.now())
+            pending_text = f" • {pending_count} pending" if pending_count else ""
+            if next_item:
+                when, label = next_item
+                self.status_var.set(
+                    f"Running{pending_text} • Next: {label} at {when.strftime('%a %d %b, %H:%M %Z')}"
+                )
+            else:
+                self.status_var.set(f"Running{pending_text} • No active reminders found")
+        except Exception as exc:
+            self._report_background_error(exc)
+        finally:
+            if self.running:
+                self._next_due_after_id = self.root.after(30_000, self.update_next_due_text)
+
+    def _selected_main_event_index(self) -> int | None:
+        selected = self.tree.selection()
+        if not selected:
+            messagebox.showinfo(APP_NAME, "Select a schedule row first.")
+            return None
+        event_id = selected[0]  # the row iid is the event id
+        event_index = next((index for index, event in enumerate(self.config_data["events"]) if event["id"] == event_id), None)
+        if event_index is None:
+            messagebox.showerror(APP_NAME, "The selected schedule is no longer available.")
+        return event_index
+
+    def add_schedule_main(self) -> None:
+        self.edit_event_dialog(self.root, None, self.refresh_schedule_table)
+
+    def edit_selected_main(self) -> None:
+        event_index = self._selected_main_event_index()
+        if event_index is None:
+            return
+        self.edit_event_dialog(self.root, event_index, self.refresh_schedule_table)
+
+    def remove_selected_main(self) -> None:
+        event_index = self._selected_main_event_index()
+        if event_index is None:
+            return
+        event = self.config_data["events"][event_index]
+        if not messagebox.askyesno(APP_NAME, f"Remove '{event['label']}' from the schedule?", parent=self.root):
+            return
+        candidate = deepcopy(self.config_data)
+        candidate["events"].pop(event_index)
+        self.save_config(candidate, "reminder_removed", event["id"])
+
+    def open_alert_settings(self) -> None:
+        settings = tk.Toplevel(self.root)
+        settings.title("Alert settings")
+        settings.geometry("420x250")
+        settings.transient(self.root)
+        form = ttk.Frame(settings, padding=18)
+        form.pack(fill="both", expand=True)
+        volume_var = tk.IntVar(value=int(self.alert_settings.get("volume", 70)))
+        ttk.Label(form, text="Alert volume").pack(anchor="w")
+        tk.Scale(form, from_=0, to=100, orient="horizontal", variable=volume_var, resolution=5, showvalue=True, length=340, highlightthickness=0).pack(fill="x", pady=(2, 12))
+        ttk.Label(form, text="Reminder sound").pack(anchor="w")
+        sound_var = tk.StringVar(value=self.alert_settings.get("sound", "chime"))
+        ttk.Combobox(form, textvariable=sound_var, state="readonly", values=("chime", "bright", "warm", "urgent", "quiet")).pack(fill="x", pady=(2, 14))
+        def save_alert_settings() -> None:
+            self.alert_settings = {"volume": volume_var.get(), "sound": sound_var.get()}
+            try:
+                self.storage.save_settings(self.alert_settings)
+                self._safe_audit("alert_settings_changed", **self.alert_settings)
+            except StorageError as exc:
+                self._warn_persistence(exc)
+            settings.destroy()
+        def test_alert_settings() -> None:
+            previous = self.alert_settings
+            self.alert_settings = {"volume": volume_var.get(), "sound": sound_var.get()}
+            self.play_alert_sound()
+            self.alert_settings = previous
+        alert_buttons = ttk.Frame(form)
+        alert_buttons.pack(fill="x", pady=(4, 0))
+        ttk.Button(alert_buttons, text="Test this sound", command=test_alert_settings).pack(side="left")
+        ttk.Button(alert_buttons, text="Save alert settings", style="Accent.TButton", command=save_alert_settings).pack(side="right")
+
+    def check_schedule(self) -> None:
+        if not self.running:
+            return
+        try:
+            now = self.now()
+            try:
+                added = self.scheduler.collect_due(now)
+                self.storage.save_state(self.scheduler.state)
+                if added:
+                    self._safe_audit("reminders_queued", count=added)
+                notice = self.scheduler.pending_skip_notice
+                if notice:
+                    self.scheduler.pending_skip_notice = None
+                    self._safe_audit("missed_doses_skipped", **notice)
+            except StorageError as exc:
+                self._warn_persistence(exc)
+
+            popup_open = self.active_popup is not None and self.active_popup.winfo_exists()
+            if popup_open and not self.active_popup.winfo_ismapped():
+                # winfo_exists() is true for a hidden window, so an alarm that is
+                # off screen would otherwise look "open" forever and no later dose
+                # would ever be raised. Re-assert it instead of waiting for a click
+                # that can never arrive.
+                self.active_popup.deiconify()
+                self.active_popup.lift()
+            if not popup_open:
+                due = self.scheduler.next_ready(now)
+                if due:
+                    self.show_due_popup(due)
+        except Exception as exc:
+            # A failure here (e.g. a TclError from show_due_popup) must never stop
+            # the reminder loop; surface it and keep the timer armed below.
+            self._report_background_error(exc)
+        finally:
+            if self.running:
+                self.root.after(CHECK_INTERVAL_SECONDS * 1000, self.check_schedule)
+
+    def play_alert_sound(self) -> None:
+        settings = dict(self.alert_settings)
+        def worker() -> None:
+            try:
+                import winsound as sound_api
+                sound_profiles = {
+                    "chime": ((523, 180), (659, 180), (784, 320)),
+                    "bright": ((784, 130), (988, 130), (1175, 260)),
+                    "warm": ((330, 180), (392, 180), (494, 300)),
+                    "urgent": ((880, 130), (440, 130), (880, 180)),
+                    "quiet": ((660, 220),),
+                }
+                pattern = sound_profiles.get(settings.get("sound"), sound_profiles["chime"])
+                volume = max(0, min(100, int(settings.get("volume", 70))))
+                # Beep ignores per-process volume on many Windows drivers. Generate
+                # normalized PCM instead, so the setting reliably controls amplitude
+                # without changing the user's global system volume.
+                amplitude = int(30000 * (0.12 + 0.88 * volume / 100))
+                def tone(frequency: int, duration: int) -> bytes:
+                    sample_rate = 44100
+                    frames = int(sample_rate * duration / 1000)
+                    raw = bytearray()
+                    for index in range(frames):
+                        position = index / max(1, frames - 1)
+                        envelope = min(1.0, position * 18.0, (1.0 - position) * 14.0)
+                        sample = int(amplitude * envelope * math.sin(2 * math.pi * frequency * index / sample_rate))
+                        raw.extend(struct.pack("<h", sample))
+                    output = io.BytesIO()
+                    with wave.open(output, "wb") as wav:
+                        wav.setnchannels(1); wav.setsampwidth(2); wav.setframerate(sample_rate); wav.writeframes(raw)
+                    return output.getvalue()
+                for _ in range(3):
+                    for frequency, duration in pattern:
+                        sound_api.PlaySound(tone(frequency, duration), sound_api.SND_MEMORY)
+                        time.sleep(0.06)
+                    time.sleep(0.35)
+            except OSError:
+                pass
+
+        threading.Thread(target=worker, daemon=True, name="medication-alert-sound").start()
+
+    def show_due_popup(self, occurrence: DueOccurrence, *, is_test: bool = False) -> None:
+        self.play_alert_sound()
+        if self.active_popup and self.active_popup.winfo_exists():
+            self._close_popup(self.active_popup)
+
+        popup = tk.Toplevel(self.root)
+        self.active_popup = popup
+        popup.configure(bg="#FFF8F2")
+        popup.title("Medication due")
+        popup.geometry("620x560")
+        popup.minsize(560, 480)
+        popup.resizable(True, True)
+        # Deliberately NOT transient to self.root: Tk mirrors a master's window
+        # state onto its transients, so while the app sits in the tray (root
+        # withdrawn) or is minimized (root iconic) the popup would be created
+        # already withdrawn — the alarm would never be seen, and because it still
+        # satisfies winfo_exists() the check loop would treat a popup as open
+        # forever and no later dose would ever surface. -topmost and lift() below
+        # give the stay-on-top behaviour transient() was there for.
+        popup.attributes("-topmost", True)
+        popup.lift()
+        popup.focus_force()
+        popup.grab_set()
+
+        if is_test:
+            popup.protocol("WM_DELETE_WINDOW", lambda: self._close_popup(popup))
+        else:
+            popup.protocol("WM_DELETE_WINDOW", lambda: self.snooze_event(occurrence, popup))
+
+        frame = ttk.Frame(popup, padding=22, style="App.TFrame")
+        frame.pack(fill="both", expand=True)
+        overdue = not is_test and self.now() > occurrence.scheduled_at.replace(second=59)
+        heading = "OVERDUE MEDICATION" if overdue else "MEDICATION DUE"
+        ttk.Label(
+            frame,
+            text=f"{heading} • {occurrence.scheduled_at.strftime('%a %d %b, %H:%M')}",
+            font=("Segoe UI", 13, "bold"),
+        ).pack(anchor="center", pady=(0, 8))
+        ttk.Label(frame, text=occurrence.label, font=("Segoe UI", 19, "bold")).pack(
+            anchor="center", pady=(0, 14)
+        )
+
+        meds_box = tk.Frame(
+            frame,
+            bg="#FFFFFF",
+            highlightbackground="#B8D8D8",
+            highlightthickness=1,
+            padx=14,
+            pady=10,
+        )
+        meds_box.pack(fill="x", pady=(0, 4))
+        for item in occurrence.medicines:
+            tk.Label(
+                meds_box,
+                text=f"•  {item}",
+                bg="#FFFFFF",
+                fg="#17324D",
+                anchor="w",
+                justify="left",
+                wraplength=540,
+                font=("Segoe UI", 13, "bold"),
+                padx=2,
+                pady=5,
+            ).pack(fill="x", anchor="w")
+
+        if occurrence.instructions:
+            ttk.Label(
+                frame,
+                text=occurrence.instructions,
+                wraplength=480,
+                justify="left",
+                font=("Segoe UI", 10),
+            ).pack(anchor="w", pady=(14, 16))
+
+        buttons = ttk.Frame(frame)
+        buttons.pack(fill="x", side="bottom")
+        if is_test:
+            ttk.Button(buttons, text="Close test", command=lambda: self._close_popup(popup)).pack(
+                expand=True, fill="x"
+            )
+        else:
+            ttk.Button(
+                buttons, text="Taken", style="Teal.TButton", command=lambda: self.mark_taken(occurrence, popup)
+            ).pack(side="left", expand=True, fill="x", padx=(0, 6))
+            ttk.Button(
+                buttons,
+                text=f"Snooze {DEFAULT_SNOOZE_MINUTES} min",
+                style="Accent.TButton",
+                command=lambda: self.snooze_event(occurrence, popup),
+            ).pack(side="left", expand=True, fill="x", padx=(6, 0))
+        popup.bell()
+
+    def mark_taken(self, occurrence: DueOccurrence, popup: tk.Toplevel) -> None:
+        now = self.now()
+        self.scheduler.mark_taken(occurrence.key, now)
+        try:
+            self.storage.save_state(self.scheduler.state)
+            self.storage.append_audit(
+                "medication_taken",
+                now,
+                event_id=occurrence.event_id,
+                label=occurrence.label,
+                scheduled_time=occurrence.scheduled_at.isoformat(),
+                items=occurrence.medicines,
+            )
+        except StorageError as exc:
+            self._warn_persistence(exc)
+        self._queue_dose_push()
+        self._close_popup(popup)
+        self.update_next_due_text()
+
+    def _note_schedule_push(self) -> None:
+        """A schedule edit is pending, so the next push is not dose-only and the
+        paired phone should still get its 'Schedule updated' notification."""
+        self.dose_only_push = False
+
+    def _queue_dose_push(self) -> None:
+        """Mark the dose record dirty and schedule a push.
+
+        Without this a take would sit on this PC until some unrelated schedule
+        edit happened to push it, which is the whole symptom dose sync exists to
+        fix. Unpaired is the normal case and must stay silent.
+        """
+        if not self.sync_credentials:
+            return
+        was_dirty = bool(self.sync_credentials.get("dirty"))
+        self.sync_credentials["dirty"] = True
+        # Bump as save_config does, but on the dose counter: if a sync is already in
+        # flight, _start_sync returns early and _finish_sync would otherwise clear
+        # dirty on the older generation, silently discarding this take.
+        self.dose_generation += 1
+        # Only claim dose-only if nothing else is already waiting to go out; a
+        # pending schedule edit must keep its notification.
+        self.dose_only_push = self.dose_only_push or not was_dirty
+        try:
+            self.storage.save_sync_credentials(self.sync_credentials)
+        except StorageError as exc:
+            self._warn_persistence(exc)
+        self.root.after(100, lambda: self._start_sync(push_local=True))
+
+    def snooze_event(self, occurrence: DueOccurrence, popup: tk.Toplevel) -> None:
+        now = self.now()
+        try:
+            until = self.scheduler.snooze(occurrence.key, now, DEFAULT_SNOOZE_MINUTES)
+        except ValueError:
+            # A sync invalidated this occurrence while its popup was open; there is
+            # nothing left to snooze, so just close the otherwise-unclosable popup.
+            self._close_popup(popup)
+            return
+        try:
+            self.storage.save_state(self.scheduler.state)
+            self.storage.append_audit(
+                "reminder_snoozed", now, event_id=occurrence.event_id, snoozed_until=until.isoformat()
+            )
+        except StorageError as exc:
+            self._warn_persistence(exc)
+        self._close_popup(popup)
+        self.update_next_due_text()
+
+    def _close_popup(self, popup: tk.Toplevel) -> None:
+        if popup.winfo_exists():
+            try:
+                popup.grab_release()
+            except tk.TclError:
+                pass
+            popup.destroy()
+        if self.active_popup is popup:
+            self.active_popup = None
+
+    def test_reminder(self) -> None:
+        now = self.now()
+        sample = DueOccurrence(
+            key=f"test-{time.time()}",
+            event_id="test",
+            label="Test reminder",
+            time_text=now.strftime("%H:%M"),
+            medicines=["This is a test alert", "No medication should be taken"],
+            instructions="Use this button to confirm that the sound and reminder window work.",
+            scheduled_at=now,
+        )
+        self.show_due_popup(sample, is_test=True)
+
+    def save_config(self, candidate: dict, action: str, event_id: str | None = None) -> bool:
+        try:
+            validated = self.storage.save_schedule(candidate)
+            self.config_data = validated
+            self.scheduler.replace_schedule(validated)
+            self.storage.save_state(self.scheduler.state)
+            self.storage.append_audit(action, self.now(), event_id=event_id)
+        except (ConfigValidationError, StorageError) as exc:
+            messagebox.showerror(APP_NAME, str(exc))
+            return False
+        self.refresh_schedule_table()
+        self.update_next_due_text()
+        if self.sync_credentials:
+            self.sync_credentials["dirty"] = True
+            self._note_schedule_push()
+            self.sync_generation += 1
+            try:
+                self.storage.save_sync_credentials(self.sync_credentials)
+            except StorageError as exc:
+                self._warn_persistence(exc)
+            self.root.after(100, lambda: self._start_sync(push_local=True))
+        return True
+
+    def open_schedule_editor(self) -> None:
+        editor = tk.Toplevel(self.root)
+        editor.title("Edit reminder schedule")
+        editor.geometry("800x580")
+        editor.transient(self.root)
+        container = ttk.Frame(editor, padding=14)
+        container.pack(fill="both", expand=True)
+
+        timezone_bar = ttk.Frame(container)
+        timezone_bar.pack(fill="x", pady=(0, 10))
+        ttk.Label(timezone_bar, text="Timezone:").pack(side="left")
+        timezone_var = tk.StringVar(value=self.config_data["timezone"])
+        ttk.Entry(timezone_bar, textvariable=timezone_var, width=35).pack(side="left", padx=8)
+
+        def apply_timezone() -> None:
+            candidate = deepcopy(self.config_data)
+            candidate["timezone"] = timezone_var.get().strip()
+            if self.save_config(candidate, "timezone_changed"):
+                messagebox.showinfo(APP_NAME, "Timezone updated. Reopen this window to refresh the display.")
+
+        ttk.Button(timezone_bar, text="Apply timezone", command=apply_timezone).pack(side="left")
+        pairing_bar = ttk.Frame(container)
+        pairing_bar.pack(fill="x", pady=(0, 8))
+        ttk.Label(pairing_bar, text="Mobile sync:", style="Meta.TLabel").pack(side="left", padx=(0, 10))
+        ttk.Button(pairing_bar, text="Link account", command=self.link_account_device).pack(side="left", padx=6)
+        ttk.Button(pairing_bar, text="Pair mobile", command=self.pair_device).pack(side="left", padx=6)
+        ttk.Button(pairing_bar, text="Show QR", command=self.show_pairing_qr).pack(side="left", padx=6)
+        ttk.Button(pairing_bar, text="Sync now", command=lambda: self._start_sync(notify=True)).pack(side="left", padx=6)
+        ttk.Button(pairing_bar, text="Unpair", command=self.unpair_device).pack(side="left", padx=6)
+        self.sync_status_var = tk.StringVar()
+        ttk.Label(container, textvariable=self.sync_status_var, style="Meta.TLabel").pack(anchor="w", pady=(0, 8))
+        self._set_sync_status()
+
+        columns = ("enabled", "time", "label", "medicines")
+        tree = ttk.Treeview(container, columns=columns, show="headings", height=15)
+        tree.heading("enabled", text="On")
+        tree.heading("time", text="Time")
+        tree.heading("label", text="Label")
+        tree.heading("medicines", text="Items")
+        tree.column("enabled", width=45, anchor="center")
+        tree.column("time", width=70, anchor="center")
+        tree.column("label", width=180)
+        tree.column("medicines", width=430)
+        tree.pack(fill="both", expand=True)
+
+        def populate() -> None:
+            for item in tree.get_children():
+                tree.delete(item)
+            for index, event in enumerate(self.config_data["events"]):
+                tree.insert(
+                    "", "end", iid=str(index),
+                    values=("Yes" if event["enabled"] else "No", event["time"], event["label"], "; ".join(event["medicines"])),
+                )
+
+        def toggle() -> None:
+            selected = tree.selection()
+            if not selected:
+                return
+            index = int(selected[0])
+            candidate = deepcopy(self.config_data)
+            candidate["events"][index]["enabled"] = not candidate["events"][index]["enabled"]
+            event_id = candidate["events"][index]["id"]
+            if self.save_config(candidate, "reminder_toggled", event_id):
+                populate()
+
+        def edit_selected() -> None:
+            selected = tree.selection()
+            if not selected:
+                messagebox.showinfo(APP_NAME, "Select a reminder first.")
+                return
+            self.edit_event_dialog(editor, int(selected[0]), populate)
+
+        def add_schedule() -> None:
+            self.edit_event_dialog(editor, None, populate)
+
+        def remove_schedule() -> None:
+            selected = tree.selection()
+            if not selected:
+                messagebox.showinfo(APP_NAME, "Select a reminder first.")
+                return
+            index = int(selected[0])
+            event_id = self.config_data["events"][index]["id"]
+            if not messagebox.askyesno(APP_NAME, f"Remove the '{event_id}' reminder?"):
+                return
+            candidate = deepcopy(self.config_data)
+            candidate["events"].pop(index)
+            if self.save_config(candidate, "reminder_removed", event_id):
+                populate()
+
+        def open_alert_settings() -> None:
+            settings = tk.Toplevel(editor)
+            settings.title("Alert settings")
+            settings.geometry("420x250")
+            settings.transient(editor)
+            form = ttk.Frame(settings, padding=18)
+            form.pack(fill="both", expand=True)
+            volume_var = tk.IntVar(value=int(self.alert_settings.get("volume", 70)))
+            ttk.Label(form, text="Alert volume").pack(anchor="w")
+            tk.Scale(form, from_=0, to=100, orient="horizontal", variable=volume_var, resolution=5, showvalue=True, length=340, highlightthickness=0).pack(fill="x", pady=(2, 12))
+            ttk.Label(form, text="Reminder sound").pack(anchor="w")
+            sound_var = tk.StringVar(value=self.alert_settings.get("sound", "chime"))
+            ttk.Combobox(form, textvariable=sound_var, state="readonly", values=("chime", "bright", "warm", "urgent", "quiet")).pack(fill="x", pady=(2, 14))
+            def save_alert_settings() -> None:
+                self.alert_settings = {"volume": volume_var.get(), "sound": sound_var.get()}
+                try:
+                    self.storage.save_settings(self.alert_settings)
+                    self._safe_audit("alert_settings_changed", **self.alert_settings)
+                except StorageError as exc:
+                    self._warn_persistence(exc)
+                settings.destroy()
+            def test_alert_settings() -> None:
+                previous = self.alert_settings
+                self.alert_settings = {"volume": volume_var.get(), "sound": sound_var.get()}
+                self.play_alert_sound()
+                self.alert_settings = previous
+            alert_buttons = ttk.Frame(form)
+            alert_buttons.pack(fill="x", pady=(4, 0))
+            ttk.Button(alert_buttons, text="Test this sound", command=test_alert_settings).pack(side="left")
+            ttk.Button(alert_buttons, text="Save alert settings", style="Accent.TButton", command=save_alert_settings).pack(side="right")
+
+        quick_actions = ttk.Frame(container)
+        quick_actions.pack(fill="x", pady=(0, 10))
+        ttk.Label(quick_actions, text="Schedule actions:", style="Meta.TLabel").pack(side="left", padx=(0, 10))
+        ttk.Button(quick_actions, text="+ Add schedule", style="Accent.TButton", command=add_schedule).pack(side="left", padx=(0, 6))
+        ttk.Button(quick_actions, text="Edit selected", style="Teal.TButton", command=edit_selected).pack(side="left", padx=6)
+        ttk.Button(quick_actions, text="Remove selected", command=remove_schedule).pack(side="left", padx=6)
+        ttk.Button(quick_actions, text="Alert settings", command=open_alert_settings).pack(side="left", padx=6)
+
+        buttons = ttk.Frame(container)
+        buttons.pack(fill="x", pady=(12, 0))
+        ttk.Button(buttons, text="Enable / disable", command=toggle).pack(side="left")
+        ttk.Button(buttons, text="Add schedule", style="Accent.TButton", command=add_schedule).pack(side="left", padx=8)
+        ttk.Button(buttons, text="Edit selected", style="Teal.TButton", command=edit_selected).pack(side="left")
+        ttk.Button(buttons, text="Remove selected", command=remove_schedule).pack(side="left", padx=8)
+        ttk.Button(buttons, text="Alert settings", command=open_alert_settings).pack(side="left")
+        ttk.Button(buttons, text="Close", command=editor.destroy).pack(side="right")
+        populate()
+
+    def edit_event_dialog(self, parent: tk.Toplevel, event_index: int | None, refresh_callback) -> None:
+        is_new = event_index is None
+        event = (deepcopy(self.config_data["events"][event_index]) if not is_new else {
+            "id": f"reminder_{int(time.time())}", "enabled": True, "time": "08:00", "label": "New reminder",
+            "medicines": ["New medication"], "instructions": "", "days": ["daily"], "start_date": None, "end_date": None,
+        })
+        dialog = tk.Toplevel(parent)
+        dialog.title("Edit reminder")
+        dialog.geometry("590x540")
+        dialog.transient(parent)
+        dialog.grab_set()
+        form = ttk.Frame(dialog, padding=18)
+        form.pack(fill="both", expand=True)
+
+        time_var = tk.StringVar(value=event["time"])
+        label_var = tk.StringVar(value=event["label"])
+        enabled_var = tk.BooleanVar(value=event["enabled"])
+        days_var = tk.StringVar(value=", ".join(event["days"]))
+        start_var = tk.StringVar(value=event["start_date"] or "")
+        end_var = tk.StringVar(value=event["end_date"] or "")
+
+        ttk.Label(form, text="Time (24-hour HH:MM)").pack(anchor="w")
+        ttk.Entry(form, textvariable=time_var).pack(fill="x", pady=(2, 8))
+        ttk.Label(form, text="Reminder label").pack(anchor="w")
+        ttk.Entry(form, textvariable=label_var).pack(fill="x", pady=(2, 8))
+        ttk.Label(form, text="Medication/items, one per line").pack(anchor="w")
+        medicines_box = tk.Listbox(form, height=5, activestyle="none", exportselection=False)
+        medicines_box.pack(fill="x", pady=(2, 4))
+        for medicine in event["medicines"]:
+            medicines_box.insert("end", medicine)
+        medicine_buttons = ttk.Frame(form)
+        medicine_buttons.pack(fill="x", pady=(0, 8))
+        def add_medicine() -> None:
+            value = simpledialog.askstring("Add medication", "Medication or item:", parent=dialog)
+            if value and value.strip(): medicines_box.insert("end", value.strip())
+        def edit_medicine() -> None:
+            selection = medicines_box.curselection()
+            if not selection: return
+            value = simpledialog.askstring("Edit medication", "Medication or item:", initialvalue=medicines_box.get(selection[0]), parent=dialog)
+            if value and value.strip(): medicines_box.delete(selection[0]); medicines_box.insert(selection[0], value.strip())
+        def remove_medicine() -> None:
+            selection = medicines_box.curselection()
+            if selection: medicines_box.delete(selection[0])
+        ttk.Button(medicine_buttons, text="Add medication", command=add_medicine).pack(side="left")
+        ttk.Button(medicine_buttons, text="Edit medication", command=edit_medicine).pack(side="left", padx=6)
+        ttk.Button(medicine_buttons, text="Remove medication", command=remove_medicine).pack(side="left")
+        ttk.Label(form, text="Days: daily or mon,tue,wed...").pack(anchor="w")
+        ttk.Entry(form, textvariable=days_var).pack(fill="x", pady=(2, 8))
+
+        date_row = ttk.Frame(form)
+        date_row.pack(fill="x")
+        start_frame = ttk.Frame(date_row)
+        start_frame.pack(side="left", fill="x", expand=True, padx=(0, 6))
+        end_frame = ttk.Frame(date_row)
+        end_frame.pack(side="left", fill="x", expand=True, padx=(6, 0))
+        ttk.Label(start_frame, text="Start date (optional, YYYY-MM-DD)").pack(anchor="w")
+        ttk.Entry(start_frame, textvariable=start_var).pack(fill="x", pady=(2, 8))
+        ttk.Label(end_frame, text="End date (optional, YYYY-MM-DD)").pack(anchor="w")
+        ttk.Entry(end_frame, textvariable=end_var).pack(fill="x", pady=(2, 8))
+        ttk.Checkbutton(form, text="Reminder enabled", variable=enabled_var).pack(anchor="w")
+
+        def save() -> None:
+            candidate = deepcopy(self.config_data)
+            updated = event if is_new else candidate["events"][event_index]
+            updated.update(
+                {
+                    "time": time_var.get().strip(),
+                    "label": label_var.get().strip(),
+                    "medicines": [medicines_box.get(index) for index in range(medicines_box.size())],
+                    "days": [item.strip().lower() for item in days_var.get().split(",") if item.strip()] or ["daily"],
+                    "start_date": start_var.get().strip() or None,
+                    "end_date": end_var.get().strip() or None,
+                    "enabled": enabled_var.get(),
+                }
+            )
+            try:
+                parse_time(updated["time"])
+                validate_schedule(candidate)
+            except ConfigValidationError as exc:
+                messagebox.showerror(APP_NAME, str(exc))
+                return
+            if is_new:
+                candidate["events"].append(updated)
+            if self.save_config(candidate, "reminder_added" if is_new else "reminder_edited", updated["id"]):
+                refresh_callback()
+                dialog.destroy()
+
+        ttk.Button(form, text="Save changes", command=save).pack(anchor="e", pady=(12, 0))
+
+    def pair_device(self) -> None:
+        if self.sync_credentials and not messagebox.askyesno(APP_NAME, "Create a new pairing? The existing mobile link will stop syncing.", parent=self.root):
+            return
+        self._set_sync_status("Creating encrypted pairing…")
+        source_id = self.sync_credentials.get("sourceId") if self.sync_credentials else secrets.token_urlsafe(24)
+        schedule = self._sync_payload()
+        old_credentials = deepcopy(self.sync_credentials) if self.sync_credentials else None
+        def worker() -> None:
+            try:
+                credentials = self._perform_repair(schedule, source_id, old_credentials)
+                self.root.after(0, lambda: self._pair_created(credentials))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, True))
+            except Exception as exc:
+                wrapped = SyncError(f"Pairing failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, True))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _perform_repair(self, schedule: dict, source_id: str, old_credentials: dict | None) -> dict:
+        """Best-effort revoke the previous server pair, then mint a fresh one.
+
+        Re-pairing must revoke the old pair so a previously paired phone can no
+        longer sync a stale schedule. A failed revoke (e.g. it is already gone)
+        must not block creating the new pairing. When the widget is linked to an
+        account, the new pair is account-scoped; otherwise it uses the legacy
+        owner path.
+        """
+        device_credential = old_credentials.get("deviceCredential") if old_credentials else None
+        if old_credentials:
+            try:
+                self.sync_client.revoke(old_credentials)
+            except SyncError:
+                pass
+        device_credential = device_credential or getattr(self, "account_credential", None)
+        if device_credential:
+            return self.sync_client.create_account_pair(schedule, source_id, device_credential)
+        return self.sync_client.create_pair(schedule, source_id)
+
+    def _device_link_label(self) -> str:
+        try:
+            node = platform.node() or "Windows"
+        except Exception:
+            node = "Windows"
+        return f"{node} widget"
+
+    def _run_device_link(self, on_code, should_cancel, sleep_fn=time.sleep) -> str:
+        """Drive the OAuth device-authorization loop and return the credential.
+
+        Headless and side-effect free so it can be unit tested. `on_code` is
+        invoked once with the start payload (user code + verification URL) for
+        display; `should_cancel()` aborts the wait. Raises SyncError on denial,
+        expiry, or cancellation.
+        """
+        start = self.sync_client.start_device_authorization(self._device_link_label())
+        on_code(start)
+        device_code = start["deviceCode"]
+        interval = max(1, int(start.get("interval", 5) or 5))
+        while not should_cancel():
+            result = self.sync_client.poll_device_authorization(device_code)
+            status = result.get("status")
+            if status == "complete":
+                return result["credential"]
+            if status in ("denied", "expired", "invalid"):
+                raise SyncError(f"Device linking was not completed ({status}).")
+            if status == "slow_down":
+                interval += 5
+            sleep_fn(interval)
+        raise SyncError("Device linking was cancelled.")
+
+    def link_account_device(self) -> None:
+        """Link this widget to the owner's account via the browser, then create
+        an account-scoped pair it can sync."""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Link this device")
+        dialog.transient(self.root)
+        dialog.resizable(False, False)
+        cancelled = {"value": False}
+        dialog.protocol("WM_DELETE_WINDOW", lambda: (cancelled.__setitem__("value", True), dialog.destroy()))
+        status = tk.StringVar(value="Requesting a device code…")
+        ttk.Label(dialog, textvariable=status, justify="left", wraplength=360).pack(padx=16, pady=16)
+        ttk.Button(dialog, text="Cancel", command=lambda: (cancelled.__setitem__("value", True), dialog.destroy())).pack(pady=(0, 12))
+
+        def show_code(start: dict) -> None:
+            code = start.get("userCode", "")
+            uri = start.get("verificationUri", APP_URL)
+            self.root.after(0, lambda: status.set(
+                f"1. Open {uri} in a browser where you are signed in.\n"
+                f"2. Enter this code to approve:\n\n        {code}\n\n"
+                "Waiting for approval…"))
+
+        def worker() -> None:
+            try:
+                credential = self._run_device_link(show_code, lambda: cancelled["value"])
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._finish_device_link(dialog, None, error))
+                return
+            except Exception as exc:  # noqa: BLE001 - surface, never crash the loop
+                wrapped = SyncError(f"Device linking failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._finish_device_link(dialog, None, error))
+                return
+            self.root.after(0, lambda: self._finish_device_link(dialog, credential, None))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_device_link(self, dialog: tk.Toplevel, credential: str | None, error: SyncError | None) -> None:
+        try:
+            dialog.destroy()
+        except tk.TclError:
+            pass
+        if error is not None or not credential:
+            if error is not None:
+                messagebox.showerror(APP_NAME, str(error), parent=self.root)
+            return
+        self.account_credential = credential
+        # Create the first account-scoped pair immediately so the widget can sync.
+        self._set_sync_status("Creating your account-linked pairing…")
+        source_id = self.sync_credentials.get("sourceId") if self.sync_credentials else secrets.token_urlsafe(24)
+        schedule = self._sync_payload()
+        old_credentials = deepcopy(self.sync_credentials) if self.sync_credentials else None
+
+        def worker() -> None:
+            try:
+                credentials = self._perform_repair(schedule, source_id, old_credentials)
+                self.root.after(0, lambda: self._pair_created(credentials))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, True))
+            except Exception as exc:  # noqa: BLE001
+                wrapped = SyncError(f"Pairing failed: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, True))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _pair_created(self, credentials: dict) -> None:
+        try:
+            self.storage.save_sync_credentials(credentials)
+        except StorageError as exc:
+            # Persist before adopting the pairing in memory, so a failed save does
+            # not leave an in-memory-only pairing pointing at an orphaned remote pair.
+            self._warn_persistence(exc)
+            return
+        self.sync_credentials = credentials
+        self._set_sync_status("Encrypted pairing ready; waiting for the mobile scan.")
+        self.show_pairing_qr()
+
+    def show_pairing_qr(self) -> None:
+        if not self.sync_credentials:
+            self.pair_device()
+            return
+        payload = self.sync_client.pairing_link(self.sync_credentials)
+        try:
+            code = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=4, border=4)
+            code.add_data(payload)
+            code.make(fit=True)
+            image = code.make_image(fill_color="#243044", back_color="white").convert("RGB")
+            photo = ImageTk.PhotoImage(image)
+            dialog = tk.Toplevel(self.root)
+            dialog.title("Pair schedule with mobile")
+            dialog.configure(bg="white")
+            dialog.resizable(False, False)
+            dialog.transient(self.root)
+            ttk.Label(dialog, text="Scan to open, install and pair the mobile app", style="Heading.TLabel").pack(padx=24, pady=(20, 10))
+            image_label = tk.Label(dialog, image=photo, bg="white")
+            image_label.image = photo
+            image_label.pack(padx=24, pady=8)
+            ttk.Label(dialog, text="The relay stores ciphertext only. One mobile device can claim this link.", style="Meta.TLabel").pack(pady=(4, 4))
+            ttk.Label(dialog, text="Scanning the QR code is the safest way to pair. Copy the link only if you cannot scan.", style="Meta.TLabel").pack(pady=(0, 12))
+            actions = ttk.Frame(dialog)
+            actions.pack(pady=(0, 20))
+            def copy_link() -> None:
+                if not messagebox.askyesno(
+                    APP_NAME,
+                    "The pairing link contains the secret encryption key. Windows Clipboard "
+                    "History and Cloud Clipboard may store and sync it to your other devices.\n\n"
+                    "Scanning the QR code is safer. Copy the link to the clipboard anyway?",
+                    parent=dialog,
+                ):
+                    return
+                self.root.clipboard_clear(); self.root.clipboard_append(payload); self.root.update()
+                messagebox.showinfo(APP_NAME, "Pairing link copied. It will be cleared from the clipboard in 60 seconds.", parent=dialog)
+                self.root.after(60_000, lambda: self._clear_clipboard_if_matches(payload))
+            ttk.Button(actions, text="Copy link (less safe)", command=copy_link).pack(side="left", padx=6)
+            ttk.Button(actions, text="Close", command=dialog.destroy).pack(side="left", padx=6)
+            dialog.lift()
+            dialog.focus_force()
+        except (ValueError, OSError) as exc:
+            messagebox.showerror(APP_NAME, f"Could not create the pairing QR code: {exc}", parent=self.root)
+
+    def _clear_clipboard_if_matches(self, value: str) -> None:
+        """Clear the clipboard if it still holds the copied pairing link."""
+        try:
+            if self.root.clipboard_get() == value:
+                self.root.clipboard_clear()
+                self.root.update()
+        except tk.TclError:
+            # Clipboard empty, non-text, or already replaced: nothing to clear.
+            pass
+
+    def _set_sync_status(self, message: str | None = None) -> None:
+        if not self.sync_status_var:
+            return
+        if message:
+            self.sync_status_var.set(message)
+        elif not self.sync_credentials:
+            self.sync_status_var.set("Not paired. Schedules remain private on this PC.")
+        else:
+            claimed = "mobile connected" if self.sync_credentials.get("claimed") else "waiting for mobile"
+            self.sync_status_var.set(f"Encrypted sync revision {self.sync_credentials.get('revision', 1)} • {claimed}")
+
+    def _periodic_sync(self) -> None:
+        try:
+            self._start_sync()
+        except Exception as exc:
+            self._report_background_error(exc)
+        finally:
+            if self.running:
+                self.root.after(PERIODIC_SYNC_SECONDS * 1000, self._periodic_sync)
+
+    def _start_sync(self, *, push_local: bool = False, notify: bool = False) -> None:
+        if not self.sync_credentials:
+            if notify:
+                messagebox.showinfo(APP_NAME, "Pair a mobile device first.", parent=self.root)
+            return
+        if self.sync_in_progress or self.conflict_pending:
+            return
+        self.sync_in_progress = True
+        self._set_sync_status("Syncing encrypted schedule…")
+        credentials = deepcopy(self.sync_credentials)
+        schedule = self._sync_payload()
+        generation = self.sync_generation
+        dose_generation = self.dose_generation
+        dose_only_push = self.dose_only_push
+        def worker() -> None:
+            try:
+                remote = self.sync_client.fetch(credentials)
+                remote_changed = remote.revision != int(credentials.get("revision", 1)) and remote.updated_by != credentials["deviceId"]
+                # A revision bump that leaves the schedule half identical is a dose
+                # change only. Those merge per occurrence, so they must never be
+                # reported to the user as a schedule conflict.
+                schedule_changed = remote_changed and remote.schedule != schedule["schedule"]
+                if schedule_changed:
+                    result = ("conflict" if credentials.get("dirty") else "remote", remote)
+                # Deliberately NOT `or remote_changed`: a clean device must not echo a
+                # remote change back. Doing so bumps the revision, which the other
+                # device reads as a remote change, and the two PUT at each other every
+                # 60s forever. The "current" branch below carries remote.doses home,
+                # which is all a clean device needs.
+                elif credentials.get("dirty") or push_local:
+                    # Merge immediately before the PUT so no push route — including
+                    # the keep-local branch of a conflict — can overwrite a dose the
+                    # other device recorded.
+                    payload = {**schedule, "doses": merge_dose_maps(schedule["doses"], remote.doses)}
+                    # Belt and braces: only suppress the phone's notification when the
+                    # pending change was a dose mark AND our schedule already matches
+                    # the server's, so a schedule change can never go out silently.
+                    dose_only = dose_only_push and remote.schedule == schedule["schedule"]
+                    revision = self.sync_client.update(payload, credentials, remote.revision, dose_only=dose_only)
+                    result = ("updated", revision, remote.claimed, remote.doses)
+                else:
+                    result = ("current", remote.revision, remote.claimed, remote.doses)
+                self.root.after(0, lambda: self._finish_sync(result, generation, notify, dose_generation))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, notify))
+            except Exception as exc:
+                # A malformed response (KeyError/TypeError/ValueError while parsing)
+                # must not kill this thread before the flag is reset, or every later
+                # _start_sync returns early and sync stays dead until restart.
+                wrapped = SyncError(f"The sync service returned an unexpected error: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, notify))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_sync(self, result: tuple, generation: int, notify: bool, dose_generation: int | None = None) -> None:
+        self.sync_in_progress = False
+        kind = result[0]
+        if kind == "remote" and generation != self.sync_generation:
+            kind = "conflict"
+        if kind == "conflict":
+            self._resolve_conflict(result[1], notify)
+            return
+        if kind == "remote":
+            self._apply_remote_schedule(result[1])
+            if notify:
+                messagebox.showinfo(APP_NAME, "The schedule was updated from the paired mobile device.", parent=self.root)
+            return
+        if not self.sync_credentials:
+            return
+        self.sync_credentials["revision"] = int(result[1])
+        self.sync_credentials["claimed"] = bool(result[2])
+        # Record the other device's doses here too, not just in what we pushed
+        # back, or a dose taken there keeps alarming on this PC.
+        if len(result) > 3 and result[3]:
+            try:
+                self.scheduler.apply_remote_doses(result[3], self.now())
+                self.storage.save_state(self.scheduler.state)
+                self.update_next_due_text()
+            except StorageError as exc:
+                self._warn_persistence(exc)
+        doses_current = dose_generation is None or dose_generation == self.dose_generation
+        if kind == "updated" and generation == self.sync_generation and doses_current:
+            self.sync_credentials["dirty"] = False
+            self.dose_only_push = False
+        try:
+            self.storage.save_sync_credentials(self.sync_credentials)
+        except StorageError as exc:
+            self._warn_persistence(exc)
+        self._set_sync_status()
+        if notify:
+            messagebox.showinfo(APP_NAME, "Encrypted schedule sync is up to date.", parent=self.root)
+
+    def _resolve_conflict(self, remote: RemoteSchedule, notify: bool) -> None:
+        # Hold conflict_pending across the modal so the 60s periodic sync (which
+        # fires during the dialog) returns early instead of stacking more dialogs
+        # that act on a stale revision.
+        if self.conflict_pending:
+            return
+        self.conflict_pending = True
+        try:
+            keep_local = messagebox.askyesno(
+                APP_NAME,
+                "Schedule changes were made on both devices.\n\n"
+                "Yes: keep this PC's version and overwrite mobile.\n"
+                "No: use the mobile version on this PC.",
+                parent=self.root,
+            )
+        finally:
+            self.conflict_pending = False
+        if not self.sync_credentials:
+            return
+        if keep_local:
+            # Push this PC's version; _start_sync re-fetches first, so the update
+            # is based on the current server revision.
+            self.sync_credentials["revision"] = remote.revision
+            self._start_sync(push_local=True, notify=notify)
+            return
+        # Use mobile: re-fetch the current remote before applying, so we never
+        # overwrite the local schedule with a revision that has gone stale while
+        # the conflict dialog was open.
+        self.sync_in_progress = True
+        self._set_sync_status("Applying the mobile schedule…")
+        credentials = deepcopy(self.sync_credentials)
+        def worker() -> None:
+            try:
+                fresh = self.sync_client.fetch(credentials)
+                self.root.after(0, lambda: self._finish_conflict_remote(fresh, notify))
+            except SyncError as exc:
+                self.root.after(0, lambda error=exc: self._sync_failed(error, notify))
+            except Exception as exc:
+                wrapped = SyncError(f"The sync service returned an unexpected error: {exc}")
+                self.root.after(0, lambda error=wrapped: self._sync_failed(error, notify))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_conflict_remote(self, remote: RemoteSchedule, notify: bool) -> None:
+        self.sync_in_progress = False
+        self._apply_remote_schedule(remote)
+        if notify:
+            messagebox.showinfo(APP_NAME, "The schedule was updated from the paired mobile device.", parent=self.root)
+
+    def _sync_payload(self) -> dict:
+        """The full payload this device publishes: schedule plus its dose record."""
+        return {
+            "version": 2,
+            "schedule": deepcopy(self.config_data),
+            "doses": self.scheduler.dose_map(self.now()),
+        }
+
+    def _apply_remote_schedule(self, remote: RemoteSchedule) -> None:
+        if not self.sync_credentials:
+            return
+        try:
+            validated = self.storage.save_schedule(remote.schedule)
+            self.config_data = validated
+            self.scheduler.replace_schedule(validated)
+            # Fold the other device's doses in per occurrence, so a dose taken
+            # there stops alarming here and one taken here is not overwritten.
+            self.scheduler.apply_remote_doses(remote.doses, self.now())
+            self.storage.save_state(self.scheduler.state)
+            self.sync_credentials.update({"revision": remote.revision, "claimed": remote.claimed, "dirty": False})
+            self.storage.save_sync_credentials(self.sync_credentials)
+            self._safe_audit("schedule_synced_from_mobile")
+            self.refresh_schedule_table(); self.update_next_due_text(); self._set_sync_status()
+        except (ConfigValidationError, StorageError) as exc:
+            self._warn_persistence(exc)
+
+    def _sync_failed(self, error: SyncError, notify: bool) -> None:
+        self.sync_in_progress = False
+        self._set_sync_status("Sync unavailable. Local reminders continue to work.")
+        if notify:
+            messagebox.showerror(APP_NAME, str(error), parent=self.root)
+
+    def unpair_device(self) -> None:
+        if not self.sync_credentials:
+            messagebox.showinfo(APP_NAME, "This widget is not paired.", parent=self.root)
+            return
+        if not messagebox.askyesno(APP_NAME, "Unpair both devices? The local schedule will be kept.", parent=self.root):
+            return
+        credentials = deepcopy(self.sync_credentials)
+        self._set_sync_status("Unpairing…")
+        def worker() -> None:
+            # The network revoke can block for the full request timeout; run it off
+            # the Tk thread so the UI stays responsive.
+            error: SyncError | None = None
+            try:
+                self.sync_client.revoke(credentials)
+            except SyncError as exc:
+                if exc.status != 404:
+                    error = exc
+            except Exception as exc:
+                error = SyncError(f"Unpair failed: {exc}")
+            self.root.after(0, lambda captured=error: self._finish_unpair(captured))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _finish_unpair(self, error: SyncError | None) -> None:
+        if error is not None:
+            self._set_sync_status()
+            messagebox.showerror(APP_NAME, str(error), parent=self.root)
+            return
+        try:
+            self.storage.delete_sync_credentials()
+        except StorageError as exc:
+            self._warn_persistence(exc)
+            return
+        self.sync_credentials = None
+        self._set_sync_status("Unpaired. The local schedule was kept.")
+
+    def export_taken_log(self) -> None:
+        if not messagebox.askyesno(
+            APP_NAME,
+            "The exported CSV is readable plaintext and may contain sensitive health information. Continue?",
+        ):
+            return
+        selected = filedialog.asksaveasfilename(
+            title="Export taken medication log",
+            defaultextension=".csv",
+            filetypes=[("CSV files", "*.csv")],
+            initialfile="medication_log.csv",
+        )
+        if not selected:
+            return
+        try:
+            count = self.storage.export_taken_csv(Path(selected))
+            self._safe_audit("taken_log_exported", record_count=count)
+            messagebox.showinfo(APP_NAME, f"Exported {count} taken record(s). Keep the file private.")
+        except StorageError as exc:
+            messagebox.showerror(APP_NAME, str(exc))
+
+    def _safe_audit(self, action: str, **details) -> None:
+        try:
+            self.storage.append_audit(action, self.now(), **details)
+        except StorageError as exc:
+            self._warn_persistence(exc)
+
+    def _report_background_error(self, exc: Exception) -> None:
+        """Surface an unexpected background-task error without stopping the loop."""
+        try:
+            self.status_var.set(f"Warning • a background task failed: {exc}")
+        except Exception:
+            pass
+
+    def _warn_persistence(self, exc: Exception) -> None:
+        self.status_var.set("Warning • protected data could not be saved")
+        if not self.persistence_warning_shown:
+            self.persistence_warning_shown = True
+            messagebox.showerror(
+                APP_NAME,
+                f"Reminder data could not be saved safely. The application will keep running, "
+                f"but restart recovery is not guaranteed.\n\n{exc}",
+            )
+
+    def hide_to_tray(self) -> None:
+        self.root.withdraw()
+
+    def show_window(self) -> None:
+        self.root.after(0, self._show_window_main_thread)
+
+    def _show_window_main_thread(self) -> None:
+        self.root.deiconify()
+        self.root.lift()
+        self.root.focus_force()
+
+    def start_tray_icon(self) -> None:
+        if not ICON_PATH.is_file():
+            raise StorageError("The application icon is missing")
+        image = Image.open(ICON_PATH)
+        menu = pystray.Menu(
+            pystray.MenuItem("Open medication reminder", lambda: self.show_window(), default=True),
+            pystray.MenuItem("Test reminder", lambda: self.root.after(0, self.test_reminder)),
+            pystray.MenuItem("Exit", lambda: self.root.after(0, self.quit_app)),
+        )
+        self.tray_icon = pystray.Icon("MedicationReminder", image, APP_NAME, menu)
+        threading.Thread(target=self.tray_icon.run, daemon=True, name="medication-tray").start()
+
+    def quit_app(self) -> None:
+        self.running = False
+        try:
+            self.storage.save_state(self.scheduler.state)
+            self.storage.append_audit("application_stopped", self.now())
+        except StorageError:
+            pass
+        if self.tray_icon:
+            self.tray_icon.stop()
+        self.root.destroy()
+
+    def run(self) -> None:
+        self.root.mainloop()
+
+
+def show_startup_error(message: str) -> None:
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror(APP_NAME, message)
+    root.destroy()
+
+
+def main() -> int:
+    instance: SingleInstance | None = None
+    try:
+        instance = SingleInstance()
+        MedicationReminderApp().run()
+        return 0
+    except RuntimeError as exc:
+        show_startup_error(str(exc))
+        return 2
+    except (ConfigValidationError, StorageError, OSError) as exc:
+        show_startup_error(f"The application could not start safely.\n\n{exc}")
+        return 1
+    finally:
+        if instance:
+            instance.close()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

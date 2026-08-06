@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#138a8a" />
+  <meta name="description" content="Approve a device to link it to your Medication Reminder account." />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Link a device · Medication Reminder</title>
+</head>
+<body>
+  <main class="link-page">
+    <article class="link-card">
+      <p class="eyebrow">DEVICE LINKING</p>
+      <h1>Link a device to your account</h1>
+      <p id="linkStatus" class="link-status" role="status" aria-live="polite">Checking your account…</p>
+      <form id="deviceLinkForm">
+        <label for="deviceUserCode">Device code</label>
+        <input id="deviceUserCode" name="deviceUserCode" inputmode="text" autocomplete="off"
+          spellcheck="false" maxlength="9" placeholder="XXXX-XXXX" aria-describedby="linkStatus" />
+        <button type="submit" id="approveDevice" class="primary-button">Approve this device</button>
+      </form>
+      <p id="signInHint" class="privacy-note" hidden>
+        Not signed in? <a href="/">Open Medication Reminder</a>, sign in, then reopen this link.
+      </p>
+      <p class="privacy-note">
+        Only approve a code you are seeing on your own device right now. Approving links that device
+        to your account so it can create encrypted pairings; you can revoke it anytime.
+      </p>
+    </article>
+  </main>
+  <script src="device-link.js"></script>
+</body>
+</html>
