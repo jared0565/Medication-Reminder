@@ -372,7 +372,7 @@ test('privacy-lock markup is present before medication content', () => {
 test('PWA loads access control before every application client', () => {
   const html = readFileSync('web/index.html', 'utf8');
   const scripts = [...html.matchAll(/<script\s+src="([^"]+)"/g)].map(match => match[1]);
-  assert.equal(scripts[0], 'access.js?v=20260806.1');
+  assert.equal(scripts[0], 'access.js?v=20260806.2');
   for (const dependent of ['app.js', 'update.js', 'account.js', 'sync.js']) {
     assert.ok(
       scripts.findIndex(value => value.startsWith(`${dependent}?`)) > 0,
@@ -412,16 +412,16 @@ test('release metadata and every versioned PWA asset are coherent', () => {
     'sync.js',
   ];
 
-  assert.equal(release.version, '2026.08.06.1');
-  assert.match(html, /Medication Reminder v2026\.08\.06\.1/);
-  assert.match(html, /id="appVersion">2026\.08\.06\.1</);
-  assert.match(serviceWorker, /medication-reminder-web-v28/);
+  assert.equal(release.version, '2026.08.06.2');
+  assert.match(html, /Medication Reminder v2026\.08\.06\.2/);
+  assert.match(html, /id="appVersion">2026\.08\.06\.2</);
+  assert.match(serviceWorker, /medication-reminder-web-v29/);
   for (const asset of expectedAssets) {
-    assert.match(html, new RegExp(`${asset.replace('.', '\\.')}\\?v=20260806\\.1`), asset);
-    assert.match(serviceWorker, new RegExp(`\\./${asset.replace('.', '\\.')}\\?v=20260806\\.1`), asset);
+    assert.match(html, new RegExp(`${asset.replace('.', '\\.')}\\?v=20260806\\.2`), asset);
+    assert.match(serviceWorker, new RegExp(`\\./${asset.replace('.', '\\.')}\\?v=20260806\\.2`), asset);
   }
   // No asset may be left on a different build stamp than the release.
-  assert.doesNotMatch(`${html}\n${serviceWorker}`, /20260806\.(?!1\b)\d+/);
+  assert.doesNotMatch(`${html}\n${serviceWorker}`, /20260806\.(?!2\b)\d+/);
   assert.doesNotMatch(`${html}\n${serviceWorker}`, /20260723\.\d+/);
 });
 

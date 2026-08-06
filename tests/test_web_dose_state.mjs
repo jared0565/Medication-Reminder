@@ -27,6 +27,13 @@ function event(overrides = {}) {
   };
 }
 
+/** The rendered status badge text -- the part of the card that states a fact. */
+function badge(app) {
+  const found = app.todayList.innerHTML.match(/<span class="status-badge">([^<]*)<\/span>/);
+  assert.ok(found, 'no status badge was rendered');
+  return found[1];
+}
+
 function fakeElement() {
   return {
     textContent: '',
@@ -279,7 +286,7 @@ test('undoing a take publishes a tombstone rather than forgetting the dose', () 
 
 test('an untaken dose is still reported by its current time after a sync', () => {
   const app = runApp();
-  assert.match(app.todayList.innerHTML, /Missed/, 'precondition: 08:00 has passed at 09:00');
+  assert.match(app.todayList.innerHTML, />Overdue</, 'precondition: 08:00 has passed at 09:00');
 
   app.window.applySyncedSchedule({
     version: 1,
@@ -305,6 +312,59 @@ test('a dose marked missed on the other device is not shown as taken here', () =
   });
 
   assert.doesNotMatch(app.todayList.innerHTML, /Taken/, 'a missed dose was rendered as taken');
+});
+
+// The reported cross-device symptom: "the widget says taken but the mobile says
+// missed". Both devices share one record, so this was never a storage conflict --
+// this device INVENTED the miss. With no record at all, the clock alone drove the
+// badge to "Missed" the moment the dose time passed, which is indistinguishable
+// from a miss the user actually recorded. Absence of evidence is not a miss: until
+// a device says otherwise, an unrecorded past dose is only overdue.
+
+test('a dose with no record is overdue, not missed, once its time has passed', () => {
+  const app = runApp(); // 08:00 dose, 09:00 clock, nothing recorded
+
+  assert.match(app.todayList.innerHTML, />Overdue</,
+    'an unrecorded dose past its time must not claim to be missed');
+});
+
+test('a recorded miss is distinguishable from a dose that simply has no record', () => {
+  const stamp = iso(FIXED);
+  const recorded = runApp({
+    taken: { [`${TODAY}|morning`]: { taken_at: null, missed_at: stamp, updated_at: stamp } },
+  });
+  const unrecorded = runApp();
+
+  // The badge specifically, not the whole card: the two already differ by their
+  // buttons, so comparing innerHTML passes without the badge ever being fixed.
+  assert.equal(badge(recorded), 'Missed', 'a miss the user recorded must still read as Missed');
+  assert.notEqual(
+    badge(unrecorded), badge(recorded),
+    'a recorded miss and an absent record show the same badge -- the whole defect',
+  );
+});
+
+test('an overdue dose can still be resolved either way', () => {
+  const app = runApp();
+
+  assert.match(app.todayList.innerHTML, /data-taken=/, 'overdue must still offer Mark taken');
+  assert.match(app.todayList.innerHTML, /data-missed=/, 'overdue must still offer Mark missed');
+});
+
+test('an overdue dose that the other device marks taken stops being overdue', () => {
+  const app = runApp();
+  const stamp = iso(FIXED);
+  assert.match(app.todayList.innerHTML, />Overdue</, 'precondition: nothing recorded yet');
+
+  // Exactly the reported case: the widget recorded the take, and it lands here.
+  app.window.applySyncedSchedule({
+    version: 2,
+    schedule: { version: 1, timezone: 'Europe/London', events: [event()] },
+    doses: { [`${TODAY}|morning`]: { taken_at: stamp, missed_at: null, updated_at: stamp } },
+  });
+
+  assert.match(app.todayList.innerHTML, />Taken</, 'the widget take must win over this clock');
+  assert.doesNotMatch(app.todayList.innerHTML, />Overdue</);
 });
 
 test('a missed mark survives a round trip through this device', () => {
