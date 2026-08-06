@@ -211,8 +211,42 @@ def main() -> None:
               "dose state survived the schedule edit")
         check(MORNING in remote_b.doses, "the undo tombstone also survived")
 
+        print("\n6. A marks a dose MISSED -> B sees missed, not taken  [F5]")
+        missed_at = stamp(3)
+        with_missed = merge_dose_maps(
+            {EVENING: {"taken_at": None, "missed_at": missed_at, "updated_at": missed_at}},
+            remote_b.doses,
+        )
+        device_a.update(
+            {"version": 2, "schedule": edited, "doses": with_missed},
+            credentials, remote_b.revision, dose_only=True,
+        )
+        remote_b = device_b.fetch(b_credentials)
+        check(remote_b.doses.get(EVENING, {}).get("missed_at") == missed_at,
+              "B receives the missed mark -- it was not stripped crossing the wire")
+        check(remote_b.doses.get(EVENING, {}).get("taken_at") is None,
+              "a missed dose must never arrive as taken")
+        check(remote_b.doses.get(MORNING, {}).get("taken_at") is None,
+              "the earlier undo tombstone is still intact")
+
+        print("\n7. A later take overrides the missed mark")
+        late_take = stamp(4)
+        corrected = merge_dose_maps(
+            {EVENING: {"taken_at": late_take, "missed_at": None, "updated_at": late_take}},
+            remote_b.doses,
+        )
+        device_a.update(
+            {"version": 2, "schedule": edited, "doses": corrected},
+            credentials, remote_b.revision, dose_only=True,
+        )
+        remote_b = device_b.fetch(b_credentials)
+        check(remote_b.doses.get(EVENING, {}).get("taken_at") == late_take,
+              "taking it late did not override the missed mark")
+        check(remote_b.doses.get(EVENING, {}).get("missed_at") is None,
+              "the stale missed mark was left behind alongside the take")
+
         print("\nDose-state E2E passed: cross-device delivery, per-occurrence merge, "
-              "undo tombstones, and schedule-edit safety.")
+              "undo tombstones, schedule-edit safety, and missed-dose state.")
     finally:
         try:
             device_a.revoke(credentials)
@@ -224,7 +258,7 @@ def main() -> None:
                 device_a.revoke_device_credential(credential)
                 print("Device credential revoked.")
 
-    print("\n6. Push CORS boundary")
+    print("\n8. Push CORS boundary")
     check_push_cors(device_a)
     print("\nPush CORS passed: production origin allowed, unapproved origin denied.")
 
