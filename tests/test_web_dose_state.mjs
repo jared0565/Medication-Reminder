@@ -44,6 +44,9 @@ function fakeElement() {
     addEventListener(type, handler) { this.listeners[type] = handler; },
     append() {},
     remove() {},
+    // due-modal.js calls this to fill the medicine list; without it show() throws
+    // and the dialog silently never opens, which made prompt tests unfalsifiable.
+    replaceChildren() {},
     closest() { return null; },
     querySelector() { return fakeElement(); },
     querySelectorAll() { return []; },
@@ -53,7 +56,7 @@ function fakeElement() {
 }
 
 /** Run web/app.js against a stub DOM with a fixed clock and seeded storage. */
-function runApp({ taken = {}, events = [event()] } = {}) {
+function runApp({ taken = {}, events = [event()], search = '' } = {}) {
   const store = new Map([
     ['medication-reminder-schedule-v1', JSON.stringify({ version: 1, timezone: 'Europe/London', events })],
     ['medication-reminder-taken-v1', JSON.stringify(taken)],
@@ -98,7 +101,7 @@ function runApp({ taken = {}, events = [event()] } = {}) {
     structuredClone,
     localStorage,
     navigator: {},
-    location: { search: '', pathname: '/', hash: '' },
+    location: { search, pathname: '/', hash: '' },
     history: { replaceState() {} },
     setInterval: () => 0,
     setTimeout: () => 0,
@@ -124,14 +127,18 @@ function runApp({ taken = {}, events = [event()] } = {}) {
       ? { dataset: { taken: attrs.taken, event: attrs.event } }
       : selector === '[data-undo-taken]' && attrs.undo
         ? { dataset: { undoTaken: attrs.undo } }
-        : null) },
+        : selector === '[data-missed]' && attrs.missed
+          ? { dataset: { missed: attrs.missed, event: attrs.event } }
+          : null) },
   });
   return {
     window,
     todayList,
     syncSignals,
+    dueDialog: $('#dueDialog'),
     markTaken: (key, eventId) => click({ taken: key, event: eventId }),
     undoTaken: key => click({ undo: key }),
+    markMissed: (key, eventId) => click({ missed: key, event: eventId }),
     storedTaken: () => JSON.parse(store.get('medication-reminder-taken-v1') || '{}'),
   };
 }
@@ -282,4 +289,106 @@ test('an untaken dose is still reported by its current time after a sync', () =>
 
   assert.match(app.todayList.innerHTML, /Upcoming/);
   assert.doesNotMatch(app.todayList.innerHTML, /Taken/);
+});
+
+// F5: a dose that was genuinely missed must survive this device, not be silently
+// downgraded to "no record" -- which would let the widget alarm for it again.
+
+test('a dose marked missed on the other device is not shown as taken here', () => {
+  const app = runApp();
+  const stamp = iso(FIXED);
+
+  app.window.applySyncedSchedule({
+    version: 2,
+    schedule: { version: 1, timezone: 'Europe/London', events: [event()] },
+    doses: { [`${TODAY}|morning`]: { taken_at: null, missed_at: stamp, updated_at: stamp } },
+  });
+
+  assert.doesNotMatch(app.todayList.innerHTML, /Taken/, 'a missed dose was rendered as taken');
+});
+
+test('a missed mark survives a round trip through this device', () => {
+  const stamp = iso(FIXED);
+  const app = runApp();
+
+  app.window.applySyncedSchedule({
+    version: 2,
+    schedule: { version: 1, timezone: 'Europe/London', events: [event()] },
+    doses: { [`${TODAY}|morning`]: { taken_at: null, missed_at: stamp, updated_at: stamp } },
+  });
+  const republished = app.window.getMedicationSchedule().doses[`${TODAY}|morning`];
+
+  assert.equal(republished.missed_at, stamp, 'this device stripped missed_at and destroyed the record');
+  assert.equal(republished.taken_at, null);
+});
+
+test('a later take overrides an earlier missed mark', () => {
+  const missedAt = iso(FIXED);
+  const app = runApp({ taken: { [`${TODAY}|morning`]: { taken_at: null, missed_at: missedAt, updated_at: missedAt } } });
+  const takenAt = iso(FIXED + 60000);
+
+  app.window.mergeRemoteDoses({ [`${TODAY}|morning`]: { taken_at: takenAt, missed_at: null, updated_at: takenAt } });
+
+  const entry = app.storedTaken()[`${TODAY}|morning`];
+  assert.equal(entry.taken_at, takenAt);
+  assert.equal(entry.missed_at, null);
+});
+
+test('a later missed mark overrides an earlier take', () => {
+  const takenAt = iso(FIXED);
+  const app = runApp({ taken: { [`${TODAY}|morning`]: { taken_at: takenAt, updated_at: takenAt } } });
+  const missedAt = iso(FIXED + 60000);
+
+  app.window.mergeRemoteDoses({ [`${TODAY}|morning`]: { taken_at: null, missed_at: missedAt, updated_at: missedAt } });
+
+  const entry = app.storedTaken()[`${TODAY}|morning`];
+  assert.equal(entry.taken_at, null);
+  assert.equal(entry.missed_at, missedAt);
+});
+
+test('marking a dose missed here records it and queues it for the other device', () => {
+  const app = runApp();
+
+  app.markMissed(`${TODAY}|morning`, 'morning');
+
+  const entry = app.window.getMedicationSchedule().doses[`${TODAY}|morning`];
+  assert.ok(entry, 'nothing was recorded, so the other device learns nothing');
+  assert.equal(entry.taken_at, null, 'a missed dose must never be recorded as taken');
+  assert.ok(entry.missed_at, 'no missed_at stamp was written');
+  assert.equal(
+    app.syncSignals.find(e => e.type === 'medication-schedule-changed')?.detail?.doseOnly,
+    true,
+    'the missed mark was not queued as a dose-only push',
+  );
+});
+
+test('a recorded missed dose offers an undo rather than another mark-missed', () => {
+  const stamp = iso(FIXED);
+  const app = runApp({ taken: { [`${TODAY}|morning`]: { taken_at: null, missed_at: stamp, updated_at: stamp } } });
+
+  assert.match(app.todayList.innerHTML, /data-undo-taken/,
+    'a recorded missed dose gave the user no way to correct it');
+});
+
+// The core complaint: without a recorded miss the only way to silence a reminder
+// was to claim the dose. A recorded miss must actually stop the prompt.
+const DUE_AT = new Date(2026, 6, 22, 8, 0, 0).getTime();
+
+test('a dose already marked missed does not re-open the due prompt', () => {
+  const stamp = iso(FIXED);
+  const app = runApp({
+    taken: { [`${TODAY}|morning`]: { taken_at: null, missed_at: stamp, updated_at: stamp } },
+    search: `?dueAt=${DUE_AT}`,
+  });
+
+  assert.equal(app.dueDialog.open, false,
+    'a dose the user already marked missed prompted them again');
+});
+
+test('an unresolved dose still opens the due prompt', () => {
+  // Control: proves the test above is not passing simply because the prompt never opens.
+  const app = runApp({ search: `?dueAt=${DUE_AT}` });
+
+  assert.equal(app.dueDialog.open, true,
+    'precondition failed: the due prompt never opens, so the missed test proves nothing');
 });

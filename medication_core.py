@@ -183,7 +183,16 @@ def _validate_dose_map(raw: Any) -> dict[str, dict[str, Any]]:
         taken_at = value.get("taken_at")
         if taken_at is not None and not isinstance(taken_at, str):
             continue
-        entries[migrated_key] = {"taken_at": taken_at or None, "updated_at": updated_at}
+        # missed_at is absent from payloads written by builds before missed-dose
+        # support; absent and null mean the same thing, so it degrades cleanly.
+        missed_at = value.get("missed_at")
+        if missed_at is not None and not isinstance(missed_at, str):
+            continue
+        entries[migrated_key] = {
+            "taken_at": taken_at or None,
+            "missed_at": missed_at or None,
+            "updated_at": updated_at,
+        }
     return entries
 
 
@@ -211,7 +220,9 @@ def merge_dose_maps(local: dict[str, Any], remote: dict[str, Any]) -> dict[str, 
     key. For one occurrence the later `updated_at` wins, which is what lets an
     undo propagate instead of being resurrected by the other device. An exact tie
     keeps the recorded take: we cannot tell which came last, and re-alarming a
-    dose the user believes they took risks a double dose.
+    dose the user believes they took risks a double dose. On an exact tie a
+    missed mark still beats a bare undo, so an explicit "I missed it" is not
+    downgraded to "no record" by a simultaneous edit elsewhere.
     """
     merged: dict[str, dict[str, Any]] = {}
     fallback = datetime.min.replace(tzinfo=timezone.utc)
@@ -224,6 +235,7 @@ def merge_dose_maps(local: dict[str, Any], remote: dict[str, Any]) -> dict[str, 
             key=lambda entry: (
                 _safe_datetime(entry.get("updated_at"), fallback),
                 entry.get("taken_at") is not None,
+                entry.get("missed_at") is not None,
             ),
         )
     return merged
@@ -829,7 +841,34 @@ class ScheduleEngine:
         self.state["snoozed_until"].pop(key, None)
         stamp = now.isoformat()
         self.state["completed"][key] = stamp
-        self.state.setdefault("doses", {})[key] = {"taken_at": stamp, "updated_at": stamp}
+        self.state.setdefault("doses", {})[key] = {
+            "taken_at": stamp, "missed_at": None, "updated_at": stamp
+        }
+        self._cleanup(now)
+
+    def mark_missed(self, key: str, now: datetime) -> None:
+        """Record that a dose was genuinely not taken, and stop alarming for it.
+
+        Distinct from an undo, which clears both stamps and leaves no assertion
+        either way. Without this the only way to silence a reminder was Taken,
+        which recorded — and synced — a dose that never happened.
+        """
+        # Pending is the usual case (the alarm is on screen), but a dose already
+        # marked taken must be correctable to missed — pressing Taken by mistake
+        # is precisely the error this feature exists to let people undo honestly.
+        # An occurrence this device has never seen is still rejected.
+        if key not in self.state["pending"] and key not in self.state.get("doses", {}):
+            raise ValueError("Only a known reminder can be marked missed")
+        now = self._localize(now)
+        self.state["pending"] = [pending for pending in self.state["pending"] if pending != key]
+        self.state["snoozed_until"].pop(key, None)
+        # Deliberately not added to `completed`: a missed dose is not a completed
+        # one, and `completed` is what the UI reads as "taken".
+        self.state["completed"].pop(key, None)
+        stamp = now.isoformat()
+        self.state.setdefault("doses", {})[key] = {
+            "taken_at": None, "missed_at": stamp, "updated_at": stamp
+        }
         self._cleanup(now)
 
     def dose_map(self, now: datetime) -> dict[str, dict[str, Any]]:
@@ -851,8 +890,12 @@ class ScheduleEngine:
         self.state["completed"] = {
             key: str(entry["taken_at"]) for key, entry in merged.items() if entry.get("taken_at")
         }
-        taken = set(self.state["completed"])
-        self.state["pending"] = [key for key in self.state["pending"] if key not in taken]
+        # A dose resolved anywhere — taken *or* explicitly missed — must stop
+        # alarming here. Only missed retires the reminder without claiming a take.
+        resolved = set(self.state["completed"]) | {
+            key for key, entry in merged.items() if entry.get("missed_at")
+        }
+        self.state["pending"] = [key for key in self.state["pending"] if key not in resolved]
         self._cleanup(now)
 
     def snooze(self, key: str, now: datetime, minutes: int) -> datetime:

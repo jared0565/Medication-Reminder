@@ -372,7 +372,15 @@
       if (!id || !parts.every(Boolean) || !entry || typeof entry !== 'object') continue;
       if (typeof entry.updated_at !== 'string' || !entry.updated_at) continue;
       if (entry.taken_at != null && typeof entry.taken_at !== 'string') continue;
-      doses[id] = { taken_at: entry.taken_at || null, updated_at: entry.updated_at };
+      // missed_at is absent from payloads written before missed-dose support;
+      // absent and null are equivalent. Dropping it would silently downgrade an
+      // explicit "missed" to "no record" and let the reminder fire again.
+      if (entry.missed_at != null && typeof entry.missed_at !== 'string') continue;
+      doses[id] = {
+        taken_at: entry.taken_at || null,
+        missed_at: entry.missed_at || null,
+        updated_at: entry.updated_at,
+      };
     }
     return doses;
   }

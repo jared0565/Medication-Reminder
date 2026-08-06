@@ -427,6 +427,73 @@ class AccountRepairTests(unittest.TestCase):
         self.assertNotIn("legacy", calls)
 
 
+class WidgetMissedDoseTests(unittest.TestCase):
+    """F5: the widget can record a dose as missed without claiming it was taken."""
+
+    def _app(self) -> MedicationReminderApp:
+        app = object.__new__(MedicationReminderApp)
+        app.config_data = _sample_schedule()
+        now = datetime(2026, 7, 22, 8, 0, tzinfo=TZ)
+        app.now = lambda: now
+        app.scheduler = ScheduleEngine(_sample_schedule(), normalize_state({
+            "version": 1, "last_check_at": datetime(2026, 7, 22, 6, 0, tzinfo=TZ).isoformat(),
+            "pending": [], "completed": {}, "snoozed_until": {},
+        }, now))
+        self.audits = []
+        app.storage = type("S", (), {
+            "save_state": staticmethod(lambda state: None),
+            "append_audit": staticmethod(lambda name, *a, **k: self.audits.append(name)),
+        })()
+        app._queue_dose_push = lambda: None
+        app._close_popup = lambda popup: None
+        app.update_next_due_text = lambda: None
+        app._warn_persistence = lambda exc: None
+        return app
+
+    def _due(self, app):
+        app.scheduler.collect_due(datetime(2026, 7, 22, 7, 30, tzinfo=TZ))
+        return app.scheduler.next_ready(datetime(2026, 7, 22, 7, 35, tzinfo=TZ))
+
+    def test_marking_missed_records_missed_not_taken(self):
+        app = self._app()
+        occurrence = self._due(app)
+
+        app.mark_missed(occurrence, popup=None)
+
+        entry = app.scheduler.state["doses"][occurrence.key]
+        self.assertIsNone(entry["taken_at"])
+        self.assertIsNotNone(entry["missed_at"])
+        self.assertNotIn(occurrence.key, app.scheduler.state["completed"])
+
+    def test_marking_missed_audits_as_missed(self):
+        """The audit trail must not describe a missed dose as taken."""
+        app = self._app()
+        occurrence = self._due(app)
+
+        app.mark_missed(occurrence, popup=None)
+
+        self.assertIn("medication_missed", self.audits)
+        self.assertNotIn("medication_taken", self.audits)
+
+    def test_marking_missed_stops_the_reminder(self):
+        app = self._app()
+        occurrence = self._due(app)
+
+        app.mark_missed(occurrence, popup=None)
+
+        self.assertIsNone(app.scheduler.next_ready(datetime(2026, 7, 22, 7, 40, tzinfo=TZ)))
+
+    def test_a_missed_dose_is_published_to_the_other_device(self):
+        app = self._app()
+        occurrence = self._due(app)
+        app.mark_missed(occurrence, popup=None)
+
+        payload = app._sync_payload()
+
+        self.assertIsNotNone(payload["doses"][occurrence.key]["missed_at"])
+        self.assertIsNone(payload["doses"][occurrence.key]["taken_at"])
+
+
 class WidgetDoseSyncTests(unittest.TestCase):
     """F2: the widget publishes its doses and folds in the other device's."""
 

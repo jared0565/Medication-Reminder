@@ -787,6 +787,17 @@ test('dose state survives the encrypted wire, and a pre-dose-sync payload still 
   // Object.keys, not deepEqual: the payload is built inside a vm context, so its
   // prototype is not this realm's Object and strict deepEqual would fail on that.
   assert.equal(Object.keys(legacy.doses).length, 0);
+
+  // F5: a missed mark must cross the wire intact. If this validator drops
+  // missed_at the dose degrades to "no record" and the widget alarms again.
+  const withMissed = await importPayload({
+    version: 2,
+    schedule,
+    doses: { '2026-07-22|morning': { taken_at: null, missed_at: stamp, updated_at: stamp } },
+  });
+  assert.equal(withMissed.doses['2026-07-22|morning'].missed_at, stamp,
+    'the missed mark was dropped crossing the encrypted wire');
+  assert.equal(withMissed.doses['2026-07-22|morning'].taken_at, null);
 });
 
 test('deferred desktop import cannot overwrite after access, account, or schedule authority changes', async t => {

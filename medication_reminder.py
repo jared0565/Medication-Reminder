@@ -565,13 +565,20 @@ class MedicationReminderApp:
         else:
             ttk.Button(
                 buttons, text="Taken", style="Teal.TButton", command=lambda: self.mark_taken(occurrence, popup)
-            ).pack(side="left", expand=True, fill="x", padx=(0, 6))
+            ).pack(side="left", expand=True, fill="x", padx=(0, 4))
             ttk.Button(
                 buttons,
                 text=f"Snooze {DEFAULT_SNOOZE_MINUTES} min",
                 style="Accent.TButton",
                 command=lambda: self.snooze_event(occurrence, popup),
-            ).pack(side="left", expand=True, fill="x", padx=(6, 0))
+            ).pack(side="left", expand=True, fill="x", padx=4)
+            # Third option deliberately present: without it the only way to stop
+            # the alarm is Taken, which records a dose that was never taken.
+            ttk.Button(
+                buttons,
+                text="Missed",
+                command=lambda: self.mark_missed(occurrence, popup),
+            ).pack(side="left", expand=True, fill="x", padx=(4, 0))
         popup.bell()
 
     def mark_taken(self, occurrence: DueOccurrence, popup: tk.Toplevel) -> None:
@@ -581,6 +588,37 @@ class MedicationReminderApp:
             self.storage.save_state(self.scheduler.state)
             self.storage.append_audit(
                 "medication_taken",
+                now,
+                event_id=occurrence.event_id,
+                label=occurrence.label,
+                scheduled_time=occurrence.scheduled_at.isoformat(),
+                items=occurrence.medicines,
+            )
+        except StorageError as exc:
+            self._warn_persistence(exc)
+        self._queue_dose_push()
+        self._close_popup(popup)
+        self.update_next_due_text()
+
+    def mark_missed(self, occurrence: DueOccurrence, popup: tk.Toplevel) -> None:
+        """Record a dose as genuinely not taken and stop alarming for it.
+
+        Deliberately mirrors mark_taken rather than reusing it: the audit event
+        and the dose record must say "missed", never "taken". Silencing an alarm
+        must not be achievable only by claiming a dose that never happened.
+        """
+        now = self.now()
+        try:
+            self.scheduler.mark_missed(occurrence.key, now)
+        except ValueError:
+            # A sync resolved this occurrence while its popup was open; there is
+            # nothing left to mark, so just close the otherwise-unclosable popup.
+            self._close_popup(popup)
+            return
+        try:
+            self.storage.save_state(self.scheduler.state)
+            self.storage.append_audit(
+                "medication_missed",
                 now,
                 event_id=occurrence.event_id,
                 label=occurrence.label,

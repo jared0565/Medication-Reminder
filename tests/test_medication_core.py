@@ -464,6 +464,129 @@ class LegacyStateKeyTests(unittest.TestCase):
 NOW_FOR_MAP = datetime(2026, 7, 22, 12, 0, tzinfo=TZ)
 
 
+class MissedDoseTests(unittest.TestCase):
+    """F5: a dose that was genuinely missed must be recordable as missed.
+
+    Before this existed the only way to silence the alarm was to press Taken,
+    which recorded — and synced — a dose that was never taken.
+    """
+
+    def _engine(self, last_check=datetime(2026, 7, 22, 6, 0, tzinfo=TZ)) -> ScheduleEngine:
+        return ScheduleEngine(schedule(), normalize_state({
+            "version": 1, "last_check_at": last_check.isoformat(),
+            "pending": [], "completed": {}, "snoozed_until": {},
+        }, last_check))
+
+    def _pending_engine(self):
+        engine = self._engine()
+        engine.collect_due(datetime(2026, 7, 22, 7, 20, tzinfo=TZ))
+        return engine, engine.state["pending"][0]
+
+    def test_marking_missed_stops_the_alarm(self):
+        engine, key = self._pending_engine()
+
+        engine.mark_missed(key, datetime(2026, 7, 22, 7, 25, tzinfo=TZ))
+
+        self.assertNotIn(key, engine.state["pending"])
+        self.assertIsNone(engine.next_ready(datetime(2026, 7, 22, 7, 30, tzinfo=TZ)))
+
+    def test_marking_missed_does_not_record_a_dose_as_taken(self):
+        """The whole point: silencing the alarm must not falsify the record."""
+        engine, key = self._pending_engine()
+
+        engine.mark_missed(key, datetime(2026, 7, 22, 7, 25, tzinfo=TZ))
+
+        self.assertNotIn(key, engine.state["completed"])
+        self.assertIsNone(engine.dose_map(NOW_FOR_MAP)[key]["taken_at"])
+        self.assertIsNotNone(engine.dose_map(NOW_FOR_MAP)[key]["missed_at"])
+
+    def test_a_missed_dose_is_distinguishable_from_an_undone_one(self):
+        """Undo leaves both stamps null; missed must not look like undo."""
+        engine, key = self._pending_engine()
+        engine.mark_taken(key, datetime(2026, 7, 22, 7, 25, tzinfo=TZ))
+        engine.mark_missed(key, datetime(2026, 7, 22, 7, 40, tzinfo=TZ))
+
+        entry = engine.dose_map(NOW_FOR_MAP)[key]
+
+        self.assertIsNone(entry["taken_at"])
+        self.assertIsNotNone(entry["missed_at"])
+
+    def test_a_remote_missed_dose_clears_the_local_pending_reminder(self):
+        """Marked missed on the phone: the PC must stop alarming for it."""
+        engine, key = self._pending_engine()
+        stamp = datetime(2026, 7, 22, 7, 30, tzinfo=TZ).isoformat()
+
+        engine.apply_remote_doses(
+            {key: {"taken_at": None, "missed_at": stamp, "updated_at": stamp}},
+            datetime(2026, 7, 22, 7, 35, tzinfo=TZ),
+        )
+
+        self.assertNotIn(key, engine.state["pending"])
+        self.assertNotIn(key, engine.state["completed"])
+
+    def test_missed_survives_the_sync_payload_validator(self):
+        stamp = datetime(2026, 7, 22, 7, 30, tzinfo=TZ).isoformat()
+        payload = validate_sync_payload({
+            "version": 2, "schedule": schedule(),
+            "doses": {"2026-07-22|morning": {"taken_at": None, "missed_at": stamp,
+                                             "updated_at": stamp}},
+        })
+
+        self.assertEqual(payload["doses"]["2026-07-22|morning"]["missed_at"], stamp)
+
+    def test_a_legacy_entry_without_missed_at_still_loads(self):
+        """A peer on an older build publishes no missed_at; that must not break."""
+        stamp = datetime(2026, 7, 22, 7, 30, tzinfo=TZ).isoformat()
+        payload = validate_sync_payload({
+            "version": 2, "schedule": schedule(),
+            "doses": {"2026-07-22|morning": {"taken_at": stamp, "updated_at": stamp}},
+        })
+
+        entry = payload["doses"]["2026-07-22|morning"]
+        self.assertEqual(entry["taken_at"], stamp)
+        self.assertIsNone(entry["missed_at"])
+
+    def test_a_later_take_overrides_an_earlier_missed(self):
+        """Took it late after marking it missed: the take is the newer truth."""
+        missed_at = datetime(2026, 7, 22, 7, 30, tzinfo=TZ).isoformat()
+        taken_at = datetime(2026, 7, 22, 8, 0, tzinfo=TZ).isoformat()
+
+        merged = merge_dose_maps(
+            {"2026-07-22|morning": {"taken_at": None, "missed_at": missed_at, "updated_at": missed_at}},
+            {"2026-07-22|morning": {"taken_at": taken_at, "missed_at": None, "updated_at": taken_at}},
+        )
+
+        self.assertEqual(merged["2026-07-22|morning"]["taken_at"], taken_at)
+        self.assertIsNone(merged["2026-07-22|morning"]["missed_at"])
+
+    def test_a_later_missed_overrides_an_earlier_take(self):
+        taken_at = datetime(2026, 7, 22, 7, 30, tzinfo=TZ).isoformat()
+        missed_at = datetime(2026, 7, 22, 8, 0, tzinfo=TZ).isoformat()
+
+        merged = merge_dose_maps(
+            {"2026-07-22|morning": {"taken_at": taken_at, "missed_at": None, "updated_at": taken_at}},
+            {"2026-07-22|morning": {"taken_at": None, "missed_at": missed_at, "updated_at": missed_at}},
+        )
+
+        self.assertIsNone(merged["2026-07-22|morning"]["taken_at"])
+        self.assertEqual(merged["2026-07-22|morning"]["missed_at"], missed_at)
+
+    def test_an_unknown_occurrence_cannot_be_marked_missed(self):
+        """Pending or already-recorded doses only — never an invented key."""
+        engine = self._engine()
+        with self.assertRaises(ValueError):
+            engine.mark_missed("2026-07-22|morning", datetime(2026, 7, 22, 7, 25, tzinfo=TZ))
+
+    def test_a_mistaken_take_can_be_corrected_to_missed(self):
+        engine, key = self._pending_engine()
+        engine.mark_taken(key, datetime(2026, 7, 22, 7, 25, tzinfo=TZ))
+
+        engine.mark_missed(key, datetime(2026, 7, 22, 7, 40, tzinfo=TZ))
+
+        self.assertNotIn(key, engine.state["completed"])
+        self.assertIsNotNone(engine.dose_map(NOW_FOR_MAP)[key]["missed_at"])
+
+
 class EngineDoseStateTests(unittest.TestCase):
     """F2: the engine keeps a syncable dose map and folds a remote one in."""
 
