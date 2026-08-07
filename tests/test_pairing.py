@@ -1,4 +1,5 @@
 import json
+import platform
 import tkinter as tk
 from copy import deepcopy
 import unittest
@@ -490,6 +491,21 @@ class DeviceLinkControllerTests(unittest.TestCase):
 
         app.sync_client = FakeClient()
         return app
+
+    def test_device_link_label_names_this_machine(self):
+        """The approval page must show WHICH machine is asking.
+
+        `platform` was never imported, so the lookup raised NameError -- and a
+        bare `except Exception` swallowed it, leaving every device on the
+        hardcoded fallback. Each linked device was therefore labelled
+        "Windows widget" regardless of the host, which makes the approval
+        prompt useless for telling two machines apart. Same shape as the
+        APP_URL defect: an unimported name sitting somewhere it fails quietly.
+        """
+        app = object.__new__(MedicationReminderApp)
+        node = platform.node()
+        self.assertTrue(node, "precondition: this host reports a name")
+        self.assertEqual(app._device_link_label(), f"{node} widget")
 
     def test_link_returns_credential_after_pending_and_slow_down(self):
         cred = "mdk_" + "Z" * 43

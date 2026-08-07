@@ -4,6 +4,7 @@ import ctypes
 import io
 import math
 import os
+import platform
 import secrets
 import struct
 import sys
