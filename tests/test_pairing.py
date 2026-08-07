@@ -342,6 +342,70 @@ class _FakeOpener:
         raise urllib.error.HTTPError(request.full_url, status, "error", {}, io.BytesIO(raw))
 
 
+class InvitationRefreshTests(unittest.TestCase):
+    """Reissue a phone invitation without rebuilding the pair.
+
+    Without this the only way to show a fresh QR was create_account_pair, which
+    revokes the pair, mints a new encryption key and forces every other device
+    to re-pair -- a heavy, destructive answer to "the invitation expired".
+    The relay gates the refresh on the invitation hash and on no mobile having
+    claimed the pair yet, NOT on the clock, so an already-expired invitation is
+    still refreshable (worker/src/index.js:576-584).
+    """
+
+    ACCOUNT = {
+        "version": 2, "role": "account", "pairId": "p" * 32,
+        "encryptionKey": "k" * 43, "deviceCredential": "mdk_" + "c" * 32,
+        "invitationToken": "i" * 43, "invitationExpiresAt": "2026-08-07T02:28:16Z",
+        "sourceId": "s" * 22, "deviceId": "s" * 22, "revision": 4,
+        "claimed": False, "dirty": False,
+    }
+
+    def test_refresh_returns_a_new_invitation_and_keeps_the_pair(self):
+        client = EncryptedSyncClient(api_url="https://api.test")
+        client._opener = _FakeOpener([(200, {
+            "pairId": "p" * 32, "invitationToken": "n" * 43,
+            "invitationExpiresAt": "2026-08-07T03:00:00Z",
+        })])
+
+        refreshed = client.refresh_invitation(self.ACCOUNT)
+
+        request = client._opener.requests[0]
+        self.assertTrue(request.full_url.endswith(f"/sync/pairs/{'p' * 32}/invitations"))
+        self.assertEqual(request.get_method(), "POST")
+        self.assertEqual(request.headers["Authorization"], f"Bearer mdk_{'c' * 32}")
+
+        body = json.loads(request.data.decode("utf-8"))
+        self.assertEqual(body["previousInvitationToken"], "i" * 43)
+        # The relay requires both proofs to be 43-char base64url (MOBILE_TOKEN_PATTERN).
+        self.assertEqual(len(body["refreshNonce"]), 43)
+        self.assertTrue(all(c.isalnum() or c in "-_" for c in body["refreshNonce"]))
+
+        # A refresh replaces only the invitation; the pair and its key must survive,
+        # or every other paired device would be silently cut off.
+        self.assertEqual(refreshed["invitationToken"], "n" * 43)
+        self.assertEqual(refreshed["invitationExpiresAt"], "2026-08-07T03:00:00Z")
+        self.assertEqual(refreshed["pairId"], self.ACCOUNT["pairId"])
+        self.assertEqual(refreshed["encryptionKey"], self.ACCOUNT["encryptionKey"])
+        self.assertEqual(refreshed["deviceCredential"], self.ACCOUNT["deviceCredential"])
+        self.assertEqual(refreshed["revision"], 4)
+
+    def test_a_malformed_refresh_response_is_a_handled_error(self):
+        client = EncryptedSyncClient(api_url="https://api.test")
+        client._opener = _FakeOpener([(200, {"pairId": "p" * 32})])
+        with self.assertRaises(SyncError):
+            client.refresh_invitation(self.ACCOUNT)
+
+    def test_refreshing_a_legacy_pair_is_refused_locally(self):
+        """A v1 pair has no invitation to refresh; fail before calling the relay."""
+        client = EncryptedSyncClient(api_url="https://api.test")
+        client._opener = _FakeOpener([])
+        legacy = {"version": 1, "role": "source", "pairId": "p" * 32,
+                  "token": "t" * 43, "encryptionKey": "k" * 43}
+        with self.assertRaises(SyncError):
+            client.refresh_invitation(legacy)
+
+
 class DeviceAuthorizationTests(unittest.TestCase):
     """Authenticated device pairing: acquire a credential, then use it for
     account-scoped pairs without ever leaking the schedule or E2E key."""

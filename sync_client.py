@@ -275,6 +275,34 @@ class EncryptedSyncClient:
             "revision": self._revision(payload), "claimed": False, "dirty": False,
         }
 
+    def refresh_invitation(self, credentials: dict[str, Any]) -> dict[str, Any]:
+        """Reissue the phone invitation, keeping the pair and its key intact.
+
+        Without this the only way to show a fresh QR was create_account_pair,
+        which revokes the pair and mints a new encryption key -- a destructive
+        answer to "the invitation expired" that forces every paired device to
+        start over.
+
+        The relay derives the new token from the previous one plus a nonce, and
+        accepts the refresh only while no mobile has claimed the pair. It does
+        not consult the clock, so an invitation that already lapsed can still be
+        renewed.
+        """
+        previous = str(credentials.get("invitationToken") or "")
+        if credentials.get("version") != 2 or not previous:
+            raise SyncError("Only an account pairing with an invitation can be refreshed")
+        payload = self._request(
+            f"/sync/pairs/{credentials['pairId']}/invitations",
+            method="POST",
+            token=self._pair_token(credentials),
+            body={"previousInvitationToken": previous, "refreshNonce": _random_id(32)},
+        )
+        token = str(payload.get("invitationToken", ""))
+        expires = str(payload.get("invitationExpiresAt", ""))
+        if not token or not expires:
+            raise SyncError("The sync service returned an invalid invitation")
+        return {**credentials, "invitationToken": token, "invitationExpiresAt": expires}
+
     # Account pairs use the shared, role-aware fetch/update/revoke above.
     def fetch_account(self, credentials: dict[str, Any]) -> RemoteSchedule:
         return self.fetch(credentials)
