@@ -729,6 +729,48 @@ test('a signed-in browser joins the account pairing instead of forking its own',
     'the shared schedule should be applied locally');
 });
 
+// The operator's own pair is CLAIMED -- a phone is attached to it. A claimed
+// source must not carry invitation material: validCredentials requires those
+// keys to be ABSENT once claimed (sync.js:159-163), and a running sync deletes
+// them on sight (sync.js:1310-1319). joinAccountPair set them unconditionally,
+// so saveCredentials threw immediately after a successful fetch and decrypt and
+// the browser silently kept its old credentials. Seen live in the relay logs: a
+// 200 on the shared pair at 12:16:49, then nothing, while the browser went on
+// polling its previous, deleted pair every 20s for a 404.
+//
+// Every existing join test used an UNCLAIMED pair, where the very same fields
+// are required rather than forbidden -- so the branch that mattered in the real
+// account was the one branch never exercised.
+test('a browser joins a pair a phone has already claimed', async () => {
+  const app = installedMobileHarness({
+    paired: false, mobile: false, standalone: false,
+    accessMode: 'account', cloudSync: true,
+  });
+  const encryptionKey = Buffer.from(webcrypto.getRandomValues(new Uint8Array(32))).toString('base64url');
+  const remote = await encryptedRemote(encryptionKey, {
+    revision: 9, claimed: true, schedule: DIVERGENT_SCHEDULE,
+  });
+  app.context.fetch = async () => ({ ok: true, async json() { return remote; } });
+
+  await app.context.window.MedicationSync.joinAccountPair({
+    version: 2,
+    pairId: 'p'.repeat(32),
+    invitationToken: 'i'.repeat(43),
+    invitationExpiresAt: new Date(Date.now() + 600_000).toISOString(),
+    encryptionKey,
+  });
+
+  const stored = JSON.parse(app.storage.get('medication-reminder-sync-v1'));
+  assert.equal(stored.pairId, 'p'.repeat(32), 'the browser must point at the existing pair');
+  assert.equal(stored.claimed, true, 'the phone’s claim must be carried over');
+  assert.equal(Object.hasOwn(stored, 'invitationToken'), false,
+    'a claimed source must not retain invitation material');
+  assert.equal(Object.hasOwn(stored, 'invitationExpiresAt'), false,
+    'a claimed source must not retain invitation material');
+  assert.equal(app.importedSchedule().schedule.events[0].id, 'remoteonly',
+    'the shared schedule should be applied locally');
+});
+
 test('a pair link whose key does not decrypt is refused before credentials are stored', async () => {
   const app = installedMobileHarness({
     paired: false, mobile: false, standalone: false,

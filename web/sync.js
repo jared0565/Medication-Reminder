@@ -983,8 +983,6 @@
       version: 2,
       role: 'source',
       pairId: invitation.pairId,
-      invitationToken: invitation.invitationToken,
-      invitationExpiresAt: invitation.invitationExpiresAt,
       encryptionKey: invitation.encryptionKey,
       deviceId: sourceId,
       sourceId,
@@ -993,6 +991,15 @@
       claimed: Boolean(remote.claimed),
       dirty: false,
     };
+    // Invitation material belongs only to a pair still waiting for its phone. A
+    // claimed source must carry none: validCredentials forbids the keys outright
+    // and a running sync deletes them on sight. Setting them unconditionally
+    // made saveCredentials throw on exactly the pairs worth joining -- the ones
+    // a phone had already attached to.
+    if (!value.claimed) {
+      value.invitationToken = invitation.invitationToken;
+      value.invitationExpiresAt = invitation.invitationExpiresAt;
+    }
     saveCredentials(value);
     window.applySyncedSchedule(shared);
     refreshStatus(value, `Joined the shared pairing · revision ${remote.revision}`);
