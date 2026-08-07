@@ -96,7 +96,24 @@ class EncryptedSyncClient:
 
     @staticmethod
     def pairing_link(credentials: dict[str, Any]) -> str:
-        invitation = {"version": 1, "pairId": credentials["pairId"], "token": credentials["token"], "encryptionKey": credentials["encryptionKey"]}
+        """Build the QR/pair link for the phone.
+
+        An account pair has no shared bearer token: the widget authenticates with
+        a device credential that must never leave this machine, and the phone
+        joins through a short-lived invitation instead. The browser validates the
+        two shapes separately and rejects a v2 link that also carries a `token`
+        (web/sync.js:545-556), so the version decides the whole payload.
+        """
+        if credentials.get("version") == 2:
+            invitation = {
+                "version": 2,
+                "pairId": credentials["pairId"],
+                "invitationToken": credentials["invitationToken"],
+                "invitationExpiresAt": credentials["invitationExpiresAt"],
+                "encryptionKey": credentials["encryptionKey"],
+            }
+        else:
+            invitation = {"version": 1, "pairId": credentials["pairId"], "token": credentials["token"], "encryptionKey": credentials["encryptionKey"]}
         return f"{APP_URL}#pair={_b64(json.dumps(invitation, separators=(',', ':')).encode('utf-8'))}"
 
     @staticmethod

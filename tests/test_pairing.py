@@ -15,7 +15,7 @@ from medication_core import (
 )
 import medication_reminder
 from medication_reminder import MedicationReminderApp
-from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError, _NoRedirectHandler
+from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError, _NoRedirectHandler, _unb64
 
 
 TZ = ZoneInfo("Europe/London")
@@ -70,6 +70,52 @@ class PairingTests(unittest.TestCase):
         self.assertIn("/#pair=", link)
         self.assertNotIn("?pair=", link)
         self.assertNotIn("medicines", link)
+
+    @staticmethod
+    def _decode_pair_link(link: str) -> dict:
+        return json.loads(_unb64(link.split("#pair=", 1)[1]).decode("utf-8"))
+
+    def test_account_pairing_link_offers_the_invitation_not_a_bearer_token(self) -> None:
+        """An account pair has no `token`; the phone claims it with an invitation.
+
+        pairing_link read credentials["token"] unconditionally, so it raised
+        KeyError for every account pairing -- and show_pairing_qr is called
+        directly after one is created, so linking an account broke at the QR.
+        web/sync.js:550 already accepts this v2 shape; only the widget never
+        emitted it.
+        """
+        credentials = {
+            "version": 2, "role": "account", "pairId": "p" * 32,
+            "encryptionKey": "k" * 43, "deviceCredential": "mdk_" + "c" * 32,
+            "invitationToken": "i" * 43, "invitationExpiresAt": "2026-08-07T00:00:00Z",
+            "sourceId": "s" * 22, "deviceId": "s" * 22, "revision": 1,
+        }
+        invitation = self._decode_pair_link(EncryptedSyncClient.pairing_link(credentials))
+
+        self.assertEqual(invitation["version"], 2)
+        self.assertEqual(invitation["invitationToken"], "i" * 43)
+        self.assertEqual(invitation["invitationExpiresAt"], "2026-08-07T00:00:00Z")
+        self.assertEqual(invitation["encryptionKey"], "k" * 43)
+        # The browser rejects a v2 link that also carries a bearer token, and the
+        # device credential must never leave this machine.
+        self.assertNotIn("token", invitation)
+        self.assertNotIn("deviceCredential", invitation)
+        # web/sync.js:540 rejects any key outside its allowlist.
+        self.assertLessEqual(
+            set(invitation),
+            {"version", "pairId", "invitationToken", "invitationExpiresAt", "encryptionKey"},
+        )
+
+    def test_legacy_pairing_link_still_carries_its_bearer_token(self) -> None:
+        credentials = {
+            "version": 1, "role": "source", "pairId": "p" * 32, "token": "t" * 43,
+            "encryptionKey": "k" * 43, "sourceId": "s" * 22, "deviceId": "s" * 22,
+            "revision": 1,
+        }
+        invitation = self._decode_pair_link(EncryptedSyncClient.pairing_link(credentials))
+        self.assertEqual(invitation["version"], 1)
+        self.assertEqual(invitation["token"], "t" * 43)
+        self.assertNotIn("invitationToken", invitation)
 
 
 class SyncResponseHardeningTests(unittest.TestCase):

@@ -489,11 +489,32 @@ class AppStorage:
         return max(0, min(100, volume))
 
     def load_sync_credentials(self) -> dict[str, Any] | None:
+        """Load either pairing shape.
+
+        v1 is the legacy owner pairing, authenticated by a shared bearer token.
+        v2 is account-scoped and authenticates with a device credential instead,
+        so it carries no `token` at all. Requiring v1 rejected every v2 pairing
+        the widget minted for itself, and because startup swallows StorageError
+        the widget silently unpaired on the next restart.
+
+        The version selects its own required fields rather than the check being
+        relaxed: a blob calling itself v2 without a device credential is still
+        invalid, and must not reach the sync client as a usable pairing.
+        """
         if not self.sync_file.exists():
             return None
         value = self.sync_file.load()
-        required = {"version", "role", "pairId", "token", "encryptionKey", "sourceId", "deviceId", "revision"}
-        if not isinstance(value, dict) or value.get("version") != 1 or not required.issubset(value):
+        if not isinstance(value, dict):
+            raise StorageError("The protected pairing credentials have an invalid structure")
+        shared = {"version", "role", "pairId", "encryptionKey", "sourceId", "deviceId", "revision"}
+        version = value.get("version")
+        if version == 1:
+            required = shared | {"token"}
+        elif version == 2:
+            required = shared | {"deviceCredential"}
+        else:
+            raise StorageError("The protected pairing credentials have an unsupported version")
+        if not required.issubset(value):
             raise StorageError("The protected pairing credentials have an invalid structure")
         return value
 
