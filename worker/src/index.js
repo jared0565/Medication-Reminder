@@ -201,12 +201,6 @@ function validEncryptedPayload(body) {
     && body.iv.length <= 64;
 }
 
-function validLegacyEncryptedBody(body) {
-  return validEncryptedPayload(body)
-    && typeof body?.updatedBy === 'string'
-    && ID_PATTERN.test(body.updatedBy);
-}
-
 function validPushEndpoint(value) {
   if (typeof value !== 'string' || value.length > 4096) return false;
   try {
@@ -236,14 +230,6 @@ export async function loadMobilePair(env, pairId, deviceId, mobileTokenHash) {
     .bind(pairId, deviceId, mobileTokenHash).first();
 }
 
-export async function loadLegacyPair(env, pairId, legacyTokenHash) {
-  return env.DB.prepare(`SELECT pair_id, source_id, mobile_device_id,
-      mobile_push_endpoint, ciphertext, iv, revision, updated_by, updated_at
-    FROM sync_pairs
-    WHERE pair_id = ? AND user_id IS NULL AND token_hash = ?`)
-    .bind(pairId, legacyTokenHash).first();
-}
-
 export async function consumeInvitation(env, value) {
   return env.DB.prepare(`UPDATE sync_pairs SET
       mobile_token_hash = ?, mobile_device_id = ?,
@@ -263,25 +249,6 @@ export async function consumeInvitation(env, value) {
       value.pushEndpoint || null,
       value.pairId,
       value.invitationTokenHash,
-    )
-    .first();
-}
-
-export async function claimLegacyPair(env, value) {
-  return env.DB.prepare(`UPDATE sync_pairs SET
-      mobile_device_id = ?,
-      mobile_push_endpoint = COALESCE(?, mobile_push_endpoint),
-      updated_at = CURRENT_TIMESTAMP
-    WHERE pair_id = ? AND user_id IS NULL AND token_hash = ?
-      AND (mobile_device_id IS NULL OR mobile_device_id = ?)
-    RETURNING pair_id, source_id, mobile_device_id, mobile_push_endpoint,
-      ciphertext, iv, revision, updated_by, updated_at`)
-    .bind(
-      value.mobileDeviceId,
-      value.pushEndpoint || null,
-      value.pairId,
-      value.legacyTokenHash,
-      value.mobileDeviceId,
     )
     .first();
 }
@@ -463,19 +430,6 @@ async function handleSync(request, env, url, ctx) {
     if (!invitationToken) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
     const invitationTokenHash = await tokenHash(invitationToken);
 
-    const legacyPair = await claimLegacyPair(env, {
-      pairId,
-      legacyTokenHash: invitationTokenHash,
-      mobileDeviceId: body.mobileDeviceId,
-      pushEndpoint: body.pushEndpoint || null,
-    });
-    if (legacyPair) {
-      return json(request, { ok: true, revision: legacyPair.revision });
-    }
-    if (await loadLegacyPair(env, pairId, invitationTokenHash)) {
-      return json(request, { error: 'This pairing is already claimed by another mobile device' }, { status: 409 });
-    }
-
     const claimNonce = body?.claimNonce;
     if (!MOBILE_TOKEN_PATTERN.test(claimNonce || '')) {
       return json(request, { error: 'Invalid claim nonce' }, { status: 400 });
@@ -637,24 +591,12 @@ async function handleSync(request, env, url, ctx) {
     pair = await mobilePair(request, env, pairId);
     if (pair) authorizationKind = 'mobile';
   }
-  let legacyTokenHash = '';
-  if (!pair) {
-    const token = bearerToken(request);
-    if (token) {
-      legacyTokenHash = await tokenHash(token);
-      pair = await loadLegacyPair(env, pairId, legacyTokenHash);
-      if (pair) authorizationKind = 'legacy';
-    }
-  }
   if (!pair) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
 
   if (['GET', 'PUT'].includes(request.method)) {
-    const cloudSyncActive = authorizationKind === 'account'
-      ? Boolean(Number(pair.cloud_sync_active))
-      : authorizationKind === 'mobile'
-        ? Boolean(Number(pair.cloud_sync_active))
-        : true;
-    if (!cloudSyncActive) {
+    // Every remaining pair is account-owned, so the capability gate always applies.
+    // The retired anonymous path used to bypass it entirely.
+    if (!Boolean(Number(pair.cloud_sync_active))) {
       return json(request, { error: 'Cloud sync is not active for this pairing' }, { status: 403 });
     }
   }
@@ -676,10 +618,7 @@ async function handleSync(request, env, url, ctx) {
       return json(request, { error: 'Invalid browser request' }, { status: 403 });
     }
     const body = await readJson(request);
-    const encryptedBodyValid = authorizationKind === 'legacy'
-      ? validLegacyEncryptedBody(body)
-      : validEncryptedPayload(body);
-    if (!Number.isInteger(body?.baseRevision) || body.baseRevision < 1 || !encryptedBodyValid) {
+    if (!Number.isInteger(body?.baseRevision) || body.baseRevision < 1 || !validEncryptedPayload(body)) {
       return json(request, { error: 'Invalid sync update' }, { status: 400 });
     }
     let statement;
@@ -699,11 +638,6 @@ async function handleSync(request, env, url, ctx) {
         WHERE pair_id = ? AND mobile_device_id = ? AND mobile_token_hash = ? AND revision = ?
           AND ${PAIR_CLOUD_CAPABILITY_SQL}`)
         .bind(body.ciphertext, body.iv, deviceId, pairId, deviceId, mobileTokenHash, body.baseRevision);
-    } else {
-      statement = env.DB.prepare(`UPDATE sync_pairs SET ciphertext = ?, iv = ?,
-        revision = revision + 1, updated_by = ?, updated_at = CURRENT_TIMESTAMP
-        WHERE pair_id = ? AND user_id IS NULL AND token_hash = ? AND revision = ?`)
-        .bind(body.ciphertext, body.iv, body.updatedBy, pairId, legacyTokenHash, body.baseRevision);
     }
     const result = await statement.run();
     if (!result.meta.changes) {
@@ -754,20 +688,15 @@ async function handleSync(request, env, url, ctx) {
     if (authorizationKind === 'account' && account.credentialKind === 'cookie' && !validCsrfRequest(request)) {
       return json(request, { error: 'Invalid browser request' }, { status: 403 });
     }
-    const result = authorizationKind === 'account'
-      ? await env.DB.prepare('DELETE FROM sync_pairs WHERE pair_id = ? AND user_id = ?')
-        .bind(pairId, account.user.user_id).run()
-      : await env.DB.prepare('DELETE FROM sync_pairs WHERE pair_id = ? AND user_id IS NULL AND token_hash = ?')
-        .bind(pairId, legacyTokenHash).run();
+    const result = await env.DB.prepare('DELETE FROM sync_pairs WHERE pair_id = ? AND user_id = ?')
+      .bind(pairId, account.user.user_id).run();
     if (Number(result.meta?.changes || 0) !== 1) return json(request, PAIR_AUTHORIZATION_FAILURE, { status: 404 });
-    if (authorizationKind === 'account') {
-      await safeRecordPairAudit(
-        env,
-        account.user.user_id,
-        'sync_pair_revoked',
-        pairAuditMetadata(pairId, null, pair.revision, 'revoked'),
-      );
-    }
+    await safeRecordPairAudit(
+      env,
+      account.user.user_id,
+      'sync_pair_revoked',
+      pairAuditMetadata(pairId, null, pair.revision, 'revoked'),
+    );
     if (pair.mobile_push_endpoint) ctx.waitUntil(notifyPairedMobile(env, pair.mobile_push_endpoint, { title: 'Mobile schedule unpaired', body: 'This pairing ended. Open Medication Reminder to remove the old schedule.', tag: 'medication-pair-revoked', type: 'pair-revoked', url: '/' }));
     return json(request, { ok: true });
   }

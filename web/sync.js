@@ -957,6 +957,55 @@
     return { terminal: true, imported: true };
   }
 
+  async function joinAccountPair(invitation) {
+    const ownerUserId = requireSourceCloud();
+    if (invitation?.version !== 2
+      || !ID_PATTERN.test(invitation.pairId || '')
+      || !validEncryptionKey(invitation.encryptionKey)) {
+      throw Error('That pairing link cannot be joined from this browser.');
+    }
+    const current = credentials();
+    if (current && current.pairId !== invitation.pairId
+      && !confirm('Join the pairing shown on your other device?\n\nThis browser’s current pairing will be replaced and stop syncing.')) {
+      return { joined: false };
+    }
+    refreshStatus(current, 'Joining the shared pairing…');
+    // A 200 here IS the ownership proof: loadAccountPair matches on the session's
+    // own user_id, so a pair belonging to another account cannot answer. Nothing
+    // claims the invitation, which leaves the single mobile slot free for a phone.
+    const remote = await api(`/sync/pairs/${encodeURIComponent(invitation.pairId)}`, {}, null);
+    // Owning the pair is not the same as holding the right key. Decrypt before
+    // persisting: otherwise a wrong key stores cleanly and then fails every later
+    // sync with nothing on screen to explain why.
+    const shared = await decryptSchedule(remote, invitation.encryptionKey);
+    const sourceId = stableId(SOURCE_ID_KEY);
+    const value = {
+      version: 2,
+      role: 'source',
+      pairId: invitation.pairId,
+      encryptionKey: invitation.encryptionKey,
+      deviceId: sourceId,
+      sourceId,
+      ownerUserId,
+      revision: remote.revision,
+      claimed: Boolean(remote.claimed),
+      dirty: false,
+    };
+    // Invitation material belongs only to a pair still waiting for its phone. A
+    // claimed source must carry none: validCredentials forbids the keys outright
+    // and a running sync deletes them on sight. Setting them unconditionally
+    // made saveCredentials throw on exactly the pairs worth joining -- the ones
+    // a phone had already attached to.
+    if (!value.claimed) {
+      value.invitationToken = invitation.invitationToken;
+      value.invitationExpiresAt = invitation.invitationExpiresAt;
+    }
+    saveCredentials(value);
+    window.applySyncedSchedule(shared);
+    refreshStatus(value, `Joined the shared pairing · revision ${remote.revision}`);
+    return { joined: true, revision: remote.revision };
+  }
+
   function validPendingClaim(value) {
     return value?.version === 1
       && ID_PATTERN.test(value.pairId || '')
@@ -1550,7 +1599,13 @@
     }
     if (window.MedicationAccess.mode !== 'account') return false;
     try {
-      const result = await importScheduleCopy(invitation);
+      // A v2 link names an account-scoped pair, and this browser is signed in as
+      // the account, so it can attach to that record directly -- the widget, the
+      // phone and this browser then share one row in D1. A v1 link predates
+      // accounts and can only ever yield a private copy.
+      const result = invitation.version === 2
+        ? { terminal: true, ...(await joinAccountPair(invitation)) }
+        : await importScheduleCopy(invitation);
       if (result?.terminal) consumePendingAccessInvitation();
     } catch (error) {
       if (!retainableClaimFailure(error)) consumePendingAccessInvitation();
@@ -1603,6 +1658,7 @@
     syncNow,
     unpair,
     importScheduleCopy,
+    joinAccountPair,
     retryPendingClaim,
     resolveConflict,
     hasPendingConflict: () => Boolean(pendingConflict),

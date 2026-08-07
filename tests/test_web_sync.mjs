@@ -598,17 +598,31 @@ test('the push subscription is refreshed on open, visibility regain, and a daily
   assert.match(src, /setInterval\(\(\)=>\{if\(document\.visibilityState==='visible'\)void syncPushSubscription\(\)\},86400000\)/);
 });
 
-test('desktop pairing links are routed to a non-claiming snapshot import', () => {
+test('neither desktop path claims the mobile invitation, and only the joiner stores credentials', () => {
   const source = readFileSync('web/sync.js', 'utf8');
-  const start = source.indexOf('async function importScheduleCopy');
-  const end = source.indexOf('function validPendingClaim', start);
-  const importer = source.slice(start, end);
+  const importStart = source.indexOf('async function importScheduleCopy');
+  const joinStart = source.indexOf('async function joinAccountPair');
+  const joinEnd = source.indexOf('function validPendingClaim', joinStart);
+  const importer = source.slice(importStart, joinStart);
+  const joiner = source.slice(joinStart, joinEnd);
 
-  assert.ok(start >= 0);
+  assert.ok(importStart >= 0 && joinStart > importStart && joinEnd > joinStart);
+
+  // The legacy one-time copy: reads and applies, but stays unpaired.
   assert.match(importer, /decryptSchedule/);
   assert.match(importer, /applySyncedSchedule/);
   assert.doesNotMatch(importer, /\/claim/);
-  assert.doesNotMatch(importer, /saveCredentials/);
+  assert.doesNotMatch(importer, /saveCredentials/,
+    'a snapshot import must not leave the browser looking paired');
+
+  // The joiner attaches this browser to the existing record: it must persist
+  // credentials, and must still never consume the phone's single mobile slot.
+  assert.match(joiner, /decryptSchedule/,
+    'the key must be proven against real ciphertext before it is stored');
+  assert.match(joiner, /saveCredentials/);
+  assert.doesNotMatch(joiner, /\/claim/,
+    'joining by account auth must leave the mobile invitation for the phone');
+
   assert.match(source, /installedMobile[\s\S]*acceptPairing\(invitation\)/);
 });
 
@@ -667,6 +681,119 @@ test('desktop encrypted schedule import works end-to-end without storing pairing
   assert.match(requestedUrl, /\/sync\/pairs\/p{32}$/);
   assert.doesNotMatch(requestedUrl, /\/claim$/);
   assert.equal(app.storage.has('medication-reminder-sync-v1'), false);
+});
+
+// The operator's requirement is that the mobile, the desktop widget AND the
+// browser all sync against the one D1 record. The server already allows it: a
+// cookie session and a device credential both resolve to authorizationKind
+// 'account' (worker/src/index.js:620-635), with no per-device slot. Only the
+// invitation path is limited to a single mobile. What was missing was any way
+// for a signed-in browser to JOIN the pairing its account already owns --
+// createPair() only ever minted a new pair with a fresh encryption key, so a
+// second browser forked its own empty copy instead of joining.
+
+test('a signed-in browser joins the account pairing instead of forking its own', async () => {
+  const app = installedMobileHarness({
+    paired: false, mobile: false, standalone: false,
+    accessMode: 'account', cloudSync: true,
+  });
+  const encryptionKey = Buffer.from(webcrypto.getRandomValues(new Uint8Array(32))).toString('base64url');
+  const remote = await encryptedRemote(encryptionKey, { revision: 9, schedule: DIVERGENT_SCHEDULE });
+  const calls = [];
+  app.context.fetch = async (url, options = {}) => {
+    calls.push({ url, method: (options.method || 'GET').toUpperCase() });
+    return { ok: true, async json() { return remote; } };
+  };
+
+  await app.context.window.MedicationSync.joinAccountPair({
+    version: 2,
+    pairId: 'p'.repeat(32),
+    invitationToken: 'i'.repeat(43),
+    invitationExpiresAt: new Date(Date.now() + 600_000).toISOString(),
+    encryptionKey,
+  });
+
+  // Joined: it now holds credentials for the SAME record, not a copy of its contents.
+  const stored = JSON.parse(app.storage.get('medication-reminder-sync-v1'));
+  assert.equal(stored.pairId, 'p'.repeat(32), 'the browser must point at the existing pair');
+  assert.equal(stored.encryptionKey, encryptionKey, 'the shared key must be adopted, not regenerated');
+  assert.equal(stored.revision, 9, 'it must continue from the record’s revision');
+
+  // It must not mint a new pair, and must not consume the single mobile slot --
+  // that belongs to the phone.
+  assert.equal(calls.some(c => c.method === 'POST' && /\/sync\/pairs$/.test(c.url)), false,
+    'joining must not create a second pair');
+  assert.equal(calls.some(c => /\/claim$/.test(c.url)), false,
+    'joining must not consume the mobile invitation');
+  assert.equal(app.importedSchedule().schedule.events[0].id, 'remoteonly',
+    'the shared schedule should be applied locally');
+});
+
+// The operator's own pair is CLAIMED -- a phone is attached to it. A claimed
+// source must not carry invitation material: validCredentials requires those
+// keys to be ABSENT once claimed (sync.js:159-163), and a running sync deletes
+// them on sight (sync.js:1310-1319). joinAccountPair set them unconditionally,
+// so saveCredentials threw immediately after a successful fetch and decrypt and
+// the browser silently kept its old credentials. Seen live in the relay logs: a
+// 200 on the shared pair at 12:16:49, then nothing, while the browser went on
+// polling its previous, deleted pair every 20s for a 404.
+//
+// Every existing join test used an UNCLAIMED pair, where the very same fields
+// are required rather than forbidden -- so the branch that mattered in the real
+// account was the one branch never exercised.
+test('a browser joins a pair a phone has already claimed', async () => {
+  const app = installedMobileHarness({
+    paired: false, mobile: false, standalone: false,
+    accessMode: 'account', cloudSync: true,
+  });
+  const encryptionKey = Buffer.from(webcrypto.getRandomValues(new Uint8Array(32))).toString('base64url');
+  const remote = await encryptedRemote(encryptionKey, {
+    revision: 9, claimed: true, schedule: DIVERGENT_SCHEDULE,
+  });
+  app.context.fetch = async () => ({ ok: true, async json() { return remote; } });
+
+  await app.context.window.MedicationSync.joinAccountPair({
+    version: 2,
+    pairId: 'p'.repeat(32),
+    invitationToken: 'i'.repeat(43),
+    invitationExpiresAt: new Date(Date.now() + 600_000).toISOString(),
+    encryptionKey,
+  });
+
+  const stored = JSON.parse(app.storage.get('medication-reminder-sync-v1'));
+  assert.equal(stored.pairId, 'p'.repeat(32), 'the browser must point at the existing pair');
+  assert.equal(stored.claimed, true, 'the phone’s claim must be carried over');
+  assert.equal(Object.hasOwn(stored, 'invitationToken'), false,
+    'a claimed source must not retain invitation material');
+  assert.equal(Object.hasOwn(stored, 'invitationExpiresAt'), false,
+    'a claimed source must not retain invitation material');
+  assert.equal(app.importedSchedule().schedule.events[0].id, 'remoteonly',
+    'the shared schedule should be applied locally');
+});
+
+test('a pair link whose key does not decrypt is refused before credentials are stored', async () => {
+  const app = installedMobileHarness({
+    paired: false, mobile: false, standalone: false,
+    accessMode: 'account', cloudSync: true,
+  });
+  // Ownership (a 200 from the relay) proves the pair belongs to this account; it
+  // says nothing about the key. Storing on a 200 alone would leave the browser
+  // wedged, failing every later sync with no visible cause.
+  const realKey = Buffer.from(webcrypto.getRandomValues(new Uint8Array(32))).toString('base64url');
+  const wrongKey = Buffer.from(webcrypto.getRandomValues(new Uint8Array(32))).toString('base64url');
+  const remote = await encryptedRemote(realKey);
+  app.context.fetch = async () => ({ ok: true, async json() { return remote; } });
+
+  await assert.rejects(() => app.context.window.MedicationSync.joinAccountPair({
+    version: 2,
+    pairId: 'p'.repeat(32),
+    invitationToken: 'i'.repeat(43),
+    invitationExpiresAt: new Date(Date.now() + 600_000).toISOString(),
+    encryptionKey: wrongKey,
+  }));
+
+  assert.equal(app.storage.has('medication-reminder-sync-v1'), false,
+    'a pairing that cannot be decrypted must not be persisted');
 });
 
 test('a dose-only remote change merges and pushes without prompting the user', async () => {
@@ -1045,13 +1172,19 @@ test('claim response body stream failure retains the exact tuple for determinist
   assert.equal(JSON.parse(app.storage.get('medication-reminder-sync-v1')).mobileToken, 'm'.repeat(43));
 });
 
-test('unsupported desktop version-2 invitation is terminal and consumed after account readiness', async () => {
+// This used to assert a v2 link was simply unsupported on the desktop -- it was
+// consumed, no request was made, and the browser stayed on its own data. That is
+// the limitation that made a signed-in browser fork an empty pairing of its own
+// instead of joining the one its account already owned.
+
+test('a version-2 pairing link opened in a signed-in browser joins the shared record', async () => {
+  const encryptionKey = 'a'.repeat(43);
   const invitation = {
     version: 2,
     pairId: 'p'.repeat(32),
     invitationToken: 'i'.repeat(43),
     invitationExpiresAt: new Date(Date.now() + 600_000).toISOString(),
-    encryptionKey: 'a'.repeat(43),
+    encryptionKey,
   };
   const app = installedMobileHarness({
     paired: false,
@@ -1060,12 +1193,22 @@ test('unsupported desktop version-2 invitation is terminal and consumed after ac
     accessMode: 'pending',
     pendingInvitation: `#pair=${Buffer.from(JSON.stringify(invitation)).toString('base64url')}`,
   });
+  const remote = await encryptedRemote(encryptionKey, { revision: 5, schedule: DIVERGENT_SCHEDULE });
+  app.context.fetch = async () => ({ ok: true, async json() { return remote; } });
+
   await app.flush();
-  assert.equal(app.pendingInvitationConsumed(), false);
+  assert.equal(app.pendingInvitationConsumed(), false,
+    'the link must wait for the account decision rather than acting while pending');
+
   app.resolveAccount();
   await app.flush();
+
   assert.equal(app.pendingInvitationConsumed(), true);
-  assert.equal(app.fetchCount(), 0);
+  const stored = JSON.parse(app.storage.get('medication-reminder-sync-v1'));
+  assert.equal(stored.pairId, invitation.pairId, 'the browser must attach to the account’s pair');
+  assert.equal(stored.encryptionKey, encryptionKey);
+  assert.equal(stored.revision, 5);
+  assert.equal(stored.role, 'source', 'it authenticates as the account, not as the mobile');
 });
 
 test('structurally invalid successful claim retains pending custody and preserves prior local pairing', async () => {

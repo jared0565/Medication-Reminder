@@ -1,9 +1,10 @@
 import json
+import platform
 import tkinter as tk
 from copy import deepcopy
 import unittest
 import urllib.error
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -15,7 +16,7 @@ from medication_core import (
 )
 import medication_reminder
 from medication_reminder import MedicationReminderApp
-from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError, _NoRedirectHandler
+from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError, _NoRedirectHandler, _unb64
 
 
 TZ = ZoneInfo("Europe/London")
@@ -70,6 +71,52 @@ class PairingTests(unittest.TestCase):
         self.assertIn("/#pair=", link)
         self.assertNotIn("?pair=", link)
         self.assertNotIn("medicines", link)
+
+    @staticmethod
+    def _decode_pair_link(link: str) -> dict:
+        return json.loads(_unb64(link.split("#pair=", 1)[1]).decode("utf-8"))
+
+    def test_account_pairing_link_offers_the_invitation_not_a_bearer_token(self) -> None:
+        """An account pair has no `token`; the phone claims it with an invitation.
+
+        pairing_link read credentials["token"] unconditionally, so it raised
+        KeyError for every account pairing -- and show_pairing_qr is called
+        directly after one is created, so linking an account broke at the QR.
+        web/sync.js:550 already accepts this v2 shape; only the widget never
+        emitted it.
+        """
+        credentials = {
+            "version": 2, "role": "account", "pairId": "p" * 32,
+            "encryptionKey": "k" * 43, "deviceCredential": "mdk_" + "c" * 32,
+            "invitationToken": "i" * 43, "invitationExpiresAt": "2026-08-07T00:00:00Z",
+            "sourceId": "s" * 22, "deviceId": "s" * 22, "revision": 1,
+        }
+        invitation = self._decode_pair_link(EncryptedSyncClient.pairing_link(credentials))
+
+        self.assertEqual(invitation["version"], 2)
+        self.assertEqual(invitation["invitationToken"], "i" * 43)
+        self.assertEqual(invitation["invitationExpiresAt"], "2026-08-07T00:00:00Z")
+        self.assertEqual(invitation["encryptionKey"], "k" * 43)
+        # The browser rejects a v2 link that also carries a bearer token, and the
+        # device credential must never leave this machine.
+        self.assertNotIn("token", invitation)
+        self.assertNotIn("deviceCredential", invitation)
+        # web/sync.js:540 rejects any key outside its allowlist.
+        self.assertLessEqual(
+            set(invitation),
+            {"version", "pairId", "invitationToken", "invitationExpiresAt", "encryptionKey"},
+        )
+
+    def test_legacy_pairing_link_still_carries_its_bearer_token(self) -> None:
+        credentials = {
+            "version": 1, "role": "source", "pairId": "p" * 32, "token": "t" * 43,
+            "encryptionKey": "k" * 43, "sourceId": "s" * 22, "deviceId": "s" * 22,
+            "revision": 1,
+        }
+        invitation = self._decode_pair_link(EncryptedSyncClient.pairing_link(credentials))
+        self.assertEqual(invitation["version"], 1)
+        self.assertEqual(invitation["token"], "t" * 43)
+        self.assertNotIn("invitationToken", invitation)
 
 
 class SyncResponseHardeningTests(unittest.TestCase):
@@ -296,6 +343,70 @@ class _FakeOpener:
         raise urllib.error.HTTPError(request.full_url, status, "error", {}, io.BytesIO(raw))
 
 
+class InvitationRefreshTests(unittest.TestCase):
+    """Reissue a phone invitation without rebuilding the pair.
+
+    Without this the only way to show a fresh QR was create_account_pair, which
+    revokes the pair, mints a new encryption key and forces every other device
+    to re-pair -- a heavy, destructive answer to "the invitation expired".
+    The relay gates the refresh on the invitation hash and on no mobile having
+    claimed the pair yet, NOT on the clock, so an already-expired invitation is
+    still refreshable (worker/src/index.js:576-584).
+    """
+
+    ACCOUNT = {
+        "version": 2, "role": "account", "pairId": "p" * 32,
+        "encryptionKey": "k" * 43, "deviceCredential": "mdk_" + "c" * 32,
+        "invitationToken": "i" * 43, "invitationExpiresAt": "2026-08-07T02:28:16Z",
+        "sourceId": "s" * 22, "deviceId": "s" * 22, "revision": 4,
+        "claimed": False, "dirty": False,
+    }
+
+    def test_refresh_returns_a_new_invitation_and_keeps_the_pair(self):
+        client = EncryptedSyncClient(api_url="https://api.test")
+        client._opener = _FakeOpener([(200, {
+            "pairId": "p" * 32, "invitationToken": "n" * 43,
+            "invitationExpiresAt": "2026-08-07T03:00:00Z",
+        })])
+
+        refreshed = client.refresh_invitation(self.ACCOUNT)
+
+        request = client._opener.requests[0]
+        self.assertTrue(request.full_url.endswith(f"/sync/pairs/{'p' * 32}/invitations"))
+        self.assertEqual(request.get_method(), "POST")
+        self.assertEqual(request.headers["Authorization"], f"Bearer mdk_{'c' * 32}")
+
+        body = json.loads(request.data.decode("utf-8"))
+        self.assertEqual(body["previousInvitationToken"], "i" * 43)
+        # The relay requires both proofs to be 43-char base64url (MOBILE_TOKEN_PATTERN).
+        self.assertEqual(len(body["refreshNonce"]), 43)
+        self.assertTrue(all(c.isalnum() or c in "-_" for c in body["refreshNonce"]))
+
+        # A refresh replaces only the invitation; the pair and its key must survive,
+        # or every other paired device would be silently cut off.
+        self.assertEqual(refreshed["invitationToken"], "n" * 43)
+        self.assertEqual(refreshed["invitationExpiresAt"], "2026-08-07T03:00:00Z")
+        self.assertEqual(refreshed["pairId"], self.ACCOUNT["pairId"])
+        self.assertEqual(refreshed["encryptionKey"], self.ACCOUNT["encryptionKey"])
+        self.assertEqual(refreshed["deviceCredential"], self.ACCOUNT["deviceCredential"])
+        self.assertEqual(refreshed["revision"], 4)
+
+    def test_a_malformed_refresh_response_is_a_handled_error(self):
+        client = EncryptedSyncClient(api_url="https://api.test")
+        client._opener = _FakeOpener([(200, {"pairId": "p" * 32})])
+        with self.assertRaises(SyncError):
+            client.refresh_invitation(self.ACCOUNT)
+
+    def test_refreshing_a_legacy_pair_is_refused_locally(self):
+        """A v1 pair has no invitation to refresh; fail before calling the relay."""
+        client = EncryptedSyncClient(api_url="https://api.test")
+        client._opener = _FakeOpener([])
+        legacy = {"version": 1, "role": "source", "pairId": "p" * 32,
+                  "token": "t" * 43, "encryptionKey": "k" * 43}
+        with self.assertRaises(SyncError):
+            client.refresh_invitation(legacy)
+
+
 class DeviceAuthorizationTests(unittest.TestCase):
     """Authenticated device pairing: acquire a credential, then use it for
     account-scoped pairs without ever leaking the schedule or E2E key."""
@@ -381,6 +492,21 @@ class DeviceLinkControllerTests(unittest.TestCase):
         app.sync_client = FakeClient()
         return app
 
+    def test_device_link_label_names_this_machine(self):
+        """The approval page must show WHICH machine is asking.
+
+        `platform` was never imported, so the lookup raised NameError -- and a
+        bare `except Exception` swallowed it, leaving every device on the
+        hardcoded fallback. Each linked device was therefore labelled
+        "Windows widget" regardless of the host, which makes the approval
+        prompt useless for telling two machines apart. Same shape as the
+        APP_URL defect: an unimported name sitting somewhere it fails quietly.
+        """
+        app = object.__new__(MedicationReminderApp)
+        node = platform.node()
+        self.assertTrue(node, "precondition: this host reports a name")
+        self.assertEqual(app._device_link_label(), f"{node} widget")
+
     def test_link_returns_credential_after_pending_and_slow_down(self):
         cred = "mdk_" + "Z" * 43
         app = self._app([{"status": "pending"}, {"status": "slow_down"}, {"status": "complete", "credential": cred}])
@@ -398,6 +524,147 @@ class DeviceLinkControllerTests(unittest.TestCase):
         app = self._app([{"status": "pending"}])
         with self.assertRaises(SyncError):
             app._run_device_link(lambda _s: None, lambda: True, sleep_fn=lambda _s: None)
+
+
+class DeviceLinkInstructionsTests(unittest.TestCase):
+    """The link dialog must render, and must not silently rebuild a live pairing."""
+
+    def test_instructions_name_the_verification_uri_and_code(self):
+        text = MedicationReminderApp._device_link_instructions(
+            {"userCode": "ABCD-EFGH", "verificationUri": "https://relay.test/link"})
+        self.assertIn("https://relay.test/link", text)
+        self.assertIn("ABCD-EFGH", text)
+
+    def test_instructions_fall_back_to_the_app_url(self):
+        # This raised NameError on EVERY click: APP_URL was never imported, and as
+        # a dict.get default it is evaluated eagerly, so the fallback fired even
+        # when the relay did return a verificationUri.
+        text = MedicationReminderApp._device_link_instructions({"userCode": "ABCD-EFGH"})
+        self.assertIn(medication_reminder.APP_URL, text)
+        self.assertIn("ABCD-EFGH", text)
+
+    def test_relinking_an_account_pairing_asks_first(self):
+        app = object.__new__(MedicationReminderApp)
+        app.root = None
+        app.sync_credentials = {"version": 2, "role": "account", "pairId": "p" * 32}
+        asked = []
+        original = medication_reminder.messagebox
+
+        class FakeBox:
+            @staticmethod
+            def askyesno(title, message, **kwargs):
+                asked.append(message)
+                return False
+
+        medication_reminder.messagebox = FakeBox
+        try:
+            # Linking again revokes the live pair and forces the mobile to re-scan,
+            # so declining must abandon it.
+            self.assertFalse(app._confirm_relink())
+        finally:
+            medication_reminder.messagebox = original
+        self.assertTrue(asked, "a second link must warn before rebuilding the pairing")
+        self.assertRegex(asked[0], r"(?i)new pairing|re-?scan|revok")
+
+    def test_first_link_does_not_prompt(self):
+        app = object.__new__(MedicationReminderApp)
+        app.root = None
+        app.sync_credentials = None
+        original = medication_reminder.messagebox
+
+        class FakeBox:
+            @staticmethod
+            def askyesno(*_a, **_k):
+                raise AssertionError("an unlinked widget must not be asked to confirm")
+
+        medication_reminder.messagebox = FakeBox
+        try:
+            self.assertTrue(app._confirm_relink())
+        finally:
+            medication_reminder.messagebox = original
+
+
+class InvitationFreshnessTests(unittest.TestCase):
+    """Show QR must never render an invitation the relay will already refuse.
+
+    The QR is drawn from whatever invitationToken is in memory, with no expiry
+    check, so a lapsed 15-minute invitation displayed as a perfectly ordinary
+    code and the phone's claim simply failed with nothing to explain it.
+    """
+
+    def _creds(self, expires, **overrides):
+        value = {
+            "version": 2, "role": "account", "pairId": "p" * 32,
+            "encryptionKey": "k" * 43, "deviceCredential": "mdk_" + "c" * 32,
+            "invitationToken": "i" * 43, "invitationExpiresAt": expires,
+            "sourceId": "s" * 22, "deviceId": "s" * 22, "revision": 3,
+            "claimed": False, "dirty": False,
+        }
+        value.update(overrides)
+        return value
+
+    def _app(self, credentials, refreshed=None, failure=None):
+        app = object.__new__(MedicationReminderApp)
+        saved = []
+        outer = self
+
+        class FakeClient:
+            calls = 0
+
+            def refresh_invitation(self, value):
+                FakeClient.calls += 1
+                if failure is not None:
+                    raise failure
+                return refreshed or outer._creds(value["invitationExpiresAt"])
+
+        class FakeStorage:
+            def save_sync_credentials(self, value):
+                saved.append(value)
+
+        FakeClient.calls = 0
+        app.sync_credentials = credentials
+        app.sync_client = FakeClient()
+        app.storage = FakeStorage()
+        return app, saved, FakeClient
+
+    @staticmethod
+    def _stamp(minutes):
+        return (datetime.now(timezone.utc) + timedelta(minutes=minutes)).isoformat()
+
+    def test_an_expired_invitation_is_refreshed_and_persisted(self):
+        fresh = self._creds(self._stamp(15))
+        app, saved, client = self._app(self._creds(self._stamp(-5)), refreshed=fresh)
+
+        app._refresh_invitation_if_stale()
+
+        self.assertEqual(client.calls, 1)
+        self.assertEqual(app.sync_credentials["invitationExpiresAt"], fresh["invitationExpiresAt"])
+        self.assertEqual(saved, [fresh], "a refreshed invitation must survive a restart")
+
+    def test_a_live_invitation_is_left_alone(self):
+        app, saved, client = self._app(self._creds(self._stamp(10)))
+        app._refresh_invitation_if_stale()
+        self.assertEqual(client.calls, 0, "no needless round trip while the code is still valid")
+        self.assertEqual(saved, [])
+
+    def test_a_refused_refresh_keeps_the_existing_invitation(self):
+        # The relay refuses once a mobile has claimed the pair. Showing the old
+        # code is better than the button raising in the user's face.
+        expires = self._stamp(-5)
+        app, saved, _ = self._app(self._creds(expires), failure=SyncError("already claimed"))
+
+        app._refresh_invitation_if_stale()
+
+        self.assertEqual(saved, [])
+        self.assertEqual(app.sync_credentials["invitationExpiresAt"], expires)
+
+    def test_a_legacy_pairing_is_never_refreshed(self):
+        legacy = {"version": 1, "role": "source", "pairId": "p" * 32,
+                  "token": "t" * 43, "encryptionKey": "k" * 43, "revision": 1}
+        app, saved, client = self._app(legacy)
+        app._refresh_invitation_if_stale()
+        self.assertEqual(client.calls, 0)
+        self.assertEqual(saved, [])
 
 
 class AccountRepairTests(unittest.TestCase):

@@ -4,6 +4,7 @@ import ctypes
 import io
 import math
 import os
+import platform
 import secrets
 import struct
 import sys
@@ -12,7 +13,7 @@ import time
 import wave
 import winsound
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog, ttk
@@ -23,7 +24,7 @@ import pystray
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "vendor"))
 import qrcode
 
-from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError
+from sync_client import APP_URL, EncryptedSyncClient, RemoteSchedule, SyncError
 
 from medication_core import (
     AppStorage,
@@ -1021,9 +1022,46 @@ class MedicationReminderApp:
             sleep_fn(interval)
         raise SyncError("Device linking was cancelled.")
 
+    @staticmethod
+    def _device_link_instructions(start: dict) -> str:
+        """The two-step text shown while the grant is pending.
+
+        `verificationUri` is read with `or` rather than as a dict.get default:
+        a default is evaluated eagerly, so a missing import there raised on every
+        call instead of only on the fallback path.
+        """
+        uri = start.get("verificationUri") or APP_URL
+        code = start.get("userCode", "")
+        return (
+            f"1. Open {uri} in a browser where you are signed in.\n"
+            f"2. Enter this code to approve:\n\n        {code}\n\n"
+            "Waiting for approval…"
+        )
+
+    def _confirm_relink(self) -> bool:
+        """Linking again is destructive, so say so before starting.
+
+        A completed link runs _perform_repair, which revokes the current pair and
+        mints a new one with a new encryption key -- every other device drops off
+        and the mobile must scan a fresh QR. 'Pair mobile' already warns about
+        exactly this; linking did not.
+        """
+        if not self.sync_credentials or self.sync_credentials.get("version") != 2:
+            return True
+        return messagebox.askyesno(
+            APP_NAME,
+            "This widget is already linked to your account.\n\n"
+            "Linking again creates a NEW pairing: the current one is revoked and "
+            "your mobile has to scan a new QR code before it syncs again.\n\n"
+            "Continue?",
+            parent=self.root,
+        )
+
     def link_account_device(self) -> None:
         """Link this widget to the owner's account via the browser, then create
         an account-scoped pair it can sync."""
+        if not self._confirm_relink():
+            return
         dialog = tk.Toplevel(self.root)
         dialog.title("Link this device")
         dialog.transient(self.root)
@@ -1035,12 +1073,8 @@ class MedicationReminderApp:
         ttk.Button(dialog, text="Cancel", command=lambda: (cancelled.__setitem__("value", True), dialog.destroy())).pack(pady=(0, 12))
 
         def show_code(start: dict) -> None:
-            code = start.get("userCode", "")
-            uri = start.get("verificationUri", APP_URL)
-            self.root.after(0, lambda: status.set(
-                f"1. Open {uri} in a browser where you are signed in.\n"
-                f"2. Enter this code to approve:\n\n        {code}\n\n"
-                "Waiting for approval…"))
+            text = self._device_link_instructions(start)
+            self.root.after(0, lambda: status.set(text))
 
         def worker() -> None:
             try:
@@ -1096,10 +1130,51 @@ class MedicationReminderApp:
         self._set_sync_status("Encrypted pairing ready; waiting for the mobile scan.")
         self.show_pairing_qr()
 
+    @staticmethod
+    def _invitation_lapsed(expires_at: str) -> bool:
+        """True when the relay would already refuse this invitation."""
+        if not expires_at:
+            return True
+        try:
+            deadline = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+        except ValueError:
+            return True
+        if deadline.tzinfo is None:
+            deadline = deadline.replace(tzinfo=timezone.utc)
+        return deadline <= datetime.now(timezone.utc)
+
+    def _refresh_invitation_if_stale(self) -> None:
+        """Reissue a lapsed invitation before the QR is drawn.
+
+        The QR is rendered from stored credentials, so an invitation that has
+        timed out is displayed as a perfectly ordinary code and the phone's
+        claim then fails with nothing on screen to explain it. A refresh keeps
+        the pair, its revision and its encryption key -- only the invitation
+        changes -- so no other device is disturbed.
+        """
+        value = self.sync_credentials
+        if not value or value.get("version") != 2:
+            return
+        if not self._invitation_lapsed(str(value.get("invitationExpiresAt") or "")):
+            return
+        try:
+            refreshed = self.sync_client.refresh_invitation(value)
+        except SyncError:
+            # The relay refuses once a mobile has claimed the pair. Showing the
+            # existing code beats the button raising in the user's face.
+            return
+        try:
+            self.storage.save_sync_credentials(refreshed)
+        except StorageError as exc:
+            self._warn_persistence(exc)
+            return
+        self.sync_credentials = refreshed
+
     def show_pairing_qr(self) -> None:
         if not self.sync_credentials:
             self.pair_device()
             return
+        self._refresh_invitation_if_stale()
         payload = self.sync_client.pairing_link(self.sync_credentials)
         try:
             code = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=4, border=4)

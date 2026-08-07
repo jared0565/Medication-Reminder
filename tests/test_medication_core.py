@@ -136,6 +136,93 @@ class StorageRecoveryTests(unittest.TestCase):
         self.assertEqual(state["version"], 1)
         self.assertTrue(list(self.tmp.glob("state.dat.corrupt-*")))
 
+
+def account_credentials(**overrides) -> dict:
+    """The exact shape create_account_pair returns (sync_client.py:252-259)."""
+    value = {
+        "version": 2, "role": "account", "pairId": "p" * 32,
+        "encryptionKey": "k" * 43, "deviceCredential": "mdk_" + "c" * 32,
+        "sourceId": "s" * 22, "deviceId": "s" * 22,
+        "invitationToken": "i" * 43, "invitationExpiresAt": "2026-08-07T00:00:00Z",
+        "revision": 1, "claimed": False, "dirty": False,
+    }
+    value.update(overrides)
+    return value
+
+
+def source_credentials(**overrides) -> dict:
+    """The legacy v1 shape create_pair returns (sync_client.py:127)."""
+    value = {
+        "version": 1, "role": "source", "pairId": "p" * 32, "token": "t" * 32,
+        "encryptionKey": "k" * 43, "sourceId": "s" * 22, "deviceId": "s" * 22,
+        "revision": 1, "claimed": False, "dirty": False,
+    }
+    value.update(overrides)
+    return value
+
+
+class AccountCredentialStorageTests(unittest.TestCase):
+    """Account (v2) pairings must survive a restart.
+
+    load_sync_credentials used to hard-require version == 1 and a 'token' field,
+    so credentials minted by create_account_pair could be saved but never read
+    back. Startup swallows StorageError and sets sync_credentials = None, so the
+    widget silently unpaired itself on the first restart after linking an
+    account -- no error, sync simply stopped. Nothing covered this: the only
+    caller of load_sync_credentials was the widget's __init__.
+    """
+
+    def setUp(self) -> None:
+        self._dir = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._dir.name)
+
+    def tearDown(self) -> None:
+        self._dir.cleanup()
+
+    def test_account_credentials_survive_a_restart(self):
+        storage = make_storage(self.tmp)
+        saved = account_credentials()
+        storage.save_sync_credentials(saved)
+
+        # A fresh AppStorage is what a restarted widget actually does.
+        loaded = make_storage(self.tmp).load_sync_credentials()
+
+        self.assertIsNotNone(loaded, "the widget would have silently unpaired itself")
+        self.assertEqual(loaded["version"], 2)
+        self.assertEqual(loaded["deviceCredential"], saved["deviceCredential"])
+        self.assertEqual(loaded["pairId"], saved["pairId"])
+        self.assertEqual(loaded["encryptionKey"], saved["encryptionKey"])
+
+    def test_legacy_source_credentials_still_load(self):
+        storage = make_storage(self.tmp)
+        storage.save_sync_credentials(source_credentials())
+        loaded = make_storage(self.tmp).load_sync_credentials()
+        self.assertEqual(loaded["version"], 1)
+        self.assertEqual(loaded["token"], "t" * 32)
+
+    def test_account_credentials_without_a_device_credential_are_rejected(self):
+        # Accepting v2 must not mean accepting anything that calls itself v2.
+        storage = make_storage(self.tmp)
+        broken = account_credentials()
+        del broken["deviceCredential"]
+        storage.save_sync_credentials(broken)
+        with self.assertRaises(StorageError):
+            make_storage(self.tmp).load_sync_credentials()
+
+    def test_legacy_credentials_without_a_token_are_rejected(self):
+        storage = make_storage(self.tmp)
+        broken = source_credentials()
+        del broken["token"]
+        storage.save_sync_credentials(broken)
+        with self.assertRaises(StorageError):
+            make_storage(self.tmp).load_sync_credentials()
+
+    def test_an_unknown_credential_version_is_rejected(self):
+        storage = make_storage(self.tmp)
+        storage.save_sync_credentials(account_credentials(version=3))
+        with self.assertRaises(StorageError):
+            make_storage(self.tmp).load_sync_credentials()
+
     def test_non_numeric_volume_recovers(self):
         storage = make_storage(self.tmp)
         storage.settings_file.save({"volume": "loud", "sound": "chime"})

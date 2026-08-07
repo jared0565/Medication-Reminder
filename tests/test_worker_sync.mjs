@@ -4,12 +4,10 @@ import { createRequire } from 'node:module';
 import { DatabaseSync } from 'node:sqlite';
 import test from 'node:test';
 import worker, {
-  claimLegacyPair,
   consumeInvitation,
   deriveInvitationToken,
   deriveMobileToken,
   loadAccountPair,
-  loadLegacyPair,
   loadMobilePair,
 } from '../worker/src/index.js';
 import { hasCloudSync } from '../worker/src/auth.js';
@@ -349,27 +347,25 @@ test('invitation consumption is atomic and single-use', async () => {
   assert.match(DB.calls[0].sql, /RETURNING pair_id/);
 });
 
-test('legacy lookup requires a null account owner and legacy token hash', async () => {
-  const DB = fakeDb(() => ({ pair_id: 'legacy_pair' }));
-  await loadLegacyPair({ DB }, 'legacy_pair', 'legacy_hash');
-  assert.match(DB.calls[0].sql, /user_id IS NULL/);
-  assert.match(DB.calls[0].sql, /token_hash = \?/);
-  assert.doesNotMatch(DB.calls[0].sql, /SELECT \*/);
-});
+// The anonymous pairing path is retired. It authorized on a bearer token alone
+// against a row with no owner (user_id IS NULL), so it read, wrote, claimed and
+// deleted pair rows entirely outside the account boundary -- and it skipped the
+// cloud-sync capability gate that every account request passes through. Every
+// pair is now account-owned; nothing may reintroduce an ownerless path.
 
-test('legacy claim is a conditional atomic update with retry-safe device binding', async () => {
-  const DB = fakeDb(() => ({ pair_id: 'legacy_pair' }));
-  await claimLegacyPair({ DB }, {
-    pairId: 'legacy_pair',
-    legacyTokenHash: 'legacy_hash',
-    mobileDeviceId: 'legacy_mobile_1234',
-    pushEndpoint: null,
-  });
-  assert.match(DB.calls[0].sql, /^UPDATE sync_pairs SET/s);
-  assert.match(DB.calls[0].sql, /user_id IS NULL/);
-  assert.match(DB.calls[0].sql, /token_hash = \?/);
-  assert.match(DB.calls[0].sql, /mobile_device_id IS NULL OR mobile_device_id = \?/);
-  assert.match(DB.calls[0].sql, /RETURNING pair_id/);
+test('no pair route authorizes on an ownerless row', async () => {
+  const source = await readFile(new URL('../worker/src/index.js', import.meta.url), 'utf8');
+
+  assert.doesNotMatch(source, /user_id IS NULL/,
+    'an ownerless pair row must not be selectable, writable or deletable');
+  assert.doesNotMatch(source, /loadLegacyPair|claimLegacyPair|validLegacyEncryptedBody/,
+    'the legacy pair helpers must be gone, not merely unreferenced');
+  assert.doesNotMatch(source, /authorizationKind === 'legacy'|=== 'legacy'/,
+    'no branch may still treat a request as legacy-authorized');
+
+  // What must remain: the two authenticated paths.
+  assert.match(source, /authorizationKind = 'account'/);
+  assert.match(source, /authorizationKind = 'mobile'/);
 });
 
 const encoder = new TextEncoder();
@@ -1224,37 +1220,6 @@ test('account and scoped mobile updates derive updated_by from authenticated dev
   );
 });
 
-test('legacy claim is atomic for competing devices and idempotent for the winner', async t => {
-  const fixture = await workerFixture();
-  t.after(() => fixture.close());
-  const legacyToken = 'Q'.repeat(43);
-  fixture.database.prepare(`INSERT INTO sync_pairs
-    (pair_id, source_id, user_id, token_hash, ciphertext, iv, updated_by)
-    VALUES (?, ?, NULL, ?, ?, ?, ?)`).run(
-    'legacy_race_123456',
-    'legacy_race_source',
-    await sha256Hex(legacyToken),
-    validEncryptedSchedule.ciphertext,
-    validEncryptedSchedule.iv,
-    validEncryptedSchedule.updatedBy,
-  );
-  const claim = device => fixture.request('/api/sync/pairs/legacy_race_123456/claim', {
-    method: 'POST',
-    bearer: legacyToken,
-    body: mobileClaim(device),
-  });
-  const winner = await claim('legacy_winner_1234');
-  assert.equal(winner.status, 200);
-  const retry = await claim('legacy_winner_1234');
-  assert.equal(retry.status, 200);
-  const loser = await claim('legacy_loser_12345');
-  assert.equal(loser.status, 409);
-  assert.equal(
-    fixture.database.prepare("SELECT mobile_device_id FROM sync_pairs WHERE pair_id = 'legacy_race_123456'").get().mobile_device_id,
-    'legacy_winner_1234',
-  );
-});
-
 test('expired and incorrect invitations use the same safe not-found response', async t => {
   const fixture = await workerFixture();
   t.after(() => fixture.close());
@@ -1374,34 +1339,54 @@ test('account and mobile updates retain separate scoped authorization predicates
   assert.equal(otherTenantUpdate.status, 404);
 });
 
-test('legacy records remain bearer-compatible only while account owner is null', async t => {
+test('an ownerless pair row is unusable through every route', async t => {
   const fixture = await workerFixture();
   t.after(() => fixture.close());
-  const legacyToken = 'L'.repeat(43);
+  const orphanToken = 'L'.repeat(43);
   fixture.database.prepare(`INSERT INTO sync_pairs
     (pair_id, source_id, user_id, token_hash, ciphertext, iv, updated_by)
     VALUES (?, ?, NULL, ?, ?, ?, ?)`).run(
-    'legacy_pair_123456',
-    'legacy_source_1234',
-    await sha256Hex(legacyToken),
+    'orphan_pair_123456',
+    'orphan_source_1234',
+    await sha256Hex(orphanToken),
     validEncryptedSchedule.ciphertext,
     validEncryptedSchedule.iv,
     validEncryptedSchedule.updatedBy,
   );
 
-  const compatible = await fixture.request('/api/sync/pairs/legacy_pair_123456', {
-    bearer: legacyToken,
-  });
-  assert.equal(compatible.status, 200);
+  // Every one of these used to succeed on the bearer alone, outside any account
+  // and skipping the cloud-sync capability gate.
+  const read = await fixture.request('/api/sync/pairs/orphan_pair_123456', { bearer: orphanToken });
+  assert.equal(read.status, 404, 'an ownerless row must not be readable');
 
-  fixture.database.prepare(`UPDATE sync_pairs SET user_id = ?
-    WHERE pair_id = 'legacy_pair_123456'`).run(fixture.sessions.a.userId);
-  const blocked = await fixture.request('/api/sync/pairs/legacy_pair_123456', {
-    bearer: legacyToken,
+  const write = await fixture.request('/api/sync/pairs/orphan_pair_123456', {
+    method: 'PUT',
+    bearer: orphanToken,
+    body: { ...validEncryptedSchedule, baseRevision: 1 },
   });
-  assert.equal(blocked.status, 404);
+  assert.equal(write.status, 404, 'an ownerless row must not be writable');
+
+  const claimed = await fixture.request('/api/sync/pairs/orphan_pair_123456/claim', {
+    method: 'POST',
+    bearer: orphanToken,
+    body: { mobileDeviceId: 'orphan_mobile_1234', claimNonce: 'N'.repeat(43) },
+  });
+  assert.notEqual(claimed.status, 200, 'an ownerless row must not be claimable');
+
+  const removed = await fixture.request('/api/sync/pairs/orphan_pair_123456', {
+    method: 'DELETE',
+    bearer: orphanToken,
+  });
+  assert.equal(removed.status, 404, 'an ownerless row must not be deletable');
+
+  // Refused, not quietly destroyed: a bearer that cannot read a row must not be
+  // able to remove it either.
+  assert.equal(
+    fixture.database.prepare('SELECT COUNT(*) AS n FROM sync_pairs WHERE pair_id = ?')
+      .get('orphan_pair_123456').n,
+    1,
+  );
 });
-
 test('pairing audit metadata never records application or credential secrets', async t => {
   const fixture = await workerFixture();
   t.after(() => fixture.close());
