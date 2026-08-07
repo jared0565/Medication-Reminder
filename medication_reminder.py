@@ -12,7 +12,7 @@ import time
 import wave
 import winsound
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog, ttk
@@ -1096,10 +1096,51 @@ class MedicationReminderApp:
         self._set_sync_status("Encrypted pairing ready; waiting for the mobile scan.")
         self.show_pairing_qr()
 
+    @staticmethod
+    def _invitation_lapsed(expires_at: str) -> bool:
+        """True when the relay would already refuse this invitation."""
+        if not expires_at:
+            return True
+        try:
+            deadline = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+        except ValueError:
+            return True
+        if deadline.tzinfo is None:
+            deadline = deadline.replace(tzinfo=timezone.utc)
+        return deadline <= datetime.now(timezone.utc)
+
+    def _refresh_invitation_if_stale(self) -> None:
+        """Reissue a lapsed invitation before the QR is drawn.
+
+        The QR is rendered from stored credentials, so an invitation that has
+        timed out is displayed as a perfectly ordinary code and the phone's
+        claim then fails with nothing on screen to explain it. A refresh keeps
+        the pair, its revision and its encryption key -- only the invitation
+        changes -- so no other device is disturbed.
+        """
+        value = self.sync_credentials
+        if not value or value.get("version") != 2:
+            return
+        if not self._invitation_lapsed(str(value.get("invitationExpiresAt") or "")):
+            return
+        try:
+            refreshed = self.sync_client.refresh_invitation(value)
+        except SyncError:
+            # The relay refuses once a mobile has claimed the pair. Showing the
+            # existing code beats the button raising in the user's face.
+            return
+        try:
+            self.storage.save_sync_credentials(refreshed)
+        except StorageError as exc:
+            self._warn_persistence(exc)
+            return
+        self.sync_credentials = refreshed
+
     def show_pairing_qr(self) -> None:
         if not self.sync_credentials:
             self.pair_device()
             return
+        self._refresh_invitation_if_stale()
         payload = self.sync_client.pairing_link(self.sync_credentials)
         try:
             code = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=4, border=4)

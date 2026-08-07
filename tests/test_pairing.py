@@ -3,7 +3,7 @@ import tkinter as tk
 from copy import deepcopy
 import unittest
 import urllib.error
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -508,6 +508,89 @@ class DeviceLinkControllerTests(unittest.TestCase):
         app = self._app([{"status": "pending"}])
         with self.assertRaises(SyncError):
             app._run_device_link(lambda _s: None, lambda: True, sleep_fn=lambda _s: None)
+
+
+class InvitationFreshnessTests(unittest.TestCase):
+    """Show QR must never render an invitation the relay will already refuse.
+
+    The QR is drawn from whatever invitationToken is in memory, with no expiry
+    check, so a lapsed 15-minute invitation displayed as a perfectly ordinary
+    code and the phone's claim simply failed with nothing to explain it.
+    """
+
+    def _creds(self, expires, **overrides):
+        value = {
+            "version": 2, "role": "account", "pairId": "p" * 32,
+            "encryptionKey": "k" * 43, "deviceCredential": "mdk_" + "c" * 32,
+            "invitationToken": "i" * 43, "invitationExpiresAt": expires,
+            "sourceId": "s" * 22, "deviceId": "s" * 22, "revision": 3,
+            "claimed": False, "dirty": False,
+        }
+        value.update(overrides)
+        return value
+
+    def _app(self, credentials, refreshed=None, failure=None):
+        app = object.__new__(MedicationReminderApp)
+        saved = []
+        outer = self
+
+        class FakeClient:
+            calls = 0
+
+            def refresh_invitation(self, value):
+                FakeClient.calls += 1
+                if failure is not None:
+                    raise failure
+                return refreshed or outer._creds(value["invitationExpiresAt"])
+
+        class FakeStorage:
+            def save_sync_credentials(self, value):
+                saved.append(value)
+
+        FakeClient.calls = 0
+        app.sync_credentials = credentials
+        app.sync_client = FakeClient()
+        app.storage = FakeStorage()
+        return app, saved, FakeClient
+
+    @staticmethod
+    def _stamp(minutes):
+        return (datetime.now(timezone.utc) + timedelta(minutes=minutes)).isoformat()
+
+    def test_an_expired_invitation_is_refreshed_and_persisted(self):
+        fresh = self._creds(self._stamp(15))
+        app, saved, client = self._app(self._creds(self._stamp(-5)), refreshed=fresh)
+
+        app._refresh_invitation_if_stale()
+
+        self.assertEqual(client.calls, 1)
+        self.assertEqual(app.sync_credentials["invitationExpiresAt"], fresh["invitationExpiresAt"])
+        self.assertEqual(saved, [fresh], "a refreshed invitation must survive a restart")
+
+    def test_a_live_invitation_is_left_alone(self):
+        app, saved, client = self._app(self._creds(self._stamp(10)))
+        app._refresh_invitation_if_stale()
+        self.assertEqual(client.calls, 0, "no needless round trip while the code is still valid")
+        self.assertEqual(saved, [])
+
+    def test_a_refused_refresh_keeps_the_existing_invitation(self):
+        # The relay refuses once a mobile has claimed the pair. Showing the old
+        # code is better than the button raising in the user's face.
+        expires = self._stamp(-5)
+        app, saved, _ = self._app(self._creds(expires), failure=SyncError("already claimed"))
+
+        app._refresh_invitation_if_stale()
+
+        self.assertEqual(saved, [])
+        self.assertEqual(app.sync_credentials["invitationExpiresAt"], expires)
+
+    def test_a_legacy_pairing_is_never_refreshed(self):
+        legacy = {"version": 1, "role": "source", "pairId": "p" * 32,
+                  "token": "t" * 43, "encryptionKey": "k" * 43, "revision": 1}
+        app, saved, client = self._app(legacy)
+        app._refresh_invitation_if_stale()
+        self.assertEqual(client.calls, 0)
+        self.assertEqual(saved, [])
 
 
 class AccountRepairTests(unittest.TestCase):
