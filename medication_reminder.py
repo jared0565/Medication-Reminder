@@ -23,7 +23,7 @@ import pystray
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "vendor"))
 import qrcode
 
-from sync_client import EncryptedSyncClient, RemoteSchedule, SyncError
+from sync_client import APP_URL, EncryptedSyncClient, RemoteSchedule, SyncError
 
 from medication_core import (
     AppStorage,
@@ -1021,9 +1021,46 @@ class MedicationReminderApp:
             sleep_fn(interval)
         raise SyncError("Device linking was cancelled.")
 
+    @staticmethod
+    def _device_link_instructions(start: dict) -> str:
+        """The two-step text shown while the grant is pending.
+
+        `verificationUri` is read with `or` rather than as a dict.get default:
+        a default is evaluated eagerly, so a missing import there raised on every
+        call instead of only on the fallback path.
+        """
+        uri = start.get("verificationUri") or APP_URL
+        code = start.get("userCode", "")
+        return (
+            f"1. Open {uri} in a browser where you are signed in.\n"
+            f"2. Enter this code to approve:\n\n        {code}\n\n"
+            "Waiting for approval…"
+        )
+
+    def _confirm_relink(self) -> bool:
+        """Linking again is destructive, so say so before starting.
+
+        A completed link runs _perform_repair, which revokes the current pair and
+        mints a new one with a new encryption key -- every other device drops off
+        and the mobile must scan a fresh QR. 'Pair mobile' already warns about
+        exactly this; linking did not.
+        """
+        if not self.sync_credentials or self.sync_credentials.get("version") != 2:
+            return True
+        return messagebox.askyesno(
+            APP_NAME,
+            "This widget is already linked to your account.\n\n"
+            "Linking again creates a NEW pairing: the current one is revoked and "
+            "your mobile has to scan a new QR code before it syncs again.\n\n"
+            "Continue?",
+            parent=self.root,
+        )
+
     def link_account_device(self) -> None:
         """Link this widget to the owner's account via the browser, then create
         an account-scoped pair it can sync."""
+        if not self._confirm_relink():
+            return
         dialog = tk.Toplevel(self.root)
         dialog.title("Link this device")
         dialog.transient(self.root)
@@ -1035,12 +1072,8 @@ class MedicationReminderApp:
         ttk.Button(dialog, text="Cancel", command=lambda: (cancelled.__setitem__("value", True), dialog.destroy())).pack(pady=(0, 12))
 
         def show_code(start: dict) -> None:
-            code = start.get("userCode", "")
-            uri = start.get("verificationUri", APP_URL)
-            self.root.after(0, lambda: status.set(
-                f"1. Open {uri} in a browser where you are signed in.\n"
-                f"2. Enter this code to approve:\n\n        {code}\n\n"
-                "Waiting for approval…"))
+            text = self._device_link_instructions(start)
+            self.root.after(0, lambda: status.set(text))
 
         def worker() -> None:
             try:

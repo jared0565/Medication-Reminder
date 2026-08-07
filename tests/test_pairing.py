@@ -510,6 +510,64 @@ class DeviceLinkControllerTests(unittest.TestCase):
             app._run_device_link(lambda _s: None, lambda: True, sleep_fn=lambda _s: None)
 
 
+class DeviceLinkInstructionsTests(unittest.TestCase):
+    """The link dialog must render, and must not silently rebuild a live pairing."""
+
+    def test_instructions_name_the_verification_uri_and_code(self):
+        text = MedicationReminderApp._device_link_instructions(
+            {"userCode": "ABCD-EFGH", "verificationUri": "https://relay.test/link"})
+        self.assertIn("https://relay.test/link", text)
+        self.assertIn("ABCD-EFGH", text)
+
+    def test_instructions_fall_back_to_the_app_url(self):
+        # This raised NameError on EVERY click: APP_URL was never imported, and as
+        # a dict.get default it is evaluated eagerly, so the fallback fired even
+        # when the relay did return a verificationUri.
+        text = MedicationReminderApp._device_link_instructions({"userCode": "ABCD-EFGH"})
+        self.assertIn(medication_reminder.APP_URL, text)
+        self.assertIn("ABCD-EFGH", text)
+
+    def test_relinking_an_account_pairing_asks_first(self):
+        app = object.__new__(MedicationReminderApp)
+        app.root = None
+        app.sync_credentials = {"version": 2, "role": "account", "pairId": "p" * 32}
+        asked = []
+        original = medication_reminder.messagebox
+
+        class FakeBox:
+            @staticmethod
+            def askyesno(title, message, **kwargs):
+                asked.append(message)
+                return False
+
+        medication_reminder.messagebox = FakeBox
+        try:
+            # Linking again revokes the live pair and forces the mobile to re-scan,
+            # so declining must abandon it.
+            self.assertFalse(app._confirm_relink())
+        finally:
+            medication_reminder.messagebox = original
+        self.assertTrue(asked, "a second link must warn before rebuilding the pairing")
+        self.assertRegex(asked[0], r"(?i)new pairing|re-?scan|revok")
+
+    def test_first_link_does_not_prompt(self):
+        app = object.__new__(MedicationReminderApp)
+        app.root = None
+        app.sync_credentials = None
+        original = medication_reminder.messagebox
+
+        class FakeBox:
+            @staticmethod
+            def askyesno(*_a, **_k):
+                raise AssertionError("an unlinked widget must not be asked to confirm")
+
+        medication_reminder.messagebox = FakeBox
+        try:
+            self.assertTrue(app._confirm_relink())
+        finally:
+            medication_reminder.messagebox = original
+
+
 class InvitationFreshnessTests(unittest.TestCase):
     """Show QR must never render an invitation the relay will already refuse.
 
