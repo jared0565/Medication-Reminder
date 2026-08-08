@@ -137,3 +137,11 @@ CREATE TABLE IF NOT EXISTS device_credentials (
 );
 
 CREATE INDEX IF NOT EXISTS idx_device_credentials_user_id ON device_credentials(user_id);
+
+-- Records that a scheduled run actually completed. The worker answering
+-- requests proves nothing about the cron: fetch and scheduled fail
+-- independently, and it is the cron that delivers reminders.
+CREATE TABLE IF NOT EXISTS service_heartbeats (
+  name TEXT PRIMARY KEY,
+  last_ok_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

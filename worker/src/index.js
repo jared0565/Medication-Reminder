@@ -748,6 +748,31 @@ export default {
         return new Response(null, { status: 204, headers: { ...corsHeaders(request), 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Max-Age': '86400' } });
       }
       if (request.method === 'GET' && url.pathname === '/health') return json(request, { ok: true, service: 'medication-reminder-push' });
+      // Deliberately separate from /health. That one is liveness for the app and
+      // must stay 200 while sync works; this one is for an external monitor and
+      // has to go non-2xx to trip an alert. Folding them together would either
+      // alarm users over a stale cron or never alert anyone at all.
+      if (request.method === 'GET' && url.pathname === '/health/cron') {
+        const STALE_AFTER_SECONDS = 600;
+        let ageSeconds = null;
+        try {
+          const row = await env.DB.prepare(
+            "SELECT CAST((julianday('now') - julianday(last_ok_at)) * 86400 AS INTEGER) AS age FROM service_heartbeats WHERE name = 'cron'",
+          ).first();
+          ageSeconds = row ? Number(row.age) : null;
+        } catch (error) {
+          console.error('cron_heartbeat_read_failed', { error: String(error) });
+          return json(request, { ok: false, reason: 'heartbeat_unreadable' }, { status: 503 });
+        }
+        // No row at all means the cron has not completed once since this was
+        // deployed. Treated as unhealthy rather than "no news is good news".
+        const healthy = ageSeconds !== null && ageSeconds <= STALE_AFTER_SECONDS;
+        return json(request, {
+          ok: healthy,
+          ageSeconds,
+          staleAfterSeconds: STALE_AFTER_SECONDS,
+        }, { status: healthy ? 200 : 503 });
+      }
       if (request.method === 'GET' && url.pathname === '/vapid-public-key') return json(request, { publicKey: env.VAPID_PUBLIC_KEY });
       if (request.method === 'POST' && url.pathname === '/subscriptions') {
         const origin = request.headers.get('Origin');
@@ -825,5 +850,11 @@ export default {
         : env.DB.prepare('UPDATE push_subscriptions SET reminders = ? WHERE endpoint = ?');
       await update.bind(JSON.stringify(remaining), row.endpoint).run();
     }
+    // Last, so it records only a run that got all the way through. Stamping it
+    // on entry would keep the heartbeat fresh while every delivery below failed,
+    // which is precisely the outage it exists to reveal.
+    await env.DB.prepare(`INSERT INTO service_heartbeats (name, last_ok_at)
+      VALUES ('cron', CURRENT_TIMESTAMP)
+      ON CONFLICT(name) DO UPDATE SET last_ok_at = CURRENT_TIMESTAMP`).run();
   },
 };

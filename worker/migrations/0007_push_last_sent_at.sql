@@ -1,0 +1,14 @@
+-- Production's push_subscriptions never gained last_sent_at, although
+-- schema.sql declares it and the scheduled handler both reads and writes it.
+-- Every cron run therefore threw:
+--
+--   D1_ERROR: no such column: last_sent_at
+--
+-- so no push reminder was ever delivered from the server. Nothing surfaced it:
+-- the failure is invisible from the app, and the worker test fixture builds
+-- from schema.sql, which has the column -- so schema drift in production is
+-- unobservable to the suite by construction.
+--
+-- Found on the first day of cron heartbeat monitoring (0006), by the heartbeat
+-- staying empty.
+ALTER TABLE push_subscriptions ADD COLUMN last_sent_at TEXT;
