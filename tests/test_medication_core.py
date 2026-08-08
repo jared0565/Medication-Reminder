@@ -72,6 +72,27 @@ class RuntimeMarkerTests(unittest.TestCase):
                                 "a different binary must produce a different fingerprint")
             self.assertEqual(second["build"]["size"], new.stat().st_size)
 
+    def test_fingerprint_is_exact_so_an_unchanged_build_never_looks_stale(self):
+        """Seconds are lossy, and lossy here means false alarms.
+
+        A truncated st_mtime disagrees by a second with any tool that rounds
+        instead (PowerShell's -UFormat %s does), so an EXE that genuinely IS
+        the running one reads as stale. A fingerprint that cries wolf is worse
+        than none, because the whole point is to end guesswork about which
+        binary is live. Nanoseconds are exact and compare identically
+        everywhere.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            storage = self._storage(tmp)
+            target = Path(tmp) / "app.exe"
+            target.write_bytes(b"build")
+            marker = storage.write_runtime_marker("2026.08.08.1", executable=target)
+
+            self.assertEqual(marker["build"]["mtime_ns"], target.stat().st_mtime_ns,
+                             "the fingerprint must match the file exactly, not to the second")
+            self.assertNotIn("mtime", marker["build"],
+                             "a lossy seconds field invites the very comparison that misreports")
+
     def test_each_start_replaces_the_previous_marker(self):
         with tempfile.TemporaryDirectory() as tmp:
             storage = self._storage(tmp)

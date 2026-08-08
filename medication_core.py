@@ -500,7 +500,17 @@ class AppStorage:
         }
         try:
             stat = target.stat()
-            marker["build"] = {"size": stat.st_size, "mtime": int(stat.st_mtime)}
+            # Nanoseconds, not seconds. A truncated st_mtime disagrees by a
+            # second with any tool that rounds instead, so an EXE that genuinely
+            # IS the running one reads as stale -- a fingerprint that cries wolf
+            # is worse than none, because the whole point is ending guesswork
+            # about which binary is live. `modified` is for humans only; compare
+            # on size and mtime_ns.
+            marker["build"] = {
+                "size": stat.st_size,
+                "mtime_ns": stat.st_mtime_ns,
+                "modified": datetime.fromtimestamp(stat.st_mtime, timezone.utc).isoformat(),
+            }
         except OSError:
             marker["build"] = None
         try:
