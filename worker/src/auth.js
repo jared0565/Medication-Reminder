@@ -449,7 +449,7 @@ export async function handleAuthRequest(request, env, url, helpers) {
     await recordAudit(env, account.user.user_id, 'device_credential_revoked', { by: 'account', count: Number(result.meta?.changes || 0) });
     return json(request, { ok: true, revoked: Number(result.meta?.changes || 0) });
   }
-  if (!['/auth/me', '/auth/session'].includes(url.pathname)) return null;
+  if (!['/auth/me', '/auth/me/export', '/auth/session'].includes(url.pathname)) return null;
   // The reusable bearer session is a temporary v1 widget compatibility
   // credential. V2 account routes are cookie-only, including when the request
   // also presents an otherwise valid session cookie.
@@ -493,6 +493,59 @@ export async function handleAuthRequest(request, env, url, helpers) {
   const account = await authenticateSession(request, env);
   if (!account) return json(request, { error: 'Sign-in required.' }, { status: 401 });
   if (request.method === 'GET' && url.pathname === '/auth/me') return json(request, accountView(account.user, account.entitlements));
+  if (request.method === 'GET' && url.pathname === '/auth/me/export') {
+    const userId = account.user.user_id;
+    const rows = async (sql) => ((await env.DB.prepare(sql).bind(userId).all()).results || []);
+    return json(request, {
+      exportedAt: new Date().toISOString(),
+      // The relay stores ciphertext and never holds the key, so a server-side
+      // export cannot contain a readable schedule. Handing someone a blob they
+      // cannot open and calling it their data would be worse than saying so:
+      // the readable copy lives in the signed-in browser, which has the key.
+      note: 'Your schedule is end-to-end encrypted. This service stores only ciphertext '
+        + 'and never holds your key, so the schedule below cannot be read here. Export a '
+        + 'readable copy from the app on a device that is already paired.',
+      account: accountView(account.user, account.entitlements).user,
+      devices: await rows('SELECT device_id, device_type, display_name, last_seen_at, created_at FROM user_devices WHERE user_id = ?'),
+      entitlements: await rows('SELECT feature_key, state, valid_from, valid_until, source FROM user_entitlements WHERE user_id = ?'),
+      auditEvents: await rows('SELECT event_type, metadata_json, created_at FROM account_audit_events WHERE user_id = ? ORDER BY created_at'),
+      pairs: await rows('SELECT pair_id, revision, updated_at, ciphertext, iv FROM sync_pairs WHERE user_id = ?'),
+    });
+  }
+  if (request.method === 'DELETE' && url.pathname === '/auth/me') {
+    if (parseSessionCredential(request)?.kind === 'cookie' && !validCsrfRequest(request)) {
+      return json(request, { error: 'Invalid browser request' }, { status: 403 });
+    }
+    const userId = account.user.user_id;
+    const scoped = sql => env.DB.prepare(sql).bind(userId);
+    try {
+      // push_subscriptions carries no user_id -- it is reachable only through
+      // sync_pairs.mobile_push_endpoint. It MUST be erased before the pairs, or
+      // the endpoints become unreachable and a deleted user keeps receiving
+      // reminders on their phone with no record left to explain why.
+      await env.DB.batch([
+        scoped(`DELETE FROM push_subscriptions WHERE endpoint IN (
+          SELECT mobile_push_endpoint FROM sync_pairs
+          WHERE user_id = ? AND mobile_push_endpoint IS NOT NULL)`),
+        scoped('DELETE FROM sync_pairs WHERE user_id = ?'),
+        scoped('DELETE FROM device_credentials WHERE user_id = ?'),
+        scoped('DELETE FROM device_authorizations WHERE user_id = ?'),
+        scoped('DELETE FROM user_devices WHERE user_id = ?'),
+        scoped('DELETE FROM user_entitlements WHERE user_id = ?'),
+        scoped('DELETE FROM account_audit_events WHERE user_id = ?'),
+        scoped('DELETE FROM app_sessions WHERE user_id = ?'),
+        scoped('DELETE FROM app_users WHERE user_id = ?'),
+      ]);
+    } catch {
+      // Report the failure rather than a cleared cookie and a half-erased
+      // account: a user told "deleted" whose data survives is the worst outcome.
+      console.error('account_deletion_failed');
+      return json(request, { error: 'The account could not be deleted. Nothing was removed.' }, { status: 503 });
+    }
+    // No audit row is written: it would be the only trace of a user who asked to
+    // be forgotten, in the very table just erased.
+    return json(request, { ok: true }, { headers: { 'Set-Cookie': clearSessionCookie() } });
+  }
   if (request.method === 'PATCH' && url.pathname === '/auth/me') {
     const body = await readJson(request);
     let startDate;

@@ -19,6 +19,8 @@
     save: document.querySelector('#saveUsagePeriod'),
     signOut: document.querySelector('#signOut'),
     signOutDialog: document.querySelector('#signOutDialog'),
+    exportAccount: document.querySelector('#exportAccount'),
+    deleteAccount: document.querySelector('#deleteAccount'),
   };
 
   let account = null;
@@ -412,6 +414,47 @@
 
   if (elements.signOut) elements.signOut.onclick = signOut;
 
+  async function exportAccountData() {
+    const epoch = authEpoch;
+    try {
+      const data = await request('/auth/me/export');
+      if (epoch !== authEpoch) return;
+      // Delivered as a download rather than shown on screen: it is the person's
+      // own record to keep, and a wall of JSON is not an answer to "what do you
+      // hold about me".
+      const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'medication-reminder-account-data.json';
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      if (epoch === authEpoch) alert(error.message);
+    }
+  }
+
+  async function deleteAccountForever() {
+    // Irreversible, and it removes a medication schedule someone may depend on.
+    // Two steps on purpose: the first states the consequence, the second makes
+    // the person type the word, so it cannot happen on a mis-click.
+    if (!confirm('Delete your account?\n\nYour schedule, paired devices and history will be removed from the server for good. Any paired phone will stop syncing. This cannot be undone.')) return;
+    if ((prompt('Type DELETE to confirm.') || '').trim().toUpperCase() !== 'DELETE') return;
+    const epoch = authEpoch;
+    elements.deleteAccount.disabled = true;
+    try {
+      await request('/auth/me', { method: 'DELETE' });
+      alert('Your account and its data have been deleted.');
+      location.reload();
+    } catch (error) {
+      if (epoch === authEpoch) alert(error.message);
+    } finally {
+      elements.deleteAccount.disabled = false;
+    }
+  }
+
+  if (elements.exportAccount) elements.exportAccount.onclick = exportAccountData;
+  if (elements.deleteAccount) elements.deleteAccount.onclick = deleteAccountForever;
+
   const initialized = initialize();
   window.MedicationAccount = {
     get current() { return account; },
@@ -419,5 +462,7 @@
     get advanced() { return Boolean(account?.features?.advanced); },
     initialized,
     signOut,
+    exportAccountData,
+    deleteAccountForever,
   };
 })();

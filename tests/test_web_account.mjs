@@ -54,6 +54,9 @@ function accountHarness({
   deferMe = false,
   deleteStatus = 200,
   clearScheduleThrows = false,
+  confirmDelete = true,
+  typedConfirmation = 'DELETE',
+  eraseStatus = 200,
 } = {}) {
   const elements = new Map([
     ['#accountStatus', element()],
@@ -66,7 +69,10 @@ function accountHarness({
     ['#usageEndDate', element()],
     ['#saveUsagePeriod', element()],
     ['#signOut', element()],
+    ['#exportAccount', element()],
+    ['#deleteAccount', element()],
   ]);
+  const reloads = [];
   const closeListeners = [];
   const signOutDialog = {
     ...element(),
@@ -213,6 +219,14 @@ function accountHarness({
         : { error: 'Session revocation could not be confirmed.' });
     }
     if (url === '/api/auth/me' && options.method === 'PATCH') return response(200, accountView());
+    if (url === '/api/auth/me/export') {
+      return response(200, { account: { email: 'person@example.com' }, note: 'end-to-end encrypted', pairs: [] });
+    }
+    if (url === '/api/auth/me' && options.method === 'DELETE') {
+      return response(eraseStatus, eraseStatus === 200
+        ? { ok: true }
+        : { error: 'The account could not be deleted. Nothing was removed.' });
+    }
     return response(404, { error: 'Not found' });
   }
 
@@ -247,6 +261,11 @@ function accountHarness({
     crypto: webcrypto,
     fetch,
     alert(message) { alerts.push(message); },
+    confirm() { return confirmDelete; },
+    prompt() { return typedConfirmation; },
+    location: { reload() { reloads.push(true); } },
+    URL: { createObjectURL: () => 'blob:stub', revokeObjectURL() {} },
+    Blob: class Blob { constructor(parts) { this.parts = parts; } },
     CustomEvent: class CustomEvent {
       constructor(type, init) { this.type = type; this.detail = init?.detail; }
     },
@@ -268,6 +287,7 @@ function accountHarness({
     storage,
     alerts,
     elements,
+    reloads,
     async initialize() {
       await window.MedicationAccount.initialized;
     },
@@ -575,4 +595,56 @@ test('security policy permits Google Identity Services while blocking plugins an
   assert.match(headers, /script-src 'self' https:\/\/accounts\.google\.com\/gsi\/client/);
   assert.match(headers, /object-src 'none'/);
   assert.match(headers, /frame-ancestors 'none'/);
+});
+
+// Erasure is irreversible and removes a medication schedule someone may be
+// relying on. Two independent confirmations stand between a mis-click and that,
+// so both are pinned: a test that only checked "DELETE was sent" would pass on a
+// build where either guard had been dropped.
+test('account deletion requires both confirmations before anything is sent', async () => {
+  const declined = accountHarness({ signedIn: true, confirmDelete: false });
+  await declined.initialize();
+  await declined.window.MedicationAccount.deleteAccountForever();
+  assert.equal(
+    declined.requests.some(r => r.url === '/api/auth/me' && r.options.method === 'DELETE'), false,
+    'declining the first confirmation must not delete the account',
+  );
+
+  const mistyped = accountHarness({ signedIn: true, confirmDelete: true, typedConfirmation: 'delete please' });
+  await mistyped.initialize();
+  await mistyped.window.MedicationAccount.deleteAccountForever();
+  assert.equal(
+    mistyped.requests.some(r => r.url === '/api/auth/me' && r.options.method === 'DELETE'), false,
+    'the typed confirmation must match before the account is deleted',
+  );
+});
+
+test('a confirmed deletion is sent with CSRF proof and reloads into the signed-out app', async () => {
+  const app = accountHarness({ signedIn: true });
+  await app.initialize();
+  await app.window.MedicationAccount.deleteAccountForever();
+
+  const sent = app.requests.find(r => r.url === '/api/auth/me' && r.options.method === 'DELETE');
+  assert.ok(sent, 'a confirmed deletion must reach the server');
+  assert.equal(sent.options.headers['X-Medication-CSRF'], '1');
+  assert.equal(sent.options.credentials, 'same-origin');
+  assert.equal(app.reloads.length, 1, 'the app must not keep showing a deleted account');
+});
+
+test('a failed deletion says so and does not pretend the account is gone', async () => {
+  const app = accountHarness({ signedIn: true, eraseStatus: 503 });
+  await app.initialize();
+  await app.window.MedicationAccount.deleteAccountForever();
+  assert.match(app.alerts.at(-1), /could not be deleted/i);
+  assert.equal(app.reloads.length, 0, 'a failed deletion must not look like a successful one');
+});
+
+test('the export is downloaded, not left on screen', async () => {
+  const app = accountHarness({ signedIn: true });
+  await app.initialize();
+  await app.window.MedicationAccount.exportAccountData();
+  assert.ok(
+    app.requests.some(r => r.url === '/api/auth/me/export'),
+    'the export must come from the server, not from whatever this browser happens to hold',
+  );
 });
