@@ -39,6 +39,10 @@ from medication_core import (
 
 
 APP_NAME = "Medication Reminder"
+# Kept in step with web/version.json by a test: both artifacts ship one release
+# stamp, so a half-stamped release fails locally instead of leaving a rebuilt
+# binary claiming to be a version it was never built from.
+APP_VERSION = "2026.08.08.1"
 CHECK_INTERVAL_SECONDS = 15
 # How often the widget reconciles with the relay. The web app pushes dose changes,
 # but the widget has no inbound channel, so this interval is its whole latency.
@@ -47,6 +51,17 @@ DEFAULT_SNOOZE_MINUTES = 10
 ERROR_ALREADY_EXISTS = 183
 STARTUP_REGISTRY_PATH = r"Software\Microsoft\Windows\CurrentVersion\Run"
 STARTUP_VALUE_NAME = "MedicationReminder"
+
+
+def _window_title() -> str:
+    """Put the build in the window title.
+
+    The title is the only place a running widget states its build without the
+    user opening anything, and it is what Task Manager shows -- so "which build
+    is actually running?" is answerable at a glance rather than by inference
+    from a file timestamp.
+    """
+    return f"{APP_NAME} {APP_VERSION}"
 
 
 def enable_dpi_awareness() -> None:
@@ -131,12 +146,15 @@ class MedicationReminderApp:
         enable_dpi_awareness()
         self.root = tk.Tk()
         self._configure_theme()
-        self.root.title(APP_NAME)
+        self.root.title(_window_title())
         self.root.geometry("680x540")
         self.root.minsize(600, 460)
         self.root.protocol("WM_DELETE_WINDOW", self.hide_to_tray)
 
         self.storage = AppStorage()
+        # Stamp what is actually running before anything else can fail, so a
+        # widget that misbehaves later can still be identified by build.
+        self.storage.write_runtime_marker(APP_VERSION)
         self.alert_settings = self.storage.load_settings()
         self.config_data = self._load_schedule_or_reset()
         try:

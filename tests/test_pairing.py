@@ -471,6 +471,38 @@ class DeviceAuthorizationTests(unittest.TestCase):
         self.assertEqual(remote.schedule, _sample_schedule())
 
 
+class ReleaseVersionTests(unittest.TestCase):
+    """One release stamp across both shipped artifacts."""
+
+    def test_widget_version_matches_the_web_release(self):
+        """A forgotten widget bump must fail here rather than in production.
+
+        APP_VERSION is a hand-edited constant with nothing to catch drift. The
+        PWA already has a test asserting every asset carries the release stamp,
+        so tying the widget to web/version.json puts both behind that one gate:
+        a release cannot ship half-stamped, and a stale binary reporting the
+        new version becomes impossible to produce by omission.
+        """
+        web = json.loads(
+            (Path(__file__).resolve().parent.parent / "web" / "version.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(medication_reminder.APP_VERSION, web["version"])
+
+    def test_window_title_names_the_running_build(self):
+        """The title is the one place a build is readable without clicking."""
+        title = medication_reminder._window_title()
+        self.assertIn(medication_reminder.APP_VERSION, title)
+        self.assertIn(medication_reminder.APP_NAME, title)
+
+    def test_the_window_actually_uses_that_title(self):
+        # A helper nothing calls would leave the build invisible where it counts.
+        source = (Path(__file__).resolve().parent.parent / "medication_reminder.py").read_text(encoding="utf-8")
+        self.assertTrue(
+            "self.root.title(_window_title())" in source,
+            "the main window must set its title from _window_title()",
+        )
+
+
 class DeviceLinkControllerTests(unittest.TestCase):
     """The headless device-link loop drives poll states and yields the credential."""
 
