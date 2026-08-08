@@ -2237,6 +2237,80 @@ test('late source revocation success cannot clear a replacement pairing from ano
   assert.equal(JSON.parse(app.storage.get('medication-reminder-sync-v1')).pairId, newPair.pairId);
 });
 
+// A terminal sync failure stopped only the dirty-push backoff. `syncOutcome` is
+// function-local and gates `pushTimer` alone, so the 20s visible-tab poll kept
+// firing regardless of it. Observed in production 2026-08-07: a browser whose
+// pair had been deleted server-side polled 404 every 20 seconds for about eight
+// hours -- roughly 1400 pointless requests -- and because the recovery confirm()
+// is gated behind `!silent`, the polling path never once offered a way out.
+//
+// The halt is keyed to the pairing it was recorded for rather than being a bare
+// boolean. A flag that failed to clear would be far worse than wasted requests:
+// on a medication app, a working pairing that silently never syncs is the
+// failure that actually causes harm. Keying it means a different pairing simply
+// does not match, so resuming needs no clear site to be remembered.
+test('a pair deleted on the server stands the poll down without wedging it', async t => {
+  const deadPair = async () => {
+    const source = sourceCredentials({ claimed: true });
+    delete source.invitationToken;
+    delete source.invitationExpiresAt;
+    const urls = [];
+    const app = installedMobileHarness({
+      storedCredentials: source,
+      mobile: false,
+      standalone: false,
+      fetchHandler: async url => {
+        urls.push(String(url));
+        // The exact body the relay sends for a pair that is gone
+        // (worker/src/index.js:358, returned with 404 at :578). A bare 404 is
+        // only a retryable error -- verifiedRevocation requires this body, so a
+        // stub without it would not exercise the revocation path at all.
+        return {
+          ok: false,
+          status: 404,
+          async json() { return { error: 'Pairing not found or credentials invalid' }; },
+        };
+      },
+    });
+    app.context.document.visibilityState = 'visible';
+    await app.context.window.MedicationSync.syncNow({ silent: true });
+    // Drain the app's own startup sync before taking the baseline. It is queued
+    // at load and fires once, which is correct behaviour -- counting it as poll
+    // traffic would make this test fail on a working implementation.
+    await app.flush();
+    return { app, source, seen: () => urls.length, urls };
+  };
+
+  await t.test('the poll stops hammering a pair that is known to be gone', async () => {
+    const { app, seen, urls } = await deadPair();
+    const afterFirst = seen();
+    assert.ok(afterFirst > 0, 'precondition: the first sync actually reached the relay');
+
+    app.context.window.MedicationSync.pollTick();
+    await app.flush();
+    app.context.window.MedicationSync.pollTick();
+    await app.flush();
+
+    assert.equal(seen(), afterFirst,
+      `a pair known to be deleted must not be polled again; requests were ${JSON.stringify(urls)}`);
+  });
+
+  await t.test('a different pairing is polled normally, so the halt cannot wedge sync', async () => {
+    const { app, source, seen } = await deadPair();
+    const afterFirst = seen();
+
+    // The account re-links, or another tab establishes a good pairing. The halt
+    // was recorded against the dead pair and must not silence this one.
+    const revived = { ...source, pairId: 'q'.repeat(32), revision: 4 };
+    app.storage.set('medication-reminder-sync-v1', JSON.stringify(revived));
+
+    app.context.window.MedicationSync.pollTick();
+    await app.flush();
+
+    assert.ok(seen() > afterFirst, 'a fresh pairing must be polled, not silenced by the old halt');
+  });
+});
+
 test('claimed source retires invitation material and hides invitation controls', async () => {
   const source = sourceCredentials();
   const remote = await encryptedRemote(source.encryptionKey, { claimed: true });

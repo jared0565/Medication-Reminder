@@ -1,17 +1,17 @@
 const CACHE_PREFIX = 'medication-reminder-web-';
-const CACHE = 'medication-reminder-web-v31';
+const CACHE = 'medication-reminder-web-v32';
 const SHELL_CACHE_KEY = new URL('/', self.location.origin).href;
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=20260807.2',
-  './access.js?v=20260807.2',
-  './qrcode.js?v=20260807.2',
-  './due-modal.js?v=20260807.2',
-  './app.js?v=20260807.2',
-  './update.js?v=20260807.2',
-  './account.js?v=20260807.2',
-  './sync.js?v=20260807.2',
+  './styles.css?v=20260808.1',
+  './access.js?v=20260808.1',
+  './qrcode.js?v=20260808.1',
+  './due-modal.js?v=20260808.1',
+  './app.js?v=20260808.1',
+  './update.js?v=20260808.1',
+  './account.js?v=20260808.1',
+  './sync.js?v=20260808.1',
   './manifest.webmanifest',
   './icon.svg',
 ];

@@ -31,6 +31,14 @@
   let pushTimer = 0;
   let syncInProgress = false;
   let syncFailures = 0;
+  // A terminal stop, recorded against the authority tuple it applies to rather
+  // than as a bare boolean. Only the background poll consults it -- anything the
+  // user initiates always runs. Keying it to the pairing is what stops a halt
+  // from wedging sync: a re-link, a new pairing or another tab's credentials
+  // produce a different tuple, so the halt stops applying without any clear site
+  // having to remember to fire. Wasted requests are cheap; a working pairing
+  // that silently never syncs is the failure this app cannot afford.
+  let syncHalt = null;
   let changeGeneration = 0;
   // True while the only pending local change is a dose mark. Module state, not a
   // credentials field: validCredentials rejects unknown keys. Losing it on reload
@@ -76,6 +84,22 @@
       ? (value.version === 2 ? value.mobileToken : value.token)
       : value.invitationToken || '';
     return [value.version, value.role, value.pairId, value.deviceId, value.ownerUserId || '', secret].join('|');
+  }
+
+  // Record a terminal stop for the pairing this failure belongs to. Reasons that
+  // can resolve on their own (a retryable error, a locally invalid schedule that
+  // the next edit fixes) must never come through here -- halting on those would
+  // stop sync for a pairing that is actually fine.
+  function haltSync(value) {
+    syncHalt = { authority: authorityTuple(value) };
+  }
+
+  // The halt applies only to the exact pairing it was recorded against. If the
+  // tuple has moved on, the stored halt is about a pairing this device no longer
+  // has, so it must not suppress anything. Erring toward polling is deliberate:
+  // a redundant request costs nothing and the next failure simply re-halts.
+  function haltedFor(value) {
+    return Boolean(syncHalt) && Boolean(value) && syncHalt.authority === authorityTuple(value);
   }
 
   function authoritySnapshot(value = credentials()) {
@@ -1291,6 +1315,11 @@
 
   async function syncNow({ pushLocal = false, silent = false, conflictChoice = null } = {}) {
     const value = credentials();
+    // Anything the user asked for clears the halt and runs. The halt exists to
+    // stop an unattended loop, never to refuse a person pressing Sync -- and
+    // "press Sync" has to remain the way out when the automatic recovery prompt
+    // was skipped because the failure happened on the silent path.
+    if (!silent) syncHalt = null;
     if (!installedMobile && !value && !sourceAllowed(null, { silent })) return;
     if (!value || syncInProgress) {
       if (!value && !silent) alert('Pair a mobile device first.');
@@ -1413,12 +1442,14 @@
       if (error.status === 403) {
         // Entitlement/paused failures are not resolved by retrying: stop the loop.
         syncOutcome = 'stop';
+        haltSync(value);
         showError('Cloud sync is paused for this pairing. Your offline schedule and pairing were kept.');
         if (!silent) alert('Cloud sync is not active right now. Your offline schedule was kept.');
         return;
       }
       if (error.verifiedRevocation && value.version === 2 && value.role === 'mobile') {
         syncOutcome = 'stop';
+        haltSync(value);
         if (!ownsAuthority(operation)) {
           staleOperation();
           return;
@@ -1431,6 +1462,7 @@
         // The pair was deleted server-side. Stop looping generic errors and offer to
         // discard the stale local pairing handle (the local schedule is always kept).
         syncOutcome = 'stop';
+        haltSync(value);
         if (!ownsSourceOperation(operation)) {
           staleOperation();
           return;
@@ -1565,9 +1597,16 @@
   });
   // Visible-tab poll. The push path above handles the urgent case; this is the
   // fallback for when push is unavailable or permission was never granted.
-  setInterval(() => {
-    if (document.visibilityState === 'visible') void syncNow({ silent: true });
-  }, 20_000);
+  //
+  // It consults the halt because it is the one caller nothing supervises: a
+  // terminal failure used to set syncOutcome and change nothing here, so a
+  // deleted pair was re-requested every 20s indefinitely.
+  function pollTick() {
+    if (document.visibilityState !== 'visible') return;
+    if (haltedFor(credentials())) return;
+    void syncNow({ silent: true });
+  }
+  setInterval(pollTick, 20_000);
 
   function consumePendingAccessInvitation() {
     window.MedicationAccess.consumePendingInvitation();
@@ -1656,6 +1695,7 @@
   window.MedicationSync = {
     createPair,
     syncNow,
+    pollTick,
     unpair,
     importScheduleCopy,
     joinAccountPair,
