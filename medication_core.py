@@ -5,6 +5,7 @@ import ctypes
 import json
 import os
 import re
+import sys
 import tempfile
 from copy import deepcopy
 from dataclasses import dataclass
@@ -459,6 +460,54 @@ class AppStorage:
         self.audit_file = ProtectedJsonFile(self.data_dir / "audit.dat", selected_protector)
         self.settings_file = ProtectedJsonFile(self.data_dir / "settings.dat", selected_protector)
         self.sync_file = ProtectedJsonFile(self.data_dir / "sync.dat", selected_protector)
+        self.runtime_file = self.data_dir / "runtime.json"
+
+    def write_runtime_marker(self, version: str, *, executable: Path | None = None) -> dict[str, Any]:
+        """Record what is actually running, so a stale binary is detectable.
+
+        A fixed source tree once went green, was committed, and a live migration
+        was then run against a binary built the previous day. Nothing could be
+        asked of the running process, so the mismatch only surfaced as failures
+        on the user's screen. One file read now answers it.
+
+        The version alone would not be enough. It is a hand-edited constant, so
+        a build made after forgetting to bump it reports the same version as the
+        new one and would CONFIRM a swap that never happened -- the original
+        failure with more confidence behind it. The build fingerprint is the
+        discriminator: size and mtime change on every rebuild whether or not
+        anyone remembered the constant.
+
+        Written as plain JSON, deliberately: it holds no medical data, and it is
+        useless for diagnosis if it needs a key to read. It does contain the
+        executable path, which embeds the Windows username -- harmless locally,
+        which is where it stays, but that makes it something to strip before
+        pasting a marker into a bug report or any upload.
+
+        Never raises: startup diagnostics must not be able to stop the app.
+        """
+        target = Path(executable) if executable is not None else Path(sys.executable)
+        marker: dict[str, Any] = {
+            "version": version,
+            "pid": os.getpid(),
+            "started_at": datetime.now(timezone.utc).isoformat(),
+            "frozen": bool(getattr(sys, "frozen", False)),
+            "executable": str(target),
+            # Recorded alongside sys.executable because under PyInstaller
+            # --onefile the two can differ; whichever resolves to the shipped
+            # binary, the marker carries it.
+            "argv0": str(Path(sys.argv[0]).resolve()) if sys.argv and sys.argv[0] else "",
+            "build": None,
+        }
+        try:
+            stat = target.stat()
+            marker["build"] = {"size": stat.st_size, "mtime": int(stat.st_mtime)}
+        except OSError:
+            marker["build"] = None
+        try:
+            self.runtime_file.write_text(json.dumps(marker, indent=2), encoding="utf-8")
+        except OSError:
+            pass
+        return marker
 
     def _quarantine(self, protected_file: ProtectedJsonFile, now: datetime | None = None) -> Path | None:
         """Rename a corrupt/undecryptable protected file aside so startup can recover.

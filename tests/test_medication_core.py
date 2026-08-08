@@ -1,3 +1,5 @@
+import json
+import os
 import tempfile
 import unittest
 from datetime import date, datetime, time, timedelta
@@ -22,6 +24,73 @@ from medication_core import (
 
 
 TZ = ZoneInfo("Europe/London")
+
+
+class RuntimeMarkerTests(unittest.TestCase):
+    """A running widget must be able to say which build it is.
+
+    On 2026-08-07 a fixed source tree went green, was committed, and a live
+    migration was then run against a binary built the previous day -- there was
+    no way to ask the running process what it was. The marker answers that in
+    one file read.
+
+    The version alone is not enough: it is a hand-edited constant, so a build
+    made after forgetting to bump it reports the SAME version as the new one,
+    and the marker would confirm a swap that never happened. The build
+    fingerprint is what discriminates, because it changes on every rebuild
+    whether or not anyone remembered the constant.
+    """
+
+    def _storage(self, tmp):
+        return AppStorage(data_dir=Path(tmp), protector=_IdentityProtector())
+
+    def test_marker_records_the_running_process(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            storage = self._storage(tmp)
+            marker = storage.write_runtime_marker("2026.08.08.1")
+
+            written = json.loads((Path(tmp) / "runtime.json").read_text(encoding="utf-8"))
+            self.assertEqual(written, marker, "the returned marker must be what landed on disk")
+            self.assertEqual(written["version"], "2026.08.08.1")
+            self.assertEqual(written["pid"], os.getpid(), "must describe THIS process, not a past one")
+            self.assertIn("started_at", written)
+
+    def test_fingerprint_distinguishes_two_builds_of_the_same_version(self):
+        # The exact stale-EXE case: same version string, different binary.
+        with tempfile.TemporaryDirectory() as tmp:
+            storage = self._storage(tmp)
+            old = Path(tmp) / "old.exe"
+            old.write_bytes(b"old build")
+            new = Path(tmp) / "new.exe"
+            new.write_bytes(b"a considerably newer build")
+
+            first = storage.write_runtime_marker("2026.08.08.1", executable=old)
+            second = storage.write_runtime_marker("2026.08.08.1", executable=new)
+
+            self.assertEqual(first["version"], second["version"], "precondition: versions match")
+            self.assertNotEqual(first["build"], second["build"],
+                                "a different binary must produce a different fingerprint")
+            self.assertEqual(second["build"]["size"], new.stat().st_size)
+
+    def test_each_start_replaces_the_previous_marker(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            storage = self._storage(tmp)
+            target = Path(tmp) / "app.exe"
+            target.write_bytes(b"build")
+            storage.write_runtime_marker("2026.08.07.1", executable=target)
+            storage.write_runtime_marker("2026.08.08.1", executable=target)
+
+            written = json.loads((Path(tmp) / "runtime.json").read_text(encoding="utf-8"))
+            self.assertEqual(written["version"], "2026.08.08.1",
+                             "a stale marker must not survive a restart")
+
+    def test_marker_survives_an_unreadable_executable(self):
+        # Never let diagnostics take the app down on startup.
+        with tempfile.TemporaryDirectory() as tmp:
+            storage = self._storage(tmp)
+            marker = storage.write_runtime_marker("2026.08.08.1", executable=Path(tmp) / "absent.exe")
+            self.assertIsNone(marker["build"])
+            self.assertEqual(marker["version"], "2026.08.08.1")
 
 
 class _IdentityProtector:
