@@ -337,6 +337,70 @@ test('Google sign-in sets a secure session cookie without exposing session secre
   }
 });
 
+// Until 2026-08-08 the only entitlement grant in the codebase fired when the
+// sign-in email matched OWNER_EMAIL. Everyone else signed in successfully and
+// then found cloud sync unavailable -- a local-only app with mobile pairing
+// dead, which is the whole product. With one account in production that was
+// invisible; the moment a second person signs up it is the first thing they hit.
+async function signIn(env) {
+  resetGoogleKeysForTests();
+  const { token, fetcher } = await fixture();
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = fetcher;
+  try {
+    const request = new Request('https://medication.bytesfx.com/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: token }),
+    });
+    const database = authDatabase();
+    const response = await handleAuthRequest(
+      request,
+      { DB: database, GOOGLE_CLIENT_ID: CLIENT_ID, ...env },
+      new URL('https://medication.bytesfx.com/auth/google'),
+      { json, readJson: current => current.json(), enforceRateLimit: async () => true, apiVersion: 2 },
+    );
+    return { response, database };
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+}
+
+const entitlementGrants = database =>
+  database.calls.filter(call => /INSERT INTO user_entitlements/.test(call.sql));
+
+test('a brand-new account is granted cloud sync on sign-in', async () => {
+  // No OWNER_EMAIL configured: this is somebody else signing up.
+  const { response, database } = await signIn({});
+  assert.equal(response.status, 200);
+
+  const grants = entitlementGrants(database);
+  assert.equal(grants.length > 0, true,
+    'a new account must be entitled, or the product does not work for the person who just signed up');
+  const grant = grants[0];
+  assert.match(grant.sql, /'advanced'/, 'cloud sync is gated on the advanced entitlement');
+  assert.match(grant.sql, /'active'/);
+  assert.equal(grant.values.includes('user-1'), true, 'the grant must be scoped to the signing-in user');
+});
+
+test('the default grant never resurrects a revoked entitlement', async () => {
+  // Re-granting on every sign-in would make revocation meaningless: an account
+  // switched off for any reason would switch itself back on at next login.
+  const { database } = await signIn({});
+  const grant = entitlementGrants(database).find(call => /default_grant/.test(call.sql));
+  assert.ok(grant, 'the default grant should be identifiable by its source');
+  assert.match(grant.sql, /ON CONFLICT[\s\S]*DO NOTHING/i,
+    'an existing entitlement row, including a revoked one, must be left alone');
+});
+
+test('the owner bootstrap still re-activates, and is not replaced by the default grant', async () => {
+  const { database } = await signIn({ OWNER_EMAIL: 'person@example.com' });
+  const owner = entitlementGrants(database).find(call => /owner_bootstrap/.test(call.sql));
+  assert.ok(owner, 'the owner path must survive');
+  assert.match(owner.sql, /DO UPDATE SET state = 'active'/,
+    'the owner grant deliberately re-activates, unlike the default grant');
+});
+
 test('sign-out clears the hardened session cookie', async () => {
   const sessionToken = `mrs_${'a'.repeat(43)}`;
   const database = authDatabase({ sessionToken });

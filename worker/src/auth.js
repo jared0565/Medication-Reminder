@@ -295,6 +295,18 @@ export async function handleAuthRequest(request, env, url, helpers) {
       display_name = excluded.display_name, picture_url = excluded.picture_url,
       updated_at = CURRENT_TIMESTAMP, last_login_at = CURRENT_TIMESTAMP`)
       .bind(userId, identity.googleSubject, identity.email, identity.displayName, identity.pictureUrl).run();
+    // Every account gets cloud sync. Without this the only grant in the codebase
+    // was the owner bootstrap below, so anyone else signed in successfully and
+    // then found sync unavailable and mobile pairing dead -- which is the whole
+    // product. With a single account in production that was invisible.
+    //
+    // DO NOTHING, not DO UPDATE: re-granting on every sign-in would make
+    // revocation meaningless, since an account switched off for any reason would
+    // switch itself back on at the next login. An existing row always wins, and
+    // the owner bootstrap below deliberately overrides because that is its job.
+    await env.DB.prepare(`INSERT INTO user_entitlements (user_id, feature_key, state, source)
+      VALUES (?, 'advanced', 'active', 'default_grant')
+      ON CONFLICT(user_id, feature_key) DO NOTHING`).bind(userId).run();
     const ownerEmail = String(env.OWNER_EMAIL || '').trim().toLowerCase();
     if (ownerEmail && identity.email === ownerEmail) {
       await env.DB.prepare(`INSERT INTO user_entitlements (user_id, feature_key, state, source)
