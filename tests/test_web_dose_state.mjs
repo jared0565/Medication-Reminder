@@ -141,6 +141,7 @@ function runApp({ taken = {}, events = [event()], search = '' } = {}) {
   return {
     window,
     todayList,
+    scheduleList: $('#scheduleList'),
     syncSignals,
     dueDialog: $('#dueDialog'),
     markTaken: (key, eventId) => click({ taken: key, event: eventId }),
@@ -451,4 +452,33 @@ test('an unresolved dose still opens the due prompt', () => {
 
   assert.equal(app.dueDialog.open, true,
     'precondition failed: the due prompt never opens, so the missed test proves nothing');
+});
+
+// First run. A stranger's entry point is this browser, and until now an empty
+// account showed "No schedules yet. Add your first reminder." and nothing else:
+// no indication that pairing a phone is the next step, or that it should come
+// after there is something to pair. The owner never saw this screen, because the
+// owner has had a schedule since before any of it was written.
+test('an empty account is told what to do, in order', () => {
+  const app = runApp({ events: [] });
+  const html = app.scheduleList.innerHTML;
+  assert.match(html, /first reminder/i, 'step one is having something to be reminded about');
+  // Assert the STEP, not just the word: an earlier version matched /phone|mobile/
+  // and survived deleting the pairing step entirely, because "Pair mobile" still
+  // appeared in the surrounding prose.
+  assert.match(html, /pair your phone/i, 'pairing a phone must be an explicit step, not an aside');
+  assert.match(html, /getting-started/, 'the guidance should be a distinct block, not a bare sentence');
+});
+
+test('the guidance disappears once there is a schedule', () => {
+  // Onboarding that keeps talking after you have onboarded is just noise.
+  const app = runApp({ events: [event()] });
+  assert.doesNotMatch(app.scheduleList.innerHTML, /getting-started/,
+    'a set-up account must not keep being told how to set up');
+});
+
+test("today's empty state points somewhere useful instead of dead-ending", () => {
+  const app = runApp({ events: [] });
+  assert.match(app.todayList.innerHTML, /schedule/i,
+    'an empty day should say where reminders come from');
 });

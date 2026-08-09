@@ -42,7 +42,7 @@ APP_NAME = "Medication Reminder"
 # Kept in step with web/version.json by a test: both artifacts ship one release
 # stamp, so a half-stamped release fails locally instead of leaving a rebuilt
 # binary claiming to be a version it was never built from.
-APP_VERSION = "2026.08.08.1"
+APP_VERSION = "2026.08.08.3"
 CHECK_INTERVAL_SECONDS = 15
 # How often the widget reconciles with the relay. The web app pushes dose changes,
 # but the widget has no inbound channel, so this interval is its whole latency.

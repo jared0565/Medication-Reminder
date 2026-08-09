@@ -1778,3 +1778,82 @@ test('an unapproved device code cannot be brute-forced through poll or approve',
   const approve = await fixture.request('/api/auth/device/approve', { method: 'POST', session: fixture.sessions.a.sessionToken, csrf: true, body: { userCode: 'ZZZZ-ZZZZ' } });
   assert.equal(approve.status, 404);
 });
+
+// "The reminders stopped" must be observable without a user reporting a missed
+// dose. The worker answering requests proves nothing about the cron: fetch and
+// scheduled fail independently, and it is the cron that delivers reminders.
+test('a completed cron run is recorded, and only a completed one', async () => {
+  const fixture = await workerFixture();
+  const heartbeat = () => fixture.database
+    .prepare("SELECT last_ok_at FROM service_heartbeats WHERE name = 'cron'").get();
+
+  assert.equal(heartbeat(), undefined, 'precondition: nothing has run yet');
+  await worker.scheduled({}, fixture.env);
+  assert.ok(heartbeat(), 'a completed run must leave a heartbeat');
+});
+
+test('a run that fails partway leaves no heartbeat', async () => {
+  // The whole value of the heartbeat is that it means "deliveries happened".
+  // Stamped on entry it would stay fresh through a total delivery outage --
+  // a monitor that reports healthy during the failure it exists to catch.
+  const fixture = await workerFixture();
+  const realPrepare = sql => fixture.env.DB.prepare(sql);
+  const brokenEnv = {
+    ...fixture.env,
+    DB: {
+      ...fixture.env.DB,
+      prepare(sql) {
+        if (/FROM push_subscriptions/.test(sql)) throw Error('database unavailable');
+        return realPrepare(sql);
+      },
+    },
+  };
+
+  await assert.rejects(() => worker.scheduled({}, brokenEnv), 'precondition: the run must actually fail');
+  const heartbeat = fixture.database
+    .prepare("SELECT last_ok_at FROM service_heartbeats WHERE name = 'cron'").get();
+  assert.equal(heartbeat, undefined, 'a failed run must not look like a healthy one');
+});
+
+test('cron health is unhealthy before the first run and healthy after it', async () => {
+  const fixture = await workerFixture();
+  const ask = () => worker.fetch(
+    new Request('https://medication.bytesfx.com/api/health/cron'), fixture.env, {},
+  );
+
+  // No row means the cron has not completed once. Absence of news is not health.
+  const cold = await ask();
+  assert.equal(cold.status, 503, 'a cron that has never completed must not report healthy');
+  assert.equal((await cold.json()).ok, false);
+
+  await worker.scheduled({}, fixture.env);
+  const warm = await ask();
+  assert.equal(warm.status, 200);
+  const body = await warm.json();
+  assert.equal(body.ok, true);
+  assert.ok(body.ageSeconds <= body.staleAfterSeconds);
+});
+
+test('a stale heartbeat reports unhealthy so an external monitor can alert', async () => {
+  const fixture = await workerFixture();
+  await worker.scheduled({}, fixture.env);
+  fixture.database
+    .prepare("UPDATE service_heartbeats SET last_ok_at = datetime('now', '-45 minutes') WHERE name = 'cron'")
+    .run();
+
+  const response = await worker.fetch(
+    new Request('https://medication.bytesfx.com/api/health/cron'), fixture.env, {},
+  );
+  assert.equal(response.status, 503, 'a stale cron must be non-2xx, or no alert can ever fire');
+  assert.equal((await response.json()).ok, false);
+});
+
+test('plain /health stays 200 while the cron is stale', async () => {
+  // The app polls /health. A stale cron is an operations problem, not a reason
+  // to tell every user the service is down.
+  const fixture = await workerFixture();
+  const response = await worker.fetch(
+    new Request('https://medication.bytesfx.com/api/health'), fixture.env, {},
+  );
+  assert.equal(response.status, 200);
+});

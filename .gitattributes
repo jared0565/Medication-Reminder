@@ -1,0 +1,6 @@
+# Shell scripts and CI workflows run on Linux runners. A CRLF checkout gives
+# `#!/usr/bin/env bash\r` -> "bad interpreter", which fails in a way that does
+# not name its own cause. Force LF regardless of the committer's platform.
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

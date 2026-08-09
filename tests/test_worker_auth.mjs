@@ -337,6 +337,153 @@ test('Google sign-in sets a secure session cookie without exposing session secre
   }
 });
 
+// Until 2026-08-08 the only entitlement grant in the codebase fired when the
+// sign-in email matched OWNER_EMAIL. Everyone else signed in successfully and
+// then found cloud sync unavailable -- a local-only app with mobile pairing
+// dead, which is the whole product. With one account in production that was
+// invisible; the moment a second person signs up it is the first thing they hit.
+async function signIn(env) {
+  resetGoogleKeysForTests();
+  const { token, fetcher } = await fixture();
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = fetcher;
+  try {
+    const request = new Request('https://medication.bytesfx.com/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: token }),
+    });
+    const database = authDatabase();
+    const response = await handleAuthRequest(
+      request,
+      { DB: database, GOOGLE_CLIENT_ID: CLIENT_ID, ...env },
+      new URL('https://medication.bytesfx.com/auth/google'),
+      { json, readJson: current => current.json(), enforceRateLimit: async () => true, apiVersion: 2 },
+    );
+    return { response, database };
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+}
+
+const entitlementGrants = database =>
+  database.calls.filter(call => /INSERT INTO user_entitlements/.test(call.sql));
+
+test('a brand-new account is granted cloud sync on sign-in', async () => {
+  // No OWNER_EMAIL configured: this is somebody else signing up.
+  const { response, database } = await signIn({});
+  assert.equal(response.status, 200);
+
+  const grants = entitlementGrants(database);
+  assert.equal(grants.length > 0, true,
+    'a new account must be entitled, or the product does not work for the person who just signed up');
+  const grant = grants[0];
+  assert.match(grant.sql, /'advanced'/, 'cloud sync is gated on the advanced entitlement');
+  assert.match(grant.sql, /'active'/);
+  assert.equal(grant.values.includes('user-1'), true, 'the grant must be scoped to the signing-in user');
+});
+
+test('the default grant never resurrects a revoked entitlement', async () => {
+  // Re-granting on every sign-in would make revocation meaningless: an account
+  // switched off for any reason would switch itself back on at next login.
+  const { database } = await signIn({});
+  const grant = entitlementGrants(database).find(call => /default_grant/.test(call.sql));
+  assert.ok(grant, 'the default grant should be identifiable by its source');
+  assert.match(grant.sql, /ON CONFLICT[\s\S]*DO NOTHING/i,
+    'an existing entitlement row, including a revoked one, must be left alone');
+});
+
+test('the owner bootstrap still re-activates, and is not replaced by the default grant', async () => {
+  const { database } = await signIn({ OWNER_EMAIL: 'person@example.com' });
+  const owner = entitlementGrants(database).find(call => /owner_bootstrap/.test(call.sql));
+  assert.ok(owner, 'the owner path must survive');
+  assert.match(owner.sql, /DO UPDATE SET state = 'active'/,
+    'the owner grant deliberately re-activates, unlike the default grant');
+});
+
+// Erasure and portability. Distributing to other people makes these obligations
+// rather than niceties, and there was no delete path at all: a user who wanted
+// their data gone had no way to get it.
+const ERASED_TABLES = [
+  'push_subscriptions',
+  'sync_pairs',
+  'device_credentials',
+  'device_authorizations',
+  'user_devices',
+  'user_entitlements',
+  'account_audit_events',
+  'app_sessions',
+  'app_users',
+];
+
+async function accountRequest(method, path, { csrf = true, sessionToken } = {}) {
+  const token = sessionToken || `mrs_${'a'.repeat(43)}`;
+  const headers = { Cookie: `mrs_session=${token}` };
+  if (csrf) {
+    headers.Origin = 'https://medication.bytesfx.com';
+    headers['X-Medication-CSRF'] = '1';
+  }
+  const request = new Request(`https://medication.bytesfx.com/api${path}`, { method, headers });
+  const database = authDatabase({ sessionToken: token });
+  const response = await handleAuthRequest(
+    request,
+    { DB: database, GOOGLE_CLIENT_ID: CLIENT_ID },
+    new URL(`https://medication.bytesfx.com${path}`),
+    { json, readJson: current => current.json(), enforceRateLimit: async () => true, apiVersion: 2 },
+  );
+  return { response, database };
+}
+
+test('deleting an account erases every table that holds that user, and only that user', async () => {
+  const { response, database } = await accountRequest('DELETE', '/auth/me');
+  assert.equal(response.status, 200);
+
+  const deletes = database.calls.filter(call => /^\s*DELETE FROM/i.test(call.sql));
+  for (const table of ERASED_TABLES) {
+    const hit = deletes.find(call => new RegExp(`DELETE FROM ${table}\\b`, 'i').test(call.sql));
+    assert.ok(hit, `${table} holds this user's data and must be erased`);
+    assert.match(hit.sql, /user_id = \?/,
+      `${table} deletion must be scoped to the account, never a blanket delete`);
+  }
+
+  // push_subscriptions has no user_id of its own -- it is reachable only through
+  // sync_pairs.mobile_push_endpoint. Delete the pairs first and the endpoints
+  // become unreachable, orphaning a live push subscription for a deleted user.
+  const order = deletes.map(call => call.sql);
+  const push = order.findIndex(sql => /DELETE FROM push_subscriptions/i.test(sql));
+  const pairs = order.findIndex(sql => /DELETE FROM sync_pairs/i.test(sql));
+  assert.ok(push >= 0 && pairs >= 0);
+  assert.ok(push < pairs,
+    'push subscriptions must be erased before the pairs they are reached through');
+});
+
+test('account deletion clears the session cookie and requires CSRF', async () => {
+  const cleared = await accountRequest('DELETE', '/auth/me');
+  assert.match(cleared.response.headers.get('Set-Cookie') || '', /mrs_session=;|Max-Age=0/,
+    'the session must not survive the account');
+
+  const forged = await accountRequest('DELETE', '/auth/me', { csrf: false });
+  assert.equal(forged.response.status, 403, 'a cross-site request must not be able to delete an account');
+  assert.equal(
+    forged.database.calls.some(call => /DELETE FROM app_users/i.test(call.sql)), false,
+    'a rejected request must not have erased anything',
+  );
+});
+
+test('account export returns the user data and is honest that the schedule is ciphertext', async () => {
+  const { response } = await accountRequest('GET', '/auth/me/export');
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.account.email, 'person@example.com');
+  for (const key of ['devices', 'entitlements', 'auditEvents', 'pairs']) {
+    assert.ok(key in body, `the export must include ${key}`);
+  }
+  // The relay holds only ciphertext, so a server-side export cannot contain a
+  // readable schedule. Saying so beats handing someone a blob they cannot open
+  // and calling it their data.
+  assert.match(JSON.stringify(body.note || ''), /encrypt/i);
+});
+
 test('sign-out clears the hardened session cookie', async () => {
   const sessionToken = `mrs_${'a'.repeat(43)}`;
   const database = authDatabase({ sessionToken });
