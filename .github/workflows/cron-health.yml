@@ -1,0 +1,85 @@
+name: Cron health
+
+# Watches the one failure that is otherwise silent: the scheduled handler dies,
+# push reminders stop, and the app keeps looking perfectly healthy because it is.
+# The first symptom is somebody missing a dose. See docs/MONITORING.md.
+#
+# This deliberately runs on GitHub rather than on Cloudflare. A monitor that
+# shares infrastructure with the thing it monitors goes quiet during exactly the
+# outage it exists to report. (Cloudflare Health Checks are also unavailable
+# here: bytesfx.com is on the Free plan, which allows zero of them.)
+
+on:
+  schedule:
+    # Every 10 minutes. GitHub delays scheduled runs under load and may skip
+    # them entirely, so treat detection latency as ~10-30 min, not exactly 10.
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      fire_drill:
+        description: 'Fail on purpose, to prove the alert actually reaches you'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: cron-health
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Poll the cron heartbeat
+        id: poll
+        run: |
+          if [ "${{ inputs.fire_drill }}" = "true" ]; then
+            echo 'FIRE DRILL: failing on purpose to test the alert path.' >&2
+            echo 'detail=fire drill -- not a real outage' >> "$GITHUB_OUTPUT"
+            echo 'drill=true' >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          bash scripts/check-cron-health.sh
+
+      - name: Raise an incident
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DETAIL: ${{ steps.poll.outputs.detail }}
+          DRILL: ${{ steps.poll.outputs.drill }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          gh label create cron-health --color B60205 \
+            --description 'Automated cron heartbeat incident' --force
+
+          existing="$(gh issue list --state open --label cron-health --limit 1 --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            echo "Incident #$existing is already open; not opening a duplicate."
+            exit 0
+          fi
+
+          title='Cron heartbeat unhealthy'
+          lead='The scheduled handler has not recorded a heartbeat within its window, so server-side push reminders are probably not being delivered.'
+          if [ "${DRILL:-}" = 'true' ]; then
+            title='[FIRE DRILL] Cron heartbeat alert test'
+            lead='This is a deliberate test of the alerting path. Nothing is wrong. Close this issue once you have confirmed the email arrived.'
+          fi
+
+          gh issue create --title "$title" --label cron-health --assignee "$OWNER" \
+            --body "$(printf '%s\n\nDetail: %s\n\nRun: %s\n' "$lead" "${DETAIL:-unknown}" "$RUN_URL")"
+
+      - name: Clear the incident
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for n in $(gh issue list --state open --label cron-health --json number --jq '.[].number'); do
+            gh issue close "$n" --comment "Heartbeat healthy again as of $(date -u '+%Y-%m-%d %H:%M UTC')."
+          done

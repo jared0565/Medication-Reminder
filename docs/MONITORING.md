@@ -33,29 +33,73 @@ Two deliberate choices:
 
 A missing row counts as unhealthy. Absence of news is not health.
 
-## Remaining setup (needs dashboard access)
+## What watches it
 
-The endpoint is live. The alert that watches it is **not yet configured** — the
-API token available to automation can read alerting config but not write it, and
-cannot reach zone-scoped endpoints at all. Do this once in the dashboard:
+A scheduled GitHub Actions workflow, `.github/workflows/cron-health.yml`, polls
+`/api/health/cron` every 10 minutes and fails the run when it does not get a
+`200`. A failed run emails the workflow's author and opens an assigned issue
+labelled `cron-health`; the next healthy run closes it again, so an open issue
+means "down right now" rather than "was down once".
 
-1. **Health check** — *bytesfx.com → Traffic → Health Checks → Create*
-   - Address `medication.bytesfx.com`, type HTTPS, path `/api/health/cron`
-   - Expected code `200`, interval 300s, retries 2
-   - Consecutive fails 2 (so one slow tick does not page)
-2. **Notification** — *Notifications → Add → Health Checks status notification*
-   - Select the health check above, deliver to your email.
+The polling logic lives in `scripts/check-cron-health.sh` so it can be run by
+hand, and it retries three times a minute apart — one slow tick should not raise
+an incident, a sustained failure should.
 
-Verify it end to end by making it actually fail, not by reading the config:
+Two deliberate choices here as well:
+
+- **It runs on GitHub, not on Cloudflare.** A monitor sharing infrastructure
+  with the thing it monitors goes quiet during exactly the outage it exists to
+  report.
+- **It polls the heartbeat rather than watching for errors.** An error-rate
+  alert fires when the cron *throws*, but stays silent when the cron simply
+  never runs — zero invocations produce zero errors. Polling a staleness
+  endpoint catches both, which is the whole point of "absence of news is not
+  health".
+
+Costs nothing: the repository is public, so Actions minutes are free.
+
+### Cloudflare Health Checks were not an option
+
+Recorded so this is not re-derived. The path is blocked twice over:
+
+- `bytesfx.com` is on the **Free** plan, which allows **zero** health checks
+  (Free/Pro/Business/Enterprise = 0/10/50/1000).
+- The automation API token gets `10000: Authentication error` on
+  `/zones/{zone}/healthchecks`, on `/accounts/{id}/workers/observability/alerts`
+  writes, and on `POST /alerting/v3/policies`. It can read alerting config; it
+  cannot write any of it.
+
+Upgrading the zone to Pro would unlock both Health Checks and the
+`health_check_status_notification` alert type, which is already available on the
+account. That is a spending decision, not a technical blocker.
+
+### Verify it by making it fail
+
+Reading the config back is not a check. There are two failures worth proving,
+and they are separate:
+
+**The endpoint really goes unhealthy, and the script really notices.** The cron
+runs every minute, so it restores itself within 60s — use a single attempt:
 
 ```sh
-npx wrangler@4.114.0 d1 execute medication-reminder-push --remote \
+cd worker && npx wrangler@4.114.0 d1 execute medication-reminder-push --remote \
   --command "UPDATE service_heartbeats SET last_ok_at = datetime('now','-30 minutes') WHERE name='cron'"
-curl -s -o /dev/null -w '%{http_code}\n' https://medication.bytesfx.com/api/health/cron   # expect 503
+cd .. && CRON_HEALTH_ATTEMPTS=1 bash scripts/check-cron-health.sh   # expect HTTP 503, exit 1
 ```
 
-The next cron tick restores it by itself. An alert you have never seen fire is
-not an alert.
+**The alert actually reaches a human.** Run the workflow with the `fire_drill`
+input set, which fails the run on purpose without touching production:
+
+```sh
+gh workflow run cron-health.yml -f fire_drill=true
+```
+
+Then confirm the email landed and an issue was assigned to you. An alert nobody
+has seen fire is not an alert.
+
+Note that GitHub disables scheduled workflows in a repository with no activity
+for 60 days, and delays or drops scheduled runs under load — treat detection
+latency as 10–30 minutes rather than exactly 10.
 
 ## The outage this found on day one
 
