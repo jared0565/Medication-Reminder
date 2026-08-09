@@ -116,6 +116,38 @@ Note that GitHub disables scheduled workflows in a repository with no activity
 for 60 days, and delays or drops scheduled runs under load — treat detection
 latency as 10–30 minutes rather than exactly 10.
 
+### The schedule did not fire, and that is the open problem
+
+On the day this shipped, `workflow_dispatch` ran the job perfectly and the
+`*/10` schedule produced **zero** runs across eight consecutive boundaries in 83
+minutes. Config was ruled out: GitHub's own copy on `main` carried the right
+cron, workflow state `active`, Actions `enabled` with `allowed_actions: all`,
+repo public, not a fork, not archived.
+
+The cron is now offset (`7,17,...` rather than `*/10`) because `*/10` fires at
+`:00`, the most congested minute on GitHub's scheduler, and short intervals are
+dropped first. Whether that is sufficient is unproven.
+
+**Do not assume this monitor is live.** Check for an actual `schedule` event:
+
+```sh
+gh run list --workflow=cron-health.yml --limit 10 --json event,status,conclusion,createdAt
+```
+
+Until one appears, the workflow is an on-demand check, not a monitor. An alert
+that looks configured but never executes is worse than none — it converts a
+known gap into a false sense of coverage.
+
+Two independent fallbacks, neither of which needs a plan upgrade:
+
+- **A Workers Observability alert**, created in the Cloudflare dashboard. The
+  `workers_observability_alert` type is already available on the account and
+  email delivery is ready; only the API token is blocked from writing it. It
+  fires when the scheduled handler *throws*, which is precisely the failure that
+  actually happened here — though it stays silent if the cron never runs at all.
+- **An external uptime monitor** polling `/api/health/cron` every 5 minutes.
+  Catches both failures and is wholly independent of both Cloudflare and GitHub.
+
 ## The outage this found on day one
 
 Within minutes of deploying the heartbeat, it stayed empty. The cause:

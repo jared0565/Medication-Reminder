@@ -11,9 +11,16 @@ name: Cron health
 
 on:
   schedule:
-    # Every 10 minutes. GitHub delays scheduled runs under load and may skip
-    # them entirely, so treat detection latency as ~10-30 min, not exactly 10.
-    - cron: '*/10 * * * *'
+    # Every 10 minutes, offset off the hour. `*/10` fires at :00, the single most
+    # congested minute on GitHub's scheduler, and short intervals are the first
+    # to be dropped under load -- an initial `*/10` here produced zero scheduled
+    # runs across eight consecutive boundaries while workflow_dispatch worked
+    # perfectly. Offsetting is the documented mitigation.
+    #
+    # Scheduled runs are best-effort regardless: treat detection latency as
+    # 10-30 min, and do not assume this fires until `gh run list
+    # --workflow=cron-health.yml` actually shows an event of `schedule`.
+    - cron: '7,17,27,37,47,57 * * * *'
   workflow_dispatch:
     inputs:
       fire_drill:
