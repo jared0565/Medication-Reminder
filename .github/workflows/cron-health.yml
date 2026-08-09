@@ -36,8 +36,14 @@ jobs:
 
       - name: Poll the cron heartbeat
         id: poll
+        # The input goes through env rather than being interpolated into the
+        # script. It is a boolean so `${{ }}` would be safe here, but this file
+        # is the one someone copies for the next workflow, and the same shape
+        # with a string input is a script-injection hole.
+        env:
+          FIRE_DRILL: ${{ inputs.fire_drill }}
         run: |
-          if [ "${{ inputs.fire_drill }}" = "true" ]; then
+          if [ "$FIRE_DRILL" = "true" ]; then
             echo 'FIRE DRILL: failing on purpose to test the alert path.' >&2
             echo 'detail=fire drill -- not a real outage' >> "$GITHUB_OUTPUT"
             echo 'drill=true' >> "$GITHUB_OUTPUT"
