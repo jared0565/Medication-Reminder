@@ -97,16 +97,20 @@ gh workflow run cron-health.yml -f fire_drill=true
 Then confirm the email landed and an issue was assigned to you. An alert nobody
 has seen fire is not an alert.
 
-**Status: the detector is verified, the delivery is not.** The 503/200 test above
-has been run against the live endpoint in both directions. The fire drill has
-**not** been run, because scheduled and `workflow_dispatch` workflows only run
-from the default branch and this has not yet reached `main`. Do not read this
-section as a record of a passed test until the drill has actually fired.
+**Status: verified end to end on 2026-08-09.** Both halves have actually been
+run, not read back from config:
 
-Check `github.com/settings/notifications` first — under *Actions*, email
-delivery must be on, or a failing run notifies nobody and the assigned issue is
-the only channel. Knowing that setting beforehand is what makes a silent drill
-interpretable rather than ambiguous.
+- Backdating the heartbeat produced a real `HTTP 503` from the live endpoint and
+  the script exited 1; the next cron tick restored it and it exited 0.
+- The fire drill (run `31288646472`) failed the run, the *Raise an incident* step
+  succeeded and opened issue #6 assigned to the owner, *Clear the incident* was
+  correctly skipped, and **the failure email arrived**.
+
+Before running a drill, check `github.com/settings/notifications` — under
+*Actions*, email delivery must be on, or a failing run notifies nobody and the
+assigned issue is the only channel. Knowing that setting beforehand is what
+makes a silent drill interpretable rather than ambiguous. Note that the account's
+notification email is not necessarily the address on the Cloudflare alerts.
 
 Note that GitHub disables scheduled workflows in a repository with no activity
 for 60 days, and delays or drops scheduled runs under load — treat detection
