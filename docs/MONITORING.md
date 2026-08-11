@@ -105,6 +105,9 @@ run, not read back from config:
 - The fire drill (run `31288646472`) failed the run, the *Raise an incident* step
   succeeded and opened issue #6 assigned to the owner, *Clear the incident* was
   correctly skipped, and **the failure email arrived**.
+- The first unattended scheduled run then closed #6 by itself, commenting
+  "Heartbeat healthy again as of 2026-08-09 03:20 UTC". So the clear path is
+  verified in production, not just the raise path.
 
 Before running a drill, check `github.com/settings/notifications` — under
 *Actions*, email delivery must be on, or a failing run notifies nobody and the
@@ -116,27 +119,40 @@ Note that GitHub disables scheduled workflows in a repository with no activity
 for 60 days, and delays or drops scheduled runs under load — treat detection
 latency as 10–30 minutes rather than exactly 10.
 
-### The schedule did not fire, and that is the open problem
+### The schedule fires, but nothing like every 10 minutes
 
-On the day this shipped, `workflow_dispatch` ran the job perfectly and the
-`*/10` schedule produced **zero** runs across eight consecutive boundaries in 83
-minutes. Config was ruled out: GitHub's own copy on `main` carried the right
-cron, workflow state `active`, Actions `enabled` with `allowed_actions: all`,
-repo public, not a fork, not archived.
+The cadence in the cron expression is a request, not a promise, and the gap here
+is large enough to change what this monitor is for.
 
-The cron is now offset (`7,17,...` rather than `*/10`) because `*/10` fires at
-`:00`, the most congested minute on GitHub's scheduler, and short intervals are
-dropped first. Whether that is sufficient is unproven.
+Measured over the first 46 hours on `main`:
 
-**Do not assume this monitor is live.** Check for an actual `schedule` event:
+| | |
+| --- | --- |
+| Scheduled runs delivered | 52 of ~277 requested — **19%** |
+| Median gap | **48 min** |
+| Gap range | **27 – 113 min** |
+| Gaps within the requested 10 min | **0 of 51** |
+| Failures among delivered runs | 0 |
+
+Every run that arrived worked. The dropping is GitHub's scheduler, not the job.
+
+The first scheduled run also took **105 minutes** to appear after the workflow
+landed on the default branch — long enough that an 83-minute check concluded the
+schedule was dead, which was wrong. If a new schedule looks broken, measure for
+longer than two hours before believing it.
+
+**So real detection latency is 30–113 minutes.** The cron is offset off `:00`
+(the most congested minute) as a documented mitigation, and asking for six ticks
+an hour to receive roughly one costs nothing — but do not read the cron
+expression as the cadence you get. Check reality instead:
 
 ```sh
-gh run list --workflow=cron-health.yml --limit 10 --json event,status,conclusion,createdAt
+gh run list --workflow=cron-health.yml --limit 100 --json event,status,conclusion,createdAt
 ```
 
-Until one appears, the workflow is an on-demand check, not a monitor. An alert
-that looks configured but never executes is worse than none — it converts a
-known gap into a false sense of coverage.
+For a medication reminder, "server-side reminders have been dead for up to two
+hours" is a weak guarantee. That is the argument for adding one of the following
+— not that this monitor does not work, but that it is slow.
 
 Two independent fallbacks, neither of which needs a plan upgrade:
 

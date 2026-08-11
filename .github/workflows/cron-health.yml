@@ -11,15 +11,18 @@ name: Cron health
 
 on:
   schedule:
-    # Every 10 minutes, offset off the hour. `*/10` fires at :00, the single most
-    # congested minute on GitHub's scheduler, and short intervals are the first
-    # to be dropped under load -- an initial `*/10` here produced zero scheduled
-    # runs across eight consecutive boundaries while workflow_dispatch worked
-    # perfectly. Offsetting is the documented mitigation.
+    # Asks for every 10 minutes, offset off the hour, and will not get it.
     #
-    # Scheduled runs are best-effort regardless: treat detection latency as
-    # 10-30 min, and do not assume this fires until `gh run list
-    # --workflow=cron-health.yml` actually shows an event of `schedule`.
+    # Measured over the first 46 hours: GitHub delivered 52 of ~277 requested
+    # ticks (19%), a median 48 minutes apart, worst gap 113 minutes, and the
+    # very first scheduled run took 105 minutes to arrive after the workflow
+    # landed on the default branch. Every delivered run succeeded -- the
+    # dropping is GitHub's scheduler, not this job.
+    #
+    # So: real detection latency is ~30-113 minutes, not 10. The offset off :00
+    # (the most congested minute) is a documented mitigation, and asking for 6
+    # ticks an hour to receive ~1 costs nothing. Do not read the number below as
+    # the cadence you get.
     - cron: '7,17,27,37,47,57 * * * *'
   workflow_dispatch:
     inputs:
