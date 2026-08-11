@@ -97,20 +97,72 @@ gh workflow run cron-health.yml -f fire_drill=true
 Then confirm the email landed and an issue was assigned to you. An alert nobody
 has seen fire is not an alert.
 
-**Status: the detector is verified, the delivery is not.** The 503/200 test above
-has been run against the live endpoint in both directions. The fire drill has
-**not** been run, because scheduled and `workflow_dispatch` workflows only run
-from the default branch and this has not yet reached `main`. Do not read this
-section as a record of a passed test until the drill has actually fired.
+**Status: verified end to end on 2026-08-09.** Both halves have actually been
+run, not read back from config:
 
-Check `github.com/settings/notifications` first — under *Actions*, email
-delivery must be on, or a failing run notifies nobody and the assigned issue is
-the only channel. Knowing that setting beforehand is what makes a silent drill
-interpretable rather than ambiguous.
+- Backdating the heartbeat produced a real `HTTP 503` from the live endpoint and
+  the script exited 1; the next cron tick restored it and it exited 0.
+- The fire drill (run `31288646472`) failed the run, the *Raise an incident* step
+  succeeded and opened issue #6 assigned to the owner, *Clear the incident* was
+  correctly skipped, and **the failure email arrived**.
+- The first unattended scheduled run then closed #6 by itself, commenting
+  "Heartbeat healthy again as of 2026-08-09 03:20 UTC". So the clear path is
+  verified in production, not just the raise path.
+
+Before running a drill, check `github.com/settings/notifications` — under
+*Actions*, email delivery must be on, or a failing run notifies nobody and the
+assigned issue is the only channel. Knowing that setting beforehand is what
+makes a silent drill interpretable rather than ambiguous. Note that the account's
+notification email is not necessarily the address on the Cloudflare alerts.
 
 Note that GitHub disables scheduled workflows in a repository with no activity
 for 60 days, and delays or drops scheduled runs under load — treat detection
 latency as 10–30 minutes rather than exactly 10.
+
+### The schedule fires, but nothing like every 10 minutes
+
+The cadence in the cron expression is a request, not a promise, and the gap here
+is large enough to change what this monitor is for.
+
+Measured over the first 46 hours on `main`:
+
+| | |
+| --- | --- |
+| Scheduled runs delivered | 52 of ~277 requested — **19%** |
+| Median gap | **48 min** |
+| Gap range | **27 – 113 min** |
+| Gaps within the requested 10 min | **0 of 51** |
+| Failures among delivered runs | 0 |
+
+Every run that arrived worked. The dropping is GitHub's scheduler, not the job.
+
+The first scheduled run also took **105 minutes** to appear after the workflow
+landed on the default branch — long enough that an 83-minute check concluded the
+schedule was dead, which was wrong. If a new schedule looks broken, measure for
+longer than two hours before believing it.
+
+**So real detection latency is 30–113 minutes.** The cron is offset off `:00`
+(the most congested minute) as a documented mitigation, and asking for six ticks
+an hour to receive roughly one costs nothing — but do not read the cron
+expression as the cadence you get. Check reality instead:
+
+```sh
+gh run list --workflow=cron-health.yml --limit 100 --json event,status,conclusion,createdAt
+```
+
+For a medication reminder, "server-side reminders have been dead for up to two
+hours" is a weak guarantee. That is the argument for adding one of the following
+— not that this monitor does not work, but that it is slow.
+
+Two independent fallbacks, neither of which needs a plan upgrade:
+
+- **A Workers Observability alert**, created in the Cloudflare dashboard. The
+  `workers_observability_alert` type is already available on the account and
+  email delivery is ready; only the API token is blocked from writing it. It
+  fires when the scheduled handler *throws*, which is precisely the failure that
+  actually happened here — though it stays silent if the cron never runs at all.
+- **An external uptime monitor** polling `/api/health/cron` every 5 minutes.
+  Catches both failures and is wholly independent of both Cloudflare and GitHub.
 
 ## The outage this found on day one
 
